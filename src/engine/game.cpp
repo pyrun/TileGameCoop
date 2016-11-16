@@ -46,7 +46,7 @@ game::~game()
 int game::process() {
     int l_error;
 
-    p_world = new world( "worlds/1-1.tmx");
+    p_world = new world( "1-1.tmx", "worlds/");
 
     // at the moment we have no error
     l_error = 0;
@@ -64,6 +64,7 @@ int game::process() {
 
 //        p_graphic->drawImage( img, vec2(0,0), vec2( 50, 50), vec2( 0, 0), 0, 0);
 //        p_graphic->drawImage( img, vec2(50,00), vec2( 50, 50), vec2( 50, 00), 0, 0);
+        p_world->draw( p_graphic);
 
         // graphic clear/draw
         p_graphic->clear();

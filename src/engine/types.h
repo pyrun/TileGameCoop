@@ -10,6 +10,13 @@ struct vec2 {
     }
     int x;
     int y;
+
+    vec2 operator+( const vec2 &a) {
+        vec2 c;
+        c.x = x + a.x;
+        c.y = y + a.y;
+        return c;
+    }
 };
 
 struct vec4 {

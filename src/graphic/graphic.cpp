@@ -61,6 +61,13 @@ graphic::graphic( config *config)
         return;
     }
 
+	// camera setings
+	p_camera.x = 0;
+	p_camera.y = 0;
+
+	p_camera_size.x = NATIV_W;
+	p_camera_size.y = NATIV_H;
+
     // set draf color
     SDL_SetRenderDrawColor( p_renderer, 255, 255, 255, 255);
 
@@ -81,8 +88,14 @@ void graphic::clear() {
     // react of change
     if( p_config->displayChange()) {
         SDL_Rect l_viewport = { 0, 0, p_config->getDisplay().x, p_config->getDisplay().y};
+
+
         // transfer data to sdl
         SDL_RenderSetViewport( p_renderer, &l_viewport);
+
+        // Nativ resulation
+        SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
+
         // set display mode
         SDL_SetWindowFullscreen( p_windows, p_config->getDisplayMode());
     }
