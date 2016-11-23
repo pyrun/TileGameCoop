@@ -1,5 +1,15 @@
 #include "game.h"
 
+Uint32 callbackCalc(Uint32 interval, void *param) {
+
+    game *l_game = (game *)param;
+
+    //p_graphic->moveCemara( { 1, 0});
+    l_game->getGraphic()->moveCemara( { 1, 0});
+
+    return interval;
+}
+
 game::game()
 {
     // inertization
@@ -48,23 +58,28 @@ int game::process() {
 
     p_world = new world( "1-1.tmx", "worlds/");
 
+    p_timer = SDL_AddTimer( 10, callbackCalc, this);
+
     // at the moment we have no error
     l_error = 0;
 
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
+        SDL_Delay( 1);
         // start measurement point
-        p_framerate->begin();
+       // p_framerate->begin();
 
         // react of player input
         p_player->handle();
 
         // now calc the delay for the framerate
-        p_framerate->calc();
+        //p_framerate->calc();
 
 //        p_graphic->drawImage( img, vec2(0,0), vec2( 50, 50), vec2( 0, 0), 0, 0);
 //        p_graphic->drawImage( img, vec2(50,00), vec2( 50, 50), vec2( 50, 00), 0, 0);
         p_world->draw( p_graphic);
+
+
 
         // graphic clear/draw
         p_graphic->clear();

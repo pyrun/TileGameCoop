@@ -132,6 +132,7 @@ image *graphic::loadImage( std::string file) {
     } else {
         printf( "graphic::loadImage Datei %s konnte nicht geladen werden\n", file.c_str());
     }
+    printf("graphic::loadImage Datei %s wurde geladen\n", file.c_str());
     return l_textureclass;
 }
 
@@ -149,7 +150,7 @@ void graphic::drawImage( image *image, vec2 position, vec2 size, vec2 source, do
 
     // transfer vec to sdl_rect
     SDL_Rect l_source = { source.x, source.y, size.x, size.y};
-    SDL_Rect l_destination = { position.x, position.y, size.x, size.y};
+    SDL_Rect l_destination = { position.x - getCamera().x, position.y - getCamera().y, size.x, size.y};
 
     // call the draw fuction of sdl
     SDL_RenderCopyEx( p_renderer, image->texture, &l_source, &l_destination, angle, NULL, l_flip);

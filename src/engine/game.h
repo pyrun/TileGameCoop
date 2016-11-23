@@ -14,6 +14,8 @@ class game {
         virtual ~game();
 
         int process();
+
+        graphic *getGraphic() { return p_graphic; }
     protected:
 
     private:
@@ -25,6 +27,8 @@ class game {
         world *p_world;
 
         bool p_game_running;
+
+        SDL_TimerID p_timer;
 };
 
 #endif // GAME_H

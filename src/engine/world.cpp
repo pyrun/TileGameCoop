@@ -165,12 +165,15 @@ void world::draw( graphic *graphic) {
     if( p_tileset == NULL) {
         p_tileset = graphic->loadImage( p_tilesetpath);
     } else {
-        int l_max_x = graphic->getCameraSize().x/p_tilewidth ;
-        int l_max_y = 17; graphic->getCameraSize().y/p_tilehight;
+        int l_camera_x = graphic->getCamera().x/p_tilewidth;
+        int l_camera_y = graphic->getCamera().y/p_tilehight;
+
+        int l_max_x = (graphic->getCameraSize().x+graphic->getCamera().x)/p_tilewidth;
+        int l_max_y = (graphic->getCameraSize().y+graphic->getCamera().y)/p_tilehight;
 
         //
-        for( int l_x = 0; l_x < l_max_x; l_x++) {
-            for( int l_y = 0; l_y < l_max_y; l_y++) {
+        for( int l_x = l_camera_x; l_x < l_max_x; l_x++) {
+            for( int l_y = l_camera_y; l_y < l_max_y; l_y++) {
                 // get the tile
                 tile *l_tile = getTile( p_tilemap_foreground, l_x, l_y);
                 if( l_tile == NULL)
