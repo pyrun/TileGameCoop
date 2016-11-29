@@ -14,6 +14,7 @@ class game {
         virtual ~game();
 
         int process();
+        int process_graphic();
 
         graphic *getGraphic() { return p_graphic; }
     protected:

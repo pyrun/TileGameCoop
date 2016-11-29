@@ -5,7 +5,7 @@ Uint32 callbackCalc(Uint32 interval, void *param) {
     game *l_game = (game *)param;
 
     //p_graphic->moveCemara( { 1, 0});
-    l_game->getGraphic()->moveCemara( { 1, 0});
+    l_game->process();
 
     return interval;
 }
@@ -54,6 +54,15 @@ game::~game()
 }
 
 int game::process() {
+
+    //
+    p_graphic->moveCamera( { 1, 0});
+
+    //if( p_graphic->getCamera().y > 500)
+    //    p_graphic->setCamera( { 0, -500});
+}
+
+int game::process_graphic() {
     int l_error;
 
     p_world = new world( "1-1.tmx", "worlds/");

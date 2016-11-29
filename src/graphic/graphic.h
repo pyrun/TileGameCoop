@@ -30,10 +30,11 @@ class graphic
         void clear();
 
         image *loadImage( std::string file);
-        void drawImage( image *image, vec2 position, vec2 size, vec2 source, double angle = 0.0f, int flip = 0);
+        void drawImage( image *image, vec2 position, vec2 size, vec2 source, double angle = 0.0f, int flip = 0, double factor = 0);
 
         SDL_Window *getWindow() { return p_windows; }
-        void moveCemara( vec2 move) { p_camera = p_camera + move; }
+        void moveCamera( vec2 move) { p_camera = p_camera + move; }
+        void setCamera( vec2 pos) { p_camera = pos; }
         vec2 getCamera() { return p_camera; }
         vec2 getCameraSize() { return p_camera_size; }
     protected:

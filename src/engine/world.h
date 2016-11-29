@@ -31,6 +31,9 @@ class world
         bool load( std::string file, std::string ordner);
         tile *getTile( tile *tilemap, int x, int y);
         void addBackground( tinyxml2::XMLElement* background, std::string ordner);
+        void drawTile( graphic *graphic, int x, int y, tile *map);
+        void drawBackAndForeground( graphic *graphic);
+        void drawOverground( graphic *graphic);
         void draw( graphic *graphic);
     protected:
 

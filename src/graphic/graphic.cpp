@@ -136,7 +136,7 @@ image *graphic::loadImage( std::string file) {
     return l_textureclass;
 }
 
-void graphic::drawImage( image *image, vec2 position, vec2 size, vec2 source, double angle, int flip) {
+void graphic::drawImage( image *image, vec2 position, vec2 size, vec2 source, double angle, int flip, double factor) {
     SDL_RendererFlip l_flip;
 
     // chose flip
@@ -151,6 +151,18 @@ void graphic::drawImage( image *image, vec2 position, vec2 size, vec2 source, do
     // transfer vec to sdl_rect
     SDL_Rect l_source = { source.x, source.y, size.x, size.y};
     SDL_Rect l_destination = { position.x - getCamera().x, position.y - getCamera().y, size.x, size.y};
+
+    if( factor != 0.0 ) {
+        l_source.w = l_source.w*factor;
+        l_source.h = l_source.h*factor;
+        l_destination.w = l_source.w/factor;
+        l_destination.h = l_source.h/factor;
+
+        if( l_destination.w > image->surface->w/factor )
+            l_destination.w = image->surface->w/factor;
+        if( l_destination.h > image->surface->h/factor )
+             l_destination.h = image->surface->h/factor;
+    }
 
     // call the draw fuction of sdl
     SDL_RenderCopyEx( p_renderer, image->texture, &l_source, &l_destination, angle, NULL, l_flip);

@@ -5,5 +5,5 @@
 int main(int argc, char *argv[]) {
     game p_game;
 
-    return p_game.process();
+    return p_game.process_graphic();
 }
