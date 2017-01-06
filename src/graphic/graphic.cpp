@@ -73,6 +73,10 @@ graphic::graphic( config *config)
 
     // renderer räumen
     SDL_RenderClear( p_renderer);
+
+    // windows maxed in config?
+    if( p_config->getDisplayMaximized())
+        SDL_MaximizeWindow( p_windows);
 }
 
 graphic::~graphic()
@@ -98,6 +102,13 @@ void graphic::clear() {
 
         // set display mode
         SDL_SetWindowFullscreen( p_windows, p_config->getDisplayMode());
+
+        // set config if windows maxmazed
+        Uint32 l_flags = SDL_GetWindowFlags( p_windows);
+        if( l_flags & SDL_WINDOW_MAXIMIZED)
+            p_config->setDisplayMaximized( true);
+        else
+            p_config->setDisplayMaximized( false);
     }
 
     // anzeigen lassen

@@ -51,6 +51,8 @@ int config::load() {
     setDisplay( loadParameter( l_root, "Display_width"), loadParameter( l_root, "Display_height"));
     setDisplayMode( loadParameter( l_root, "Display_mode"));
 
+    setDisplayMaximized( loadParameter( l_root, "Display_maximized"));
+
     // load input
     setInputPadButton( loadParameter( l_root, "Input_run"),
                        loadParameter( l_root, "Input_jump"),
@@ -96,6 +98,8 @@ void config::save() {
     saveParameter( &l_config, l_root, "Display_width", getDisplay().x);
     saveParameter( &l_config, l_root, "Display_height", getDisplay().y);
     saveParameter( &l_config, l_root, "Display_mode", getDisplayMode());
+
+    saveParameter( &l_config, l_root, "Display_maximized", getDisplayMaximized());
 
     // save
     l_config.SaveFile( CONFIG_FILE);

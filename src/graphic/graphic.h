@@ -6,8 +6,10 @@
 
 #include "../engine/config.h"
 
-#define NATIV_W 640
-#define NATIV_H 400
+#define NATIV_W 480
+#define NATIV_H 300
+
+#define BMP_ALPHA  128, 128, 255
 
 bool initSDL(); // call it once
 

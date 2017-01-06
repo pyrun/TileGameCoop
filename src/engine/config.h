@@ -58,9 +58,16 @@ class config
         void setDisplayMode( int mode) {
             p_display_mode = mode;
         }
+
         vec2 getDisplay() { return vec2{ p_display_width, p_display_height}; p_display_change = true; }
         int getDisplayMode()  { return p_display_mode; }
         bool displayChange() { return p_display_change; p_display_change = false; }
+
+        void setDisplayMaximized( bool set) {
+            p_display_maximazed = set;
+        }
+
+        bool getDisplayMaximized() { return p_display_maximazed; }
     protected:
 
     private:
@@ -80,6 +87,8 @@ class config
         int p_display_height;
         bool p_display_change;
         int p_display_mode;
+
+        bool p_display_maximazed;
 };
 
 #endif // CONFIG_H

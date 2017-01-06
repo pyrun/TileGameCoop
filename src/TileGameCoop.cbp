@@ -46,6 +46,8 @@
 		</Compiler>
 		<Unit filename="engine/config.cpp" />
 		<Unit filename="engine/config.h" />
+		<Unit filename="engine/entity.cpp" />
+		<Unit filename="engine/entity.h" />
 		<Unit filename="engine/framenrate.cpp" />
 		<Unit filename="engine/framenrate.h" />
 		<Unit filename="engine/game.cpp" />

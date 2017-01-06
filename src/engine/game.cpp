@@ -56,7 +56,7 @@ game::~game()
 int game::process() {
 
     //
-    p_graphic->moveCamera( { 1, 0});
+    //p_graphic->moveCamera( { 1, 0});
 
     //if( p_graphic->getCamera().y > 500)
     //    p_graphic->setCamera( { 0, -500});
@@ -86,8 +86,7 @@ int game::process_graphic() {
 
 //        p_graphic->drawImage( img, vec2(0,0), vec2( 50, 50), vec2( 0, 0), 0, 0);
 //        p_graphic->drawImage( img, vec2(50,00), vec2( 50, 50), vec2( 50, 00), 0, 0);
-        p_world->draw( p_graphic);
-
+        //p_world->draw( p_graphic);
 
 
         // graphic clear/draw

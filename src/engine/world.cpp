@@ -47,6 +47,8 @@ bool world::load( std::string file, std::string ordner) {
     std::string l_foreground;
     std::string l_background;
 
+    std::string l_map_temp;
+
     // file set
     if(file != "")
         p_file = ordner+file;
@@ -82,17 +84,21 @@ bool world::load( std::string file, std::string ordner) {
     if( !l_layer)
         return false;
 
-    l_background = l_layer->FirstChildElement("data")->GetText();
-    l_layer = l_layer->NextSiblingElement("layer");
-    if( !l_layer)
-        return false;
+    // alle layer lesen
+    while( l_layer) {
+        l_map_temp = l_layer->FirstChildElement("data")->GetText();
+        std::string l_name = l_layer->Attribute( "name" );
 
-    l_foreground = l_layer->FirstChildElement("data")->GetText();
-    l_layer = l_layer->NextSiblingElement("layer");
-    if( !l_layer)
-        return false;
+        // background zuweisen
+        if( l_name == "Background" )
+            l_background = l_map_temp;
+        if( l_name == "Foreground" )
+            l_foreground = l_map_temp;
+        if( l_name == "Overlap" )
+            l_overlap = l_map_temp;
 
-    l_overlap = l_layer->FirstChildElement("data")->GetText();
+        l_layer = l_layer->NextSiblingElement("layer");
+    }
 
     // image
     XMLElement* l_background_element = l_map->FirstChildElement( "imagelayer");
@@ -102,11 +108,8 @@ bool world::load( std::string file, std::string ordner) {
     }
     printf( "backgrounds %d\n", p_backgrounds.size());
 
-    // printf( "map %d %d\n", l_map_width, l_map_height);
-    // printf( "tile %d %d \"%s\"\n", l_tilewidth, l_tilehight, l_tileset.c_str());
-    // printf( "Data %s %s %s\n", l_overlap.c_str(), l_foreground.c_str(), l_background.c_str());
 
-    //
+    // map size save
     p_map_width = l_map_width;
     p_map_hight = l_map_height;
 
@@ -226,7 +229,7 @@ void world::draw( graphic *graphic) {
             world_background *l_background = &p_backgrounds[0];
             float l_factor = (float)l_background->picture->surface->h/ ((float)p_map_hight * (float)p_tilehight);
 
-            vec2 l_position = { graphic->getCamera().x*0.25, graphic->getCamera().y*0.25};
+            vec2 l_position = { graphic->getCamera().x*0.8, graphic->getCamera().y*0.8};
 
             int l_background_x = 0;
             while(l_position.x-graphic->getCamera().x+ l_background->picture->surface->w/l_factor< 0)
