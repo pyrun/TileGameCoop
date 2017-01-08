@@ -54,6 +54,7 @@ class config
         void setDisplay( int width, int height) {
             p_display_width = width;
             p_display_height = height;
+            p_display_change = true;
         }
         void setDisplayMode( int mode) {
             p_display_mode = mode;

@@ -75,8 +75,7 @@ graphic::graphic( config *config)
     SDL_RenderClear( p_renderer);
 
     // windows maxed in config?
-    if( p_config->getDisplayMaximized())
-        SDL_MaximizeWindow( p_windows);
+    clear();
 }
 
 graphic::~graphic()
@@ -98,13 +97,16 @@ void graphic::clear() {
         SDL_RenderSetViewport( p_renderer, &l_viewport);
 
         // Nativ resulation
-        if( p_config->getDisplayMode() != SDL_WINDOW_FULLSCREEN_DESKTOP)
+        if( !p_config->getDisplayMode()) {
+            SDL_SetWindowFullscreen( p_windows, 0);
             SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
-        else
+        }
+        else {
+            SDL_SetWindowFullscreen( p_windows, SDL_WINDOW_FULLSCREEN_DESKTOP);
             SDL_RenderSetScale( p_renderer, NATIV_ZOOM, NATIV_ZOOM);
+        }
 
-        // set display mode
-        SDL_SetWindowFullscreen( p_windows, p_config->getDisplayMode());
+
 
         // set config if windows maxmazed
         Uint32 l_flags = SDL_GetWindowFlags( p_windows);

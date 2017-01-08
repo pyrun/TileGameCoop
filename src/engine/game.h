@@ -8,11 +8,14 @@
 #include "player.h"
 #include "world.h"
 #include "font.h"
+#include "entity.h"
 
 class game {
     public:
         game();
         virtual ~game();
+
+        void drawHUD();
 
         int process();
         int process_graphic();
@@ -28,6 +31,7 @@ class game {
         player_handle *p_player;
         world *p_world;
         font *p_font;
+        entitylist *p_entity;
 
         bool p_game_running;
 };

@@ -23,6 +23,9 @@ game::game()
     // load font
     p_font = new font( p_graphic);
 
+    // create entity list
+    p_entity = new entitylist();
+
     // game running
     p_game_running = true;
 }
@@ -46,6 +49,13 @@ game::~game()
         delete p_framerate;
 }
 
+void game::drawHUD() {
+    char test[255];
+    float wert = 1000/ (16-(float)p_framerate->getDelay() );
+    sprintf( test, "%s%d %4.0f %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(), wert,NATIV_W, NATIV_H );
+    p_font->drawMessage( p_graphic, test, vec2( NATIV_W-140, 10));
+}
+
 int game::process() {
 
     //p_graphic->moveCamera( { 1, 0});
@@ -53,7 +63,6 @@ int game::process() {
     //if( p_graphic->getCamera().y > 500)
     //    p_graphic->setCamera( { 20, 0});
 }
-
 int game::process_graphic() {
     int l_error;
 
@@ -61,6 +70,8 @@ int game::process_graphic() {
 
     // at the moment we have no error
     l_error = 0;
+
+    p_entity->loadType( "creature/riven/");
 
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
@@ -76,16 +87,11 @@ int game::process_graphic() {
         // process
         process();
 
-//        p_graphic->drawImage( img, vec2(0,0), vec2( 50, 50), vec2( 0, 0), 0, 0);
-//        p_graphic->drawImage( img, vec2(50,00), vec2( 50, 50), vec2( 50, 00), 0, 0);
-
+        // draw world
         p_world->draw( p_graphic);
 
-        //p_font->drawLetter( p_graphic, 'T');
-        char test[255];
-        int wert = 5;
-        sprintf( test, "%s%d %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(),NATIV_W, NATIV_H );
-        p_font->drawMessage( p_graphic, test, vec2( NATIV_W-140, 10));
+        // draw info
+        drawHUD();
 
         // graphic clear/draw
         p_graphic->clear();

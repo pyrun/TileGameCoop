@@ -1,7 +1,6 @@
-<object>
-<width>32</width>
-<hight>32</hight>
+<object name="riven" width="32" height="32">
 </object>
+
 <action>
 <walk>1</walk>
 </action>

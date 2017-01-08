@@ -5,10 +5,13 @@
 #include <vector>
 
 #include "types.h"
+#include "../xml/tinyxml2.h"
 
-enum Action_name { action_walk = 1, action_run, action_jump, action_swim, action_special, action_die};
+#define ENTITY_FILE "definition.xml"
 
-class Action
+enum action_name { action_walk = 1, action_run, action_jump, action_swim, action_special, action_die};
+
+class action
 {
     public:
 
@@ -17,43 +20,53 @@ class Action
     private:
 };
 
-class Entity
+class entitytype
 {
     public:
-        Entity();
-        virtual ~Entity();
+        entitytype() {};
+        virtual ~entitytype() {};
 
+        int width;
+        int height;
+        std::string name;
     protected:
 
     private:
 };
 
-class EntityType
+class entity
 {
     public:
-        EntityType();
-        virtual ~EntityType();
+        entity();
+        virtual ~entity();
 
+        void setType( entitytype *type) { this->type = type; }
     protected:
 
     private:
+        int p_id;
+
+        entitytype *type;
 };
 
-class EntityList {
+class entitylist {
     public:
-        EntityList();
-        virtual ~EntityList();
+        entitylist();
+        virtual ~entitylist();
 
-        int create( EntityType obj, vec2 pos);
+        int create( entitytype *type, vec2 pos);
 
         bool loadType( std::string folder);
         void removeTypes();
+        entitytype *getType( std::string name);
     protected:
 
     private:
-        std::vector<EntityType> p_entity_types;
-        std::vector<Entity> p_entitys;
+        std::vector<entitytype> p_entity_types;
+        std::vector<entity> p_entitys;
         int p_id;
+
+        std::string p_folder;
 };
 
 #endif // ENTITY_H
