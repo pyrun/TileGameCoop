@@ -57,6 +57,7 @@ class world
         image *p_tileset;
         int p_tileset_width;
         int p_tileset_height;
+        int p_tileset_space;
 
         std::vector<world_background> p_backgrounds;
 };

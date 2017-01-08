@@ -42,6 +42,7 @@ bool world::load( std::string file, std::string ordner) {
     std::string l_tileset;
     int l_tileset_width;
     int l_tileset_height;
+    int l_tileset_space;
 
     std::string l_overlap;
     std::string l_foreground;
@@ -72,6 +73,8 @@ bool world::load( std::string file, std::string ordner) {
         return false;
     l_tilewidth = atoi(l_xml_tileset->Attribute( "tilewidth" ));
     l_tilehight = atoi(l_xml_tileset->Attribute( "tileheight" ));
+    l_tileset_space = atoi(l_xml_tileset->Attribute( "spacing" ));
+
     XMLElement* l_xml_tileset_source = l_xml_tileset->FirstChildElement( "image" );
     if( !l_xml_tileset_source)
         return false;
@@ -108,10 +111,16 @@ bool world::load( std::string file, std::string ordner) {
     }
     printf( "backgrounds %d\n", p_backgrounds.size());
 
+    // check if all world data here
+    if( !l_overlap.size() || !l_background.size() || !l_foreground.size()) {
+        printf( "world cant be loaded - world data \"Background\", \"Foreground\", or \"Overlap\" missing\n");
+    }
+
 
     // map size save
     p_map_width = l_map_width;
     p_map_hight = l_map_height;
+    p_tileset_space = l_tileset_space;
 
     // creating world
     p_tilemap_overlap = readTilemap( l_overlap);
@@ -168,8 +177,10 @@ void world::drawTile( graphic *graphic, int x, int y, tile *map) {
     int l_x = 0;
     l_x = l_tile->id;
     int l_y = 0;
-    while( l_x > p_tileset_width/p_tilewidth) {
-        l_x = l_x - (p_tileset_width/p_tilewidth);
+    int l_factor = (p_tileset_width/(p_tilewidth+p_tileset_space));
+
+    while( l_x > l_factor) {
+        l_x = l_x - (l_factor);
         l_y = l_y +1;
     }
 
@@ -177,7 +188,7 @@ void world::drawTile( graphic *graphic, int x, int y, tile *map) {
         return;
     l_x -= 1;
 
-    graphic->drawImage( p_tileset, vec2( x*p_tilewidth, y*p_tilewidth), vec2( p_tilewidth, p_tilehight), vec2( l_x*p_tilewidth, l_y*p_tilehight));
+    graphic->drawImage( p_tileset, vec2( x*p_tilewidth, y*p_tilewidth), vec2( p_tilewidth, p_tilehight), vec2( l_x*p_tilewidth+l_x, l_y*p_tilehight+l_y));
 }
 
 void world::drawBackAndForeground( graphic *graphic) {
@@ -229,7 +240,7 @@ void world::draw( graphic *graphic) {
             world_background *l_background = &p_backgrounds[0];
             float l_factor = (float)l_background->picture->surface->h/ ((float)p_map_hight * (float)p_tilehight);
 
-            vec2 l_position = { graphic->getCamera().x*0.8, graphic->getCamera().y*0.8};
+            vec2 l_position = { graphic->getCamera().x*0.5, graphic->getCamera().y*0.5};
 
             int l_background_x = 0;
             while(l_position.x-graphic->getCamera().x+ l_background->picture->surface->w/l_factor< 0)
@@ -241,12 +252,12 @@ void world::draw( graphic *graphic) {
 
             graphic->drawImage( l_background->picture, l_position + vec2( l_background->picture->surface->w/l_factor, 0) + vec2( l_background->picture->surface->w/l_factor, 0), vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight), vec2( 0, 0), 0.0, 0, l_factor);
 
-
         }
     }
 
     // load tileset if not loadead
     drawBackAndForeground( graphic);
+
 
     drawOverground( graphic);
 }

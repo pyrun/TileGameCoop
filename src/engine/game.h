@@ -7,6 +7,7 @@
 #include "input.h"
 #include "player.h"
 #include "world.h"
+#include "font.h"
 
 class game {
     public:
@@ -26,10 +27,9 @@ class game {
         input *p_input;
         player_handle *p_player;
         world *p_world;
+        font *p_font;
 
         bool p_game_running;
-
-        SDL_TimerID p_timer;
 };
 
 #endif // GAME_H

@@ -18,6 +18,7 @@
 					<Add directory="../../SDL2_64/include" />
 					<Add directory="../../tinyxml2/inc" />
 					<Add directory="engine" />
+					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lmingw32 -lSDL2main -lSDL2  -lSDL2_image -lSDL2_net" />
@@ -48,6 +49,8 @@
 		<Unit filename="engine/config.h" />
 		<Unit filename="engine/entity.cpp" />
 		<Unit filename="engine/entity.h" />
+		<Unit filename="engine/font.cpp" />
+		<Unit filename="engine/font.h" />
 		<Unit filename="engine/framenrate.cpp" />
 		<Unit filename="engine/framenrate.h" />
 		<Unit filename="engine/game.cpp" />

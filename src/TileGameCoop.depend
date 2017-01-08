@@ -490,3 +490,471 @@
 1483685788 c:\users\pyrun\documents\project\tilegamecoop\src\engine\entity.h
 	<string>
 
+1478965413 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\input.cpp
+	"input.h"
+	<stdio.h>
+
+1478965413 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\input.h
+	<SDL2\SDL.h>
+	"types.h"
+	"config.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_assert.h"
+	"SDL_atomic.h"
+	"SDL_audio.h"
+	"SDL_clipboard.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_filesystem.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_haptic.h"
+	"SDL_hints.h"
+	"SDL_loadso.h"
+	"SDL_log.h"
+	"SDL_messagebox.h"
+	"SDL_mutex.h"
+	"SDL_power.h"
+	"SDL_render.h"
+	"SDL_rwops.h"
+	"SDL_system.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_version.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<math.h>
+	<float.h>
+	<iconv.h>
+	<sal.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_config.h
+	"SDL_platform.h"
+	"SDL_config_premake.h"
+	"SDL_config_windows.h"
+	"SDL_config_winrt.h"
+	"SDL_config_macosx.h"
+	"SDL_config_iphoneos.h"
+	"SDL_config_android.h"
+	"SDL_config_psp.h"
+	"SDL_config_minimal.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_platform.h
+	"AvailabilityMacros.h"
+	"TargetConditionals.h"
+	<winapifamily.h>
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\begin_code.h
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\close_code.h
+
+1462710278 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_config_windows.h
+	"SDL_platform.h"
+
+1462710278 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_config_winrt.h
+	"SDL_platform.h"
+	<sdkddkver.h>
+
+1462710278 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_config_macosx.h
+	"SDL_platform.h"
+	<AvailabilityMacros.h>
+
+1462710278 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_config_iphoneos.h
+	"SDL_platform.h"
+
+1462710278 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_config_android.h
+	"SDL_platform.h"
+	<stdarg.h>
+
+1462710278 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_config_psp.h
+	"SDL_platform.h"
+
+1462710278 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_config_minimal.h
+	"SDL_platform.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_assert.h
+	"SDL_config.h"
+	"begin_code.h"
+	<signal.h>
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_atomic.h
+	"SDL_stdinc.h"
+	"SDL_platform.h"
+	"begin_code.h"
+	<mbarrier.h>
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_atomic.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_clipboard.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_cpuinfo.h
+	"SDL_stdinc.h"
+	<intrin.h>
+	<intrin.h>
+	<altivec.h>
+	<mmintrin.h>
+	<mm3dnow.h>
+	<xmmintrin.h>
+	<emmintrin.h>
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_quit.h"
+	"SDL_gesture.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_video.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_surface.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_pixels.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_rect.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_pixels.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_surface.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_blendmode.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_blendmode.h
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keycode.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_keycode.h
+	"SDL_stdinc.h"
+	"SDL_scancode.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_scancode.h
+	"SDL_stdinc.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_gamecontroller.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_gesture.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_touch.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_filesystem.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_haptic.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_hints.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_log.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_messagebox.h
+	"SDL_stdinc.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_power.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_render.h
+	"SDL_stdinc.h"
+	"SDL_rect.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_system.h
+	"SDL_stdinc.h"
+	"SDL_keyboard.h"
+	"SDL_render.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1462710297 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1479316936 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\types.h
+	<SDL2/SDL_timer.h>
+
+1483826081 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\config.h
+	<string>
+	"../xml/tinyxml2.h"
+	"types.h"
+
+1478965413 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\xml\tinyxml2.h
+	<ctype.h>
+	<limits.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdarg.h>
+	<cctype>
+	<climits>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<cstdarg>
+	<android/log.h>
+	<assert.h>
+
+1478965413 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\player.cpp
+	"player.h"
+	<stdio.h>
+
+1478965413 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\player.h
+	<SDL2\SDL.h>
+	<vector>
+	"input.h"
+	"config.h"
+
+1478965413 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\types.cpp
+	"types.h"
+
+1478965413 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\xml\tinyxml2.cpp
+	"tinyxml2.h"
+	<new>
+	<stddef.h>
+	<cstddef>
+
+1483826033 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\config.cpp
+	"config.h"
+
+1483733537 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\entity.cpp
+	"entity.h"
+
+1483738212 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\entity.h
+	<string>
+	<vector>
+	"types.h"
+
+1483840219 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\framenrate.cpp
+	"framenrate.h"
+	<stdio.h>
+
+1483840219 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\framenrate.h
+	"types.h"
+
+1483841517 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\game.cpp
+	"game.h"
+
+1483834580 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\game.h
+	"../graphic/graphic.h"
+	"config.h"
+	"framenrate.h"
+	"input.h"
+	"player.h"
+	"world.h"
+	"font.h"
+
+1483841363 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\graphic\graphic.h
+	<SDL2/SDL.h>
+	<string>
+	"../engine/config.h"
+
+1483818727 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\world.h
+	<string>
+	<vector>
+	"../xml/tinyxml2.h"
+	"../graphic/graphic.h"
+
+1483829972 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\world.cpp
+	"world.h"
+
+1483823980 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\graphic\graphic.cpp
+	"graphic.h"
+	<stdio.h>
+	<SDL2/SDL_image.h>
+
+1376156342 c:\users\thelightalex\documents\projekte 2015\sdl2_64\include\sdl2\sdl_image.h
+	"SDL.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1483733537 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\main.cpp
+	<stdio.h>
+	"engine/game.h"
+
+1483834215 source:c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\font.cpp
+	"font.h"
+
+1483835224 c:\users\thelightalex\documents\projekte 2015\tilegamecoop\src\engine\font.h
+	"../graphic/graphic.h"
+

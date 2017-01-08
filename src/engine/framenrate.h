@@ -11,11 +11,13 @@ class framenrate
 
         void begin();
         void calc();
+        int getDelay() { return p_ms; }
     protected:
 
     private:
         int p_framerate; // the framerate what we want
         int p_frame; //Keep track of the current frame
+        int p_ms;
 
         timer p_fps;
 };

@@ -45,7 +45,7 @@ graphic::graphic( config *config)
     p_config = config;
 
     // create window
-    p_windows = SDL_CreateWindow( "Jump'n'Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, p_config->getDisplay().x, p_config->getDisplay().y, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    p_windows = SDL_CreateWindow( "Jump'n'Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, p_config->getDisplay().x, p_config->getDisplay().y, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE );
     if( p_windows == NULL )
     {
         printf( "graphic::graphic Window could not be created! SDL_Error: %s\n", SDL_GetError() );
@@ -98,7 +98,10 @@ void graphic::clear() {
         SDL_RenderSetViewport( p_renderer, &l_viewport);
 
         // Nativ resulation
-        SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
+        if( p_config->getDisplayMode() != SDL_WINDOW_FULLSCREEN_DESKTOP)
+            SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
+        else
+            SDL_RenderSetScale( p_renderer, NATIV_ZOOM, NATIV_ZOOM);
 
         // set display mode
         SDL_SetWindowFullscreen( p_windows, p_config->getDisplayMode());
@@ -125,6 +128,8 @@ image *graphic::loadImage( std::string file) {
 
     // load the file in RAM
     l_surface = IMG_Load( file.c_str());
+
+    SDL_SetColorKey( l_surface, SDL_TRUE, SDL_MapRGB(l_surface->format, BMP_ALPHA));
 
     if( l_surface) {
         // transfer to VRAM

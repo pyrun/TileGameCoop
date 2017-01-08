@@ -2,12 +2,19 @@
 #define ENTITY_H
 
 #include <string>
+#include <vector>
 
-enum Action_name { action_walk = 1, action_run, action_jump, action_swim, action_special};
+#include "types.h"
+
+enum Action_name { action_walk = 1, action_run, action_jump, action_swim, action_special, action_die};
 
 class Action
 {
+    public:
 
+    protected:
+
+    private:
 };
 
 class Entity
@@ -21,15 +28,32 @@ class Entity
     private:
 };
 
+class EntityType
+{
+    public:
+        EntityType();
+        virtual ~EntityType();
+
+    protected:
+
+    private:
+};
+
 class EntityList {
     public:
         EntityList();
         virtual ~EntityList();
 
-        bool load( std::string folder);
+        int create( EntityType obj, vec2 pos);
+
+        bool loadType( std::string folder);
+        void removeTypes();
     protected:
 
     private:
+        std::vector<EntityType> p_entity_types;
+        std::vector<Entity> p_entitys;
+        int p_id;
 };
 
 #endif // ENTITY_H

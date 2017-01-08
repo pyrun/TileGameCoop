@@ -6,10 +6,12 @@
 
 #include "../engine/config.h"
 
-#define NATIV_W 480
-#define NATIV_H 300
+#define NATIV_ZOOM 4
 
-#define BMP_ALPHA  128, 128, 255
+#define NATIV_W (1920/NATIV_ZOOM)
+#define NATIV_H (1080/NATIV_ZOOM)
+
+#define BMP_ALPHA  200, 191, 231
 
 bool initSDL(); // call it once
 
@@ -37,13 +39,15 @@ class graphic
         SDL_Window *getWindow() { return p_windows; }
         void moveCamera( vec2 move) { p_camera = p_camera + move; }
         void setCamera( vec2 pos) { p_camera = pos; }
-        vec2 getCamera() { return p_camera; }
+        vec2 getCamera() { return p_cameraOld; }
         vec2 getCameraSize() { return p_camera_size; }
+        void flipCamera() { p_cameraOld = p_camera; }
     protected:
 
     private:
         config *p_config;
         vec2 p_camera;
+        vec2 p_cameraOld;
         vec2 p_camera_size;
 
         SDL_Window *p_windows;

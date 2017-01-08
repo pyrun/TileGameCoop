@@ -1,7 +1,7 @@
 <Root>
     <Input_run>0</Input_run>
     <Input_jump>2</Input_jump>
-    <Input_attack>3</Input_attack>
+    <Input_attack>7</Input_attack>
     <Input_special>1</Input_special>
     <Input_select>4</Input_select>
     <Input_start>6</Input_start>
@@ -9,8 +9,8 @@
     <Input_right>10</Input_right>
     <Input_x>0</Input_x>
     <Input_y>1</Input_y>
-    <Display_width>940</Display_width>
-    <Display_height>578</Display_height>
-    <Display_mode>0</Display_mode>
+    <Display_width>1680</Display_width>
+    <Display_height>1050</Display_height>
+    <Display_mode>4097</Display_mode>
     <Display_maximized>0</Display_maximized>
 </Root>
