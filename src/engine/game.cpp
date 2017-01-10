@@ -32,6 +32,14 @@ game::game()
 
 game::~game()
 {
+    // delete entity
+    if( p_entity)
+        delete p_entity;
+
+    // delte font
+    if( p_font)
+        delete p_font;
+
     // delete world if a there
     if( p_world)
         delete p_world;
@@ -57,11 +65,13 @@ void game::drawHUD() {
 }
 
 int game::process() {
-
+    l_timer.start();
     //p_graphic->moveCamera( { 1, 0});
 
     //if( p_graphic->getCamera().y > 500)
     //    p_graphic->setCamera( { 20, 0});
+
+    return l_timer.getTicks();
 }
 int game::process_graphic() {
     int l_error;
@@ -71,7 +81,14 @@ int game::process_graphic() {
     // at the moment we have no error
     l_error = 0;
 
-    p_entity->loadType( "creature/riven/");
+    p_entity->loadType( "creature/riven/", p_graphic);
+
+    p_entity->create( p_entity->getType("riven"), vec2( 100, 100));
+    p_entity->getEntity( 0)->setAction( "swim");
+
+    p_entity->loadType( "creature/coin/", p_graphic);
+    p_entity->create( p_entity->getType("coin"), vec2( 200, 100));
+
 
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
@@ -89,6 +106,9 @@ int game::process_graphic() {
 
         // draw world
         p_world->draw( p_graphic);
+
+        // draw entity
+        p_entity->draw( p_graphic);
 
         // draw info
         drawHUD();

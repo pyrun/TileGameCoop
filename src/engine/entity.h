@@ -4,17 +4,32 @@
 #include <string>
 #include <vector>
 
+#include "../graphic/graphic.h"
 #include "types.h"
 #include "../xml/tinyxml2.h"
 
 #define ENTITY_FILE "definition.xml"
 
-enum action_name { action_walk = 1, action_run, action_jump, action_swim, action_special, action_die};
+// grund action
+#define ACTION_IDLE "idle"
+#define ACTION_WALK "walk"
+#define ACTION_RUN "run"
+#define ACTION_JUMP "jump"
+#define ACTION_ATTACK "attack"
+#define ACTION_SWIM "swim"
+#define ACTION_SPECIAL "special"
+#define ACTION_DIE "die"
 
 class action
 {
     public:
+        action();
+        virtual ~action();
 
+        std::string name;
+        std::string file;
+        int frame;
+        image *image;
     protected:
 
     private:
@@ -26,9 +41,12 @@ class entitytype
         entitytype() {};
         virtual ~entitytype() {};
 
+        action* getAction( std::string name);
+
         int width;
         int height;
         std::string name;
+        std::vector<action> *actions;
     protected:
 
     private:
@@ -37,16 +55,25 @@ class entitytype
 class entity
 {
     public:
-        entity();
+        entity( int id);
         virtual ~entity();
 
-        void setType( entitytype *type) { this->type = type; }
+        void draw( graphic *graphic);
+
+        void setType( entitytype *type) { this->p_type = type; }
+        void setAction( std::string name) { p_action = name; }
+        void setPos( vec2 pos) { p_pos = pos; }
+
+        int getId() { return p_id; }
     protected:
 
     private:
         int p_id;
+        vec2 p_pos;
+        std::string p_action;
 
-        entitytype *type;
+        entitytype *p_type;
+
 };
 
 class entitylist {
@@ -56,9 +83,13 @@ class entitylist {
 
         int create( entitytype *type, vec2 pos);
 
-        bool loadType( std::string folder);
+        void draw(graphic *graphic);
+
+        bool loadType( std::string folder, graphic *graphic);
         void removeTypes();
         entitytype *getType( std::string name);
+
+        entity *getEntity( int id);
     protected:
 
     private:

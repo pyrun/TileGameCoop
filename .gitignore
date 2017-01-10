@@ -7,7 +7,11 @@ Desktop.ini
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
+
+# obj folder and code blocks layout
 obj/
+src/TileGameCoop.depend
+src/TileGameCoop.layout
 
 # Windows Installer files
 *.cab
