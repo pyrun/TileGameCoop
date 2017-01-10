@@ -25,6 +25,8 @@ game::game()
 
     // create entity list
     p_entity = new entitylist();
+    // load types
+    loadTypes();
 
     // game running
     p_game_running = true;
@@ -64,6 +66,26 @@ void game::drawHUD() {
     p_font->drawMessage( p_graphic, test, vec2( NATIV_W-140, 10));
 }
 
+void game::loadTypes() {
+    DIR *l_dir;
+    struct dirent *l_entry;
+
+    std::string l_path = "creature/";
+
+    l_dir = opendir(l_path.c_str());
+    if ( l_dir == NULL) {  /* error opening the directory? */
+        printf("game::loadTypes cant load types, dir not found\n");
+    }
+
+    while ((l_entry = readdir(l_dir)) != NULL) {
+        std::string file = l_path + l_entry->d_name + "/";
+
+        // load folder
+        p_entity->loadType( file, p_graphic);
+    }
+    closedir(l_dir);
+}
+
 int game::process() {
     l_timer.start();
     //p_graphic->moveCamera( { 1, 0});
@@ -73,22 +95,21 @@ int game::process() {
 
     return l_timer.getTicks();
 }
+
 int game::process_graphic() {
     int l_error;
+
 
     p_world = new world( "1-1.tmx", "worlds/");
 
     // at the moment we have no error
     l_error = 0;
 
-    p_entity->loadType( "creature/riven/", p_graphic);
-
-    p_entity->create( p_entity->getType("riven"), vec2( 100, 100));
-    p_entity->getEntity( 0)->setAction( "swim");
-
-    p_entity->loadType( "creature/coin/", p_graphic);
     p_entity->create( p_entity->getType("coin"), vec2( 200, 100));
+    int riven = p_entity->create( p_entity->getType("riven"), vec2( 100, 100));
 
+
+    p_entity->getEntity( riven)->setAction( "swim");
 
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {

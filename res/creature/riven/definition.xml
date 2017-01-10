@@ -1,9 +1,10 @@
 <object name="riven" width="32" height="32">
 </object>
 
-<action name="idle" frame="4">idle.png</action>
-<action name="walk" frame="4">walk.png</action>
-<action name="jump" frame="4">jump.png</action>
-<action name="swim" frame="4">swim.png</action>
+<action name="idle" frame="4" speed="120">idle.png</action>
+<action name="walk" frame="4" speed="12">walk.png</action>
+<action name="run" frame="4" speed="6">walk.png</action>
+<action name="jump" frame="4" speed="20">jump.png</action>
+<action name="swim" frame="4" speed="12">swim.png</action>
 
 

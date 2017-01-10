@@ -9,6 +9,7 @@
 #include "world.h"
 #include "font.h"
 #include "entity.h"
+#include <dirent.h>
 
 class game {
     public:
@@ -16,6 +17,7 @@ class game {
         virtual ~game();
 
         void drawHUD();
+        void loadTypes();
 
         int process();
         int process_graphic();

@@ -6,22 +6,12 @@ using namespace tinyxml2;
 	#define XMLCheckResult(a_eResult) if (a_eResult != XML_SUCCESS) { printf("Error: %i\n", a_eResult); return a_eResult; }
 #endif
 
-action::action()
-{
-    this->image = NULL;
-}
-
-action::~action()
-{
-    if( this->image != NULL)
-        delete this->image;
-}
-
 action* entitytype::getAction( std::string name) {
-    for( int i = 0; i < (int)actions->size(); i++) {
-        if( actions->at(i).name == name)
-            return &actions->at(i);
+    for( int i = 0; i < (int)p_actions.size(); i++) {
+        if( p_actions[i].name == name)
+            return &p_actions[i];
     }
+
     return NULL;
 }
 
@@ -37,15 +27,25 @@ entity::~entity()
 }
 
 void entity::draw( graphic *graphic) {
+    int l_frame;
 
     action *l_action = p_type->getAction( this->p_action);
     if( l_action == NULL) { // falls animaton fehlt zurück zu idle
         p_action = ACTION_IDLE;
+        printf("dont found action, jump to idle\n");
         return;
     }
 
     image *l_image = l_action->image;
-    graphic->drawImage( l_image, p_pos, vec2(p_type->width, p_type->height), vec2( 0, 0));
+
+
+
+    if( l_action->frame != 0)
+        l_frame = p_type->getWidth()*( ((int)(graphic->getFrame()/l_action->speed) ) %l_action->frame);
+    else
+        l_frame = 0;
+
+    graphic->drawImage( l_image, p_pos, vec2( p_type->getWidth(),p_type->getHeight()), vec2( l_frame, 0));
 }
 
 entitylist::entitylist()
@@ -66,7 +66,7 @@ int entitylist::create( entitytype *type, vec2 pos) {
     if( type == NULL)
         return -1;
 
-    printf( "creating \"%s\" with id %d\n", type->name.c_str(), p_id);
+    printf( "creating \"%s\" with id %d\n", type->getName().c_str(), p_id);
 
     // create object
     obj = new entity( p_id);
@@ -121,9 +121,11 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     XMLElement* l_xml_action = l_file.FirstChildElement( "action" );
     /*if( !l_xml_action)
         return -1;*/
+    entitytype *l_type = new entitytype();
     std::string l_action_name;
     std::string l_action_file;
     int l_action_frame;
+    int l_action_speed;
 
     bool l_idle = false;
 
@@ -131,42 +133,38 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_action_file = l_xml_action->GetText();
         l_action_name = l_xml_action->Attribute( "name" );
         l_action_frame = atoi( l_xml_action->Attribute( "frame" ));
+        l_action_speed = atoi( l_xml_action->Attribute( "speed" ));
 
-        action *l_new_action = new action();
-
-        l_new_action->name = l_action_name;
-        l_new_action->file = l_action_file;
-        l_new_action->frame = l_action_frame;
-        l_new_action->image = graphic->loadImage( folder + l_action_file);
+        // check data
+        if( l_action_speed == 0)
+            l_action_speed = 1; // verry fast animation
 
         if( l_action_name == ACTION_IDLE)
             l_idle = true;
 
         // push back
-        l_actions->push_back( *l_new_action);
+        l_type->addAction( l_action_name, l_action_file, l_action_frame, l_action_speed, graphic->loadImage( folder + l_action_file));
 
         l_xml_action = l_xml_action->NextSiblingElement("action");
     }
+
     if( !l_idle) {
         printf("entitylist::loadType type %s has no idle action!\n", l_name.c_str());
         return false;
     }
 
-    entitytype *type = new entitytype();
+    l_type->setWidth(l_width);
+    l_type->setHeight(l_height);
+    l_type->setName( l_name);
 
-    type->width = l_width;
-    type->height = l_height;
-    type->name = l_name;
-    type->actions = l_actions;
-
-    p_entity_types.push_back( *type);
+    p_entity_types.push_back( *l_type);
 
     return true;
 }
 
 entitytype* entitylist::getType( std::string name) {
     for( int i = 0; i < (int)p_entity_types.size(); i++)
-        if( p_entity_types[i].name == name)
+        if( p_entity_types[i].getName() == name)
             return &p_entity_types[i];
     return NULL;
 }

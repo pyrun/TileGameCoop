@@ -74,6 +74,10 @@ graphic::graphic( config *config)
     // renderer räumen
     SDL_RenderClear( p_renderer);
 
+    // start the frame count
+    p_frame.start();
+    p_framecount = 1;
+
     // windows maxed in config?
     clear();
 }
@@ -88,6 +92,13 @@ graphic::~graphic()
 }
 
 void graphic::clear() {
+    // fame count
+    if( p_frame.getTicks() > FRAME) {
+        p_framecount++;
+        p_frame.start();
+    }
+
+
     // react of change
     if( p_config->displayChange()) {
         SDL_Rect l_viewport = { 0, 0, p_config->getDisplay().x, p_config->getDisplay().y};

@@ -20,36 +20,52 @@
 #define ACTION_SPECIAL "special"
 #define ACTION_DIE "die"
 
-class action
-{
+class action {
     public:
-        action();
-        virtual ~action();
-
         std::string name;
         std::string file;
         int frame;
+        int speed;
         image *image;
-    protected:
-
-    private:
 };
 
 class entitytype
 {
     public:
-        entitytype() {};
+        entitytype() { };
         virtual ~entitytype() {};
 
         action* getAction( std::string name);
 
-        int width;
-        int height;
-        std::string name;
-        std::vector<action> *actions;
+
+
+        void addAction( std::string name, std::string file, int frame, int speed, image *image) {
+            action *l_action = new action;
+
+            l_action->name = name;
+            l_action->file = file;
+            l_action->frame = frame;
+            l_action->speed = speed;
+            l_action->image = image;
+
+            p_actions.push_back( *l_action);
+        }
+
+        void setName( std::string name) { p_name = name; }
+
+        void setWidth( int width) { p_width = width; }
+        void setHeight( int height) { p_height = height; }
+
+        std::string getName() { return p_name; }
+        int getWidth() { return p_width; }
+        int getHeight() { return p_height; }
     protected:
 
     private:
+        int p_width;
+        int p_height;
+        std::string p_name;
+        std::vector<action> p_actions;
 };
 
 class entity

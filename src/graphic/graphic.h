@@ -13,6 +13,8 @@
 
 #define BMP_ALPHA  200, 191, 231
 
+#define FRAME (1.0f/60.0f) //60hz
+
 bool initSDL(); // call it once
 
 class image {
@@ -42,6 +44,7 @@ class graphic
         vec2 getCamera() { return p_cameraOld; }
         vec2 getCameraSize() { return p_camera_size; }
         void flipCamera() { p_cameraOld = p_camera; }
+        int getFrame() { return p_framecount; }
     protected:
 
     private:
@@ -49,6 +52,9 @@ class graphic
         vec2 p_camera;
         vec2 p_cameraOld;
         vec2 p_camera_size;
+
+        timer p_frame;
+        int p_framecount;
 
         SDL_Window *p_windows;
         SDL_Renderer *p_renderer;
