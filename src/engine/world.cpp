@@ -30,6 +30,37 @@ world::~world()
     //dtor
 }
 
+void world::loadTypes( std::string file) {
+    XMLDocument l_file;
+    XMLElement* l_tile;
+
+    std::string l_xmlfile = file + ".xml";
+
+    // load the file
+    XMLError l_result = l_file.LoadFile( l_xmlfile.c_str());
+
+    l_tile = l_file.FirstChildElement( "animation");
+    while( l_tile) {
+        tiletype *l_type = new tiletype();
+        XMLElement* l_animation_tile;
+
+        l_type->speed = atoi(l_tile->Attribute( "speed"));
+        l_type->speed = l_type->speed==0?1:l_type->speed;
+
+        l_animation_tile = l_tile->FirstChildElement("tile");
+        while( l_animation_tile) {
+            l_type->id.push_back( atoi(l_animation_tile->GetText()) );
+            l_animation_tile = l_animation_tile->NextSiblingElement("tile");
+        }
+
+        p_tiletypes.push_back( *l_type);
+
+        l_tile = l_tile->NextSiblingElement("animation");
+    }
+
+    printf("%s %d types loaded\n", l_xmlfile.c_str(), (int)p_tiletypes.size());
+}
+
 bool world::load( std::string file, std::string ordner) {
     XMLDocument l_file;
 
@@ -122,6 +153,9 @@ bool world::load( std::string file, std::string ordner) {
     p_map_hight = l_map_height;
     p_tileset_space = l_tileset_space;
 
+    // load types
+    loadTypes( ordner + l_tileset);
+
     // creating world
     p_tilemap_overlap = readTilemap( l_overlap);
     p_tilemap_foreground = readTilemap( l_foreground);
@@ -138,6 +172,22 @@ bool world::load( std::string file, std::string ordner) {
     printf( "Tileset %s %d %d\n", p_tilesetpath.c_str(), p_tileset_width/p_tilewidth, l_tileset_height/l_tilehight);
 
     return true;
+}
+
+tiletype *world::findType( int id) {
+/*    for( int i = 0; i < (int)p_tiletypes.size(); i++)
+        if( p_tiletypes[i].start_id == id) {
+            printf("found\n");
+            return &p_tiletypes[i];
+        }
+    return NULL;*/
+    for( int i = 0; i < (int)p_tiletypes.size(); i++) {
+        for( int n = 0; n < (int)p_tiletypes[i].id.size(); n++)
+            if( p_tiletypes[i].id[n] == id) {
+                return &p_tiletypes[i];
+            }
+    }
+    return NULL;
 }
 
 tile *world::getTile( tile *tilemap, int x, int y) {
@@ -175,7 +225,13 @@ void world::drawTile( graphic *graphic, int x, int y, tile *map) {
         return;
 
     int l_x = 0;
-    l_x = l_tile->id;
+
+    // Animation
+    if( l_tile->type != NULL) {
+        l_x = l_tile->type->id[ ((graphic->getFrame()/l_tile->type->speed) + l_tile->id)%l_tile->type->id.size()]+1;
+    }
+    else
+        l_x = l_tile->id;
     int l_y = 0;
     int l_factor = (p_tileset_width/(p_tilewidth+p_tileset_space));
 
@@ -275,6 +331,8 @@ tile *world::readTilemap( std::string tilemap) {
         tile l_tile;
         // set data
         l_tile.id = atoi( l_data);
+        l_tile.type = findType( l_tile.id-1 );
+
         // save to the array
         l_tilemap[ l_amount] = l_tile;
 

@@ -1,0 +1,11 @@
+<animation speed="20">
+<tile>60</tile>
+<tile>120</tile>
+<tile>180</tile>
+<tile>240</tile>
+</animation>
+
+<animation speed="30">
+<tile>66</tile>
+<tile>68</tile>
+</animation>

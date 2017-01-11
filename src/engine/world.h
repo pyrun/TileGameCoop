@@ -7,9 +7,17 @@
 #include "../xml/tinyxml2.h"
 #include "../graphic/graphic.h"
 
+class tiletype {
+    public:
+        std::vector<int> id;
+        int speed;
+};
+
 class tile {
     public:
         int id;
+        int speed;
+        tiletype *type;
 };
 
 class world_background {
@@ -28,7 +36,9 @@ class world
         world( std::string file, std::string ordner );
         virtual ~world();
 
+        void loadTypes( std::string file);
         bool load( std::string file, std::string ordner);
+        tiletype *findType( int id);
         tile *getTile( tile *tilemap, int x, int y);
         void addBackground( tinyxml2::XMLElement* background, std::string ordner);
         void drawTile( graphic *graphic, int x, int y, tile *map);
@@ -60,6 +70,8 @@ class world
         int p_tileset_space;
 
         std::vector<world_background> p_backgrounds;
+
+        std::vector<tiletype> p_tiletypes;
 };
 
 #endif // WORLD_H

@@ -26,7 +26,7 @@ class action {
         std::string file;
         int frame;
         int speed;
-        image *image;
+        image *imagefile;
 };
 
 class entitytype
@@ -46,7 +46,7 @@ class entitytype
             l_action->file = file;
             l_action->frame = frame;
             l_action->speed = speed;
-            l_action->image = image;
+            l_action->imagefile = image;
 
             p_actions.push_back( *l_action);
         }
@@ -87,9 +87,7 @@ class entity
         int p_id;
         vec2 p_pos;
         std::string p_action;
-
         entitytype *p_type;
-
 };
 
 class entitylist {

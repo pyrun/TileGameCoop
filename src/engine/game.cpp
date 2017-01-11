@@ -108,8 +108,10 @@ int game::process_graphic() {
     p_entity->create( p_entity->getType("coin"), vec2( 200, 100));
     int riven = p_entity->create( p_entity->getType("riven"), vec2( 100, 100));
 
+    p_entity->create( p_entity->getType("coin2"), vec2( 200, 200));
 
-    p_entity->getEntity( riven)->setAction( "swim");
+
+    p_entity->getEntity( riven)->setAction( "run");
 
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {

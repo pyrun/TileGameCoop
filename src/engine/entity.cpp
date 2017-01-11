@@ -36,7 +36,7 @@ void entity::draw( graphic *graphic) {
         return;
     }
 
-    image *l_image = l_action->image;
+    image *l_image = l_action->imagefile;
 
 
 
