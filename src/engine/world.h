@@ -46,6 +46,7 @@ class world
         void drawBackAndForeground( graphic *graphic);
         void drawOverground( graphic *graphic);
         void draw( graphic *graphic);
+        float getGravity() { return p_gravity; }
     protected:
 
     private:
@@ -69,6 +70,7 @@ class world
         int p_tileset_width;
         int p_tileset_height;
         int p_tileset_space;
+        float p_gravity;
 
         std::vector<world_background> p_backgrounds;
 

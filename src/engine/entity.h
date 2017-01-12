@@ -7,6 +7,7 @@
 #include "../graphic/graphic.h"
 #include "types.h"
 #include "../xml/tinyxml2.h"
+#include "world.h"
 
 #define ENTITY_FILE "definition.xml"
 
@@ -79,15 +80,22 @@ class entity
         void setType( entitytype *type) { this->p_type = type; }
         void setAction( std::string name) { p_action = name; }
         void setPos( vec2 pos) { p_pos = pos; }
+        void setPos( fvec2 pos) { p_pos = pos; }
+        void setVelocity( fvec2 velocity) { p_velocity = velocity; }
 
         int getId() { return p_id; }
+        void addVelocity( fvec2 velocity) { p_velocity = p_velocity + velocity; }
+        fvec2 getVelocity() { return p_velocity; }
+        fvec2 getPosition() { return p_pos; }
     protected:
 
     private:
         int p_id;
-        vec2 p_pos;
+        fvec2 p_pos;
         std::string p_action;
         entitytype *p_type;
+
+        fvec2 p_velocity;
 };
 
 class entitylist {
@@ -98,6 +106,8 @@ class entitylist {
         int create( entitytype *type, vec2 pos);
 
         void draw(graphic *graphic);
+
+        void process( world *world, int dt);
 
         bool loadType( std::string folder, graphic *graphic);
         void removeTypes();

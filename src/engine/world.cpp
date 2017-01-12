@@ -17,6 +17,9 @@ world::world(std::string file = "default.tmx", std::string ordner = "worlds/")
     p_file = file;
     if(!load( file, ordner))
         printf( "world::world cant load the file\n");
+
+    // gravity
+    p_gravity = 0.0010f;
 }
 
 world::~world()
@@ -191,16 +194,19 @@ tile *world::getTile( tile *tilemap, int x, int y) {
             l_tile = &tilemap[ y * p_map_width + x];
     return l_tile;
 }
+
 int world::getTypeIndex( int id, tiletype *type) {
     for( int i = 0; i < (int)type->id.size(); i++)
         if( type->id[i] == id-1)
             return i;
     return 0;
 }
+
 void world::addBackground( XMLElement* background, std::string ordner) {
     XMLElement* image;
     world_background l_background;
     image = NULL;
+
 
     // load the first child image
     image = background->FirstChildElement("image");

@@ -9,7 +9,7 @@ game::game()
     p_graphic = new graphic( &p_config);
 
     // create the framerate counter
-    p_framerate = new framenrate();
+    p_framerate = new framenrate( );
 
     // create player_list
     p_player = new player_handle(&p_config);
@@ -87,13 +87,13 @@ void game::loadTypes() {
 }
 
 int game::process() {
-    l_timer.start();
+    p_timer.start();
     //p_graphic->moveCamera( { 1, 0});
 
     //if( p_graphic->getCamera().y > 500)
     //    p_graphic->setCamera( { 20, 0});
 
-    return l_timer.getTicks();
+    return p_timer.getTicks();
 }
 
 int game::process_graphic() {
@@ -113,6 +113,9 @@ int game::process_graphic() {
 
     p_entity->getEntity( riven)->setAction( "run");
 
+    //delta time start
+    p_deltaTime.start();
+
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
         // start measurement point
@@ -126,6 +129,12 @@ int game::process_graphic() {
 
         // process
         process();
+
+        // calc entity
+        p_entity->process( p_world, p_deltaTime.getTicks());
+
+        //delta time reset to next frame
+        p_deltaTime.start();
 
         // draw world
         p_world->draw( p_graphic);

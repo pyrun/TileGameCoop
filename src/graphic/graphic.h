@@ -13,7 +13,7 @@
 
 #define BMP_ALPHA  200, 191, 231
 
-#define FRAME (1.0f/60.0f) //60hz
+#define FRAME 16 //60hz
 
 bool initSDL(); // call it once
 

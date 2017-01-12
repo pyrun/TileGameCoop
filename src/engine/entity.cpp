@@ -39,13 +39,11 @@ void entity::draw( graphic *graphic) {
     image *l_image = l_action->imagefile;
 
 
-
     if( l_action->frame != 0)
         l_frame = p_type->getWidth()*( ((int)(graphic->getFrame()/l_action->speed) ) %l_action->frame);
     else
         l_frame = 0;
-
-    graphic->drawImage( l_image, p_pos, vec2( p_type->getWidth(),p_type->getHeight()), vec2( l_frame, 0));
+    graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( l_frame, 0));
 }
 
 entitylist::entitylist()
@@ -87,6 +85,39 @@ int entitylist::create( entitytype *type, vec2 pos) {
 void entitylist::draw(graphic *graphic) {
     for(int i = 0; i < (int)p_entitys.size(); i++)
         p_entitys[i].draw( graphic);
+}
+
+void entitylist::process( world *world, int deltaTime) {
+    float l_velocityDelta;
+
+    // calc delta of velocity
+    l_velocityDelta = (float)deltaTime * world->getGravity();
+
+
+    for(int i = 0; i < (int)p_entitys.size(); i++) {
+        fvec2 l_velocity;
+        fvec2 l_position;
+        fvec2 l_change;
+
+        // positon ermiteln
+        l_position = p_entitys[i].getPosition();
+        l_velocity = p_entitys[i].getVelocity();
+
+        // änderung rechnen
+        l_change.x += l_velocity.x * deltaTime;
+        l_change.y += (( l_velocity.y + (l_velocityDelta / 2)) * deltaTime);
+
+        // y delta dazurechnen (x nicht nötig da keine gravi. )
+        l_velocity.y += l_velocityDelta;
+
+        p_entitys[i].setPos( l_position + l_change );
+
+        // add velocity next frame
+        p_entitys[i].setVelocity( l_velocity);
+
+        if( p_entitys[i].getPosition().y+l_velocity.y > 180)
+            p_entitys[i].setVelocity( fvec2( 0.1f, -0.375f) );
+    }
 }
 
 bool entitylist::loadType( std::string folder, graphic *graphic) {

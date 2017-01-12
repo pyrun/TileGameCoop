@@ -35,7 +35,8 @@ class game {
         font *p_font;
         entitylist *p_entity;
 
-        timer l_timer;
+        timer p_timer;
+        timer p_deltaTime;
 
         bool p_game_running;
 };

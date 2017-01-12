@@ -11,7 +11,7 @@ framenrate::framenrate( int framerate)
     p_ms = 0;
 
     // set framerate what we want
-    p_framerate = framerate;
+    p_framerate = 60;
 }
 
 framenrate::~framenrate()
@@ -31,6 +31,6 @@ void framenrate::calc() {
     // ms
     p_ms = p_fps.getTicks();
 
-    if( p_fps.getTicks() < 1000.f/ p_framerate)
+    if( p_fps.getTicks() < (1000.f/ p_framerate) )
         SDL_Delay( ( 1000.f/ p_framerate) - p_fps.getTicks() );
 }
