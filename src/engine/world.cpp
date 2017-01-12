@@ -175,12 +175,6 @@ bool world::load( std::string file, std::string ordner) {
 }
 
 tiletype *world::findType( int id) {
-/*    for( int i = 0; i < (int)p_tiletypes.size(); i++)
-        if( p_tiletypes[i].start_id == id) {
-            printf("found\n");
-            return &p_tiletypes[i];
-        }
-    return NULL;*/
     for( int i = 0; i < (int)p_tiletypes.size(); i++) {
         for( int n = 0; n < (int)p_tiletypes[i].id.size(); n++)
             if( p_tiletypes[i].id[n] == id) {
@@ -197,7 +191,12 @@ tile *world::getTile( tile *tilemap, int x, int y) {
             l_tile = &tilemap[ y * p_map_width + x];
     return l_tile;
 }
-
+int world::getTypeIndex( int id, tiletype *type) {
+    for( int i = 0; i < (int)type->id.size(); i++)
+        if( type->id[i] == id-1)
+            return i;
+    return 0;
+}
 void world::addBackground( XMLElement* background, std::string ordner) {
     XMLElement* image;
     world_background l_background;
@@ -228,7 +227,7 @@ void world::drawTile( graphic *graphic, int x, int y, tile *map) {
 
     // Animation
     if( l_tile->type != NULL) {
-        l_x = l_tile->type->id[ ((graphic->getFrame()/l_tile->type->speed) + l_tile->id)%l_tile->type->id.size()]+1;
+        l_x = l_tile->type->id[ ((graphic->getFrame()/l_tile->type->speed) + getTypeIndex(l_tile->id, l_tile->type) )%l_tile->type->id.size()]+1;
     }
     else
         l_x = l_tile->id;
