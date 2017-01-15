@@ -7,6 +7,8 @@
 #include "../xml/tinyxml2.h"
 #include "../graphic/graphic.h"
 
+#define MASSIV_TILE 1337.f
+
 class tiletype {
     public:
         std::vector<int> id;
@@ -36,6 +38,7 @@ class world
         world( std::string file, std::string ordner );
         virtual ~world();
 
+        float getCollisionY( fvec2 position, fvec2 change, fvec2 velocity);
         void loadTypes( std::string file);
         bool load( std::string file, std::string ordner);
         tiletype *findType( int id);

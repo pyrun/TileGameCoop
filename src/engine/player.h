@@ -28,6 +28,7 @@ class player_handle
         virtual ~player_handle();
 
         void handle();
+        int getPlayerAmount() { return (int)p_playerlist.size(); }
     protected:
 
     private:

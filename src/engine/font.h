@@ -12,10 +12,7 @@ class font
     public:
         font( graphic *graphic);
         virtual ~font();
-        void drawMessage(graphic *graphic, std::string text, vec2 pos) {
-            for( int i = 0; i < (int)text.size(); i++)
-                drawLetter( graphic, text.c_str()[i], pos + vec2( i*FONT_SIZE_W, 0));
-        }
+        void drawMessage(graphic *graphic, std::string text, vec2 pos, bool left = false, bool up = false);
         void drawLetter(graphic *graphic, char ascii, vec2 pos) {
             graphic->drawImage( p_font, pos, vec2(FONT_SIZE_W, FONT_SIZE_H),vec2( getXFont( ascii), getYFont( ascii)) );
         }

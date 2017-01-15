@@ -30,6 +30,15 @@ class action {
         image *imagefile;
 };
 
+class vertex {
+    public:
+        vec2 pos;
+        bool up;
+        bool left;
+        bool right;
+        bool down;
+};
+
 class entitytype
 {
     public:
@@ -51,8 +60,20 @@ class entitytype
 
             p_actions.push_back( *l_action);
         }
+        void addVertex(vec2 pos, bool left, bool right, bool up, bool down) {
+            vertex *l_vertex = new vertex;
+
+            l_vertex->pos = pos;
+            l_vertex->left = left;
+            l_vertex->right = right;
+            l_vertex->down = down;
+            l_vertex->up = up;
+
+            p_vertex.push_back( *l_vertex);
+        }
 
         void setName( std::string name) { p_name = name; }
+        void setGravity( bool mass) { p_gravity = mass; }
 
         void setWidth( int width) { p_width = width; }
         void setHeight( int height) { p_height = height; }
@@ -60,13 +81,17 @@ class entitytype
         std::string getName() { return p_name; }
         int getWidth() { return p_width; }
         int getHeight() { return p_height; }
+        bool getGravity() { return p_gravity; }
+        std::vector<vertex> getVertex() { return p_vertex; }
     protected:
 
     private:
         int p_width;
         int p_height;
+        bool p_gravity;
         std::string p_name;
         std::vector<action> p_actions;
+        std::vector<vertex> p_vertex;
 };
 
 class entity
@@ -87,6 +112,7 @@ class entity
         void addVelocity( fvec2 velocity) { p_velocity = p_velocity + velocity; }
         fvec2 getVelocity() { return p_velocity; }
         fvec2 getPosition() { return p_pos; }
+        entitytype *getType() { return p_type; }
     protected:
 
     private:

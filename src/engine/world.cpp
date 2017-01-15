@@ -1,5 +1,7 @@
 #include "world.h"
 
+#include <math.h>
+
 using namespace tinyxml2;
 
 #ifndef XMLCheckResult
@@ -33,6 +35,55 @@ world::~world()
     //dtor
 }
 
+float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity) {
+    if( velocity.y > 0) {
+        int l_x = ( position.x )/p_tilewidth;
+        int l_y = ( position.y )/p_tilehight;
+        tile *l_tile = NULL;
+
+        //printf("%.2f %d/%d\n", change.y, position.tovec2().x, position.tovec2().y);
+        float i;
+
+        for( i = 0; i < change.y; i+= 0.1f) {
+            l_x = ( position.x )/p_tilewidth;
+            l_y = ( position.y + i )/p_tilehight;
+
+            // collision tile
+            l_tile = getTile( p_tilemap_foreground, l_x, l_y);
+            if( l_tile != NULL && l_tile->id == 0) {
+                l_tile = NULL;
+                continue;
+            }
+            break;
+        }
+
+        float l_pos_y = position.y;
+        float l_pos_change_y = position.y + change.y;
+        float l_bottom = l_y*p_tilehight;
+
+        //printf("%.2f y%.2f %.2f %.2f %.2f\n", i, l_bottom,change.y, position.y, l_pos_change_y-l_bottom);
+        //printf("%d %.2f %.2f %0.2f\n", l_y*p_tilehight, change.y, position.y, i);
+        /*float l_coll_y = change.y;
+        while( l_coll_y > 0 && l_tile == NULL) {
+            l_tile = getTile( p_tilemap_foreground, l_x, l_y+);
+            l_coll_y-= p_tilehight;
+        }*/
+
+        if( l_tile == NULL)
+            return MASSIV_TILE;
+
+        // abfragen wo hitbox ist
+        if( l_tile->id == 0)
+            return MASSIV_TILE;
+
+        /*if( position.y - ((l_y + i) * p_tilehight) < p_tilehight)
+            return change.y;*/
+        // massiv
+        return l_pos_change_y-l_bottom;//position.y - ((l_y ) * p_tilehight);
+    }
+    return MASSIV_TILE;
+}
+
 void world::loadTypes( std::string file) {
     XMLDocument l_file;
     XMLElement* l_tile;
@@ -48,6 +99,7 @@ void world::loadTypes( std::string file) {
         XMLElement* l_animation_tile;
 
         l_type->speed = atoi(l_tile->Attribute( "speed"));
+        // speed lesen -> falls fehlt eins einsetzten
         l_type->speed = l_type->speed==0?1:l_type->speed;
 
         l_animation_tile = l_tile->FirstChildElement("tile");
@@ -189,10 +241,17 @@ tiletype *world::findType( int id) {
 
 tile *world::getTile( tile *tilemap, int x, int y) {
     tile *l_tile = NULL;
-    if( x < p_map_width && y < p_map_hight)
-        if( x >= 0 && y >= 0)
-            l_tile = &tilemap[ y * p_map_width + x];
-    return l_tile;
+
+    // nicht über rand
+    if( x >= p_map_width || y >= p_map_hight )
+        return NULL;
+
+    // keine negative werte
+    if( x < 0 || y < 0)
+        return NULL;
+
+
+    return &tilemap[ y * p_map_width + x];;
 }
 
 int world::getTypeIndex( int id, tiletype *type) {

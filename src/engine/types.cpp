@@ -1,5 +1,12 @@
 #include "types.h"
 
+#include <math.h>
+
+/*double round(double d)
+{
+  return floor(d + 0.5);
+}*/
+
 timer::timer() {
     // Initialize the variables
     stop();

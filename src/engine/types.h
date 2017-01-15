@@ -2,6 +2,8 @@
 #define TYPES_H
 
 #include <SDL2/SDL_timer.h>
+#include <math.h>
+
 
 struct vec2 {
     vec2( int x = 0, int y = 0) {
@@ -15,6 +17,13 @@ struct vec2 {
         vec2 c;
         c.x = x + a.x;
         c.y = y + a.y;
+        return c;
+    }
+
+    vec2 operator-( const vec2 &a) {
+        vec2 c;
+        c.x = x - a.x;
+        c.y = y - a.y;
         return c;
     }
 };
@@ -47,6 +56,13 @@ struct fvec2 {
         return c;
     }
 
+    fvec2 operator-( const fvec2 &a) {
+        fvec2 c;
+        c.x = x - a.x;
+        c.y = y - a.y;
+        return c;
+    }
+
     fvec2 operator=( const vec2 &a) {
         x = a.x;
         y = a.y;
@@ -55,8 +71,8 @@ struct fvec2 {
 
     vec2 tovec2() {
         vec2 c;
-        c.x = (int)this->x;
-        c.y = (int)this->y;
+        c.x = (int)round( (double)this->x);
+        c.y = (int)round( (double)this->y);
         return c;
     }
 };

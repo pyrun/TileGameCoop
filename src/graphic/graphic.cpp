@@ -113,10 +113,10 @@ void graphic::clear() {
             SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
         }
         else {
+            SDL_SetWindowSize( p_windows, p_config->getDisplayFullscreen().x, p_config->getDisplayFullscreen().y);
             SDL_SetWindowFullscreen( p_windows, SDL_WINDOW_FULLSCREEN_DESKTOP);
             SDL_RenderSetScale( p_renderer, NATIV_ZOOM, NATIV_ZOOM);
         }
-
 
 
         // set config if windows maxmazed

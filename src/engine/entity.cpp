@@ -89,15 +89,18 @@ void entitylist::draw(graphic *graphic) {
 
 void entitylist::process( world *world, int deltaTime) {
     float l_velocityDelta;
+    float l_collision_y = 0.0f;
 
     // calc delta of velocity
     l_velocityDelta = (float)deltaTime * world->getGravity();
-
 
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         fvec2 l_velocity;
         fvec2 l_position;
         fvec2 l_change;
+
+        if( p_entitys[i].getType()->getGravity() != false)
+            continue;
 
         // positon ermiteln
         l_position = p_entitys[i].getPosition();
@@ -105,18 +108,29 @@ void entitylist::process( world *world, int deltaTime) {
 
         // änderung rechnen
         l_change.x += l_velocity.x * deltaTime;
-        l_change.y += (( l_velocity.y + (l_velocityDelta / 2)) * deltaTime);
+        if( l_velocityDelta)
+            l_change.y += (( l_velocity.y + (l_velocityDelta / 2)) * deltaTime);
 
         // y delta dazurechnen (x nicht nötig da keine gravi. )
         l_velocity.y += l_velocityDelta;
+
+        l_collision_y = world->getCollisionY( l_position + fvec2( 0, (float)p_entitys[i].getType()->getHeight()), l_change, l_velocity);
+        if( l_collision_y != MASSIV_TILE) {
+
+            p_entitys[i].setPos( l_position + l_change - fvec2( 0, l_collision_y) );
+
+            p_entitys[i].setVelocity( fvec2() );
+
+            continue;
+        }
 
         p_entitys[i].setPos( l_position + l_change );
 
         // add velocity next frame
         p_entitys[i].setVelocity( l_velocity);
 
-        if( p_entitys[i].getPosition().y+l_velocity.y > 180)
-            p_entitys[i].setVelocity( fvec2( 0.1f, -0.375f) );
+        /*if( p_entitys[i].getPosition().y+l_velocity.y > 250)
+            p_entitys[i].setVelocity( fvec2( 0.1f, -0.375f) );*/
     }
 }
 
@@ -129,6 +143,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
 
     int l_width;
     int l_height;
+    bool l_gravity;
 
     std::string l_name;
     std::vector<action> *l_actions = new std::vector<action>();
@@ -147,11 +162,9 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_name = l_object->Attribute( "name" );
     l_width = atoi(l_object->Attribute( "width" ));
     l_height = atoi(l_object->Attribute( "height" ));
+    l_gravity = atoi(l_object->Attribute( "gravity" ));
 
-    // read all actions
-    XMLElement* l_xml_action = l_file.FirstChildElement( "action" );
-    /*if( !l_xml_action)
-        return -1;*/
+
     entitytype *l_type = new entitytype();
     std::string l_action_name;
     std::string l_action_file;
@@ -159,7 +172,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     int l_action_speed;
 
     bool l_idle = false;
-
+    // read all actions
+    XMLElement* l_xml_action = l_object->FirstChildElement( "action" );
     while( l_xml_action) {
         l_action_file = l_xml_action->GetText();
         l_action_name = l_xml_action->Attribute( "name" );
@@ -179,6 +193,45 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_xml_action = l_xml_action->NextSiblingElement("action");
     }
 
+    // load vertex
+    std::string l_vertex_name;
+    vec2 l_vertex_pos;
+    bool l_vertex_up;
+    bool l_vertex_left;
+    bool l_vertex_down;
+    bool l_vertex_right;
+    XMLElement* l_xml_vertex = l_object->FirstChildElement( "vertex" );
+    while( l_xml_vertex) {
+        l_vertex_name = l_xml_vertex->GetText();
+        // reset
+        l_vertex_left = false;
+        l_vertex_up = false;
+        l_vertex_down = false;
+        l_vertex_right = false;
+
+        if( l_vertex_name == "up")
+            l_vertex_up = true;
+        if( l_vertex_name == "left")
+            l_vertex_left = true;
+        if( l_vertex_name == "down")
+            l_vertex_down = true;
+        if( l_vertex_name == "right")
+            l_vertex_right = true;
+
+        // vertex
+        l_vertex_pos.x = atoi(l_xml_vertex->Attribute( "x") );
+        l_vertex_pos.y = atoi(l_xml_vertex->Attribute( "y") );
+
+        //printf( "vertex u%dl%dd%dr%d %d/%d\n", l_vertex_up, l_vertex_left, l_vertex_down, l_vertex_right,l_vertex_pos.x, l_vertex_pos.y);
+        l_type->addVertex( l_vertex_pos, l_vertex_left, l_vertex_right, l_vertex_up, l_vertex_down);
+
+        // next vertex
+        l_xml_vertex = l_xml_vertex->NextSiblingElement("vertex");
+    }
+    printf(" %d\n", l_type->getVertex().size());
+
+
+
     if( !l_idle) {
         printf("entitylist::loadType type %s has no idle action!\n", l_name.c_str());
         return false;
@@ -187,6 +240,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setWidth(l_width);
     l_type->setHeight(l_height);
     l_type->setName( l_name);
+    l_type->setGravity( l_gravity);
 
     p_entity_types.push_back( *l_type);
 

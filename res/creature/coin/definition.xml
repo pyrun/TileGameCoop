@@ -1,4 +1,3 @@
-<object name="coin" width="16" height="16">
-</object>
-
+<object name="coin" width="16" height="16" gravity="1">
 <action name="idle" frame="5" speed="20">coin.bmp</action>
+</object>
