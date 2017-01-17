@@ -1,3 +1,0 @@
-<object name="coin2" width="16" height="16" gravity="0">
-<action name="idle">coin.bmp</action>
-</object>

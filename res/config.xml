@@ -9,10 +9,10 @@
     <Input_right>10</Input_right>
     <Input_x>0</Input_x>
     <Input_y>1</Input_y>
-    <Display_width>806</Display_width>
-    <Display_height>548</Display_height>
+    <Display_width>997</Display_width>
+    <Display_height>469</Display_height>
     <DisplayFullscreen_width>1920</DisplayFullscreen_width>
     <DisplayFullscreen_height>1080</DisplayFullscreen_height>
-    <Display_mode>0</Display_mode>
+    <Display_mode>1</Display_mode>
     <Display_maximized>0</Display_maximized>
 </Root>

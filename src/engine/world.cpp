@@ -90,6 +90,10 @@ void world::loadTypes( std::string file) {
 
     std::string l_xmlfile = file + ".xml";
 
+    // if fille dont found
+    if( file_exist( l_xmlfile) == false)
+        return;
+
     // load the file
     XMLError l_result = l_file.LoadFile( l_xmlfile.c_str());
 
@@ -113,7 +117,7 @@ void world::loadTypes( std::string file) {
         l_tile = l_tile->NextSiblingElement("animation");
     }
 
-    printf("%s %d types loaded\n", l_xmlfile.c_str(), (int)p_tiletypes.size());
+    //printf("%s %d types loaded\n", l_xmlfile.c_str(), (int)p_tiletypes.size());
 }
 
 bool world::load( std::string file, std::string ordner) {
@@ -142,36 +146,48 @@ bool world::load( std::string file, std::string ordner) {
 
     // load the file
     XMLError l_result = l_file.LoadFile( p_file.c_str());
+    if( file_exist( p_file) == false) {
+        printf( "world::load file dont exist \"%s\"\n", p_file.c_str());
+        return false;
+    }
 
     // check the file
     XMLCheckResult(l_result);
 
     // map
     XMLElement* l_map = l_file.FirstChildElement( "map" );
-    if( !l_map)
+    if( !l_map) {
+        printf( "world::load map not defined - file corrupt? \n");
         return false;
+    }
     l_map_width = atoi(l_map->Attribute( "width" ));
     l_map_height = atoi( l_map->Attribute( "height" ));
 
     // tile
     XMLElement* l_xml_tileset = l_map->FirstChildElement( "tileset" );
-    if( !l_xml_tileset)
+    if( !l_xml_tileset) {
+        printf( "world::load tileset not defined in world file - cancel load\n");
         return false;
+    }
     l_tilewidth = atoi(l_xml_tileset->Attribute( "tilewidth" ));
     l_tilehight = atoi(l_xml_tileset->Attribute( "tileheight" ));
     l_tileset_space = atoi(l_xml_tileset->Attribute( "spacing" ));
 
     XMLElement* l_xml_tileset_source = l_xml_tileset->FirstChildElement( "image" );
-    if( !l_xml_tileset_source)
+    if( !l_xml_tileset_source) {
+        printf( "world::load tileset not defined in world file - cancel load\n");
         return false;
+    }
     l_tileset = l_xml_tileset_source->Attribute( "source" );
     l_tileset_width = atoi(l_xml_tileset_source->Attribute( "width" ));
     l_tileset_height = atoi(l_xml_tileset_source->Attribute( "height"));
 
     // data
     XMLElement* l_layer = l_map->FirstChildElement( "layer" );
-    if( !l_layer)
+    if( !l_layer) {
+        printf( "world::load no layer found - cancel load\n");
         return false;
+    }
 
     // alle layer lesen
     while( l_layer) {
@@ -195,7 +211,6 @@ bool world::load( std::string file, std::string ordner) {
         addBackground( l_background_element, ordner);
         l_background_element = l_background_element->NextSiblingElement( "imagelayer");
     }
-    printf( "backgrounds %d\n", p_backgrounds.size());
 
     // check if all world data here
     if( !l_overlap.size() || !l_background.size() || !l_foreground.size()) {
@@ -224,7 +239,7 @@ bool world::load( std::string file, std::string ordner) {
     p_tilewidth = l_tilewidth;
     p_tilehight = l_tilehight;
 
-    printf( "Tileset %s %d %d\n", p_tilesetpath.c_str(), p_tileset_width/p_tilewidth, l_tileset_height/l_tilehight);
+    //printf( "Tileset %s %d %d\n", p_tilesetpath.c_str(), p_tileset_width/p_tilewidth, l_tileset_height/l_tilehight);
 
     return true;
 }
@@ -353,6 +368,10 @@ void world::drawOverground( graphic *graphic) {
 }
 
 void world::draw( graphic *graphic) {
+    // dont draw if world not loaded or wrong loaded
+    if( p_tilemap_foreground == NULL)
+        return;
+
     if( (int)p_backgrounds.size() > 0) {
         if(p_backgrounds[0].picture == NULL)
             p_backgrounds[0].picture = graphic->loadImage( p_backgrounds[0].picture_file);
@@ -375,10 +394,10 @@ void world::draw( graphic *graphic) {
         }
     }
 
-    // load tileset if not loadead
+    // draw Back and Foreground
     drawBackAndForeground( graphic);
 
-
+    // draw Overground
     drawOverground( graphic);
 }
 

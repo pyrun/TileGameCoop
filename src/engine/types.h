@@ -3,7 +3,8 @@
 
 #include <SDL2/SDL_timer.h>
 #include <math.h>
-
+#include <unistd.h>
+#include <string>
 
 struct vec2 {
     vec2( int x = 0, int y = 0) {
@@ -102,6 +103,9 @@ class timer {
         bool p_paused;
         bool p_started;
 };
+
+
+extern bool file_exist( std::string file);
 
 /*class types
 {

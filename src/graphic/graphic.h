@@ -6,10 +6,9 @@
 
 #include "../engine/config.h"
 
-#define NATIV_ZOOM 4
 
-#define NATIV_W (1920/NATIV_ZOOM)
-#define NATIV_H (1080/NATIV_ZOOM)
+#define NATIV_W (1920/4)
+#define NATIV_H (1080/4)
 
 #define BMP_ALPHA  200, 191, 231
 

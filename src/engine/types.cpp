@@ -75,3 +75,9 @@ int timer::getTicks() {
 
     return l_time;
 }
+
+bool file_exist( std::string file) {
+    if( access( file.c_str(), F_OK ) != -1 )
+        return true;
+    return false;
+}

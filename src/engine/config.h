@@ -62,7 +62,7 @@ class config
         void setDisplaySizeFullscreen(vec2 size) { p_displayFullscreen = size; p_display_change = true;}
 
         vec2 getDisplayFullscreen() { return p_displayFullscreen; }
-        vec2 getDisplay() { return vec2{ p_display_width, p_display_height}; p_display_change = true; }
+        vec2 getDisplay() { return vec2{ p_display_width, p_display_height}; }
         int getDisplayMode()  { return p_display_mode; }
         bool displayChange() { return p_display_change; p_display_change = false; }
 

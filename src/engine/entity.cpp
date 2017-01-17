@@ -82,6 +82,60 @@ int entitylist::create( entitytype *type, vec2 pos) {
     return (p_id-1);
 }
 
+void entitylist::createFromWorldFile( std::string file) {
+    XMLDocument l_file;
+    std::string l_type;
+
+    vec2 l_pos;
+
+    // load form world file
+    XMLError l_result = l_file.LoadFile( file.c_str());
+
+    // file exist?
+    if( file_exist( file) == false) {
+        printf( "entitylist::createFromWorldFile file dont exist \"%s\"\n", file.c_str());
+        return;
+    }
+
+    //
+
+    XMLElement* l_map = l_file.FirstChildElement( "map" );
+    if( !l_map) {
+        printf( "entitylist::createFromWorldFile world has no map defined\n");
+        return;
+    }
+
+    XMLElement* l_objectgroup = l_map->FirstChildElement( "objectgroup" );
+    if( !l_objectgroup) {
+        printf( "entitylist::createFromWorldFile objectgroup has no map defined\n");
+        return;
+    }
+
+    XMLElement* l_object = l_objectgroup->FirstChildElement( "object" );
+
+    //
+    while( l_object) {
+
+        // load data
+        l_type = l_object->Attribute("name") == NULL?"":l_object->Attribute("name");
+        l_pos.x = atoi(l_object->Attribute( "x"));
+        l_pos.y = atoi(l_object->Attribute( "y"));
+
+
+        //printf("%s %d %d\n", l_type.c_str(), l_pos.x, l_pos.y);
+
+        //
+        entitytype *l_entity_type = getType( l_type);
+
+        if( l_entity_type != NULL)
+            create( l_entity_type, l_pos);
+
+        // next object
+        l_object = l_object->NextSiblingElement( "object");
+    }
+
+}
+
 void entitylist::draw(graphic *graphic) {
     for(int i = 0; i < (int)p_entitys.size(); i++)
         p_entitys[i].draw( graphic);
@@ -147,6 +201,11 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
 
     std::string l_name;
     std::vector<action> *l_actions = new std::vector<action>();
+
+    // if file dont exist - dont load
+    if( file_exist( l_pathfile) == false) {
+        return false;
+    }
 
     // load the file
     XMLError l_result = l_file.LoadFile( l_pathfile.c_str());
@@ -228,9 +287,6 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         // next vertex
         l_xml_vertex = l_xml_vertex->NextSiblingElement("vertex");
     }
-    printf(" %d\n", l_type->getVertex().size());
-
-
 
     if( !l_idle) {
         printf("entitylist::loadType type %s has no idle action!\n", l_name.c_str());

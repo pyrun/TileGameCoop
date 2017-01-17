@@ -62,16 +62,16 @@ game::~game()
 void game::drawHUD() {
     char test[255];
     float wert = 1000/ (16-(float)p_framerate->getDelay() );
-    sprintf( test, "%s%d %4.0f %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(), wert,NATIV_W, NATIV_H );
-    p_font->drawMessage( p_graphic, test, vec2( NATIV_W, 10), true);
+    sprintf( test, "%s%d %4.0f %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(), wert, (int)p_graphic->getCameraSize().x, (int)p_graphic->getCameraSize().y );
+    p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 10), true);
 
     p_font->drawMessage( p_graphic, "Go home your drunk", vec2( 0, 0));
 
     sprintf( test, "Nativ %dx%d", p_config.getDisplayFullscreen().x, p_config.getDisplayFullscreen().y);
-    p_font->drawMessage( p_graphic, test, vec2( NATIV_W, 30), true);
+    p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 30), true);
 
     sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), 0, 0);
-    p_font->drawMessage( p_graphic, test, vec2( 0, NATIV_H), false, true);
+    p_font->drawMessage( p_graphic, test, vec2( 0, (int)p_graphic->getCameraSize().y), false, true);
 }
 
 void game::loadTypes() {
@@ -109,17 +109,17 @@ int game::process_graphic() {
 
 
     p_world = new world( "1-1.tmx", "worlds/");
+    p_entity->createFromWorldFile( p_world->getFileName());
 
     // at the moment we have no error
     l_error = 0;
 
     //p_entity->create( p_entity->getType("coin"), vec2( 40, 80));
-    int riven = p_entity->create( p_entity->getType("riven"), vec2( 112, 100));
+/*    int riven = p_entity->create( p_entity->getType("riven"), vec2( 112, 100));
 
     //p_entity->create( p_entity->getType("coin2"), vec2( 40, 190));
 
-
-    p_entity->getEntity( riven)->setAction( "walk");
+    p_entity->getEntity( riven)->setAction( "walk");*/
 
 
     //delta time start
@@ -148,12 +148,12 @@ int game::process_graphic() {
         // draw world
         p_world->draw( p_graphic);
 
-        if(p_graphic->getFrame()%100 == 0) {
+        /*if(p_graphic->getFrame()%100 == 0) {
             p_entity->getEntity( riven)->setVelocity( fvec2( 0, -0.285f) );
             p_entity->getEntity( riven)->setAction( "jump");
         } else
             if( p_entity->getEntity( riven)->getVelocity().y > 0)
-                p_entity->getEntity( riven)->setAction( "walk");
+                p_entity->getEntity( riven)->setAction( "walk");*/
 
         // draw entity
         p_entity->draw( p_graphic);

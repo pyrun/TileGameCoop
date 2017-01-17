@@ -65,8 +65,8 @@ graphic::graphic( config *config)
 	p_camera.x = 0;
 	p_camera.y = 0;
 
-	p_camera_size.x = NATIV_W;
-	p_camera_size.y = NATIV_H;
+	p_camera_size.x = p_config->getDisplay().x;
+	p_camera_size.y = p_config->getDisplay().y;
 
     // set draf color
     SDL_SetRenderDrawColor( p_renderer, 255, 255, 255, 255);
@@ -103,6 +103,8 @@ void graphic::clear() {
     if( p_config->displayChange()) {
         SDL_Rect l_viewport = { 0, 0, p_config->getDisplay().x, p_config->getDisplay().y};
 
+        //p_camera_size = p_config->getDisplay();
+
 
         // transfer data to sdl
         SDL_RenderSetViewport( p_renderer, &l_viewport);
@@ -110,12 +112,23 @@ void graphic::clear() {
         // Nativ resulation
         if( !p_config->getDisplayMode()) {
             SDL_SetWindowFullscreen( p_windows, 0);
+            p_camera_size.x = NATIV_W;
+            p_camera_size.y = NATIV_H;
             SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
         }
         else {
             SDL_SetWindowSize( p_windows, p_config->getDisplayFullscreen().x, p_config->getDisplayFullscreen().y);
             SDL_SetWindowFullscreen( p_windows, SDL_WINDOW_FULLSCREEN_DESKTOP);
-            SDL_RenderSetScale( p_renderer, NATIV_ZOOM, NATIV_ZOOM);
+            float l_zoom;
+            if( p_config->getDisplayFullscreen().x - 480> p_config->getDisplayFullscreen().y - 270)
+                l_zoom = p_config->getDisplayFullscreen().x/480.f;
+            else
+                l_zoom = p_config->getDisplayFullscreen().y/270.f;
+
+            p_camera_size.x = p_config->getDisplayFullscreen().x/l_zoom;
+            p_camera_size.y = p_config->getDisplayFullscreen().y/l_zoom;
+
+            SDL_RenderSetScale( p_renderer, (int)l_zoom, (int)l_zoom);
         }
 
 

@@ -130,6 +130,7 @@ class entitylist {
         virtual ~entitylist();
 
         int create( entitytype *type, vec2 pos);
+        void createFromWorldFile( std::string file);
 
         void draw(graphic *graphic);
 
