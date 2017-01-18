@@ -338,8 +338,8 @@ void world::drawBackAndForeground( graphic *graphic) {
         int l_max_y = graphic->getCameraSize().y/p_tilehight;
 
         //
-        for( int l_x = l_camera_x; l_x <= l_camera_x+l_max_x; l_x++) {
-            for( int l_y = l_camera_y; l_y <= l_camera_y+l_max_y; l_y++) {
+        for( int l_x = l_camera_x; l_x <= l_camera_x+l_max_x+1; l_x++) {
+            for( int l_y = l_camera_y; l_y <= l_camera_y+l_max_y+1; l_y++) {
                 drawTile( graphic, l_x, l_y, p_tilemap_background);
                 drawTile( graphic, l_x, l_y, p_tilemap_foreground);
             }
@@ -359,8 +359,8 @@ void world::drawOverground( graphic *graphic) {
         int l_max_y = graphic->getCameraSize().y/p_tilehight;
 
         //
-        for( int l_x = l_camera_x; l_x <= l_camera_x+l_max_x; l_x++) {
-            for( int l_y = l_camera_y; l_y <= l_camera_y+l_max_y; l_y++) {
+        for( int l_x = l_camera_x; l_x <= l_camera_x+l_max_x+1; l_x++) {
+            for( int l_y = l_camera_y; l_y <= l_camera_y+l_max_y+1; l_y++) {
                 drawTile( graphic, l_x, l_y, p_tilemap_overlap);
             }
         }
