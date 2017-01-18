@@ -11,7 +11,10 @@ framenrate::framenrate( int framerate)
     p_ms = 0;
 
     // set framerate what we want
-    p_framerate = 60;
+    p_framerate = framerate;
+
+    // start the counter
+    p_fps.start();
 }
 
 framenrate::~framenrate()
@@ -21,7 +24,7 @@ framenrate::~framenrate()
 
 void framenrate::begin() {
     // start the frame timer
-    p_fps.start();
+
 }
 
 void framenrate::calc() {
@@ -30,7 +33,18 @@ void framenrate::calc() {
 
     // ms
     p_ms = p_fps.getTicks();
+    p_ms_list.push_back( p_ms);
+    if( (int)p_ms_list.size() > 20)
+        p_ms_list.erase( p_ms_list.begin() );
+    if( p_ms < p_framerate ) {
+        p_fps.start();
+        SDL_Delay( p_framerate - p_ms );
 
-    if( p_fps.getTicks() < (1000.f/ p_framerate) )
-        SDL_Delay( ( 1000.f/ p_framerate) - p_fps.getTicks() );
+        int l_framerate = p_fps.getTicks() + p_ms;
+        if( (int)p_framerate_list.size() > 20)
+            p_framerate_list.erase( p_framerate_list.begin() );
+
+        p_framerate_list.push_back( l_framerate);
+    }
+    p_fps.start();
 }

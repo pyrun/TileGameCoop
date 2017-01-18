@@ -61,7 +61,9 @@ game::~game()
 
 void game::drawHUD() {
     char test[255];
-    float wert = 1000/ (16-(float)p_framerate->getDelay() );
+
+    float wert = 1000.f/ ( (float)p_framerate->getFramerate() );
+
     sprintf( test, "%s%d %4.0f %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(), wert, (int)p_graphic->getCameraSize().x, (int)p_graphic->getCameraSize().y );
     p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 10), true);
 
@@ -128,7 +130,7 @@ int game::process_graphic() {
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
         // start measurement point
-        p_framerate->begin();
+        //p_framerate->begin();
 
         // flip camera
         p_graphic->flipCamera();
