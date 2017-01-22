@@ -49,10 +49,11 @@ int config::load() {
 
     // load data
     setDisplay( loadParameter( l_root, "Display_width"), loadParameter( l_root, "Display_height"));
-    setDisplaySizeFullscreen( vec2( loadParameter( l_root, "DisplayFullscreen_width"), loadParameter( l_root, "DisplayFullscreen_height")) );
     setDisplayMode( loadParameter( l_root, "Display_mode"));
 
     setDisplayMaximized( loadParameter( l_root, "Display_maximized"));
+
+    setDisplayResolutionFile( loadParameterString( l_root, "Display_resolution_file"));
 
     // load input
     setInputPadButton( loadParameter( l_root, "Input_run"),
@@ -98,11 +99,10 @@ void config::save() {
     // save parameter
     saveParameter( &l_config, l_root, "Display_width", getDisplay().x);
     saveParameter( &l_config, l_root, "Display_height", getDisplay().y);
-    saveParameter( &l_config, l_root, "DisplayFullscreen_width", getDisplayFullscreen().x);
-    saveParameter( &l_config, l_root, "DisplayFullscreen_height", getDisplayFullscreen().y);
     saveParameter( &l_config, l_root, "Display_mode", getDisplayMode());
 
     saveParameter( &l_config, l_root, "Display_maximized", getDisplayMaximized());
+    saveParameter( &l_config, l_root, "Display_resolution_file", p_resolution_file);
 
     // save
     l_config.SaveFile( CONFIG_FILE);
@@ -111,6 +111,12 @@ void config::save() {
 void config::saveParameter( XMLDocument *config, XMLNode *root, std::string name, int data) {
     XMLElement * l_element = config->NewElement( name.c_str());
     l_element->SetText( data);
+    root->InsertEndChild(l_element);
+}
+
+void config::saveParameter( XMLDocument *config, XMLNode *root, std::string name, std::string data) {
+    XMLElement * l_element = config->NewElement( name.c_str());
+    l_element->SetText( data.c_str());
     root->InsertEndChild(l_element);
 }
 
@@ -123,4 +129,11 @@ int config::loadParameter( XMLNode *root, std::string name) {
     XMLCheckResult(l_result);
 
     return l_out;
+}
+
+std::string config::loadParameterString( XMLNode *root, std::string name) {
+    XMLElement * l_element = root->FirstChildElement( name.c_str());
+    if (l_element == nullptr) return "";
+
+    return l_element->GetText();
 }

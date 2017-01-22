@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <SDL2/SDL_image.h>
 
+using namespace tinyxml2;
+
 bool success_initSDL = false;
 
 bool initSDL() {
@@ -41,17 +43,28 @@ image::~image() {
 
 graphic::graphic( config *config)
 {
+    vec2 l_displayR;
     // pointer at config
     p_config = config;
 
+    Uint32 l_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
+
+    if( p_config->getDisplayMode())
+        l_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+
+    l_displayR = p_config->getDisplay();
+
     // create window
-    p_windows = SDL_CreateWindow( "Jump'n'Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, p_config->getDisplay().x, p_config->getDisplay().y, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE );
+    p_windows = SDL_CreateWindow( "Jump'n'Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, l_displayR.x, l_displayR.y, l_flags);
     if( p_windows == NULL )
     {
         printf( "graphic::graphic Window could not be created! SDL_Error: %s\n", SDL_GetError() );
         success_initSDL = false;
         return;
     }
+
+    SDL_GetWindowSize( p_windows, &l_displayR.x, &l_displayR.y);
+    p_config->setDisplay( l_displayR.x, l_displayR.y);
 
     // creating the renderer
     p_renderer = SDL_CreateRenderer( p_windows, -1, 0);
@@ -65,8 +78,7 @@ graphic::graphic( config *config)
 	p_camera.x = 0;
 	p_camera.y = 0;
 
-	p_camera_size.x = p_config->getDisplay().x;
-	p_camera_size.y = p_config->getDisplay().y;
+	p_camera_size = l_displayR;
 
     // set draf color
     SDL_SetRenderDrawColor( p_renderer, 255, 255, 255, 255);
@@ -78,8 +90,12 @@ graphic::graphic( config *config)
     p_frame.start();
     p_framecount = 1;
 
+    loadResolution( p_config->getDisplayResolutionFile());
+
     // windows maxed in config?
     clear();
+
+    p_config->setDisplayChange();
 }
 
 graphic::~graphic()
@@ -89,6 +105,36 @@ graphic::~graphic()
 
     // destroy window
     SDL_DestroyWindow( p_windows);
+}
+
+void graphic::loadResolution( std::string file) {
+    XMLDocument l_file;
+
+    // load form world file
+    XMLError l_result = l_file.LoadFile( file.c_str());
+
+    // file exist?
+    if( file_exist( file) == false) {
+        printf( "graphic::loadResolution file dont exist \"%s\"\n", file.c_str());
+        return;
+    }
+
+    XMLElement* l_xml_resolution = l_file.FirstChildElement( "display" );
+
+    //
+    while( l_xml_resolution) {
+        zoom l_zoom;
+
+        // load data
+        l_zoom.zoom = atoi( l_xml_resolution->Attribute("zoom") == NULL?"1":l_xml_resolution->Attribute("zoom") );
+        l_zoom.resolution.x = atoi(l_xml_resolution->Attribute( "x"));
+        l_zoom.resolution.y = atoi(l_xml_resolution->Attribute( "y"));
+
+        p_resolution.push_back( l_zoom);
+
+        // next object
+        l_xml_resolution = l_xml_resolution->NextSiblingElement( "display");
+    }
 }
 
 void graphic::clear() {
@@ -117,16 +163,21 @@ void graphic::clear() {
             SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
         }
         else {
-            SDL_SetWindowSize( p_windows, p_config->getDisplayFullscreen().x, p_config->getDisplayFullscreen().y);
+            //SDL_SetWindowSize( p_windows, p_config->getDisplay().x, p_config->getDisplay().y);
             SDL_SetWindowFullscreen( p_windows, SDL_WINDOW_FULLSCREEN_DESKTOP);
             float l_zoom;
-            if( p_config->getDisplayFullscreen().x - 480> p_config->getDisplayFullscreen().y - 270)
-                l_zoom = p_config->getDisplayFullscreen().x/480.f;
-            else
-                l_zoom = p_config->getDisplayFullscreen().y/270.f;
+            vec2 l_newr;
 
-            p_camera_size.x = p_config->getDisplayFullscreen().x/l_zoom;
-            p_camera_size.y = p_config->getDisplayFullscreen().y/l_zoom;
+            SDL_GetWindowSize( p_windows, &l_newr.x, &l_newr.y);
+            p_config->setDisplay( l_newr.x, l_newr.y);
+
+            l_zoom = getZoom( p_config->getDisplay() );
+
+
+            //printf( "%d %d\n", p_config->getDisplayFullscreen().x, p_config->getDisplayFullscreen().y);
+
+            p_camera_size.x = p_config->getDisplay().x/l_zoom;
+            p_camera_size.y = p_config->getDisplay().y/l_zoom;
 
             SDL_RenderSetScale( p_renderer, (int)l_zoom, (int)l_zoom);
         }
@@ -208,4 +259,12 @@ void graphic::drawImage( image *image, vec2 position, vec2 size, vec2 source, do
 
     // call the draw fuction of sdl
     SDL_RenderCopyEx( p_renderer, image->texture, &l_source, &l_destination, angle, NULL, l_flip);
+}
+
+int graphic::getZoom( vec2 display) {
+    for( int i = 0; i < (int)p_resolution.size(); i++) {
+        if( p_config->getDisplay() == p_resolution[i].resolution)
+            return p_resolution[i].zoom;
+    }
+    return 1;
 }

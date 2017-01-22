@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <string>
+#include <vector>
 
 #include "../engine/config.h"
 
@@ -26,12 +27,19 @@ class image {
         std::string file;
 };
 
+class zoom {
+    public:
+        vec2 resolution;
+        int zoom;
+};
+
 class graphic
 {
     public:
         graphic( config *config);
         virtual ~graphic();
 
+        void loadResolution( std::string file);
         void clear();
 
         image *loadImage( std::string file);
@@ -44,6 +52,7 @@ class graphic
         vec2 getCameraSize() { return p_camera_size; }
         void flipCamera() { p_cameraOld = p_camera; }
         int getFrame() { return p_framecount; }
+        int getZoom( vec2 display);
     protected:
 
     private:
@@ -57,6 +66,8 @@ class graphic
 
         SDL_Window *p_windows;
         SDL_Renderer *p_renderer;
+
+        std::vector<zoom> p_resolution;
 
 };
 

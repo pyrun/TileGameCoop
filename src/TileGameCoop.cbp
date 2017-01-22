@@ -17,12 +17,13 @@
 					<Add option="-g" />
 					<Add directory="../../SDL2_64/include" />
 					<Add directory="../../tinyxml2/inc" />
-					<Add directory="engine" />
-					<Add directory="engine/" />
+					<Add directory="../../lua-5.3.3/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-lmingw32 -lSDL2main -lSDL2  -lSDL2_image -lSDL2_net" />
+					<Add option="-llua53" />
 					<Add directory="../../SDL2_64/lib" />
+					<Add directory="../../lua-5.3.3/lib" />
 				</Linker>
 			</Target>
 			<Target title="WinRelease32">
@@ -59,6 +60,8 @@
 		<Unit filename="engine/input.h" />
 		<Unit filename="engine/player.cpp" />
 		<Unit filename="engine/player.h" />
+		<Unit filename="engine/script.cpp" />
+		<Unit filename="engine/script.h" />
 		<Unit filename="engine/types.cpp" />
 		<Unit filename="engine/types.h" />
 		<Unit filename="engine/world.cpp" />

@@ -45,10 +45,7 @@ bool input::handle( SDL_Window* window) {
                     p_display_height = p_event.window.data2;
 
                     // set display
-                    if( !p_config->getDisplayMode())
-                        p_config->setDisplay( p_display_width, p_display_height);
-                    else
-                        p_config->setDisplaySizeFullscreen( vec2(p_display_width, p_display_height) );
+                    p_config->setDisplay( p_display_width, p_display_height);
                 break;
             }
         }

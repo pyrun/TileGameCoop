@@ -50,6 +50,7 @@ entitylist::entitylist()
 {
     // start at 0
     p_id = 0;
+    p_playerentity = 0;
 }
 
 entitylist::~entitylist()
@@ -75,6 +76,10 @@ int entitylist::create( entitytype *type, vec2 pos) {
 
     // incress next id
     p_id++;
+
+    // player entity incress if he is one
+    if( type->getIsPlayer())
+        p_playerentity++;
 
     // add to vector
     p_entitys.push_back( *obj);
@@ -198,6 +203,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     int l_width;
     int l_height;
     bool l_gravity;
+    bool l_isplayer;
 
     std::string l_name;
     std::vector<action> *l_actions = new std::vector<action>();
@@ -222,6 +228,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_width = atoi(l_object->Attribute( "width" ));
     l_height = atoi(l_object->Attribute( "height" ));
     l_gravity = atoi(l_object->Attribute( "gravity" ));
+    l_isplayer = atoi(l_object->Attribute( "player" ));
 
 
     entitytype *l_type = new entitytype();
@@ -238,6 +245,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_action_name = l_xml_action->Attribute( "name" );
         l_action_frame = atoi( l_xml_action->Attribute( "frame" ));
         l_action_speed = atoi( l_xml_action->Attribute( "speed" ));
+
 
         // check data
         if( l_action_speed == 0)
@@ -297,6 +305,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setHeight(l_height);
     l_type->setName( l_name);
     l_type->setGravity( l_gravity);
+    l_type->setIsPlayer( l_isplayer);
 
     p_entity_types.push_back( *l_type);
 
@@ -316,3 +325,4 @@ entity* entitylist::getEntity( int id) {
             return &p_entitys[i];
     return NULL;
 }
+

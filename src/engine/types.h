@@ -27,6 +27,12 @@ struct vec2 {
         c.y = y - a.y;
         return c;
     }
+
+    bool operator==( const vec2& a) {
+        if( a.x == x && a.y == y)
+            return true;
+        return false;
+    }
 };
 
 struct vec4 {

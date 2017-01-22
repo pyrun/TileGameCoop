@@ -20,7 +20,9 @@ class config
         void save();
 
         void saveParameter( tinyxml2::XMLDocument *config, tinyxml2::XMLNode *root, std::string name, int data);
+        void saveParameter( tinyxml2::XMLDocument *config, tinyxml2::XMLNode *root, std::string name, std::string data);
         int loadParameter( tinyxml2::XMLNode *root, std::string name);
+        std::string loadParameterString( tinyxml2::XMLNode *root, std::string name);
 
         // input
         void setInputPadButton( int run, int jump, int attack, int special, int select, int start, int left, int right) {
@@ -59,18 +61,19 @@ class config
         void setDisplayMode( int mode) {
             p_display_mode = mode;
         }
-        void setDisplaySizeFullscreen(vec2 size) { p_displayFullscreen = size; p_display_change = true;}
+        void setDisplayChange() { p_display_change = true; }
 
-        vec2 getDisplayFullscreen() { return p_displayFullscreen; }
         vec2 getDisplay() { return vec2{ p_display_width, p_display_height}; }
         int getDisplayMode()  { return p_display_mode; }
-        bool displayChange() { return p_display_change; p_display_change = false; }
+        bool displayChange() { bool l_return = p_display_change; p_display_change = false; return l_return; }
 
         void setDisplayMaximized( bool set) {
             p_display_maximazed = set;
         }
 
         bool getDisplayMaximized() { return p_display_maximazed; }
+        void setDisplayResolutionFile( std::string file) { p_resolution_file = file; }
+        std::string getDisplayResolutionFile() { return p_resolution_file; }
     protected:
 
     private:
@@ -88,11 +91,12 @@ class config
 
         int p_display_width;
         int p_display_height;
-        vec2 p_displayFullscreen;
         bool p_display_change;
         int p_display_mode;
 
         bool p_display_maximazed;
+
+        std::string p_resolution_file;
 };
 
 #endif // CONFIG_H

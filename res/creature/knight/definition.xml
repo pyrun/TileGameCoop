@@ -1,8 +1,8 @@
-<object name="knight" width="32" height="32">
+<object name="knight" width="32" height="32" player="1">
 <action name="idle" frame="4" speed="120">idle.png</action>
 <action name="walk" frame="4" speed="12">walk.png</action>
 <action name="run" frame="4" speed="6">walk.png</action>
-<action name="jump" frame="4" speed="20">jump.png</action>
+<action name="jump" frame="4" speed="8">jump.png</action>
 <action name="swim" frame="4" speed="12">swim.png</action>
 <vertex x="8" y="32">down</vertex>
 <vertex x="26" y="32">down</vertex>

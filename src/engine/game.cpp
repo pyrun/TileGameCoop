@@ -65,15 +65,15 @@ void game::drawHUD() {
     float wert = 1000.f/ ( (float)p_framerate->getFramerate() );
 
     sprintf( test, "%s%d %4.0f %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(), wert, (int)p_graphic->getCameraSize().x, (int)p_graphic->getCameraSize().y );
-    p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 10), true);
+    p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 10), 1.0f,true);
 
     p_font->drawMessage( p_graphic, "Go home your drunk", vec2( 0, 0));
 
-    sprintf( test, "Nativ %dx%d", p_config.getDisplayFullscreen().x, p_config.getDisplayFullscreen().y);
-    p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 30), true);
+    sprintf( test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
+    p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 30), 1.0f, true);
 
-    sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), 0, 0);
-    p_font->drawMessage( p_graphic, test, vec2( 0, (int)p_graphic->getCameraSize().y), false, true);
+    sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_entity->getAmountPlayerObject(), 0);
+    p_font->drawMessage( p_graphic, test, vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, false, true);
 }
 
 void game::loadTypes() {
@@ -117,15 +117,16 @@ int game::process_graphic() {
     l_error = 0;
 
     //p_entity->create( p_entity->getType("coin"), vec2( 40, 80));
-/*    int riven = p_entity->create( p_entity->getType("riven"), vec2( 112, 100));
 
-    //p_entity->create( p_entity->getType("coin2"), vec2( 40, 190));
+    /*int riven = p_entity->create( p_entity->getType("knight"), vec2( 10, 100));
 
-    p_entity->getEntity( riven)->setAction( "walk");*/
+    p_entity->getEntity( riven)->setAction( "jump");*/
 
 
     //delta time start
     p_deltaTime.start();
+
+    printf( "%d\n", SDL_CONTROLLER_BUTTON_X );
 
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {

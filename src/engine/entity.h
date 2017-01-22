@@ -77,18 +77,21 @@ class entitytype
 
         void setWidth( int width) { p_width = width; }
         void setHeight( int height) { p_height = height; }
+        void setIsPlayer( bool isplayer) { p_isplayer = isplayer; }
 
         std::string getName() { return p_name; }
         int getWidth() { return p_width; }
         int getHeight() { return p_height; }
         bool getGravity() { return p_gravity; }
         std::vector<vertex> getVertex() { return p_vertex; }
+        bool getIsPlayer() { return p_isplayer; }
     protected:
 
     private:
         int p_width;
         int p_height;
         bool p_gravity;
+        bool p_isplayer;
         std::string p_name;
         std::vector<action> p_actions;
         std::vector<vertex> p_vertex;
@@ -141,12 +144,15 @@ class entitylist {
         entitytype *getType( std::string name);
 
         entity *getEntity( int id);
+        int getAmountPlayerObject() { return p_playerentity; }
     protected:
 
     private:
         std::vector<entitytype> p_entity_types;
         std::vector<entity> p_entitys;
         int p_id;
+
+        int p_playerentity;
 
         std::string p_folder;
 };
