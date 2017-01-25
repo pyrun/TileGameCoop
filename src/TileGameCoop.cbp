@@ -60,7 +60,6 @@
 		<Unit filename="engine/input.h" />
 		<Unit filename="engine/player.cpp" />
 		<Unit filename="engine/player.h" />
-		<Unit filename="engine/script.cpp" />
 		<Unit filename="engine/script.h" />
 		<Unit filename="engine/types.cpp" />
 		<Unit filename="engine/types.h" />

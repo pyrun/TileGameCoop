@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <lua.hpp>
 
 #include "../graphic/graphic.h"
 #include "types.h"
@@ -42,35 +43,18 @@ class vertex {
 class entitytype
 {
     public:
-        entitytype() { };
-        virtual ~entitytype() {};
+        entitytype();
+        virtual ~entitytype();
 
         action* getAction( std::string name);
 
+        void addAction( std::string name, std::string file, int frame, int speed, image *image);
+        void addVertex(vec2 pos, bool left, bool right, bool up, bool down);
 
-
-        void addAction( std::string name, std::string file, int frame, int speed, image *image) {
-            action *l_action = new action;
-
-            l_action->name = name;
-            l_action->file = file;
-            l_action->frame = frame;
-            l_action->speed = speed;
-            l_action->imagefile = image;
-
-            p_actions.push_back( *l_action);
-        }
-        void addVertex(vec2 pos, bool left, bool right, bool up, bool down) {
-            vertex *l_vertex = new vertex;
-
-            l_vertex->pos = pos;
-            l_vertex->left = left;
-            l_vertex->right = right;
-            l_vertex->down = down;
-            l_vertex->up = up;
-
-            p_vertex.push_back( *l_vertex);
-        }
+        void loadScript( std::string file);
+        void lua_jump();
+        void lua_printerror();
+        bool lua_hasLoaded() { return p_state!=NULL?true:false; }
 
         void setName( std::string name) { p_name = name; }
         void setGravity( bool mass) { p_gravity = mass; }
@@ -95,6 +79,8 @@ class entitytype
         std::string p_name;
         std::vector<action> p_actions;
         std::vector<vertex> p_vertex;
+
+        lua_State *p_state;
 };
 
 class entity

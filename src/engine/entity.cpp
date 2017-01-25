@@ -6,6 +6,78 @@ using namespace tinyxml2;
 	#define XMLCheckResult(a_eResult) if (a_eResult != XML_SUCCESS) { printf("Error: %i\n", a_eResult); return a_eResult; }
 #endif
 
+entitytype::entitytype() {
+    p_state = NULL;
+}
+
+entitytype::~entitytype() {
+    if( p_state)
+        lua_close( p_state);
+}
+
+void entitytype::addAction( std::string name, std::string file, int frame, int speed, image *image) {
+    action *l_action = new action;
+
+    l_action->name = name;
+    l_action->file = file;
+    l_action->frame = frame;
+    l_action->speed = speed;
+    l_action->imagefile = image;
+
+    p_actions.push_back( *l_action);
+}
+
+void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down) {
+    vertex *l_vertex = new vertex;
+
+    l_vertex->pos = pos;
+    l_vertex->left = left;
+    l_vertex->right = right;
+    l_vertex->down = down;
+    l_vertex->up = up;
+
+    p_vertex.push_back( *l_vertex);
+}
+
+void entitytype::loadScript( std::string file) {
+    int l_result;
+
+
+    if( file_exist( file) == false) {
+        printf( "entitytype::loadScript file '%s' dont found\n", file.c_str());
+        return;
+    }
+
+    p_state = luaL_newstate();
+
+    // standard libraries
+    luaL_openlibs( p_state);
+
+    // load the file
+    l_result = luaL_dofile( p_state, file.c_str());
+    if( l_result != LUA_OK ) {
+        // print error
+        lua_printerror();
+    }
+}
+
+void entitytype::lua_jump() {
+    // name the function
+    lua_getglobal( p_state, "jump");
+
+    // call the function
+    lua_call( p_state, 0, 0);
+    //lua_pop( p_state, 1);
+}
+
+void entitytype::lua_printerror() {
+  // The error message is on top of the stack.
+  // Fetch it, print it and then pop it off the stack.
+  const char* message = lua_tostring( p_state, -1);
+  puts(message);
+  lua_pop( p_state, 1);
+}
+
 action* entitytype::getAction( std::string name) {
     for( int i = 0; i < (int)p_actions.size(); i++) {
         if( p_actions[i].name == name)
@@ -138,7 +210,6 @@ void entitylist::createFromWorldFile( std::string file) {
         // next object
         l_object = l_object->NextSiblingElement( "object");
     }
-
 }
 
 void entitylist::draw(graphic *graphic) {
@@ -154,6 +225,11 @@ void entitylist::process( world *world, int deltaTime) {
     l_velocityDelta = (float)deltaTime * world->getGravity();
 
     for(int i = 0; i < (int)p_entitys.size(); i++) {
+        entitytype *l_type = p_entitys[i].getType();
+
+        if( l_type->lua_hasLoaded())
+            l_type->lua_jump();
+
         fvec2 l_velocity;
         fvec2 l_position;
         fvec2 l_change;
@@ -204,6 +280,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     int l_height;
     bool l_gravity;
     bool l_isplayer;
+    std::string l_script;
 
     std::string l_name;
     std::vector<action> *l_actions = new std::vector<action>();
@@ -229,6 +306,9 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_height = atoi(l_object->Attribute( "height" ));
     l_gravity = atoi(l_object->Attribute( "gravity" ));
     l_isplayer = atoi(l_object->Attribute( "player" ));
+
+    if( l_object->Attribute( "script"))
+        l_script = folder + l_object->Attribute( "script");
 
 
     entitytype *l_type = new entitytype();
@@ -306,6 +386,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setName( l_name);
     l_type->setGravity( l_gravity);
     l_type->setIsPlayer( l_isplayer);
+    l_type->loadScript( l_script);
 
     p_entity_types.push_back( *l_type);
 
