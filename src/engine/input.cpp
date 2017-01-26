@@ -18,7 +18,7 @@ input_map::input_map() {
 input::input( config *config)
 {
     // add more mapping for gamecontroller
-    SDL_GameControllerAddMappingsFromFile("gamecontrollerdb.txt");
+    SDL_GameControllerAddMappingsFromFile( config->getControllerMappingsFile().c_str());
 
     // link config
     p_config = config;
@@ -53,7 +53,6 @@ bool input::handle( SDL_Window* window) {
         // quit event
         if(p_event.type == SDL_QUIT)
             return false;
-
 
     }
 

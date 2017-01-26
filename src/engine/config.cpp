@@ -69,6 +69,8 @@ int config::load() {
     setInputPadAxis(    loadParameter( l_root, "Input_x"),
                         loadParameter( l_root, "Input_y"));
 
+    setControllerMappingsFile( loadParameterString( l_root, "ControllerMappingsFile"));
+
     // return a success of loading
     return XML_SUCCESS;
 }
@@ -102,7 +104,9 @@ void config::save() {
     saveParameter( &l_config, l_root, "Display_mode", getDisplayMode());
 
     saveParameter( &l_config, l_root, "Display_maximized", getDisplayMaximized());
-    saveParameter( &l_config, l_root, "Display_resolution_file", p_resolution_file);
+    saveParameter( &l_config, l_root, "Display_resolution_file", getDisplayResolutionFile());
+
+    saveParameter( &l_config, l_root, "ControllerMappingsFile", getControllerMappingsFile());
 
     // save
     l_config.SaveFile( CONFIG_FILE);

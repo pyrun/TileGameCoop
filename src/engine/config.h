@@ -74,6 +74,8 @@ class config
         bool getDisplayMaximized() { return p_display_maximazed; }
         void setDisplayResolutionFile( std::string file) { p_resolution_file = file; }
         std::string getDisplayResolutionFile() { return p_resolution_file; }
+        void setControllerMappingsFile( std::string file) { p_controllermappingsfile = file; }
+        std::string getControllerMappingsFile() { return p_controllermappingsfile; }
     protected:
 
     private:
@@ -97,6 +99,7 @@ class config
         bool p_display_maximazed;
 
         std::string p_resolution_file;
+        std::string p_controllermappingsfile;
 };
 
 #endif // CONFIG_H

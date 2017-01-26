@@ -52,7 +52,13 @@ class entitytype
         void addVertex(vec2 pos, bool left, bool right, bool up, bool down);
 
         void loadScript( std::string file);
+
         void lua_jump();
+        void lua_right();
+        void lua_left();
+        void lua_up();
+        void lua_down();
+
         void lua_printerror();
         bool lua_hasLoaded() { return p_state!=NULL?true:false; }
 

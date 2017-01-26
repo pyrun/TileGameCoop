@@ -64,9 +64,63 @@ void entitytype::loadScript( std::string file) {
 void entitytype::lua_jump() {
     // name the function
     lua_getglobal( p_state, "jump");
-
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
     // call the function
     lua_call( p_state, 0, 0);
+    // no return
+    //lua_pop( p_state, 1);
+}
+
+void entitytype::lua_right() {
+    // name the function
+    lua_getglobal( p_state, "right");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    // call the function
+    lua_call( p_state, 0, 0);
+    // no return
+    //lua_pop( p_state, 1);
+}
+
+void entitytype::lua_left() {
+    // name the function
+    lua_getglobal( p_state, "left");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    // call the function
+    lua_call( p_state, 0, 0);
+    // no return
+    //lua_pop( p_state, 1);
+}
+void entitytype::lua_up() {
+    // name the function
+    lua_getglobal( p_state, "up");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    // call the function
+    lua_call( p_state, 0, 0);
+    // no return
+    //lua_pop( p_state, 1);
+}
+void entitytype::lua_down() {
+    // name the function
+    lua_getglobal( p_state, "down");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    // call the function
+    lua_call( p_state, 0, 0);
+    // no return
     //lua_pop( p_state, 1);
 }
 
@@ -228,7 +282,7 @@ void entitylist::process( world *world, int deltaTime) {
         entitytype *l_type = p_entitys[i].getType();
 
         if( l_type->lua_hasLoaded())
-            l_type->lua_jump();
+            l_type->lua_right();
 
         fvec2 l_velocity;
         fvec2 l_position;
