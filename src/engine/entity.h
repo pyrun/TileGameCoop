@@ -134,6 +134,7 @@ class entitylist {
         bool loadType( std::string folder, graphic *graphic);
         void removeTypes();
         entitytype *getType( std::string name);
+        std::vector<int> findPlayerObject();
 
         entity *getEntity( int id);
         int getAmountPlayerObject() { return p_playerentity; }

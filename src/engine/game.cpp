@@ -72,7 +72,7 @@ void game::drawHUD() {
     sprintf( test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
     p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 30), 1.0f, true);
 
-    sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_entity->getAmountPlayerObject(), 0);
+    sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_entity->getAmountPlayerObject(), p_player->player_getPlayerActive());
     p_font->drawMessage( p_graphic, test, vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, false, true);
 }
 
@@ -137,7 +137,7 @@ int game::process_graphic() {
         p_graphic->flipCamera();
 
         // react of player input
-        p_player->handle();
+        p_player->handle( p_entity);
 
         // process
         process();

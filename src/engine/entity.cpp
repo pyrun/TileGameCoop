@@ -281,8 +281,8 @@ void entitylist::process( world *world, int deltaTime) {
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entitytype *l_type = p_entitys[i].getType();
 
-        if( l_type->lua_hasLoaded())
-            l_type->lua_right();
+        /*if( l_type->lua_hasLoaded())
+            l_type->lua_right();*/
 
         fvec2 l_velocity;
         fvec2 l_position;
@@ -452,6 +452,17 @@ entitytype* entitylist::getType( std::string name) {
         if( p_entity_types[i].getName() == name)
             return &p_entity_types[i];
     return NULL;
+}
+
+std::vector<int> entitylist::findPlayerObject() {
+    std::vector<int> l_obj;
+
+    for( int i = 0; i < (int)p_entitys.size(); i++) {
+        entity *l_entity = &p_entitys[i];
+        if( l_entity->getType()->getIsPlayer())
+            l_obj.push_back( l_entity->getId());
+    }
+    return l_obj;
 }
 
 entity* entitylist::getEntity( int id) {
