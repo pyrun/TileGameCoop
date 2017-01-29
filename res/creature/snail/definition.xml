@@ -1,0 +1,15 @@
+<object name="snake" width="28" height="18">
+<action name="idle" frame="1">walk.png</action>
+<action name="walk" frame="4" speed="12">walk.png</action>
+<action name="died" frame="4" speed="30">die.png</action>
+<vertex x="8" y="18">down</vertex>
+<vertex x="20" y="18">down</vertex>
+<vertex x="10" y="1">up</vertex>
+<vertex x="18" y="1">up</vertex>
+<vertex x="9" y="4">left</vertex>
+<vertex x="9" y="16">left</vertex>
+<vertex x="17" y="4">right</vertex>
+<vertex x="17" y="16">right</vertex>
+</object>
+
+
