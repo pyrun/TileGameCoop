@@ -53,11 +53,11 @@ class entitytype
 
         void loadScript( std::string file);
 
-        void lua_jump();
-        void lua_right();
-        void lua_left();
-        void lua_up();
-        void lua_down();
+        void lua_jump( int id);
+        void lua_right( int id);
+        void lua_left( int id);
+        void lua_up( int id);
+        void lua_down( int id);
 
         void lua_printerror();
         bool lua_hasLoaded() { return p_state!=NULL?true:false; }
@@ -108,6 +108,14 @@ class entity
         fvec2 getVelocity() { return p_velocity; }
         fvec2 getPosition() { return p_pos; }
         entitytype *getType() { return p_type; }
+        void setColisionDown( bool set) { p_down = set; }
+        void setColisionUp( bool set) { p_up = set; }
+        void setColisionRight( bool set) { p_right = set; }
+        void setColisionLeft( bool set) { p_left = set; }
+        bool getColisionDown() { return p_down;}
+        bool getColisionUp() { return p_up;}
+        bool getColisionRight() { return p_right;}
+        bool getColisionLeft() { return p_left;}
     protected:
 
     private:
@@ -115,6 +123,11 @@ class entity
         fvec2 p_pos;
         std::string p_action;
         entitytype *p_type;
+        bool p_down;
+        bool p_up;
+        bool p_right;
+        bool p_left;
+
 
         fvec2 p_velocity;
 };

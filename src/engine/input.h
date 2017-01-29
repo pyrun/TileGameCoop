@@ -6,13 +6,24 @@
 #include "types.h"
 #include "config.h"
 
+class input_dir {
+    public:
+        bool right;
+        bool left;
+        bool up;
+        bool down;
+};
+
 class input_map {
     public:
         input_map();
         ~input_map() {}
         int x;
         int y;
-        bool run;
+        input_dir dir;
+
+        bool run;bool dir_right;
+
         bool jump;
         bool attack;
         bool special;

@@ -6,6 +6,156 @@ using namespace tinyxml2;
 	#define XMLCheckResult(a_eResult) if (a_eResult != XML_SUCCESS) { printf("Error: %i\n", a_eResult); return a_eResult; }
 #endif
 
+/** LUA FUNCTION */
+
+entitylist *lua_entitylist = NULL;
+
+static int lua_addVelocity( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    float l_x, l_y;
+    if ( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) || !lua_isnumber( state, 3)) {
+        printf( "lua_addVelocity call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_x = lua_tonumber( state, 2);
+    l_y = lua_tonumber( state, 3);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_addVelocity obj not found\n");
+        return 0;
+    }
+    l_obj->addVelocity( fvec2( l_x, l_y) );
+
+    return 0;
+}
+
+static int lua_setVelocityX( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    float l_x;
+    if ( !lua_isnumber( state, 1) || !lua_isnumber( state, 2)) {
+        printf( "lua_addVelocity call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_x = lua_tonumber( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_addVelocity obj not found\n");
+        return 0;
+    }
+    l_obj->setVelocity( fvec2( l_x, l_obj->getVelocity().y) );
+
+    return 0;
+}
+
+static int lua_getVelocity( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    if ( !lua_isnumber( state, 1) ) {
+        printf( "lua_addVelocity call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_addVelocity obj not found\n");
+        return 0;
+    }
+    lua_pushnumber( state, l_obj->getVelocity().x );
+    lua_pushnumber( state, l_obj->getVelocity().y );
+
+    return 2;
+}
+
+static int lua_setVelocityY( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    float l_y;
+    if ( !lua_isnumber( state, 1) || !lua_isnumber( state, 2)) {
+        printf( "lua_addVelocity call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_y = lua_tonumber( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_addVelocity obj not found\n");
+        return 0;
+    }
+    l_obj->setVelocity( fvec2( l_obj->getVelocity().x, l_y) );
+
+    return 0;
+}
+
+static int lua_getColision( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    std::string l_name;
+    bool l_return = false;
+
+    if ( !lua_isnumber( state, 1) || !lua_isstring( state, 2)) {
+        printf( "lua_getColision call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_name = lua_tostring( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_getColision obj not found\n");
+        return 0;
+    }
+
+    if( l_name == "down")
+        l_return = l_obj->getColisionDown();
+    else if( l_name == "up")
+        l_return = l_obj->getColisionUp();
+    else if( l_name == "right")
+        l_return = l_obj->getColisionRight();
+    else if( l_name == "left")
+        l_return = l_obj->getColisionLeft();
+
+    lua_pushboolean( state, l_return);
+
+    return 1;
+}
+
+
+void lua_install( lua_State *state) {
+    // add all entity function ..
+    lua_pushcfunction( state, lua_addVelocity);
+    lua_setglobal( state, "addVelocity");
+
+    lua_pushcfunction( state, lua_getColision);
+    lua_setglobal( state, "getColision");
+
+    lua_pushcfunction( state, lua_setVelocityX);
+    lua_setglobal( state, "setVelocityX");
+
+    lua_pushcfunction( state, lua_setVelocityY);
+    lua_setglobal( state, "setVelocityY");
+
+    lua_pushcfunction( state, lua_getVelocity);
+    lua_setglobal( state, "getVelocity");
+}
+
+void lua_setEntity( entitylist *entity) {
+    // set list
+    lua_entitylist = entity;
+}
+
 entitytype::entitytype() {
     p_state = NULL;
 }
@@ -42,6 +192,8 @@ void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down) 
 void entitytype::loadScript( std::string file) {
     int l_result;
 
+    if( file.size() < 1) // no file
+        return;
 
     if( file_exist( file) == false) {
         printf( "entitytype::loadScript file '%s' dont found\n", file.c_str());
@@ -59,69 +211,72 @@ void entitytype::loadScript( std::string file) {
         // print error
         lua_printerror();
     }
+
+    // install lua entity function
+    lua_install( p_state);
 }
 
-void entitytype::lua_jump() {
+void entitytype::lua_jump( int id) {
     // name the function
     lua_getglobal( p_state, "jump");
     if( !lua_isfunction( p_state, -1)) {
         lua_pop( p_state,1);
         return;
     }
+    lua_pushnumber( p_state, id);
     // call the function
-    lua_call( p_state, 0, 0);
-    // no return
-    //lua_pop( p_state, 1);
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entitytype::lua_jump %s\n", lua_tostring( p_state, -1));
 }
 
-void entitytype::lua_right() {
+void entitytype::lua_right( int id) {
     // name the function
     lua_getglobal( p_state, "right");
     if( !lua_isfunction( p_state, -1)) {
         lua_pop( p_state,1);
         return;
     }
+    lua_pushnumber( p_state, id);
     // call the function
-    lua_call( p_state, 0, 0);
-    // no return
-    //lua_pop( p_state, 1);
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entitytype::lua_right %s\n", lua_tostring( p_state, -1));
 }
 
-void entitytype::lua_left() {
+void entitytype::lua_left( int id) {
     // name the function
     lua_getglobal( p_state, "left");
     if( !lua_isfunction( p_state, -1)) {
         lua_pop( p_state,1);
         return;
     }
+    lua_pushnumber( p_state, id);
     // call the function
-    lua_call( p_state, 0, 0);
-    // no return
-    //lua_pop( p_state, 1);
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entitytype::lua_left %s\n", lua_tostring( p_state, -1));
 }
-void entitytype::lua_up() {
+void entitytype::lua_up( int id) {
     // name the function
     lua_getglobal( p_state, "up");
     if( !lua_isfunction( p_state, -1)) {
         lua_pop( p_state,1);
         return;
     }
+    lua_pushnumber( p_state, id);
     // call the function
-    lua_call( p_state, 0, 0);
-    // no return
-    //lua_pop( p_state, 1);
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entitytype::lua_up %s\n", lua_tostring( p_state, -1));
 }
-void entitytype::lua_down() {
+void entitytype::lua_down( int id) {
     // name the function
     lua_getglobal( p_state, "down");
     if( !lua_isfunction( p_state, -1)) {
         lua_pop( p_state,1);
         return;
     }
+    lua_pushnumber( p_state, id);
     // call the function
-    lua_call( p_state, 0, 0);
-    // no return
-    //lua_pop( p_state, 1);
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entitytype::lua_down %s\n", lua_tostring( p_state, -1));
 }
 
 void entitytype::lua_printerror() {
@@ -273,13 +428,15 @@ void entitylist::draw(graphic *graphic) {
 
 void entitylist::process( world *world, int deltaTime) {
     float l_velocityDelta;
-    float l_collision_y = 0.0f;
+    float l_collision_y, l_collision_x;
 
     // calc delta of velocity
     l_velocityDelta = (float)deltaTime * world->getGravity();
 
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        entitytype *l_type = p_entitys[i].getType();
+        entity *l_entity = &p_entitys[i];
+        entitytype *l_type = l_entity->getType();
+
 
         /*if( l_type->lua_hasLoaded())
             l_type->lua_right();*/
@@ -288,35 +445,121 @@ void entitylist::process( world *world, int deltaTime) {
         fvec2 l_position;
         fvec2 l_change;
 
-        if( p_entitys[i].getType()->getGravity() != false)
-            continue;
+        // calc gravity
+        if( l_type->getGravity() == false) {
+            // positon ermiteln
+            l_position = l_entity->getPosition();
+            l_velocity = l_entity->getVelocity();
 
-        // positon ermiteln
-        l_position = p_entitys[i].getPosition();
-        l_velocity = p_entitys[i].getVelocity();
+            // änderung rechnen
+            l_change.x += l_velocity.x * deltaTime;
+            if( l_velocityDelta)
+                l_change.y += (( l_velocity.y + (l_velocityDelta / 2)) * deltaTime);
 
-        // änderung rechnen
-        l_change.x += l_velocity.x * deltaTime;
-        if( l_velocityDelta)
-            l_change.y += (( l_velocity.y + (l_velocityDelta / 2)) * deltaTime);
+            // y delta dazurechnen (x nicht nötig da keine gravi. )
+            l_velocity.y += l_velocityDelta;
+            l_collision_y = 0.0f;
+            l_collision_x = 0.0f;
 
-        // y delta dazurechnen (x nicht nötig da keine gravi. )
-        l_velocity.y += l_velocityDelta;
+            l_entity->setColisionDown( false);
+            l_entity->setColisionUp( false);
+            l_entity->setColisionLeft( false);
+            l_entity->setColisionRight( false);
 
-        l_collision_y = world->getCollisionY( l_position + fvec2( 0, (float)p_entitys[i].getType()->getHeight()), l_change, l_velocity);
-        if( l_collision_y != MASSIV_TILE) {
 
-            p_entitys[i].setPos( l_position + l_change - fvec2( 0, l_collision_y) );
+            for( int n = 0; n < (int)l_type->getVertex().size(); n++) {
+                vertex *l_vertex = &l_type->getVertex()[n];
+                vec2 l_collision_pos = l_vertex->pos;
 
-            p_entitys[i].setVelocity( fvec2() );
+                // collison
+                if( l_vertex->down) {
+                    float l_temp;
 
-            continue;
+                    // collsion y
+                    l_temp = world->getCollisionY( l_position + l_collision_pos, l_change, l_velocity);
+
+                    // nur falls alter wert kleiner ist
+                    if( ((l_collision_y == MASSIV_TILE || l_collision_y == 0.0f) && l_temp != MASSIV_TILE) ||
+                       (l_collision_y < l_temp && l_temp != MASSIV_TILE) ||
+                       (l_collision_y == 0.0f)) {
+                        l_collision_y = l_temp;
+                    }
+
+                    if( l_collision_y != MASSIV_TILE)
+                        l_entity->setColisionDown( true);
+                }
+                if( l_vertex->up) {
+                    float l_temp;
+
+                    // collsion y
+                    l_temp = world->getCollisionY( l_position + l_collision_pos, l_change, l_velocity, true);
+
+                    // nur falls alter wert kleiner ist
+                    if( ((l_collision_y == MASSIV_TILE || l_collision_y == 0.0f) && l_temp != MASSIV_TILE) ||
+                       (l_collision_y > l_temp && l_temp != MASSIV_TILE) ||
+                       (l_collision_y == 0.0f)) {
+                        l_collision_y = l_temp;
+                        //printf("%.2f\n", l_temp);
+                    }
+
+                    if( l_collision_y != MASSIV_TILE)
+                        l_entity->setColisionUp( true);
+                }
+                if( l_vertex->right) {
+                    float l_temp;
+
+                    // collsion y
+                    l_temp = world->getCollisionX( l_position + l_collision_pos, l_change, l_velocity);
+
+                    // nur falls alter wert kleiner ist
+                    if( ((l_collision_x == MASSIV_TILE || l_collision_x == 0.0f) && l_temp != MASSIV_TILE) ||
+                       (l_collision_x > l_temp && l_temp != MASSIV_TILE) ||
+                       (l_collision_x == 0.0f)) {
+                        l_collision_x = l_temp;
+                    }
+                    if( l_collision_x != MASSIV_TILE)
+                        l_entity->setColisionRight( true);
+                }
+
+                if( l_vertex->left) {
+                    float l_temp;
+
+                    // collsion y
+                    l_temp = world->getCollisionX( l_position + l_collision_pos, l_change, l_velocity, true);
+
+                    // nur falls alter wert kleiner ist
+                    if( ((l_collision_x == MASSIV_TILE || l_collision_x == 0.0f) && l_temp != MASSIV_TILE) ||
+                       (l_collision_x < l_temp && l_temp != MASSIV_TILE) ||
+                       (l_collision_x == 0.0f)) {
+                        l_collision_x = l_temp;
+                    }
+                    if( l_collision_x != MASSIV_TILE)
+                        l_entity->setColisionLeft( true);
+                }
+            }
+            if( l_collision_y != MASSIV_TILE) {
+                l_change = l_change - fvec2( 0, l_collision_y);
+                //l_entity->setPos( l_position + l_change - fvec2( 0, l_collision_y) );
+                l_entity->setVelocity( fvec2() );
+                l_velocity.y = 0;
+                //continue;
+            }
+            if( l_collision_x != MASSIV_TILE) {
+                l_change = l_change - fvec2( l_collision_x, 0);
+                //l_entity->setPos( l_position + l_change - fvec2( 0, l_collision_y) );
+                l_entity->setVelocity( fvec2() );
+                l_velocity.x = 0;
+                //continue;
+            }
+            if( l_entity->getColisionDown())
+                l_velocity.x = l_velocity.x/3;
+            else
+                l_velocity.x = l_velocity.x*0.99;
+            l_entity->setPos( l_position + l_change );
+
+            // add velocity next frame
+            l_entity->setVelocity( l_velocity);
         }
-
-        p_entitys[i].setPos( l_position + l_change );
-
-        // add velocity next frame
-        p_entitys[i].setVelocity( l_velocity);
 
         /*if( p_entitys[i].getPosition().y+l_velocity.y > 250)
             p_entitys[i].setVelocity( fvec2( 0.1f, -0.375f) );*/
@@ -441,6 +684,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setGravity( l_gravity);
     l_type->setIsPlayer( l_isplayer);
     l_type->loadScript( l_script);
+    lua_setEntity( this);
 
     p_entity_types.push_back( *l_type);
 

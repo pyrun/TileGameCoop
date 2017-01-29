@@ -21,7 +21,7 @@ world::world(std::string file = "default.tmx", std::string ordner = "worlds/")
         printf( "world::world cant load the file\n");
 
     // gravity
-    p_gravity = 0.0010f;
+    p_gravity = 0.0005f;
 }
 
 world::~world()
@@ -35,8 +35,78 @@ world::~world()
     //dtor
 }
 
-float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity) {
-    if( velocity.y > 0) {
+float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool left) {
+    if( velocity.x > 0 && !left) {
+        int l_x = ( position.x )/p_tilewidth;
+        int l_y = ( position.y )/p_tilehight;
+        tile *l_tile = NULL;
+
+        for( float i = 0; i < change.x; i+= 0.1f) {
+            l_x = ( position.x + i )/p_tilewidth;
+            l_y = ( position.y )/p_tilehight;
+
+            // collision tile
+            l_tile = getTile( p_tilemap_foreground, l_x, l_y);
+            if( l_tile != NULL && l_tile->id == 0) {
+                l_tile = NULL;
+                continue;
+            }
+            break;
+        }
+
+        float l_pos_change_x = position.x + change.x;
+        float l_bottom = l_x*p_tilehight;
+
+        //
+        if( l_tile == NULL)
+            return MASSIV_TILE;
+
+        // abfragen wo hitbox ist
+        if( l_tile->id == 0)
+            return MASSIV_TILE;
+
+        // massiv
+        return l_pos_change_x-l_bottom;
+    }
+    if( velocity.x < 0 && left) {
+        int l_x = ( position.x )/p_tilewidth;
+        int l_y = ( position.y )/p_tilehight;
+        tile *l_tile = NULL;
+
+        for( float i = 0; i < abs(change.x)+1; i+= 0.1f) {
+            l_x = ( position.x - i)/p_tilewidth;
+            l_x += 1;
+            l_y = ( position.y )/p_tilehight;
+
+            // collision tile
+            l_tile = getTile( p_tilemap_foreground, l_x-1, l_y);
+            if( l_tile != NULL && l_tile->id == 0) {
+                l_tile = NULL;
+                continue;
+            }
+            break;
+        }
+
+        float l_pos_change_x = position.x + change.x;
+        float l_bottom = l_x*p_tilehight;
+
+        //
+        if( l_tile == NULL)
+            return MASSIV_TILE;
+
+        // abfragen wo hitbox ist
+        if( l_tile->id == 0)
+            return MASSIV_TILE;
+
+        // massiv
+        return l_pos_change_x-l_bottom;
+    }
+
+    return MASSIV_TILE;
+}
+
+float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool up) {
+    if( velocity.y > 0 && !up) {
         int l_x = ( position.x )/p_tilewidth;
         int l_y = ( position.y )/p_tilehight;
         tile *l_tile = NULL;
@@ -61,14 +131,46 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity) {
         float l_pos_change_y = position.y + change.y;
         float l_bottom = l_y*p_tilehight;
 
-        //printf("%.2f y%.2f %.2f %.2f %.2f\n", i, l_bottom,change.y, position.y, l_pos_change_y-l_bottom);
-        //printf("%d %.2f %.2f %0.2f\n", l_y*p_tilehight, change.y, position.y, i);
-        /*float l_coll_y = change.y;
-        while( l_coll_y > 0 && l_tile == NULL) {
-            l_tile = getTile( p_tilemap_foreground, l_x, l_y+);
-            l_coll_y-= p_tilehight;
-        }*/
+        //
+        if( l_tile == NULL)
+            return MASSIV_TILE;
 
+        // abfragen wo hitbox ist
+        if( l_tile->id == 0)
+            return MASSIV_TILE;
+
+        /*if( position.y - ((l_y + i) * p_tilehight) < p_tilehight)
+            return change.y;*/
+        // massiv
+        return l_pos_change_y-l_bottom;//position.y - ((l_y ) * p_tilehight);
+    }
+    if( velocity.y < 0 && up) {
+        int l_x = ( position.x )/p_tilewidth;
+        int l_y = ( position.y )/p_tilehight;
+        tile *l_tile = NULL;
+
+        //printf("%.2f %d/%d\n", change.y, position.tovec2().x, position.tovec2().y);
+        float i;
+
+        for( i = 0; i < abs(change.y)+1; i+= 0.1f) {
+            l_x = ( position.x )/p_tilewidth;
+            l_y = ( position.y - i )/p_tilehight;
+            l_y += 1;
+
+            // collision tile
+            l_tile = getTile( p_tilemap_foreground, l_x, l_y-1);
+            if( l_tile != NULL && l_tile->id == 0) {
+                l_tile = NULL;
+                continue;
+            }
+            break;
+        }
+
+        float l_pos_y = position.y;
+        float l_pos_change_y = position.y + change.y;
+        float l_bottom = l_y*p_tilehight;
+
+        //
         if( l_tile == NULL)
             return MASSIV_TILE;
 

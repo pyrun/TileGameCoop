@@ -38,7 +38,8 @@ class world
         world( std::string file, std::string ordner );
         virtual ~world();
 
-        float getCollisionY( fvec2 position, fvec2 change, fvec2 velocity);
+        float getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool left = false);
+        float getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool up = false);
         void loadTypes( std::string file);
         bool load( std::string file, std::string ordner);
         tiletype *findType( int id);

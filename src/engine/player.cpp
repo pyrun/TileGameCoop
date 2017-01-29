@@ -50,6 +50,25 @@ void player_handle::handle( entitylist *entitylist) {
         l_map->x = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)p_config->getInputPadAxisX());
         l_map->y = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)p_config->getInputPadAxisY());
 
+        if( l_map->x > 32767/3)
+            l_map->dir.right = true;
+        else
+            l_map->dir.right = false;
+        if( l_map->x < -32767/3)
+            l_map->dir.left = true;
+        else
+            l_map->dir.left = false;
+
+        if( l_map->y > 32767/3)
+            l_map->dir.down = true;
+        else
+            l_map->dir.down = false;
+        if( l_map->y < -32767/3)
+            l_map->dir.up = true;
+        else
+            l_map->dir.up = false;
+
+
         // react
         l_map->jump = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_run() );
         l_map->run = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_jump() );
@@ -70,7 +89,6 @@ void player_handle::handle( entitylist *entitylist) {
             if( l_player->entity_id == -1) {
                 std::vector<int> l_obj = entitylist->findPlayerObject();
                 int l_id = -1;
-
 
                 for( int y = 0; y < (int)l_obj.size(); y++) {
                     bool l_found = true;
@@ -99,11 +117,16 @@ void player_handle::handle( entitylist *entitylist) {
             entitytype *l_type = l_entity->getType();
 
             if( l_type->lua_hasLoaded()) {
-               if( l_map->jump)
-                l_type->lua_jump();
+                if( l_map->jump && !l_map_old->jump)
+                    l_type->lua_jump( l_entity->getId());
+                if( l_map->dir.left )
+                    l_type->lua_left( l_entity->getId());
+                if( l_map->dir.right )
+                    l_type->lua_right( l_entity->getId());
             }
 
             //printf( "x%d y%d %d %d %d %d s%d b%d l%d r%d\n", l_map->x, l_map->y,l_map->jump, l_map->run, l_map->attack, l_map->special, l_map->start, l_map->select, l_map->left, l_map->right);
+            //printf( "%d %d %d %d\n", l_map->dir.right, l_map->dir.left, l_map->dir.up, l_map->dir.down);
         }
     }
 }

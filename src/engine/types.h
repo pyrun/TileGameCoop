@@ -82,6 +82,13 @@ struct fvec2 {
         c.y = (int)round( (double)this->y);
         return c;
     }
+
+    fvec2 operator+( const vec2 &a) {
+        fvec2 c;
+        c.x = x + (int)a.x;
+        c.y = y + (int)a.y;
+        return c;
+    }
 };
 
 // timer
