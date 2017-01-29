@@ -7,7 +7,7 @@
 class framenrate
 {
     public:
-        framenrate( int framerate = 16);
+        framenrate( int framerate = 8);
         virtual ~framenrate();
 
         void begin();

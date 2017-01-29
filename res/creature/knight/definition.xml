@@ -9,8 +9,10 @@
 <vertex id="2" x="10" y="1">up</vertex>
 <vertex id="3" x="22" y="1">up</vertex>
 <vertex id="4" x="9" y="8">left</vertex>
+<vertex id="4" x="9" y="16">left</vertex>
 <vertex id="5" x="9" y="31">left</vertex>
 <vertex id="6" x="23" y="8">right</vertex>
+<vertex id="6" x="23" y="16">right</vertex>
 <vertex id="7" x="23" y="31">right</vertex>
 </object>
 

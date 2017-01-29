@@ -60,7 +60,7 @@ class entitytype
         void lua_down( int id);
 
         void lua_printerror();
-        bool lua_hasLoaded() { return p_state!=NULL?true:false; }
+        bool lua_hasLoaded() { return p_state==NULL?false:true; }
 
         void setName( std::string name) { p_name = name; }
         void setGravity( bool mass) { p_gravity = mass; }

@@ -217,6 +217,8 @@ void entitytype::loadScript( std::string file) {
 }
 
 void entitytype::lua_jump( int id) {
+    if( p_state == NULL)
+        return;
     // name the function
     lua_getglobal( p_state, "jump");
     if( !lua_isfunction( p_state, -1)) {
@@ -230,6 +232,8 @@ void entitytype::lua_jump( int id) {
 }
 
 void entitytype::lua_right( int id) {
+    if( p_state == NULL)
+        return;
     // name the function
     lua_getglobal( p_state, "right");
     if( !lua_isfunction( p_state, -1)) {
@@ -243,6 +247,8 @@ void entitytype::lua_right( int id) {
 }
 
 void entitytype::lua_left( int id) {
+    if( p_state == NULL)
+        return;
     // name the function
     lua_getglobal( p_state, "left");
     if( !lua_isfunction( p_state, -1)) {
@@ -255,6 +261,8 @@ void entitytype::lua_left( int id) {
         printf("entitytype::lua_left %s\n", lua_tostring( p_state, -1));
 }
 void entitytype::lua_up( int id) {
+    if( p_state == NULL)
+        return;
     // name the function
     lua_getglobal( p_state, "up");
     if( !lua_isfunction( p_state, -1)) {
@@ -267,6 +275,8 @@ void entitytype::lua_up( int id) {
         printf("entitytype::lua_up %s\n", lua_tostring( p_state, -1));
 }
 void entitytype::lua_down( int id) {
+    if( p_state != NULL)
+        return;
     // name the function
     lua_getglobal( p_state, "down");
     if( !lua_isfunction( p_state, -1)) {
@@ -606,7 +616,6 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
 
     if( l_object->Attribute( "script"))
         l_script = folder + l_object->Attribute( "script");
-
 
     entitytype *l_type = new entitytype();
     std::string l_action_name;

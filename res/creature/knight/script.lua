@@ -1,48 +1,47 @@
-local wert = 0
-local inflychange = 0
-local change = 0
-local maxchange = 40
+local jump_two = 0
+local jump_high = -0.23
 
 function jump( id)
+	
 	if getColision( id, "down") then
-		setVelocityY( id, -0.23)
-		wert = 1
-		inflychange = 1
-		change = 0
-	elseif wert == 1 then
-		setVelocityY( id, -0.12)
-		wert = 0
+		addVelocity( id, 0, jump_high)
+		jump_two = 1
+    	elseif jump_two == 1 then
+        jump_two = 0
+        setVelocityY( id, jump_high/2)
 	end
 end
 
-local walk = 0.105
-local flychange = 0.004
+local max_speed = 0.5
+local walk_speed = 0.1
 
 function right( id)
+    local l_velX, l_velY
+    -- get velocity
+	l_velX, l_velY = getVelocity( id)
 	if getColision( id, "down") then
-		addVelocity( id, walk, 0 )
-	elseif change < maxchange then
-		change = change + 1
-		local x, y = getVelocity( id)
-		if x < 0 then
-			setVelocityX( id, x/1.1)
-		else
-			addVelocity( id, flychange , 0)
-		end
+        if l_velX < max_speed then
+            addVelocity( id, walk_speed, 0 )
+        end
+    else
+        if l_velX < max_speed/4 then
+            addVelocity( id, walk_speed/10, 0 )
+        end
 	end
 end
 
 function left( id)
+    local l_velX, l_velY
+    -- get velocity
+	l_velX, l_velY = getVelocity( id)
 	if getColision( id, "down") then
-		addVelocity( id, -walk, 0 )
-	elseif change < maxchange then
-		change = change + 1
-		local x, y = getVelocity( id)
-		if x > 0 then
-			setVelocityX( id, x/1.1)
-		else
-			addVelocity( id, -flychange , 0)
-		end
+        if l_velX > -max_speed then
+            addVelocity( id, -walk_speed, 0 )
+        end
+	else
+        if l_velX > -max_speed/4 then
+            addVelocity( id, -walk_speed/10, 0 )
+        end
 	end
 end
 

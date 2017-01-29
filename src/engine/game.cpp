@@ -109,7 +109,6 @@ int game::process() {
 int game::process_graphic() {
     int l_error;
 
-
     p_world = new world( "1-1.tmx", "worlds/");
     p_entity->createFromWorldFile( p_world->getFileName());
 
