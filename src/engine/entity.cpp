@@ -206,8 +206,8 @@ entity::entity( int id)
 
 entity::~entity()
 {
-    if( p_state)
-        lua_close( p_state);
+    //if( p_state)
+        //lua_close( p_state);
 }
 
 void entity::draw( graphic *graphic) {
@@ -242,6 +242,10 @@ void entity::loadScript( std::string file) {
     }
 
     p_state = luaL_newstate();
+    if( p_state == NULL) {
+        printf( "entity::loadScript cannot create new lua state\n" );
+        return;
+    }
 
     // standard libraries
     luaL_openlibs( p_state);
@@ -268,9 +272,9 @@ void entity::lua_jump( int id) {
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 1, 0))
+    if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_jump %s\n", lua_tostring( p_state, -1));
-    lua_pop( p_state, 1);
+    //lua_pop( p_state, 1);
 }
 
 
@@ -285,9 +289,8 @@ void entity::lua_right( int id) {
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 1, 0))
+    if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_right %s\n", lua_tostring( p_state, -1));
-    lua_pop( p_state, 1);
 }
 
 void entity::lua_left( int id) {
@@ -301,9 +304,8 @@ void entity::lua_left( int id) {
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 1, 0))
+    if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_left %s\n", lua_tostring( p_state, -1));
-    lua_pop( p_state, 1);
 }
 void entity::lua_up( int id) {
     if( p_state == NULL)
@@ -316,12 +318,11 @@ void entity::lua_up( int id) {
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 1, 0))
+    if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_up %s\n", lua_tostring( p_state, -1));
-    lua_pop( p_state, 1);
 }
 void entity::lua_down( int id) {
-    if( p_state != NULL)
+    if( p_state == NULL)
         return;
     // name the function
     lua_getglobal( p_state, "down");
@@ -331,9 +332,8 @@ void entity::lua_down( int id) {
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 1, 0))
+    if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_down %s\n", lua_tostring( p_state, -1));
-    lua_pop( p_state, 1);
 }
 
 void entity::lua_printerror() {
@@ -569,9 +569,9 @@ void entitylist::process( world *world, int deltaTime) {
                 //continue;
             }
             if( l_entity->getColisionDown())
-                l_velocity.x = l_velocity.x/3;
+                l_velocity.x = l_velocity.x*0.7f;
             else
-                l_velocity.x = l_velocity.x*0.99;
+                l_velocity.x = l_velocity.x*0.99f;
             l_entity->setPos( l_position + l_change );
 
             // add velocity next frame

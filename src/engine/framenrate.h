@@ -4,10 +4,12 @@
 #include "types.h"
 #include <vector>
 
+#define FPS(x) (1.0f/x*1000.0f)
+
 class framenrate
 {
     public:
-        framenrate( int framerate = 8);
+        framenrate( int framerate = (float)FPS(60));
         virtual ~framenrate();
 
         void begin();

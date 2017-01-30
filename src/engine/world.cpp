@@ -21,7 +21,7 @@ world::world(std::string file = "default.tmx", std::string ordner = "worlds/")
         printf( "world::world cant load the file\n");
 
     // gravity
-    p_gravity = 0.0005f;
+    p_gravity = 0.001f;
 }
 
 world::~world()

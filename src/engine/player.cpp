@@ -50,20 +50,20 @@ void player_handle::handle( entitylist *entitylist) {
         l_map->x = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)p_config->getInputPadAxisX());
         l_map->y = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)p_config->getInputPadAxisY());
 
-        if( l_map->x > 32767/3)
+        if( l_map->x > 32767/2)
             l_map->dir.right = true;
         else
             l_map->dir.right = false;
-        if( l_map->x < -32767/3)
+        if( l_map->x < -32767/2)
             l_map->dir.left = true;
         else
             l_map->dir.left = false;
 
-        if( l_map->y > 32767/3)
+        if( l_map->y > 32767/2)
             l_map->dir.down = true;
         else
             l_map->dir.down = false;
-        if( l_map->y < -32767/3)
+        if( l_map->y < -32767/2)
             l_map->dir.up = true;
         else
             l_map->dir.up = false;
@@ -119,10 +119,11 @@ void player_handle::handle( entitylist *entitylist) {
             if( l_entity->lua_hasLoaded()) {
                 if( l_map->jump && !l_map_old->jump) {
                     l_entity->lua_jump( l_entity->getId());
-                    printf("test\n");
-                    entitylist->create( l_type, vec2( 10, 10));
-                    printf("123test\n");
                 }
+                if( l_map->dir.up )
+                    l_entity->lua_up( l_entity->getId());
+                if( l_map->dir.down )
+                    l_entity->lua_down( l_entity->getId());
                 if( l_map->dir.left )
                     l_entity->lua_left( l_entity->getId());
                 if( l_map->dir.right )
