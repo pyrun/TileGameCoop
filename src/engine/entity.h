@@ -51,25 +51,16 @@ class entitytype
         void addAction( std::string name, std::string file, int frame, int speed, image *image);
         void addVertex(vec2 pos, bool left, bool right, bool up, bool down);
 
-        void loadScript( std::string file);
-
-        void lua_jump( int id);
-        void lua_right( int id);
-        void lua_left( int id);
-        void lua_up( int id);
-        void lua_down( int id);
-
-        void lua_printerror();
-        bool lua_hasLoaded() { return p_state==NULL?false:true; }
-
         void setName( std::string name) { p_name = name; }
         void setGravity( bool mass) { p_gravity = mass; }
 
         void setWidth( int width) { p_width = width; }
         void setHeight( int height) { p_height = height; }
         void setIsPlayer( bool isplayer) { p_isplayer = isplayer; }
+        void setScriptName( std::string file) { p_script = file; }
 
         std::string getName() { return p_name; }
+        std::string getScriptName() { return p_script; }
         int getWidth() { return p_width; }
         int getHeight() { return p_height; }
         bool getGravity() { return p_gravity; }
@@ -83,10 +74,9 @@ class entitytype
         bool p_gravity;
         bool p_isplayer;
         std::string p_name;
+        std::string p_script;
         std::vector<action> p_actions;
         std::vector<vertex> p_vertex;
-
-        lua_State *p_state;
 };
 
 class entity
@@ -102,6 +92,19 @@ class entity
         void setPos( vec2 pos) { p_pos = pos; }
         void setPos( fvec2 pos) { p_pos = pos; }
         void setVelocity( fvec2 velocity) { p_velocity = velocity; }
+
+
+        void loadScript( std::string file);
+
+        void lua_jump( int id);
+        void lua_right( int id);
+        void lua_left( int id);
+        void lua_up( int id);
+        void lua_down( int id);
+
+        void lua_printerror();
+        bool lua_hasLoaded() { return p_state==NULL?false:true; }
+
 
         int getId() { return p_id; }
         void addVelocity( fvec2 velocity) { p_velocity = p_velocity + velocity; }
@@ -130,6 +133,8 @@ class entity
 
 
         fvec2 p_velocity;
+
+        lua_State *p_state;
 };
 
 class entitylist {

@@ -116,14 +116,18 @@ void player_handle::handle( entitylist *entitylist) {
             entity *l_entity = entitylist->getEntity( l_player->entity_id);
             entitytype *l_type = l_entity->getType();
 
-            if( l_type->lua_hasLoaded()) {
-                if( l_map->jump && !l_map_old->jump)
-                    l_type->lua_jump( l_entity->getId());
+            if( l_entity->lua_hasLoaded()) {
+                if( l_map->jump && !l_map_old->jump) {
+                    l_entity->lua_jump( l_entity->getId());
+                    printf("test\n");
+                    entitylist->create( l_type, vec2( 10, 10));
+                    printf("123test\n");
+                }
                 if( l_map->dir.left )
-                    l_type->lua_left( l_entity->getId());
+                    l_entity->lua_left( l_entity->getId());
                 if( l_map->dir.right )
-                    l_type->lua_right( l_entity->getId());
-            }
+                    l_entity->lua_right( l_entity->getId());
+            } else if(l_type->getScriptName().length() > 1) l_entity->loadScript( l_type->getScriptName());
 
             //printf( "x%d y%d %d %d %d %d s%d b%d l%d r%d\n", l_map->x, l_map->y,l_map->jump, l_map->run, l_map->attack, l_map->special, l_map->start, l_map->select, l_map->left, l_map->right);
             //printf( "%d %d %d %d\n", l_map->dir.right, l_map->dir.left, l_map->dir.up, l_map->dir.down);

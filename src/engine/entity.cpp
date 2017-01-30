@@ -157,12 +157,19 @@ void lua_setEntity( entitylist *entity) {
 }
 
 entitytype::entitytype() {
-    p_state = NULL;
 }
 
 entitytype::~entitytype() {
-    if( p_state)
-        lua_close( p_state);
+
+}
+
+action* entitytype::getAction( std::string name) {
+    for( int i = 0; i < (int)p_actions.size(); i++) {
+        if( p_actions[i].name == name)
+            return &p_actions[i];
+    }
+
+    return NULL;
 }
 
 void entitytype::addAction( std::string name, std::string file, int frame, int speed, image *image) {
@@ -189,7 +196,41 @@ void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down) 
     p_vertex.push_back( *l_vertex);
 }
 
-void entitytype::loadScript( std::string file) {
+entity::entity( int id)
+{
+    // set id
+    p_id = id;
+
+    p_state = NULL;
+}
+
+entity::~entity()
+{
+    if( p_state)
+        lua_close( p_state);
+}
+
+void entity::draw( graphic *graphic) {
+    int l_frame;
+
+    action *l_action = p_type->getAction( this->p_action);
+    if( l_action == NULL) { // falls animaton fehlt zurück zu idle
+        p_action = ACTION_IDLE;
+        printf("dont found action, jump to idle\n");
+        return;
+    }
+
+    image *l_image = l_action->imagefile;
+
+
+    if( l_action->frame != 0)
+        l_frame = p_type->getWidth()*( ((int)(graphic->getFrame()/l_action->speed) ) %l_action->frame);
+    else
+        l_frame = 0;
+    graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( l_frame, 0));
+}
+
+void entity::loadScript( std::string file) {
     int l_result;
 
     if( file.size() < 1) // no file
@@ -216,22 +257,24 @@ void entitytype::loadScript( std::string file) {
     lua_install( p_state);
 }
 
-void entitytype::lua_jump( int id) {
+void entity::lua_jump( int id) {
     if( p_state == NULL)
         return;
     // name the function
     lua_getglobal( p_state, "jump");
     if( !lua_isfunction( p_state, -1)) {
-        lua_pop( p_state,1);
+        lua_pop( p_state, 1);
         return;
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 0, 0))
-        printf("entitytype::lua_jump %s\n", lua_tostring( p_state, -1));
+    if( lua_pcall( p_state, 1, 1, 0))
+        printf("entity::lua_jump %s\n", lua_tostring( p_state, -1));
+    lua_pop( p_state, 1);
 }
 
-void entitytype::lua_right( int id) {
+
+void entity::lua_right( int id) {
     if( p_state == NULL)
         return;
     // name the function
@@ -242,11 +285,12 @@ void entitytype::lua_right( int id) {
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 0, 0))
-        printf("entitytype::lua_right %s\n", lua_tostring( p_state, -1));
+    if( lua_pcall( p_state, 1, 1, 0))
+        printf("entity::lua_right %s\n", lua_tostring( p_state, -1));
+    lua_pop( p_state, 1);
 }
 
-void entitytype::lua_left( int id) {
+void entity::lua_left( int id) {
     if( p_state == NULL)
         return;
     // name the function
@@ -257,10 +301,11 @@ void entitytype::lua_left( int id) {
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 0, 0))
-        printf("entitytype::lua_left %s\n", lua_tostring( p_state, -1));
+    if( lua_pcall( p_state, 1, 1, 0))
+        printf("entity::lua_left %s\n", lua_tostring( p_state, -1));
+    lua_pop( p_state, 1);
 }
-void entitytype::lua_up( int id) {
+void entity::lua_up( int id) {
     if( p_state == NULL)
         return;
     // name the function
@@ -271,10 +316,11 @@ void entitytype::lua_up( int id) {
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 0, 0))
-        printf("entitytype::lua_up %s\n", lua_tostring( p_state, -1));
+    if( lua_pcall( p_state, 1, 1, 0))
+        printf("entity::lua_up %s\n", lua_tostring( p_state, -1));
+    lua_pop( p_state, 1);
 }
-void entitytype::lua_down( int id) {
+void entity::lua_down( int id) {
     if( p_state != NULL)
         return;
     // name the function
@@ -285,56 +331,17 @@ void entitytype::lua_down( int id) {
     }
     lua_pushnumber( p_state, id);
     // call the function
-    if( lua_pcall( p_state, 1, 0, 0))
-        printf("entitytype::lua_down %s\n", lua_tostring( p_state, -1));
+    if( lua_pcall( p_state, 1, 1, 0))
+        printf("entity::lua_down %s\n", lua_tostring( p_state, -1));
+    lua_pop( p_state, 1);
 }
 
-void entitytype::lua_printerror() {
+void entity::lua_printerror() {
   // The error message is on top of the stack.
   // Fetch it, print it and then pop it off the stack.
   const char* message = lua_tostring( p_state, -1);
   puts(message);
   lua_pop( p_state, 1);
-}
-
-action* entitytype::getAction( std::string name) {
-    for( int i = 0; i < (int)p_actions.size(); i++) {
-        if( p_actions[i].name == name)
-            return &p_actions[i];
-    }
-
-    return NULL;
-}
-
-entity::entity( int id)
-{
-    // set id
-    p_id = id;
-}
-
-entity::~entity()
-{
-    //dtor
-}
-
-void entity::draw( graphic *graphic) {
-    int l_frame;
-
-    action *l_action = p_type->getAction( this->p_action);
-    if( l_action == NULL) { // falls animaton fehlt zurück zu idle
-        p_action = ACTION_IDLE;
-        printf("dont found action, jump to idle\n");
-        return;
-    }
-
-    image *l_image = l_action->imagefile;
-
-
-    if( l_action->frame != 0)
-        l_frame = p_type->getWidth()*( ((int)(graphic->getFrame()/l_action->speed) ) %l_action->frame);
-    else
-        l_frame = 0;
-    graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( l_frame, 0));
 }
 
 entitylist::entitylist()
@@ -692,7 +699,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setName( l_name);
     l_type->setGravity( l_gravity);
     l_type->setIsPlayer( l_isplayer);
-    l_type->loadScript( l_script);
+    l_type->setScriptName( l_script);
     lua_setEntity( this);
 
     p_entity_types.push_back( *l_type);
