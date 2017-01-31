@@ -1,5 +1,32 @@
+function update( id)
+	local l_velX, l_velY
+    	-- get velocity
+	l_velX, l_velY = getVelocity( id)
+
+	if l_velY < 0.0 then
+		setAnimation( id, "jump")
+	end
+	
+	if getColision( id, "down") then
+		if math.abs(l_velX) > 0.01 then
+			setAnimation( id, "walk")
+		end
+		if math.abs(l_velX) < 0.01 then
+			setAnimation( id, "idle")
+		end
+	end
+
+	if math.abs(l_velX) > 0.0 then
+		local dir = 0
+		if l_velX < 0.00 then
+			dir = 1
+		end
+		setAnimationDirection( id, dir)
+	end
+end
+
 local jump_two = 0
-local jump_high = -0.35
+local jump_high = -0.32
 
 function jump( id)
 	if getColision( id, "down") then

@@ -24,7 +24,15 @@ class framenrate
             return (int)l_ms;
         }
         int getFramerate() {
-            float l_framerate = 0;
+            int l_framerate = getDelay();
+            if( l_framerate < p_framerate)
+                l_framerate = p_framerate;
+
+            p_framerate_list.push_back( l_framerate);
+            if( (int)p_framerate_list.size() > 20)
+            p_framerate_list.erase( p_framerate_list.begin() );
+
+            l_framerate = 0;
 
             for( int i =0; i < (int)p_framerate_list.size(); i++)
                 l_framerate += p_framerate_list[i];

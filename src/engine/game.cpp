@@ -132,6 +132,8 @@ int game::process_graphic() {
         // start measurement point
         //p_framerate->begin();
 
+        //p_entity->create( p_entity->getType("knight"), vec2( 10, 100));
+
         // flip camera
         p_graphic->flipCamera();
 

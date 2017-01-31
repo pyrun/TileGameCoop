@@ -10,6 +10,50 @@ using namespace tinyxml2;
 
 entitylist *lua_entitylist = NULL;
 
+static int lua_setAnimation( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    std::string l_name;
+
+    if( !lua_isnumber( state, 1) || !lua_isstring( state, 2) ) {
+        printf( "lua_setAnimation call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_name = lua_tostring( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_addVelocity obj not found\n");
+        return 0;
+    }
+
+    l_obj->setAction( l_name);
+}
+
+static int lua_setAnimationDirection( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    int l_dir;
+
+    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) ) {
+        printf( "lua_setAnimation call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_dir = lua_tointeger( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_addVelocity obj not found\n");
+        return 0;
+    }
+
+    l_obj->setDirection( l_dir);
+}
+
 static int lua_addVelocity( lua_State *state) {
     entity *l_obj;
     int l_id;
@@ -29,6 +73,7 @@ static int lua_addVelocity( lua_State *state) {
         return 0;
     }
     l_obj->addVelocity( fvec2( l_x, l_y) );
+    l_obj->setUpdate( true);
 
     return 0;
 }
@@ -51,6 +96,7 @@ static int lua_setVelocityX( lua_State *state) {
         return 0;
     }
     l_obj->setVelocity( fvec2( l_x, l_obj->getVelocity().y) );
+    l_obj->setUpdate( true);
 
     return 0;
 }
@@ -73,6 +119,8 @@ static int lua_getVelocity( lua_State *state) {
     lua_pushnumber( state, l_obj->getVelocity().x );
     lua_pushnumber( state, l_obj->getVelocity().y );
 
+    l_obj->setUpdate( true);
+
     return 2;
 }
 
@@ -94,6 +142,7 @@ static int lua_setVelocityY( lua_State *state) {
         return 0;
     }
     l_obj->setVelocity( fvec2( l_obj->getVelocity().x, l_y) );
+    l_obj->setUpdate( true);
 
     return 0;
 }
@@ -135,6 +184,12 @@ static int lua_getColision( lua_State *state) {
 
 void lua_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_setAnimation);
+    lua_setglobal( state, "setAnimation");
+
+    lua_pushcfunction( state, lua_setAnimationDirection);
+    lua_setglobal( state, "setAnimationDirection");
+
     lua_pushcfunction( state, lua_addVelocity);
     lua_setglobal( state, "addVelocity");
 
@@ -200,6 +255,7 @@ entity::entity( int id)
 {
     // set id
     p_id = id;
+    p_direction = 0;
 
     p_state = NULL;
 }
@@ -212,6 +268,10 @@ entity::~entity()
 
 void entity::draw( graphic *graphic) {
     int l_frame;
+
+    // graphic update
+    if( NeedUpdate())
+        lua_update( getId());
 
     action *l_action = p_type->getAction( this->p_action);
     if( l_action == NULL) { // falls animaton fehlt zurück zu idle
@@ -227,7 +287,7 @@ void entity::draw( graphic *graphic) {
         l_frame = p_type->getWidth()*( ((int)(graphic->getFrame()/l_action->speed) ) %l_action->frame);
     else
         l_frame = 0;
-    graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( l_frame, 0));
+    graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( l_frame, 0), 0, p_direction);
 }
 
 void entity::loadScript( std::string file) {
@@ -277,7 +337,6 @@ void entity::lua_jump( int id) {
     //lua_pop( p_state, 1);
 }
 
-
 void entity::lua_right( int id) {
     if( p_state == NULL)
         return;
@@ -326,6 +385,21 @@ void entity::lua_down( int id) {
         return;
     // name the function
     lua_getglobal( p_state, "down");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    // call the function
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entity::lua_down %s\n", lua_tostring( p_state, -1));
+}
+
+void entity::lua_update( int id) {
+    if( p_state == NULL)
+        return;
+    // name the function
+    lua_getglobal( p_state, "update");
     if( !lua_isfunction( p_state, -1)) {
         lua_pop( p_state,1);
         return;
@@ -483,7 +557,6 @@ void entitylist::process( world *world, int deltaTime) {
             l_entity->setColisionLeft( false);
             l_entity->setColisionRight( false);
 
-
             for( int n = 0; n < (int)l_type->getVertex().size(); n++) {
                 vertex *l_vertex = &l_type->getVertex()[n];
                 vec2 l_collision_pos = l_vertex->pos;
@@ -558,16 +631,17 @@ void entitylist::process( world *world, int deltaTime) {
                 l_change = l_change - fvec2( 0, l_collision_y);
                 //l_entity->setPos( l_position + l_change - fvec2( 0, l_collision_y) );
                 l_entity->setVelocity( fvec2() );
+                l_entity->setUpdate( true);
                 l_velocity.y = 0;
-                //continue;
             }
             if( l_collision_x != MASSIV_TILE) {
                 l_change = l_change - fvec2( l_collision_x, 0);
                 //l_entity->setPos( l_position + l_change - fvec2( 0, l_collision_y) );
                 l_entity->setVelocity( fvec2() );
+                l_entity->setUpdate( true);
                 l_velocity.x = 0;
-                //continue;
             }
+
             if( l_entity->getColisionDown())
                 l_velocity.x = l_velocity.x*0.7f;
             else

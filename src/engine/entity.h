@@ -89,9 +89,12 @@ class entity
 
         void setType( entitytype *type) { this->p_type = type; }
         void setAction( std::string name) { p_action = name; }
+        void setDirection( int dir) { p_direction = dir; }
         void setPos( vec2 pos) { p_pos = pos; }
         void setPos( fvec2 pos) { p_pos = pos; }
         void setVelocity( fvec2 velocity) { p_velocity = velocity; }
+        void setUpdate( bool set) { p_update = set; }
+        bool NeedUpdate() { return p_update; }
 
 
         void loadScript( std::string file);
@@ -101,6 +104,7 @@ class entity
         void lua_left( int id);
         void lua_up( int id);
         void lua_down( int id);
+        void lua_update( int id);
 
         void lua_printerror();
         bool lua_hasLoaded() { return p_state==NULL?false:true; }
@@ -126,10 +130,13 @@ class entity
         fvec2 p_pos;
         std::string p_action;
         entitytype *p_type;
+        bool p_update;
         bool p_down;
         bool p_up;
         bool p_right;
         bool p_left;
+
+        bool p_direction;
 
 
         fvec2 p_velocity;
