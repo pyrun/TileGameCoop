@@ -16,7 +16,7 @@ class player {
         bool active;
         bool wantToJoin;
 
-        int device_number;
+        SDL_JoystickID device_number;
 
         input_map *map;
         input_map *map_old;
@@ -30,17 +30,16 @@ class player_handle
         player_handle( config *config);
         virtual ~player_handle();
 
-        void handle( entitylist *entity);
+        void handle( entitylist *entity, input *input);
         int getPlayerAmount() { return (int)p_playerlist.size(); }
         int player_getPlayerActive();
     protected:
-
     private:
         config *p_config;
         std::vector<player*> p_playerlist;
 
-        void player_add( SDL_GameController *controller, int device_number);
-        bool player_getDeviceNumber( int device_number);
+        void player_add( SDL_GameController *controller);
+        void player_remove( int id);
 
 };
 

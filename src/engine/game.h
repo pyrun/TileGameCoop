@@ -36,7 +36,6 @@ class game {
         entitylist *p_entity;
 
         timer p_timer;
-        timer p_deltaTime;
 
         bool p_game_running;
 };

@@ -11,11 +11,11 @@ game::game()
     // create the framerate counter
     p_framerate = new framenrate( );
 
+        // input
+    p_input = new input( &p_config);
+
     // create player_list
     p_player = new player_handle(&p_config);
-
-    // input
-    p_input = new input( &p_config);
 
     // no wolrd load
     p_world = NULL;
@@ -122,11 +122,6 @@ int game::process_graphic() {
     p_entity->getEntity( riven)->setAction( "jump");*/
 
 
-    //delta time start
-    p_deltaTime.start();
-
-    printf( "%d\n", SDL_CONTROLLER_BUTTON_X );
-
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
         // start measurement point
@@ -138,16 +133,12 @@ int game::process_graphic() {
         p_graphic->flipCamera();
 
         // react of player input
-        p_player->handle( p_entity);
+        p_player->handle( p_entity, p_input);
 
         // process
         process();
 
-        // calc entity
-        p_entity->process( p_world, p_deltaTime.getTicks());
-
-        //delta time reset to next frame
-        p_deltaTime.start();
+        p_entity->process( p_world, 16);
 
         // draw world
         p_world->draw( p_graphic);

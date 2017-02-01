@@ -16,20 +16,30 @@ player_handle::~player_handle()
     }
 }
 
-void player_handle::handle( entitylist *entitylist) {
-    int i = 0;
-    for ( i = 0; i < SDL_NumJoysticks(); i++) {
-        if (SDL_IsGameController(i) && !player_getDeviceNumber( i)) {
+void player_handle::handle( entitylist *entitylist, input *input) {
 
-            SDL_GameController *l_controller = SDL_GameControllerOpen(i);
+    // handle new controler
+    std::vector<int> l_device = input->getDevice();
+    if( l_device.size() > 0) {
+        for( int i = 0; i < (int)l_device.size(); i++) {
 
-            if ( l_controller) {
-                player_add( l_controller, i);
-            } else {
-                printf("Couldn't open SDL_GameController %d\n", i);
-            }
+            if( !SDL_IsGameController( l_device[i] ) )
+                continue;
+
+            SDL_GameController *l_controller = SDL_GameControllerOpen(l_device[i]);
+            if( !l_controller)
+                continue;
+
+            // add controler
+            player_add( l_controller);
         }
     }
+    // delete old one
+    l_device = input->getDeviceDestroyed();
+    for( int i = 0; i < (int)l_device.size(); i++)
+        player_remove(  l_device[i] );
+    // clear input device list
+    input->cearDevice();
 
     // react of push bottum
     for( int i = 0; i < (int)p_playerlist.size(); i++) {
@@ -117,9 +127,8 @@ void player_handle::handle( entitylist *entitylist) {
             entitytype *l_type = l_entity->getType();
 
             if( l_entity->lua_hasLoaded()) {
-                if( l_map->jump && !l_map_old->jump) {
+                if( l_map->jump && !l_map_old->jump)
                     l_entity->lua_jump( l_entity->getId());
-                }
                 if( l_map->dir.up )
                     l_entity->lua_up( l_entity->getId());
                 if( l_map->dir.down )
@@ -146,23 +155,35 @@ int player_handle::player_getPlayerActive() {
 }
 
 
-void player_handle::player_add( SDL_GameController *controller, int device_number) {
-    printf( "add controller %d\n", device_number );
+void player_handle::player_add( SDL_GameController *controller) {
 
     player *l_player =  new player();
 
+    l_player->device_number = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
     l_player->controller = controller;
     l_player->active = false;
     l_player->wantToJoin = false;
-    l_player->device_number = device_number;
 
     p_playerlist.push_back( l_player);
 }
 
-bool player_handle::player_getDeviceNumber( int device_number) {
-    for( int i = 0; i < (int)p_playerlist.size(); i++) {
-        if( p_playerlist[i]->device_number == device_number)
-            return true;
+void player_handle::player_remove( int id) {
+    player *l_player = NULL;
+    int i;
+    for( i = 0; i < (int)p_playerlist.size(); i++) {
+        if( p_playerlist[i]->device_number == id) {
+            l_player = p_playerlist[i];
+            break;
+        }
     }
-    return false;
+
+    if( l_player == NULL)
+        return;
+
+    // close the gamepad connection
+    SDL_GameControllerClose( l_player->controller );
+
+    // delete now the player
+    p_playerlist.erase( p_playerlist.begin() + i);
 }
+
