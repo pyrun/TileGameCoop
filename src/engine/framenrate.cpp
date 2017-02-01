@@ -37,6 +37,7 @@ void framenrate::calc() {
     if( (int)p_ms_list.size() > 20)
         p_ms_list.erase( p_ms_list.begin() );
     if( p_ms < p_framerate ) {
+        SDL_Delay( p_framerate-p_ms );
         //p_fps.start();
     }
     p_fps.start();
