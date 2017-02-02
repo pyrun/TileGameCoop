@@ -33,6 +33,13 @@ struct vec2 {
             return true;
         return false;
     }
+
+    vec2 operator/( const vec2 &a) {
+        vec2 c;
+        c.x = x / (int)a.x;
+        c.y = y / (int)a.y;
+        return c;
+    }
 };
 
 struct vec4 {

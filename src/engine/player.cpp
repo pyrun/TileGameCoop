@@ -5,6 +5,8 @@
 player_handle::player_handle( config *config)
 {
     p_config = config;
+
+    p_playercamerafocus = NULL;
 }
 
 player_handle::~player_handle()
@@ -16,8 +18,7 @@ player_handle::~player_handle()
     }
 }
 
-void player_handle::handle( entitylist *entitylist, input *input) {
-
+void player_handle::handle( entitylist *entitylist, input *input, graphic* graphic) {
     // handle new controler
     std::vector<int> l_device = input->getDevice();
     if( l_device.size() > 0) {
@@ -129,6 +130,8 @@ void player_handle::handle( entitylist *entitylist, input *input) {
             if( l_entity->lua_hasLoaded()) {
                 if( l_map->jump && !l_map_old->jump)
                     l_entity->lua_jump( l_entity->getId());
+                if( l_map->run )
+                    entitylist->create( entitylist->getType("knight"), vec2( 10, 100));
                 if( l_map->dir.up )
                     l_entity->lua_up( l_entity->getId());
                 if( l_map->dir.down )
@@ -137,12 +140,27 @@ void player_handle::handle( entitylist *entitylist, input *input) {
                     l_entity->lua_left( l_entity->getId());
                 if( l_map->dir.right )
                     l_entity->lua_right( l_entity->getId());
+                if( l_map->left && !l_map_old->left) {
+                    if( p_playercamerafocus == l_player)
+                        p_playercamerafocus = NULL;
+                    else
+                        p_playercamerafocus = l_player;
+                }
             } else if(l_type->getScriptName().length() > 1) l_entity->loadScript( l_type->getScriptName());
 
             //printf( "x%d y%d %d %d %d %d s%d b%d l%d r%d\n", l_map->x, l_map->y,l_map->jump, l_map->run, l_map->attack, l_map->special, l_map->start, l_map->select, l_map->left, l_map->right);
             //printf( "%d %d %d %d\n", l_map->dir.right, l_map->dir.left, l_map->dir.up, l_map->dir.down);
         }
     }
+    if( p_playercamerafocus != NULL) {
+        vec2 l_pos = entitylist->getEntity( p_playercamerafocus->entity_id)->getPosition().tovec2();
+        vec2 l_cam = graphic->getCameraSize();
+
+        vec2 l_newpos = l_pos - (l_cam/vec2( 2.f, 2.f ));
+
+        graphic->setCamera( l_newpos);
+    }
+
 }
 
 int player_handle::player_getPlayerActive() {

@@ -7,6 +7,7 @@
 #include "input.h"
 #include "config.h"
 #include "entity.h"
+#include "../graphic/graphic.h"
 
 class player {
     public:
@@ -30,7 +31,7 @@ class player_handle
         player_handle( config *config);
         virtual ~player_handle();
 
-        void handle( entitylist *entity, input *input);
+        void handle( entitylist *entity, input *input, graphic* graphic);
         int getPlayerAmount() { return (int)p_playerlist.size(); }
         int player_getPlayerActive();
     protected:
@@ -40,7 +41,7 @@ class player_handle
 
         void player_add( SDL_GameController *controller);
         void player_remove( int id);
-
+        player *p_playercamerafocus;
 };
 
 #endif // PLAYER_H

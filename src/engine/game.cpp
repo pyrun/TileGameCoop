@@ -101,7 +101,7 @@ int game::process() {
     //p_graphic->moveCamera( { 1, 0});
 
     //if( p_graphic->getCamera().y > 500)
-        p_graphic->setCamera( { 0, 0});
+    //p_graphic->setCamera( { 0, 0});
 
     return p_timer.getTicks();
 }
@@ -120,25 +120,27 @@ int game::process_graphic() {
     /*int riven = p_entity->create( p_entity->getType("knight"), vec2( 10, 100));
 
     p_entity->getEntity( riven)->setAction( "jump");*/
-
+    timer l_time;
+    float l_delta = 0.0f;
 
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
-        // start measurement point
-        //p_framerate->begin();
-
-        //p_entity->create( p_entity->getType("knight"), vec2( 10, 100));
+        l_delta = l_time.getTicks();
+        if( l_delta < 0.5)
+            l_delta = 0.5;
+        // start
+        l_time.start();
 
         // flip camera
         p_graphic->flipCamera();
 
         // react of player input
-        p_player->handle( p_entity, p_input);
+        p_player->handle( p_entity, p_input, p_graphic);
 
         // process
         process();
 
-        p_entity->process( p_world, 16);
+        p_entity->process( p_world, l_delta);
 
         // draw world
         p_world->draw( p_graphic);
@@ -161,6 +163,7 @@ int game::process_graphic() {
 
         // now calc the delay for the framerate
         p_framerate->calc();
+
     }
 
     return l_error;
