@@ -159,7 +159,7 @@ int game::process_graphic() {
         drawHUD();
 
         // graphic clear/draw
-        p_graphic->clear();
+        p_graphic->clear( l_delta);
 
         // now calc the delay for the framerate
         p_framerate->calc();

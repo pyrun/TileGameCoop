@@ -1,5 +1,6 @@
 #include "graphic.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <SDL2/SDL_image.h>
 
@@ -137,13 +138,33 @@ void graphic::loadResolution( std::string file) {
     }
 }
 
-void graphic::clear() {
+#define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
+
+void graphic::clear( float dt) {
+    if( p_flyTo ) {
+        float l_speed;
+        fvec2 l_velocity;
+        fvec2 l_change = p_cameraFlyTo - p_camera;
+
+        float l_angle = atan2f( l_change.y, l_change.x);
+
+        l_speed = sdp( l_change.x, l_change.y)/100.f;
+        l_speed *= dt;
+        l_velocity.x += cos( l_angle) * l_speed;
+        l_velocity.y += sin( l_angle) * l_speed;
+
+        if( fabs(l_change.x)+fabs(l_change.y) < l_speed )
+            p_camera = p_camera + l_change;
+        else p_camera = p_camera + l_velocity;
+
+        p_flyTo = NULL;
+    }
+
     // fame count
     if( p_frame.getTicks() > FRAME) {
         p_framecount++;
         p_frame.start();
     }
-
 
     // react of change
     if( p_config->displayChange()) {

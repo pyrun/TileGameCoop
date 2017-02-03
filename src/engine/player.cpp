@@ -158,7 +158,7 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
 
         vec2 l_newpos = l_pos - (l_cam/vec2( 2.f, 2.f ));
 
-        graphic->setCamera( l_newpos);
+        graphic->flyTo( l_newpos);
     }
 
 }
@@ -197,6 +197,9 @@ void player_handle::player_remove( int id) {
 
     if( l_player == NULL)
         return;
+
+    if( p_playercamerafocus == l_player)
+        p_playercamerafocus = NULL;
 
     // close the gamepad connection
     SDL_GameControllerClose( l_player->controller );

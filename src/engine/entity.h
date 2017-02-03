@@ -38,6 +38,8 @@ class vertex {
         bool left;
         bool right;
         bool down;
+        bool hit;
+        int id;
 };
 
 class entitytype
@@ -49,7 +51,7 @@ class entitytype
         action* getAction( std::string name);
 
         void addAction( std::string name, std::string file, int frame, int speed, image *image);
-        void addVertex(vec2 pos, bool left, bool right, bool up, bool down);
+        void addVertex(vec2 pos, bool left, bool right, bool up, bool down, int id);
 
         void setName( std::string name) { p_name = name; }
         void setGravity( bool mass) { p_gravity = mass; }

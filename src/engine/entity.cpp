@@ -239,9 +239,10 @@ void entitytype::addAction( std::string name, std::string file, int frame, int s
     p_actions.push_back( *l_action);
 }
 
-void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down) {
+void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down, int id) {
     vertex *l_vertex = new vertex;
 
+    l_vertex->id = id;
     l_vertex->pos = pos;
     l_vertex->left = left;
     l_vertex->right = right;
@@ -575,8 +576,11 @@ void entitylist::process( world *world, int deltaTime) {
                         l_collision_y = l_temp;
                     }
 
-                    if( l_collision_y != MASSIV_TILE)
+                    if( l_collision_y != MASSIV_TILE) {
+                        // for lua
+                        l_vertex->hit = true;
                         l_entity->setColisionDown( true);
+                    }
                 }
                 if( l_vertex->up) {
                     float l_temp;
@@ -592,8 +596,11 @@ void entitylist::process( world *world, int deltaTime) {
                         //printf("%.2f\n", l_temp);
                     }
 
-                    if( l_collision_y != MASSIV_TILE)
+                    if( l_collision_y != MASSIV_TILE) {
+                        // for lua
+                        l_vertex->hit = true;
                         l_entity->setColisionUp( true);
+                    }
                 }
                 if( l_vertex->right) {
                     float l_temp;
@@ -607,8 +614,11 @@ void entitylist::process( world *world, int deltaTime) {
                        (l_collision_x == 0.0f)) {
                         l_collision_x = l_temp;
                     }
-                    if( l_collision_x != MASSIV_TILE)
+                    if( l_collision_x != MASSIV_TILE) {
+                        // for lua
+                        l_vertex->hit = true;
                         l_entity->setColisionRight( true);
+                    }
                 }
 
                 if( l_vertex->left) {
@@ -623,8 +633,11 @@ void entitylist::process( world *world, int deltaTime) {
                        (l_collision_x == 0.0f)) {
                         l_collision_x = l_temp;
                     }
-                    if( l_collision_x != MASSIV_TILE)
+                    if( l_collision_x != MASSIV_TILE) {
+                        // for lua
+                        l_vertex->hit = true;
                         l_entity->setColisionLeft( true);
+                    }
                 }
             }
             if( l_collision_y != MASSIV_TILE) {
@@ -734,9 +747,13 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     bool l_vertex_left;
     bool l_vertex_down;
     bool l_vertex_right;
+    int l_vertex_id;
     XMLElement* l_xml_vertex = l_object->FirstChildElement( "vertex" );
     while( l_xml_vertex) {
         l_vertex_name = l_xml_vertex->GetText();
+
+        l_vertex_id = atoi( l_xml_vertex->Attribute( "id", "0"));
+
         // reset
         l_vertex_left = false;
         l_vertex_up = false;
@@ -757,7 +774,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_vertex_pos.y = atoi(l_xml_vertex->Attribute( "y") );
 
         //printf( "vertex u%dl%dd%dr%d %d/%d\n", l_vertex_up, l_vertex_left, l_vertex_down, l_vertex_right,l_vertex_pos.x, l_vertex_pos.y);
-        l_type->addVertex( l_vertex_pos, l_vertex_left, l_vertex_right, l_vertex_up, l_vertex_down);
+        l_type->addVertex( l_vertex_pos, l_vertex_left, l_vertex_right, l_vertex_up, l_vertex_down, l_vertex_id);
 
         // next vertex
         l_xml_vertex = l_xml_vertex->NextSiblingElement("vertex");
