@@ -146,7 +146,7 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                     else
                         p_playercamerafocus = l_player;
                 }
-            } else if(l_type->getScriptName().length() > 1) l_entity->loadScript( l_type->getScriptName());
+            } //else if(l_type->getScriptName().length() > 1) l_entity->loadScript( l_type->getScriptName());
 
             //printf( "x%d y%d %d %d %d %d s%d b%d l%d r%d\n", l_map->x, l_map->y,l_map->jump, l_map->run, l_map->attack, l_map->special, l_map->start, l_map->select, l_map->left, l_map->right);
             //printf( "%d %d %d %d\n", l_map->dir.right, l_map->dir.left, l_map->dir.up, l_map->dir.down);

@@ -40,6 +40,8 @@ class vertex {
         bool down;
         bool hit;
         int id;
+
+        void setHit( bool set) { hit = set; }
 };
 
 class entitytype
@@ -96,10 +98,13 @@ class entity
         void setPos( fvec2 pos) { p_pos = pos; }
         void setVelocity( fvec2 velocity) { p_velocity = velocity; }
         void setUpdate( bool set) { p_update = set; }
+        void setVertex( std::vector<vertex> vertex) { p_vertex = vertex; }
         bool NeedUpdate() { return p_update; }
 
 
         void loadScript( std::string file);
+
+        void lua_vertexhit( int id);
 
         void lua_jump( int id);
         void lua_right( int id);
@@ -116,6 +121,7 @@ class entity
         void addVelocity( fvec2 velocity) { p_velocity = p_velocity + velocity; }
         fvec2 getVelocity() { return p_velocity; }
         fvec2 getPosition() { return p_pos; }
+        bool getVertexHit( int id);
         entitytype *getType() { return p_type; }
         void setColisionDown( bool set) { p_down = set; }
         void setColisionUp( bool set) { p_up = set; }
@@ -125,12 +131,14 @@ class entity
         bool getColisionUp() { return p_up;}
         bool getColisionRight() { return p_right;}
         bool getColisionLeft() { return p_left;}
+        std::vector<vertex>* getVertex() { return &p_vertex; }
     protected:
 
     private:
         int p_id;
         fvec2 p_pos;
         std::string p_action;
+        std::vector<vertex> p_vertex;
         entitytype *p_type;
         bool p_update;
         bool p_down;
@@ -156,8 +164,11 @@ class entitylist {
 
         void draw(graphic *graphic);
 
+        int setVertexHit( vertex *vertex, bool set);
+
         void process( world *world, int dt);
 
+        void vertexHit( entity *entity, int vertexid);
         bool loadType( std::string folder, graphic *graphic);
         void removeTypes();
         entitytype *getType( std::string name);

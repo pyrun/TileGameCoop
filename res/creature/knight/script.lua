@@ -1,3 +1,7 @@
+function vertexhit( id)
+	print( "vertex was hit, for simple ki(like hit at wall or dont jump cliff down)")
+end
+
 function update( id)
 	local l_velX, l_velY
     	-- get velocity
