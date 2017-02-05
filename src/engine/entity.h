@@ -62,6 +62,7 @@ class entitytype
         void setHeight( int height) { p_height = height; }
         void setIsPlayer( bool isplayer) { p_isplayer = isplayer; }
         void setScriptName( std::string file) { p_script = file; }
+        void setTimer( int time) { p_time = time;}
 
         std::string getName() { return p_name; }
         std::string getScriptName() { return p_script; }
@@ -70,9 +71,11 @@ class entitytype
         bool getGravity() { return p_gravity; }
         std::vector<vertex> getVertex() { return p_vertex; }
         bool getIsPlayer() { return p_isplayer; }
+        int getTimerTime() { return p_time; }
     protected:
 
     private:
+        int p_time;
         int p_width;
         int p_height;
         bool p_gravity;
@@ -94,6 +97,7 @@ class entity
         void setType( entitytype *type) { this->p_type = type; }
         void setAction( std::string name) { p_action = name; }
         void setDirection( int dir) { p_direction = dir; }
+        int getDirection() { return p_direction; }
         void setPos( vec2 pos) { p_pos = pos; }
         void setPos( fvec2 pos) { p_pos = pos; }
         void setVelocity( fvec2 velocity) { p_velocity = velocity; }
@@ -111,7 +115,9 @@ class entity
         void lua_left( int id);
         void lua_up( int id);
         void lua_down( int id);
+        void lua_run( int id, bool press);
         void lua_update( int id);
+        int lua_timer( int id, int time);
 
         void lua_printerror();
         bool lua_hasLoaded() { return p_state==NULL?false:true; }
@@ -132,6 +138,7 @@ class entity
         bool getColisionRight() { return p_right;}
         bool getColisionLeft() { return p_left;}
         std::vector<vertex>* getVertex() { return &p_vertex; }
+        timer *getTimer() { return &p_timer; }
     protected:
 
     private:
@@ -145,13 +152,10 @@ class entity
         bool p_up;
         bool p_right;
         bool p_left;
-
         bool p_direction;
-
-
         fvec2 p_velocity;
-
         lua_State *p_state;
+        timer p_timer;
 };
 
 class entitylist {

@@ -17,13 +17,13 @@
 					<Add option="-g" />
 					<Add directory="../../SDL2_64/include" />
 					<Add directory="../../tinyxml2/inc" />
-					<Add directory="../../lua-5.3.3/include" />
+					<Add directory="../../lua/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-lmingw32 -lSDL2main -lSDL2  -lSDL2_image -lSDL2_net" />
 					<Add option="-llua53" />
 					<Add directory="../../SDL2_64/lib" />
-					<Add directory="../../lua-5.3.3/lib" />
+					<Add directory="../../lua/lib" />
 				</Linker>
 			</Target>
 			<Target title="WinRelease32">

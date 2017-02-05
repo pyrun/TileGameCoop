@@ -1,5 +1,4 @@
 function vertexhit( id)
-	print( "vertex was hit, for simple ki(like hit at wall or dont jump cliff down)")
 end
 
 function update( id)
@@ -83,4 +82,11 @@ function left( id)
 	end
 end
 
+function run( id, press)
+	if press then
+		max_speed = 0.2
+	else
+		max_speed = 0.1
+	end
+end
 

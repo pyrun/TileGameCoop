@@ -9,7 +9,7 @@
 class framenrate
 {
     public:
-        framenrate( int framerate = (float)FPS(60));
+        framenrate( int framerate = (float)FPS(62));
         virtual ~framenrate();
 
         void begin();

@@ -9,8 +9,7 @@ player_handle::player_handle( config *config)
     p_playercamerafocus = NULL;
 }
 
-player_handle::~player_handle()
-{
+player_handle::~player_handle() {
     // close connection
     for( int i = 0; i < (int)p_playerlist.size(); i++) {
         SDL_GameController *l_pad = p_playerlist[i]->controller;
@@ -130,8 +129,11 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
             if( l_entity->lua_hasLoaded()) {
                 if( l_map->jump && !l_map_old->jump)
                     l_entity->lua_jump( l_entity->getId());
-                if( l_map->run )
-                    entitylist->create( entitylist->getType("knight"), vec2( 10, 100));
+                if( l_map->run && !l_map_old->run)
+                    l_entity->lua_run( l_entity->getId(), true);
+                if( !l_map->run && l_map_old->run)
+                    l_entity->lua_run( l_entity->getId(), false);
+
                 if( l_map->dir.up )
                     l_entity->lua_up( l_entity->getId());
                 if( l_map->dir.down )

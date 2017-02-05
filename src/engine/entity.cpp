@@ -30,6 +30,7 @@ static int lua_setAnimation( lua_State *state) {
     }
 
     l_obj->setAction( l_name);
+    return 0;
 }
 
 static int lua_setAnimationDirection( lua_State *state) {
@@ -52,6 +53,30 @@ static int lua_setAnimationDirection( lua_State *state) {
     }
 
     l_obj->setDirection( l_dir);
+    return 0;
+}
+
+static int lua_getAnimationDirection( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    int l_dir;
+
+    if( !lua_isnumber( state, 1)) {
+        printf( "lua_setAnimation call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_addVelocity obj not found\n");
+        return 0;
+    }
+
+    l_dir = l_obj->getDirection();
+    lua_pushnumber( state, l_dir );
+    return 1;
 }
 
 static int lua_addVelocity( lua_State *state) {
@@ -202,12 +227,6 @@ static int lua_getVertexHit( lua_State *state) {
 
     lua_pushboolean ( state, l_hit);
 
-
-    //lua_pushnumber( state, l_obj->getVelocity().x );
-    //lua_pushnumber( state, l_obj->getVelocity().y );
-
-    //l_obj->setUpdate( true);
-
     return 1;
 }
 
@@ -219,6 +238,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_setAnimationDirection);
     lua_setglobal( state, "setAnimationDirection");
+
+    lua_pushcfunction( state, lua_getAnimationDirection);
+    lua_setglobal( state, "getAnimationDirection");
 
     lua_pushcfunction( state, lua_addVelocity);
     lua_setglobal( state, "addVelocity");
@@ -292,6 +314,9 @@ entity::entity( int id)
     p_direction = 0;
 
     p_state = NULL;
+
+    // timer start
+    p_timer.start();
 }
 
 entity::~entity()
@@ -444,6 +469,22 @@ void entity::lua_down( int id) {
         printf("entity::lua_down %s\n", lua_tostring( p_state, -1));
 }
 
+void entity::lua_run( int id, bool press) {
+    if( p_state == NULL)
+        return;
+    // name the function
+    lua_getglobal( p_state, "run");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    lua_pushboolean( p_state, press);
+    // call the function
+    if( lua_pcall( p_state, 2, 0, 0))
+        printf("entity::lua_run %s\n", lua_tostring( p_state, -1));
+}
+
 void entity::lua_update( int id) {
     if( p_state == NULL)
         return;
@@ -456,7 +497,24 @@ void entity::lua_update( int id) {
     lua_pushnumber( p_state, id);
     // call the function
     if( lua_pcall( p_state, 1, 0, 0))
-        printf("entity::lua_down %s\n", lua_tostring( p_state, -1));
+        printf("entity::lua_update %s\n", lua_tostring( p_state, -1));
+}
+
+int entity::lua_timer( int id, int time) {
+    if( p_state == NULL)
+        return 0;
+    // name the function
+    lua_getglobal( p_state, "timer");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return 0;
+    }
+    lua_pushnumber( p_state, id);
+    lua_pushnumber( p_state, time);
+    // call the function
+    if( lua_pcall( p_state, 2, 0, 0))
+        printf("entity::lua_timer %s\n", lua_tostring( p_state, -1));
+    return time;
 }
 
 void entity::lua_printerror() {
@@ -468,10 +526,9 @@ void entity::lua_printerror() {
 }
 
 bool entity::getVertexHit( int id) {
-    std::vector<vertex> l_vertex = this->p_type->getVertex();
-    for( int i = 0; i < (int)l_vertex.size(); i++) {
-        if( l_vertex[i].id == id) {
-            if( l_vertex[i].hit == true)
+    for( int i = 0; i < (int)p_vertex.size(); i++) {
+        if( p_vertex[i].id == id) {
+            if( p_vertex[i].hit == true)
                 return true;
             else
                 return false;
@@ -540,8 +597,6 @@ void entitylist::createFromWorldFile( std::string file) {
         return;
     }
 
-    //
-
     XMLElement* l_map = l_file.FirstChildElement( "map" );
     if( !l_map) {
         printf( "entitylist::createFromWorldFile world has no map defined\n");
@@ -608,9 +663,15 @@ void entitylist::process( world *world, int deltaTime) {
 
         l_vertexhitchange = 0;
 
-
-        /*if( l_type->lua_hasLoaded())
-            l_type->lua_right();*/
+        // lua timer for simple ai
+        if( l_type->getTimerTime() > 0) {
+            // time over
+            if( l_entity->getTimer()->getTicks() > l_type->getTimerTime() ) {
+                // start again
+                l_entity->getTimer()->start();
+                l_entity->lua_timer( l_entity->getId(), l_type->getTimerTime());
+            }
+        }
 
         fvec2 l_velocity;
         fvec2 l_position;
@@ -655,11 +716,13 @@ void entitylist::process( world *world, int deltaTime) {
                         l_collision_y = l_temp;
                     }
 
-                    if( l_collision_y != MASSIV_TILE) {
-                        // for lua
-                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                    if( l_collision_y != MASSIV_TILE)
                         l_entity->setColisionDown( true);
-                    } else l_vertexhitchange += setVertexHit( l_vertex, false);
+
+                    // lua event
+                    if( l_temp != MASSIV_TILE)
+                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                    else l_vertexhitchange += setVertexHit( l_vertex, false);
                 }
                 if( l_vertex->up) {
                     float l_temp;
@@ -675,11 +738,13 @@ void entitylist::process( world *world, int deltaTime) {
                         //printf("%.2f\n", l_temp);
                     }
 
-                    if( l_collision_y != MASSIV_TILE) {
-                        // for lua
-                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                    if( l_collision_y != MASSIV_TILE)
                         l_entity->setColisionUp( true);
-                    } else l_vertexhitchange += setVertexHit( l_vertex, false);
+
+                    // lua event
+                    if( l_temp != MASSIV_TILE)
+                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                    else l_vertexhitchange += setVertexHit( l_vertex, false);
                 }
                 if( l_vertex->right) {
                     float l_temp;
@@ -693,12 +758,15 @@ void entitylist::process( world *world, int deltaTime) {
                        (l_collision_x == 0.0f)) {
                         l_collision_x = l_temp;
                     }
-                    if( l_collision_x != MASSIV_TILE) {
-                        // for lua
-                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                    if( l_collision_x != MASSIV_TILE)
                         l_entity->setColisionRight( true);
-                    } else l_vertexhitchange += setVertexHit( l_vertex, false);
+
+                    // lua event
+                    if( l_temp != MASSIV_TILE)
+                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                    else l_vertexhitchange += setVertexHit( l_vertex, false);
                 }
+
 
                 if( l_vertex->left) {
                     float l_temp;
@@ -712,11 +780,13 @@ void entitylist::process( world *world, int deltaTime) {
                        (l_collision_x == 0.0f)) {
                         l_collision_x = l_temp;
                     }
-                    if( l_collision_x != MASSIV_TILE) {
-                        // for lua
-                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                    if( l_collision_x != MASSIV_TILE)
                         l_entity->setColisionLeft( true);
-                    } else l_vertexhitchange += setVertexHit( l_vertex, false);
+
+                    // lua event
+                    if( l_temp != MASSIV_TILE)
+                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                    else l_vertexhitchange += setVertexHit( l_vertex, false);
                 }
             }
             if( l_collision_y != MASSIV_TILE) {
@@ -735,7 +805,7 @@ void entitylist::process( world *world, int deltaTime) {
             }
 
             if( l_entity->getColisionDown())
-                l_velocity.x = l_velocity.x*0.7f;
+                l_velocity.x = l_velocity.x*0.9f;
             else
                 l_velocity.x = l_velocity.x*0.99f;
             l_entity->setPos( l_position + l_change );
@@ -762,6 +832,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     int l_height;
     bool l_gravity;
     bool l_isplayer;
+    int l_timer;
     std::string l_script;
 
     std::string l_name;
@@ -788,6 +859,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_height = atoi(l_object->Attribute( "height" ));
     l_gravity = atoi(l_object->Attribute( "gravity" ));
     l_isplayer = atoi(l_object->Attribute( "player" ));
+    l_timer = atoi( l_object->Attribute( "timer" ));
+
 
     if( l_object->Attribute( "script"))
         l_script = folder + l_object->Attribute( "script");
@@ -833,7 +906,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     while( l_xml_vertex) {
         l_vertex_name = l_xml_vertex->GetText();
 
-        l_vertex_id = atoi( l_xml_vertex->Attribute( "id", "0"));
+        l_vertex_id = atoi( l_xml_vertex->Attribute( "id"));
 
         // reset
         l_vertex_left = false;
@@ -872,6 +945,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setGravity( l_gravity);
     l_type->setIsPlayer( l_isplayer);
     l_type->setScriptName( l_script);
+    l_type->setTimer( l_timer);
     lua_setEntity( this);
 
     p_entity_types.push_back( *l_type);

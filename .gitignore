@@ -12,6 +12,7 @@ $RECYCLE.BIN/
 obj/
 src/TileGameCoop.depend
 src/TileGameCoop.layout
+src/TileGameCoop.cscope_file_list
 build/
 
 # Windows Installer files
