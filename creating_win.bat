@@ -41,6 +41,7 @@ goto END
 
 
 :CMD
+cd src
 cmd
 goto :END
 
