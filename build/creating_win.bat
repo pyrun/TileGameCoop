@@ -1,3 +1,4 @@
+:START
 @echo off
 echo             Engine-Skript
 echo             =============
@@ -13,37 +14,38 @@ echo.
 set asw=0
 set /p asw="Bitte Auswahl eingeben: "
 
-SET folder="build\"
+SET folder="win\%DATE%\"
 
 if %asw%==1 goto WIND
 if %asw%==2 goto WINR
 if %asw%==4 goto MAKEFILE
 if %asw%==3 goto OBJDELETING
 if %asw%==5 goto CMD
-goto END
+goto THEEND
 
 :WIND
 del %folder% /s /q
-xcopy "bin\WinDebug32" %folder% /I
-xcopy "res" %folder% /E /C /Q /I /Y
+xcopy "..\bin\WinDebug32" %folder% /I
+xcopy "..\res" %folder% /E /C /Q /I /Y
 goto END
 
 :WINR
 del %folder% /s /q
-xcopy "bin\win\WinRelease32" %folder% /I
-xcopy "res" %folder% /E /C /Q /I /Y
+xcopy "..\bin\win\WinRelease32" %folder% /I
+xcopy "..\res" %folder% /E /C /Q /I /Y
 goto END
 
 :MAKEFILE
-cbp2make.exe -in src/TileGameCoop.cbp -out makefile
+cbp2make.exe -in ..\src\TileGameCoop.cbp -out ..\src\makefile
 goto END
 
 
-
 :CMD
-cd src
+cd ..\src\
 cmd
 goto :END
 
 
 :END
+goto START
+:THEEND

@@ -13,7 +13,9 @@ obj/
 src/TileGameCoop.depend
 src/TileGameCoop.layout
 src/TileGameCoop.cscope_file_list
-build/
+build/win/
+build/linux/
+build/mac/
 
 # Windows Installer files
 *.cab
