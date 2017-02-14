@@ -10,6 +10,60 @@ using namespace tinyxml2;
 
 entitylist *lua_entitylist = NULL;
 
+static int lua_createObject( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    bool l_alive;
+    std::string l_typeName;
+    int l_x, l_y;
+
+    if( !lua_isstring( state, 1) || !lua_isnumber( state, 2) || !lua_isnumber( state, 3) ) {
+        printf( "lua_createObject call wrong argument\n");
+        return 0;
+    }
+
+    l_typeName = lua_tostring( state, 1);
+    l_x = lua_tointeger( state, 2);
+    l_y = lua_tointeger( state, 3);
+
+    entitytype *l_type;
+    l_type = lua_entitylist->getType( l_typeName);
+    if( l_type == NULL) {
+        printf( "lua_createObject dont found type '%s'\n", l_typeName.c_str());
+        return 0;
+    }
+    l_id = lua_entitylist->create( l_type, vec2( l_x, l_y) ); //lua_tointeger( state, 1);
+
+    lua_pushnumber( state, l_id);
+
+    return 1;
+}
+
+static int lua_isAlive( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    bool l_alive;
+    std::string l_name;
+
+    if( !lua_isnumber( state, 1) ) {
+        printf( "lua_isAlive call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+
+    if( l_obj == NULL)
+        l_alive = false;
+    else
+        l_alive = true;
+
+    lua_pushboolean( state, l_alive);
+
+    return 1;
+}
+
 static int lua_setAnimation( lua_State *state) {
     entity *l_obj;
     int l_id;
@@ -230,9 +284,35 @@ static int lua_getVertexHit( lua_State *state) {
     return 1;
 }
 
+static int lua_getPosition( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    if ( !lua_isnumber( state, 1) ) {
+        printf( "lua_getPosition call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_getPosition obj not found\n");
+        return 0;
+    }
+    lua_pushnumber( state, l_obj->getPosition().x );
+    lua_pushnumber( state, l_obj->getPosition().y );
+
+    return 2;
+}
 
 void lua_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_createObject);
+    lua_setglobal( state, "createObject");
+
+    lua_pushcfunction( state, lua_isAlive);
+    lua_setglobal( state, "isAlive");
+
     lua_pushcfunction( state, lua_setAnimation);
     lua_setglobal( state, "setAnimation");
 
@@ -259,6 +339,10 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_getVertexHit);
     lua_setglobal( state, "getVertexHit");
+
+    lua_pushcfunction( state, lua_getPosition);
+    lua_setglobal( state, "getPosition");
+
 }
 
 void lua_setEntity( entitylist *entity) {
