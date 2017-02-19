@@ -3,7 +3,8 @@
 
 #include <string>
 #include <vector>
-#include <lua.hpp>
+//#include <lua.hpp>
+#include <lua5.3/lua.hpp>
 
 #include "../graphic/graphic.h"
 #include "types.h"

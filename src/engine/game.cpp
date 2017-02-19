@@ -25,8 +25,13 @@ game::game()
 
     // create entity list
     p_entity = new entitylist();
+
+    printf("tset\n");
+
     // load types
     loadTypes();
+
+    printf("tset\n");
 
     // game running
     p_game_running = true;
@@ -78,6 +83,7 @@ void game::drawHUD() {
 
 void game::loadTypes() {
     DIR *l_dir;
+
     struct dirent *l_entry;
 
     std::string l_path = "creature/";
@@ -88,10 +94,13 @@ void game::loadTypes() {
     }
 
     while ((l_entry = readdir(l_dir)) != NULL) {
-        std::string file = l_path + l_entry->d_name + "/";
+        std::string l_file = l_path + l_entry->d_name + "/";
+
+        printf("tset223 %s\n", l_file.c_str());
 
         // load folder
-        p_entity->loadType( file, p_graphic);
+        p_entity->loadType( l_file, p_graphic);
+
     }
     closedir(l_dir);
 }

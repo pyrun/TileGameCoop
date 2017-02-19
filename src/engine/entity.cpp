@@ -912,11 +912,11 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
 
     std::string l_pathfile = folder + (char*)ENTITY_FILE;
 
-    int l_width;
-    int l_height;
-    bool l_gravity;
-    bool l_isplayer;
-    int l_timer;
+    int l_width = 0;
+    int l_height = 0;
+    bool l_gravity = 0;
+    bool l_isplayer = 0;
+    int l_timer = 0;
     std::string l_script;
 
     std::string l_name;
@@ -935,17 +935,21 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
 
     //
     XMLElement* l_object = l_file.FirstChildElement( "object" );
-    if( !l_object)
-        return false;
+    if( l_object == nullptr)
+        return false;;
 
-    l_name = l_object->Attribute( "name" );
-    l_width = atoi(l_object->Attribute( "width" ));
-    l_height = atoi(l_object->Attribute( "height" ));
-    l_gravity = atoi(l_object->Attribute( "gravity" ));
-    l_isplayer = atoi(l_object->Attribute( "player" ));
-    l_timer = atoi( l_object->Attribute( "timer" ));
-
-
+    if( l_object->Attribute( "name"))
+        l_name = l_object->Attribute( "name");
+    if( l_object->Attribute( "width"))
+        l_width = atoi(l_object->Attribute( "width" ));
+    if( l_object->Attribute( "height"))
+        l_height = atoi(l_object->Attribute( "height"));
+    if( l_object->Attribute( "gravity"))
+        l_gravity = atoi(l_object->Attribute( "gravity" ));
+    if( l_object->Attribute( "player"))
+        l_isplayer = atoi(l_object->Attribute( "player" ));
+    if( l_object->Attribute( "timer"))
+        l_timer = atoi( l_object->Attribute( "timer" ));
     if( l_object->Attribute( "script"))
         l_script = folder + l_object->Attribute( "script");
 
@@ -961,9 +965,14 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     while( l_xml_action) {
         l_action_file = l_xml_action->GetText();
         l_action_name = l_xml_action->Attribute( "name" );
-        l_action_frame = atoi( l_xml_action->Attribute( "frame" ));
-        l_action_speed = atoi( l_xml_action->Attribute( "speed" ));
-
+        if( l_xml_action->Attribute( "frame" ))
+            l_action_frame = atoi( l_xml_action->Attribute( "frame" ));
+        else
+            l_action_frame = 0;
+        if( l_xml_action->Attribute( "speed" ))
+            l_action_speed = atoi( l_xml_action->Attribute( "speed" ));
+        else
+            l_action_speed = 0;
 
         // check data
         if( l_action_speed == 0)
@@ -990,7 +999,10 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     while( l_xml_vertex) {
         l_vertex_name = l_xml_vertex->GetText();
 
-        l_vertex_id = atoi( l_xml_vertex->Attribute( "id"));
+        if( l_xml_vertex->Attribute( "id"))
+            l_vertex_id = atoi( l_xml_vertex->Attribute( "id"));
+        else
+            l_vertex_id = 0;
 
         // reset
         l_vertex_left = false;
@@ -1017,6 +1029,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         // next vertex
         l_xml_vertex = l_xml_vertex->NextSiblingElement("vertex");
     }
+
+    printf("tset3 %s\n", l_pathfile.c_str());
 
     if( !l_idle) {
         printf("entitylist::loadType type %s has no idle action!\n", l_name.c_str());
