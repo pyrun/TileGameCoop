@@ -54,7 +54,8 @@
 				<Linker>
 					<Add option="-lSDL2" />
 					<Add option="-lSDL2_image" />
-					<Add option="-llua5.3" />
+					<Add option="-llua" />
+					<Add option="-ldl" />
 				</Linker>
 			</Target>
 		</Build>

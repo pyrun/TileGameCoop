@@ -3,13 +3,13 @@
 #------------------------------------------------------------------------------#
 
 
-WORKDIR = %cd%
+WORKDIR = `pwd`
 
-CC = gcc.exe
-CXX = g++.exe
-AR = ar.exe
-LD = g++.exe
-WINDRES = windres.exe
+CC = gcc
+CXX = g++
+AR = ar
+LD = g++
+WINDRES = windres
 
 INC = 
 CFLAGS = -Wall
@@ -18,42 +18,55 @@ LIBDIR =
 LIB = 
 LDFLAGS = 
 
-INC_WINDEBUG32 = $(INC) -I..\..\SDL2_64\include -I..\..\tinyxml2\inc -I..\..\lua\include
+INC_WINDEBUG32 = $(INC) -I../../SDL2_64/include -I../../tinyxml2/inc -I../../lua/include
 CFLAGS_WINDEBUG32 = $(CFLAGS) -std=c++0x -g
 RESINC_WINDEBUG32 = $(RESINC)
 RCFLAGS_WINDEBUG32 = $(RCFLAGS)
-LIBDIR_WINDEBUG32 = $(LIBDIR) -L..\..\SDL2_64\lib -L..\..\lua\lib
+LIBDIR_WINDEBUG32 = $(LIBDIR) -L../../SDL2_64/lib -L../../lua/lib
 LIB_WINDEBUG32 = $(LIB)
 LDFLAGS_WINDEBUG32 = $(LDFLAGS) -lmingw32 -lSDL2main -lSDL2  -lSDL2_image -lSDL2_net -llua53
-OBJDIR_WINDEBUG32 = ..\\obj\\WinDebug32
+OBJDIR_WINDEBUG32 = ../obj/windebug32
 DEP_WINDEBUG32 = 
-OUT_WINDEBUG32 = ..\\bin\\WinDebug32\\TileGameCoop.exe
+OUT_WINDEBUG32 = ../bin/windebug32/TileGameCoop
 
-INC_WINRELEASE32 = $(INC) -Igraphic\ -Iengine\ -Iengine
+INC_WINRELEASE32 = $(INC) -Igraphic/ -Iengine/ -Iengine
 CFLAGS_WINRELEASE32 = $(CFLAGS) -O2
 RESINC_WINRELEASE32 = $(RESINC)
 RCFLAGS_WINRELEASE32 = $(RCFLAGS)
 LIBDIR_WINRELEASE32 = $(LIBDIR)
 LIB_WINRELEASE32 = $(LIB)
 LDFLAGS_WINRELEASE32 = $(LDFLAGS) -s
-OBJDIR_WINRELEASE32 = ..\\obj\\WinRelease32
+OBJDIR_WINRELEASE32 = ../obj/winrelease32
 DEP_WINRELEASE32 = 
-OUT_WINRELEASE32 = ..\\bin\\WinRelease32\\TileGameCoop.exe
+OUT_WINRELEASE32 = ../bin/winrelease32/TileGameCoop
 
-OBJ_WINDEBUG32 = $(OBJDIR_WINDEBUG32)\\xml\\tinyxml2.o $(OBJDIR_WINDEBUG32)\\main.o $(OBJDIR_WINDEBUG32)\\graphic\\graphic.o $(OBJDIR_WINDEBUG32)\\engine\\world.o $(OBJDIR_WINDEBUG32)\\engine\\types.o $(OBJDIR_WINDEBUG32)\\engine\\player.o $(OBJDIR_WINDEBUG32)\\engine\\input.o $(OBJDIR_WINDEBUG32)\\engine\\game.o $(OBJDIR_WINDEBUG32)\\engine\\framenrate.o $(OBJDIR_WINDEBUG32)\\engine\\font.o $(OBJDIR_WINDEBUG32)\\engine\\entity.o $(OBJDIR_WINDEBUG32)\\engine\\config.o
+INC_LINUX = $(INC)
+CFLAGS_LINUX = $(CFLAGS) -std=c++0x
+RESINC_LINUX = $(RESINC)
+RCFLAGS_LINUX = $(RCFLAGS)
+LIBDIR_LINUX = $(LIBDIR)
+LIB_LINUX = $(LIB)
+LDFLAGS_LINUX = $(LDFLAGS) -lSDL2 -lSDL2_image -llua5.3
+OBJDIR_LINUX = ../obj/linux
+DEP_LINUX = 
+OUT_LINUX = ../bin/linux/TileGameCoop
 
-OBJ_WINRELEASE32 = $(OBJDIR_WINRELEASE32)\\xml\\tinyxml2.o $(OBJDIR_WINRELEASE32)\\main.o $(OBJDIR_WINRELEASE32)\\graphic\\graphic.o $(OBJDIR_WINRELEASE32)\\engine\\world.o $(OBJDIR_WINRELEASE32)\\engine\\types.o $(OBJDIR_WINRELEASE32)\\engine\\player.o $(OBJDIR_WINRELEASE32)\\engine\\input.o $(OBJDIR_WINRELEASE32)\\engine\\game.o $(OBJDIR_WINRELEASE32)\\engine\\framenrate.o $(OBJDIR_WINRELEASE32)\\engine\\font.o $(OBJDIR_WINRELEASE32)\\engine\\entity.o $(OBJDIR_WINRELEASE32)\\engine\\config.o
+OBJ_WINDEBUG32 = $(OBJDIR_WINDEBUG32)/engine/player.o $(OBJDIR_WINDEBUG32)/xml/tinyxml2.o $(OBJDIR_WINDEBUG32)/main.o $(OBJDIR_WINDEBUG32)/graphic/graphic.o $(OBJDIR_WINDEBUG32)/engine/world.o $(OBJDIR_WINDEBUG32)/engine/types.o $(OBJDIR_WINDEBUG32)/engine/config.o $(OBJDIR_WINDEBUG32)/engine/input.o $(OBJDIR_WINDEBUG32)/engine/game.o $(OBJDIR_WINDEBUG32)/engine/framenrate.o $(OBJDIR_WINDEBUG32)/engine/font.o $(OBJDIR_WINDEBUG32)/engine/entity.o
 
-all: windebug32 winrelease32
+OBJ_WINRELEASE32 = $(OBJDIR_WINRELEASE32)/engine/player.o $(OBJDIR_WINRELEASE32)/xml/tinyxml2.o $(OBJDIR_WINRELEASE32)/main.o $(OBJDIR_WINRELEASE32)/graphic/graphic.o $(OBJDIR_WINRELEASE32)/engine/world.o $(OBJDIR_WINRELEASE32)/engine/types.o $(OBJDIR_WINRELEASE32)/engine/config.o $(OBJDIR_WINRELEASE32)/engine/input.o $(OBJDIR_WINRELEASE32)/engine/game.o $(OBJDIR_WINRELEASE32)/engine/framenrate.o $(OBJDIR_WINRELEASE32)/engine/font.o $(OBJDIR_WINRELEASE32)/engine/entity.o
 
-clean: clean_windebug32 clean_winrelease32
+OBJ_LINUX = $(OBJDIR_LINUX)/engine/player.o $(OBJDIR_LINUX)/xml/tinyxml2.o $(OBJDIR_LINUX)/main.o $(OBJDIR_LINUX)/graphic/graphic.o $(OBJDIR_LINUX)/engine/world.o $(OBJDIR_LINUX)/engine/types.o $(OBJDIR_LINUX)/engine/config.o $(OBJDIR_LINUX)/engine/input.o $(OBJDIR_LINUX)/engine/game.o $(OBJDIR_LINUX)/engine/framenrate.o $(OBJDIR_LINUX)/engine/font.o $(OBJDIR_LINUX)/engine/entity.o
+
+all: windebug32 winrelease32 linux
+
+clean: clean_windebug32 clean_winrelease32 clean_linux
 
 before_windebug32: 
-	cmd /c if not exist ..\\bin\\WinDebug32 md ..\\bin\\WinDebug32
-	cmd /c if not exist $(OBJDIR_WINDEBUG32)\\xml md $(OBJDIR_WINDEBUG32)\\xml
-	cmd /c if not exist $(OBJDIR_WINDEBUG32) md $(OBJDIR_WINDEBUG32)
-	cmd /c if not exist $(OBJDIR_WINDEBUG32)\\graphic md $(OBJDIR_WINDEBUG32)\\graphic
-	cmd /c if not exist $(OBJDIR_WINDEBUG32)\\engine md $(OBJDIR_WINDEBUG32)\\engine
+	test -d ../bin/windebug32 || mkdir -p ../bin/windebug32
+	test -d $(OBJDIR_WINDEBUG32)/engine || mkdir -p $(OBJDIR_WINDEBUG32)/engine
+	test -d $(OBJDIR_WINDEBUG32)/xml || mkdir -p $(OBJDIR_WINDEBUG32)/xml
+	test -d $(OBJDIR_WINDEBUG32) || mkdir -p $(OBJDIR_WINDEBUG32)
+	test -d $(OBJDIR_WINDEBUG32)/graphic || mkdir -p $(OBJDIR_WINDEBUG32)/graphic
 
 after_windebug32: 
 
@@ -62,56 +75,56 @@ windebug32: before_windebug32 out_windebug32 after_windebug32
 out_windebug32: before_windebug32 $(OBJ_WINDEBUG32) $(DEP_WINDEBUG32)
 	$(LD) $(LIBDIR_WINDEBUG32) -o $(OUT_WINDEBUG32) $(OBJ_WINDEBUG32)  $(LDFLAGS_WINDEBUG32) $(LIB_WINDEBUG32)
 
-$(OBJDIR_WINDEBUG32)\\xml\\tinyxml2.o: xml\\tinyxml2.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c xml\\tinyxml2.cpp -o $(OBJDIR_WINDEBUG32)\\xml\\tinyxml2.o
+$(OBJDIR_WINDEBUG32)/engine/player.o: engine/player.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine/player.cpp -o $(OBJDIR_WINDEBUG32)/engine/player.o
 
-$(OBJDIR_WINDEBUG32)\\main.o: main.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c main.cpp -o $(OBJDIR_WINDEBUG32)\\main.o
+$(OBJDIR_WINDEBUG32)/xml/tinyxml2.o: xml/tinyxml2.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c xml/tinyxml2.cpp -o $(OBJDIR_WINDEBUG32)/xml/tinyxml2.o
 
-$(OBJDIR_WINDEBUG32)\\graphic\\graphic.o: graphic\\graphic.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c graphic\\graphic.cpp -o $(OBJDIR_WINDEBUG32)\\graphic\\graphic.o
+$(OBJDIR_WINDEBUG32)/main.o: main.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c main.cpp -o $(OBJDIR_WINDEBUG32)/main.o
 
-$(OBJDIR_WINDEBUG32)\\engine\\world.o: engine\\world.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine\\world.cpp -o $(OBJDIR_WINDEBUG32)\\engine\\world.o
+$(OBJDIR_WINDEBUG32)/graphic/graphic.o: graphic/graphic.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c graphic/graphic.cpp -o $(OBJDIR_WINDEBUG32)/graphic/graphic.o
 
-$(OBJDIR_WINDEBUG32)\\engine\\types.o: engine\\types.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine\\types.cpp -o $(OBJDIR_WINDEBUG32)\\engine\\types.o
+$(OBJDIR_WINDEBUG32)/engine/world.o: engine/world.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine/world.cpp -o $(OBJDIR_WINDEBUG32)/engine/world.o
 
-$(OBJDIR_WINDEBUG32)\\engine\\player.o: engine\\player.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine\\player.cpp -o $(OBJDIR_WINDEBUG32)\\engine\\player.o
+$(OBJDIR_WINDEBUG32)/engine/types.o: engine/types.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine/types.cpp -o $(OBJDIR_WINDEBUG32)/engine/types.o
 
-$(OBJDIR_WINDEBUG32)\\engine\\input.o: engine\\input.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine\\input.cpp -o $(OBJDIR_WINDEBUG32)\\engine\\input.o
+$(OBJDIR_WINDEBUG32)/engine/config.o: engine/config.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine/config.cpp -o $(OBJDIR_WINDEBUG32)/engine/config.o
 
-$(OBJDIR_WINDEBUG32)\\engine\\game.o: engine\\game.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine\\game.cpp -o $(OBJDIR_WINDEBUG32)\\engine\\game.o
+$(OBJDIR_WINDEBUG32)/engine/input.o: engine/input.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine/input.cpp -o $(OBJDIR_WINDEBUG32)/engine/input.o
 
-$(OBJDIR_WINDEBUG32)\\engine\\framenrate.o: engine\\framenrate.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine\\framenrate.cpp -o $(OBJDIR_WINDEBUG32)\\engine\\framenrate.o
+$(OBJDIR_WINDEBUG32)/engine/game.o: engine/game.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine/game.cpp -o $(OBJDIR_WINDEBUG32)/engine/game.o
 
-$(OBJDIR_WINDEBUG32)\\engine\\font.o: engine\\font.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine\\font.cpp -o $(OBJDIR_WINDEBUG32)\\engine\\font.o
+$(OBJDIR_WINDEBUG32)/engine/framenrate.o: engine/framenrate.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine/framenrate.cpp -o $(OBJDIR_WINDEBUG32)/engine/framenrate.o
 
-$(OBJDIR_WINDEBUG32)\\engine\\entity.o: engine\\entity.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine\\entity.cpp -o $(OBJDIR_WINDEBUG32)\\engine\\entity.o
+$(OBJDIR_WINDEBUG32)/engine/font.o: engine/font.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine/font.cpp -o $(OBJDIR_WINDEBUG32)/engine/font.o
 
-$(OBJDIR_WINDEBUG32)\\engine\\config.o: engine\\config.cpp
-	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine\\config.cpp -o $(OBJDIR_WINDEBUG32)\\engine\\config.o
+$(OBJDIR_WINDEBUG32)/engine/entity.o: engine/entity.cpp
+	$(CXX) $(CFLAGS_WINDEBUG32) $(INC_WINDEBUG32) -c engine/entity.cpp -o $(OBJDIR_WINDEBUG32)/engine/entity.o
 
 clean_windebug32: 
-	cmd /c del /f $(OBJ_WINDEBUG32) $(OUT_WINDEBUG32)
-	cmd /c rd ..\\bin\\WinDebug32
-	cmd /c rd $(OBJDIR_WINDEBUG32)\\xml
-	cmd /c rd $(OBJDIR_WINDEBUG32)
-	cmd /c rd $(OBJDIR_WINDEBUG32)\\graphic
-	cmd /c rd $(OBJDIR_WINDEBUG32)\\engine
+	rm -f $(OBJ_WINDEBUG32) $(OUT_WINDEBUG32)
+	rm -rf ../bin/windebug32
+	rm -rf $(OBJDIR_WINDEBUG32)/engine
+	rm -rf $(OBJDIR_WINDEBUG32)/xml
+	rm -rf $(OBJDIR_WINDEBUG32)
+	rm -rf $(OBJDIR_WINDEBUG32)/graphic
 
 before_winrelease32: 
-	cmd /c if not exist ..\\bin\\WinRelease32 md ..\\bin\\WinRelease32
-	cmd /c if not exist $(OBJDIR_WINRELEASE32)\\xml md $(OBJDIR_WINRELEASE32)\\xml
-	cmd /c if not exist $(OBJDIR_WINRELEASE32) md $(OBJDIR_WINRELEASE32)
-	cmd /c if not exist $(OBJDIR_WINRELEASE32)\\graphic md $(OBJDIR_WINRELEASE32)\\graphic
-	cmd /c if not exist $(OBJDIR_WINRELEASE32)\\engine md $(OBJDIR_WINRELEASE32)\\engine
+	test -d ../bin/winrelease32 || mkdir -p ../bin/winrelease32
+	test -d $(OBJDIR_WINRELEASE32)/engine || mkdir -p $(OBJDIR_WINRELEASE32)/engine
+	test -d $(OBJDIR_WINRELEASE32)/xml || mkdir -p $(OBJDIR_WINRELEASE32)/xml
+	test -d $(OBJDIR_WINRELEASE32) || mkdir -p $(OBJDIR_WINRELEASE32)
+	test -d $(OBJDIR_WINRELEASE32)/graphic || mkdir -p $(OBJDIR_WINRELEASE32)/graphic
 
 after_winrelease32: 
 
@@ -120,49 +133,107 @@ winrelease32: before_winrelease32 out_winrelease32 after_winrelease32
 out_winrelease32: before_winrelease32 $(OBJ_WINRELEASE32) $(DEP_WINRELEASE32)
 	$(LD) $(LIBDIR_WINRELEASE32) -o $(OUT_WINRELEASE32) $(OBJ_WINRELEASE32)  $(LDFLAGS_WINRELEASE32) $(LIB_WINRELEASE32)
 
-$(OBJDIR_WINRELEASE32)\\xml\\tinyxml2.o: xml\\tinyxml2.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c xml\\tinyxml2.cpp -o $(OBJDIR_WINRELEASE32)\\xml\\tinyxml2.o
+$(OBJDIR_WINRELEASE32)/engine/player.o: engine/player.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine/player.cpp -o $(OBJDIR_WINRELEASE32)/engine/player.o
 
-$(OBJDIR_WINRELEASE32)\\main.o: main.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c main.cpp -o $(OBJDIR_WINRELEASE32)\\main.o
+$(OBJDIR_WINRELEASE32)/xml/tinyxml2.o: xml/tinyxml2.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c xml/tinyxml2.cpp -o $(OBJDIR_WINRELEASE32)/xml/tinyxml2.o
 
-$(OBJDIR_WINRELEASE32)\\graphic\\graphic.o: graphic\\graphic.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c graphic\\graphic.cpp -o $(OBJDIR_WINRELEASE32)\\graphic\\graphic.o
+$(OBJDIR_WINRELEASE32)/main.o: main.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c main.cpp -o $(OBJDIR_WINRELEASE32)/main.o
 
-$(OBJDIR_WINRELEASE32)\\engine\\world.o: engine\\world.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine\\world.cpp -o $(OBJDIR_WINRELEASE32)\\engine\\world.o
+$(OBJDIR_WINRELEASE32)/graphic/graphic.o: graphic/graphic.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c graphic/graphic.cpp -o $(OBJDIR_WINRELEASE32)/graphic/graphic.o
 
-$(OBJDIR_WINRELEASE32)\\engine\\types.o: engine\\types.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine\\types.cpp -o $(OBJDIR_WINRELEASE32)\\engine\\types.o
+$(OBJDIR_WINRELEASE32)/engine/world.o: engine/world.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine/world.cpp -o $(OBJDIR_WINRELEASE32)/engine/world.o
 
-$(OBJDIR_WINRELEASE32)\\engine\\player.o: engine\\player.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine\\player.cpp -o $(OBJDIR_WINRELEASE32)\\engine\\player.o
+$(OBJDIR_WINRELEASE32)/engine/types.o: engine/types.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine/types.cpp -o $(OBJDIR_WINRELEASE32)/engine/types.o
 
-$(OBJDIR_WINRELEASE32)\\engine\\input.o: engine\\input.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine\\input.cpp -o $(OBJDIR_WINRELEASE32)\\engine\\input.o
+$(OBJDIR_WINRELEASE32)/engine/config.o: engine/config.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine/config.cpp -o $(OBJDIR_WINRELEASE32)/engine/config.o
 
-$(OBJDIR_WINRELEASE32)\\engine\\game.o: engine\\game.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine\\game.cpp -o $(OBJDIR_WINRELEASE32)\\engine\\game.o
+$(OBJDIR_WINRELEASE32)/engine/input.o: engine/input.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine/input.cpp -o $(OBJDIR_WINRELEASE32)/engine/input.o
 
-$(OBJDIR_WINRELEASE32)\\engine\\framenrate.o: engine\\framenrate.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine\\framenrate.cpp -o $(OBJDIR_WINRELEASE32)\\engine\\framenrate.o
+$(OBJDIR_WINRELEASE32)/engine/game.o: engine/game.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine/game.cpp -o $(OBJDIR_WINRELEASE32)/engine/game.o
 
-$(OBJDIR_WINRELEASE32)\\engine\\font.o: engine\\font.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine\\font.cpp -o $(OBJDIR_WINRELEASE32)\\engine\\font.o
+$(OBJDIR_WINRELEASE32)/engine/framenrate.o: engine/framenrate.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine/framenrate.cpp -o $(OBJDIR_WINRELEASE32)/engine/framenrate.o
 
-$(OBJDIR_WINRELEASE32)\\engine\\entity.o: engine\\entity.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine\\entity.cpp -o $(OBJDIR_WINRELEASE32)\\engine\\entity.o
+$(OBJDIR_WINRELEASE32)/engine/font.o: engine/font.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine/font.cpp -o $(OBJDIR_WINRELEASE32)/engine/font.o
 
-$(OBJDIR_WINRELEASE32)\\engine\\config.o: engine\\config.cpp
-	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine\\config.cpp -o $(OBJDIR_WINRELEASE32)\\engine\\config.o
+$(OBJDIR_WINRELEASE32)/engine/entity.o: engine/entity.cpp
+	$(CXX) $(CFLAGS_WINRELEASE32) $(INC_WINRELEASE32) -c engine/entity.cpp -o $(OBJDIR_WINRELEASE32)/engine/entity.o
 
 clean_winrelease32: 
-	cmd /c del /f $(OBJ_WINRELEASE32) $(OUT_WINRELEASE32)
-	cmd /c rd ..\\bin\\WinRelease32
-	cmd /c rd $(OBJDIR_WINRELEASE32)\\xml
-	cmd /c rd $(OBJDIR_WINRELEASE32)
-	cmd /c rd $(OBJDIR_WINRELEASE32)\\graphic
-	cmd /c rd $(OBJDIR_WINRELEASE32)\\engine
+	rm -f $(OBJ_WINRELEASE32) $(OUT_WINRELEASE32)
+	rm -rf ../bin/winrelease32
+	rm -rf $(OBJDIR_WINRELEASE32)/engine
+	rm -rf $(OBJDIR_WINRELEASE32)/xml
+	rm -rf $(OBJDIR_WINRELEASE32)
+	rm -rf $(OBJDIR_WINRELEASE32)/graphic
 
-.PHONY: before_windebug32 after_windebug32 clean_windebug32 before_winrelease32 after_winrelease32 clean_winrelease32
+before_linux: 
+	test -d ../bin/linux || mkdir -p ../bin/linux
+	test -d $(OBJDIR_LINUX)/engine || mkdir -p $(OBJDIR_LINUX)/engine
+	test -d $(OBJDIR_LINUX)/xml || mkdir -p $(OBJDIR_LINUX)/xml
+	test -d $(OBJDIR_LINUX) || mkdir -p $(OBJDIR_LINUX)
+	test -d $(OBJDIR_LINUX)/graphic || mkdir -p $(OBJDIR_LINUX)/graphic
+
+after_linux: 
+
+linux: before_linux out_linux after_linux
+
+out_linux: before_linux $(OBJ_LINUX) $(DEP_LINUX)
+	$(LD) $(LIBDIR_LINUX) -o $(OUT_LINUX) $(OBJ_LINUX)  $(LDFLAGS_LINUX) $(LIB_LINUX)
+
+$(OBJDIR_LINUX)/engine/player.o: engine/player.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c engine/player.cpp -o $(OBJDIR_LINUX)/engine/player.o
+
+$(OBJDIR_LINUX)/xml/tinyxml2.o: xml/tinyxml2.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c xml/tinyxml2.cpp -o $(OBJDIR_LINUX)/xml/tinyxml2.o
+
+$(OBJDIR_LINUX)/main.o: main.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c main.cpp -o $(OBJDIR_LINUX)/main.o
+
+$(OBJDIR_LINUX)/graphic/graphic.o: graphic/graphic.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c graphic/graphic.cpp -o $(OBJDIR_LINUX)/graphic/graphic.o
+
+$(OBJDIR_LINUX)/engine/world.o: engine/world.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c engine/world.cpp -o $(OBJDIR_LINUX)/engine/world.o
+
+$(OBJDIR_LINUX)/engine/types.o: engine/types.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c engine/types.cpp -o $(OBJDIR_LINUX)/engine/types.o
+
+$(OBJDIR_LINUX)/engine/config.o: engine/config.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c engine/config.cpp -o $(OBJDIR_LINUX)/engine/config.o
+
+$(OBJDIR_LINUX)/engine/input.o: engine/input.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c engine/input.cpp -o $(OBJDIR_LINUX)/engine/input.o
+
+$(OBJDIR_LINUX)/engine/game.o: engine/game.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c engine/game.cpp -o $(OBJDIR_LINUX)/engine/game.o
+
+$(OBJDIR_LINUX)/engine/framenrate.o: engine/framenrate.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c engine/framenrate.cpp -o $(OBJDIR_LINUX)/engine/framenrate.o
+
+$(OBJDIR_LINUX)/engine/font.o: engine/font.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c engine/font.cpp -o $(OBJDIR_LINUX)/engine/font.o
+
+$(OBJDIR_LINUX)/engine/entity.o: engine/entity.cpp
+	$(CXX) $(CFLAGS_LINUX) $(INC_LINUX) -c engine/entity.cpp -o $(OBJDIR_LINUX)/engine/entity.o
+
+clean_linux: 
+	rm -f $(OBJ_LINUX) $(OUT_LINUX)
+	rm -rf ../bin/linux
+	rm -rf $(OBJDIR_LINUX)/engine
+	rm -rf $(OBJDIR_LINUX)/xml
+	rm -rf $(OBJDIR_LINUX)
+	rm -rf $(OBJDIR_LINUX)/graphic
+
+.PHONY: before_windebug32 after_windebug32 clean_windebug32 before_winrelease32 after_winrelease32 clean_winrelease32 before_linux after_linux clean_linux
 

@@ -96,8 +96,6 @@ void game::loadTypes() {
     while ((l_entry = readdir(l_dir)) != NULL) {
         std::string l_file = l_path + l_entry->d_name + "/";
 
-        printf("tset223 %s\n", l_file.c_str());
-
         // load folder
         p_entity->loadType( l_file, p_graphic);
 
