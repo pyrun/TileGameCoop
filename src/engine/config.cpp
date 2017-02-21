@@ -18,6 +18,7 @@ config::config()
 #ifdef DEBUG_CONFIG
     printf("fine\n");
 #endif // DEBUG_CONFIG
+    p_display_changemode = false;
 }
 
 config::~config()

@@ -66,6 +66,7 @@ class config
         vec2 getDisplay() { return vec2{ p_display_width, p_display_height}; }
         int getDisplayMode()  { return p_display_mode; }
         bool displayChange() { bool l_return = p_display_change; p_display_change = false; return l_return; }
+        bool getDisplayChangeMode() { bool l_return = p_display_changemode; p_display_changemode = false; return l_return; }
 
         void setDisplayMaximized( bool set) {
             p_display_maximazed = set;
@@ -73,6 +74,7 @@ class config
 
         bool getDisplayMaximized() { return p_display_maximazed; }
         void setDisplayResolutionFile( std::string file) { p_resolution_file = file; }
+        void setDisplayChangeMode() { p_display_changemode = true; }
         std::string getDisplayResolutionFile() { return p_resolution_file; }
         void setControllerMappingsFile( std::string file) { p_controllermappingsfile = file; }
         std::string getControllerMappingsFile() { return p_controllermappingsfile; }
@@ -94,9 +96,11 @@ class config
         int p_display_width;
         int p_display_height;
         bool p_display_change;
+        bool p_display_changemode;
         int p_display_mode;
 
         bool p_display_maximazed;
+
 
         std::string p_resolution_file;
         std::string p_controllermappingsfile;

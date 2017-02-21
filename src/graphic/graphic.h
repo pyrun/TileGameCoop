@@ -40,6 +40,7 @@ class graphic
         virtual ~graphic();
 
         void loadResolution( std::string file);
+        void setFullscreen( bool fromWindow = false);
         void clear( float dt = 1.0f);
 
         image *loadImage( std::string file);

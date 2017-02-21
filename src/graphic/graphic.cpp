@@ -97,6 +97,10 @@ graphic::graphic( config *config)
     clear();
 
     p_config->setDisplayChange();
+
+    // scale set
+    if( p_config->getDisplayMode())
+        setFullscreen( );
 }
 
 graphic::~graphic()
@@ -140,6 +144,28 @@ void graphic::loadResolution( std::string file) {
 
 #define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
 
+void graphic::setFullscreen( bool fromWindow) {
+    printf( "graphic::setFullscreen change\n\n\n");
+    //SDL_SetWindowSize( p_windows, p_config->getDisplay().x, p_config->getDisplay().y);
+    if( fromWindow = true)
+        SDL_SetWindowFullscreen( p_windows, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    float l_zoom;
+    vec2 l_newr;
+
+    SDL_GetWindowSize( p_windows, &l_newr.x, &l_newr.y);
+    p_config->setDisplay( l_newr.x, l_newr.y);
+
+    l_zoom = getZoom( p_config->getDisplay() );
+
+
+    //printf( "%d %d\n", p_config->getDisplayFullscreen().x, p_config->getDisplayFullscreen().y);
+
+    p_camera_size.x = p_config->getDisplay().x/l_zoom;
+    p_camera_size.y = p_config->getDisplay().y/l_zoom;
+
+    SDL_RenderSetScale( p_renderer, (int)l_zoom, (int)l_zoom);
+}
+
 void graphic::clear( float dt) {
     if( p_flyTo ) {
         float l_speed;
@@ -176,31 +202,19 @@ void graphic::clear( float dt) {
         // transfer data to sdl
         SDL_RenderSetViewport( p_renderer, &l_viewport);
 
+        SDL_DisplayMode *l_mode;
+
         // Nativ resulation
-        if( !p_config->getDisplayMode()) {
-            SDL_SetWindowFullscreen( p_windows, 0);
-            p_camera_size.x = NATIV_W;
-            p_camera_size.y = NATIV_H;
-            SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
-        }
-        else {
-            //SDL_SetWindowSize( p_windows, p_config->getDisplay().x, p_config->getDisplay().y);
-            SDL_SetWindowFullscreen( p_windows, SDL_WINDOW_FULLSCREEN_DESKTOP);
-            float l_zoom;
-            vec2 l_newr;
-
-            SDL_GetWindowSize( p_windows, &l_newr.x, &l_newr.y);
-            p_config->setDisplay( l_newr.x, l_newr.y);
-
-            l_zoom = getZoom( p_config->getDisplay() );
-
-
-            //printf( "%d %d\n", p_config->getDisplayFullscreen().x, p_config->getDisplayFullscreen().y);
-
-            p_camera_size.x = p_config->getDisplay().x/l_zoom;
-            p_camera_size.y = p_config->getDisplay().y/l_zoom;
-
-            SDL_RenderSetScale( p_renderer, (int)l_zoom, (int)l_zoom);
+        if( p_config->getDisplayChangeMode()) {
+            if( !p_config->getDisplayMode()) {
+                SDL_SetWindowFullscreen( p_windows, 0);
+                p_camera_size.x = NATIV_W;
+                p_camera_size.y = NATIV_H;
+                SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
+            }
+            else {
+                setFullscreen( true);
+            }
         }
 
 
