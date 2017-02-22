@@ -26,12 +26,8 @@ game::game()
     // create entity list
     p_entity = new entitylist();
 
-    printf("tset\n");
-
     // load types
     loadTypes();
-
-    printf("tset\n");
 
     // game running
     p_game_running = true;
@@ -122,11 +118,6 @@ int game::process_graphic() {
     // at the moment we have no error
     l_error = 0;
 
-    //p_entity->create( p_entity->getType("coin"), vec2( 40, 80));
-
-    /*int riven = p_entity->create( p_entity->getType("knight"), vec2( 10, 100));
-
-    p_entity->getEntity( riven)->setAction( "jump");*/
     timer l_time;
     float l_delta = 0.0f;
 
@@ -151,13 +142,6 @@ int game::process_graphic() {
 
         // draw world
         p_world->draw( p_graphic);
-
-        /*if(p_graphic->getFrame()%100 == 0) {
-            p_entity->getEntity( riven)->setVelocity( fvec2( 0, -0.285f) );
-            p_entity->getEntity( riven)->setAction( "jump");
-        } else
-            if( p_entity->getEntity( riven)->getVelocity().y > 0)
-                p_entity->getEntity( riven)->setAction( "walk");*/
 
         // draw entity
         p_entity->draw( p_graphic);

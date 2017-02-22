@@ -14,6 +14,7 @@
 <vertex id="6" x="23" y="8">right</vertex>
 <vertex id="6" x="23" y="16">right</vertex>
 <vertex id="7" x="23" y="31">right</vertex>
+<hitbox offsetx="10" offsety="2" width="12" hight="30"/>
 </object>
 
 

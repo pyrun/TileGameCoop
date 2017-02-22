@@ -1030,8 +1030,6 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_xml_vertex = l_xml_vertex->NextSiblingElement("vertex");
     }
 
-    printf("tset3 %s\n", l_pathfile.c_str());
-
     if( !l_idle) {
         printf("entitylist::loadType type %s has no idle action!\n", l_name.c_str());
         return false;

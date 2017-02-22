@@ -15,12 +15,22 @@ bool initSDL() {
         return true;
 	//Initialization flag
 	bool success_initSDL = true;
+    int l_flags;
 
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0 )
 	{
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 		success_initSDL = false;
+		SDL_Quit();
+	}
+
+	// Start sdl image
+	if( success_initSDL && IMG_Init( l_flags) < 0) {
+        printf( " SDL_Image could not initialize! SDL_IMG_Error: %s\n", IMG_GetError());
+        IMG_Quit();
+        SDL_Quit();
+        success_initSDL = false;
 	}
 
 	return success_initSDL;
@@ -48,7 +58,7 @@ graphic::graphic( config *config)
     // pointer at config
     p_config = config;
 
-    Uint32 l_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
+    Uint32 l_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
 
     if( p_config->getDisplayMode())
         l_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -68,7 +78,7 @@ graphic::graphic( config *config)
     p_config->setDisplay( l_displayR.x, l_displayR.y);
 
     // creating the renderer
-    p_renderer = SDL_CreateRenderer( p_windows, -1, 0);
+    p_renderer = SDL_CreateRenderer( p_windows, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if( p_renderer == NULL ) {
         printf( "graphic::graphic Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
         success_initSDL = false;
@@ -145,24 +155,28 @@ void graphic::loadResolution( std::string file) {
 #define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
 
 void graphic::setFullscreen( bool fromWindow) {
-    printf( "graphic::setFullscreen change\n\n\n");
-    //SDL_SetWindowSize( p_windows, p_config->getDisplay().x, p_config->getDisplay().y);
-    if( fromWindow = true)
-        SDL_SetWindowFullscreen( p_windows, SDL_WINDOW_FULLSCREEN_DESKTOP);
     float l_zoom;
     vec2 l_newr;
 
+    printf( "graphic::setFullscreen change\n");
+    // window to fullscreen -> set
+    if( fromWindow = true) {
+        SDL_SetWindowFullscreen( p_windows, SDL_WINDOW_FULLSCREEN_DESKTOP);
+        //SDL_SetWindowSize( p_windows, p_config->getDisplay().x, p_config->getDisplay().y);
+    }
+
+    // get new resolution
     SDL_GetWindowSize( p_windows, &l_newr.x, &l_newr.y);
     p_config->setDisplay( l_newr.x, l_newr.y);
 
+    // calc zoom
     l_zoom = getZoom( p_config->getDisplay() );
 
-
-    //printf( "%d %d\n", p_config->getDisplayFullscreen().x, p_config->getDisplayFullscreen().y);
-
+    // set camera zoom
     p_camera_size.x = p_config->getDisplay().x/l_zoom;
     p_camera_size.y = p_config->getDisplay().y/l_zoom;
 
+    // set scale
     SDL_RenderSetScale( p_renderer, (int)l_zoom, (int)l_zoom);
 }
 
@@ -207,6 +221,7 @@ void graphic::clear( float dt) {
         // Nativ resulation
         if( p_config->getDisplayChangeMode()) {
             if( !p_config->getDisplayMode()) {
+                printf( "diesdas\n");
                 SDL_SetWindowFullscreen( p_windows, 0);
                 p_camera_size.x = NATIV_W;
                 p_camera_size.y = NATIV_H;

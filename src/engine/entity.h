@@ -3,8 +3,13 @@
 
 #include <string>
 #include <vector>
-//#include <lua.hpp>
+
+// debian
+#ifdef IMADEBIAN
+#include <lua5.3/lua.hpp>
+#else
 #include <lua.hpp>
+#endif // IMADEBIAN
 
 #include "../graphic/graphic.h"
 #include "types.h"
