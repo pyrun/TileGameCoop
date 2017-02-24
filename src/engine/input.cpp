@@ -58,6 +58,7 @@ bool input::handle( SDL_Window* window) {
 
                     // set display
                     p_config->setDisplay( p_display_width, p_display_height);
+                    p_config->setDisplayChangeMode();
                 break;
             }
         }

@@ -54,7 +54,7 @@ image::~image() {
 
 graphic::graphic( config *config)
 {
-    vec2 l_displayR;
+    vec2 l_displayResolution;
     // pointer at config
     p_config = config;
 
@@ -63,10 +63,10 @@ graphic::graphic( config *config)
     if( p_config->getDisplayMode())
         l_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-    l_displayR = p_config->getDisplay();
+    l_displayResolution = p_config->getDisplay();
 
     // create window
-    p_windows = SDL_CreateWindow( "Jump'n'Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, l_displayR.x, l_displayR.y, l_flags);
+    p_windows = SDL_CreateWindow( "Jump'n'Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, l_displayResolution.x, l_displayResolution.y, l_flags);
     if( p_windows == NULL )
     {
         printf( "graphic::graphic Window could not be created! SDL_Error: %s\n", SDL_GetError() );
@@ -74,11 +74,11 @@ graphic::graphic( config *config)
         return;
     }
 
-    SDL_GetWindowSize( p_windows, &l_displayR.x, &l_displayR.y);
-    p_config->setDisplay( l_displayR.x, l_displayR.y);
+    SDL_GetWindowSize( p_windows, &l_displayResolution.x, &l_displayResolution.y);
+    p_config->setDisplay( l_displayResolution.x, l_displayResolution.y);
 
     // creating the renderer
-    p_renderer = SDL_CreateRenderer( p_windows, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    p_renderer = SDL_CreateRenderer( p_windows, -1, SDL_RENDERER_ACCELERATED );
     if( p_renderer == NULL ) {
         printf( "graphic::graphic Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
         success_initSDL = false;
@@ -89,7 +89,8 @@ graphic::graphic( config *config)
 	p_camera.x = 0;
 	p_camera.y = 0;
 
-	p_camera_size = l_displayR;
+	//
+	p_camera_size = l_displayResolution;
 
     // set draf color
     SDL_SetRenderDrawColor( p_renderer, 255, 255, 255, 255);
@@ -108,9 +109,13 @@ graphic::graphic( config *config)
 
     p_config->setDisplayChange();
 
+    SDL_RenderSetIntegerScale(p_renderer, SDL_TRUE);
+
     // scale set
     if( p_config->getDisplayMode())
         setFullscreen( );
+    else
+        p_config->setDisplayChangeMode();
 }
 
 graphic::~graphic()
@@ -153,6 +158,14 @@ void graphic::loadResolution( std::string file) {
 }
 
 #define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
+
+void graphic::changeWindowSize() {
+    SDL_SetWindowFullscreen( p_windows, 0);
+    p_camera_size.x = NATIV_W;
+    p_camera_size.y = NATIV_H;
+    SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
+    printf( "graphic::changeWindowSize changed\n");
+}
 
 void graphic::setFullscreen( bool fromWindow) {
     float l_zoom;
@@ -218,18 +231,12 @@ void graphic::clear( float dt) {
 
         SDL_DisplayMode *l_mode;
 
-        // Nativ resulation
+        // Zoom or change window
         if( p_config->getDisplayChangeMode()) {
-            if( !p_config->getDisplayMode()) {
-                printf( "diesdas\n");
-                SDL_SetWindowFullscreen( p_windows, 0);
-                p_camera_size.x = NATIV_W;
-                p_camera_size.y = NATIV_H;
-                SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
-            }
-            else {
+            if( !p_config->getDisplayMode())
+                changeWindowSize();
+            else
                 setFullscreen( true);
-            }
         }
 
 
@@ -269,13 +276,20 @@ image *graphic::loadImage( std::string file) {
             l_textureclass->texture = l_texture;
         } else {
             printf( "graphic::loadImage Datei %s konnte nicht zur Textur gemacht werden\n", file.c_str());
+            printf( "graphic::loadImage SDL_Error: %s\n", SDL_GetError());
             // free the ram data
             SDL_FreeSurface( l_surface);
+            l_textureclass = NULL;
         }
     } else {
         printf( "graphic::loadImage Datei %s konnte nicht geladen werden\n", file.c_str());
+        printf( "graphic::loadImage SDL_Error: %s\n", IMG_GetError());
+        l_textureclass = NULL;
     }
-    printf("graphic::loadImage Datei %s wurde geladen\n", file.c_str());
+
+    // ausgeben falls detei geladen werde konnte
+    if( l_textureclass != NULL)
+        printf("graphic::loadImage Datei %s wurde geladen\n", file.c_str());
     return l_textureclass;
 }
 
