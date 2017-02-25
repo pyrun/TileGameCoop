@@ -107,9 +107,8 @@ graphic::graphic( config *config)
     // windows maxed in config?
     clear();
 
+    // set change flag
     p_config->setDisplayChange();
-
-    SDL_RenderSetIntegerScale(p_renderer, SDL_TRUE);
 
     // scale set
     if( p_config->getDisplayMode())
@@ -141,7 +140,7 @@ void graphic::loadResolution( std::string file) {
 
     XMLElement* l_xml_resolution = l_file.FirstChildElement( "display" );
 
-    //
+    // load all resolution
     while( l_xml_resolution) {
         zoom l_zoom;
 

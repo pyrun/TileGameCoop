@@ -905,6 +905,18 @@ void entitylist::process( world *world, int deltaTime) {
     }
 }
 
+bool entitylist::collision_boundingBox( entity* entity) {
+    //
+    for( int i = 0; i < (int)p_entitys.size(); i++)  {
+        /*
+        if (rect1.x < rect2.x + rect2.width)
+            break;
+   rect1.x + rect1.width > rect2.x &&
+   rect1.y < rect2.y + rect2.height &&
+   rect1.height + rect1.y > rect2.y) {*/
+    }
+}
+
 bool entitylist::loadType( std::string folder, graphic *graphic) {
     XMLDocument l_file;
 
@@ -1029,6 +1041,29 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         // next vertex
         l_xml_vertex = l_xml_vertex->NextSiblingElement("vertex");
     }
+
+    vec2 l_hitbox_offset;
+    vec2 l_hitbox_size;
+    XMLElement* l_xml_hitbox = l_object->FirstChildElement( "hitbox" );
+    if( l_xml_hitbox ) {
+        // offset
+        if( l_xml_hitbox->Attribute( "offsetx"))
+            l_hitbox_offset.x = atoi( l_xml_hitbox->Attribute( "offsetx"));
+        else
+            l_hitbox_offset.x = 0;
+        if( l_xml_hitbox->Attribute( "offsety"))
+            l_hitbox_offset.x = atoi( l_xml_hitbox->Attribute( "offsety"));
+        else
+            l_hitbox_offset.x = 0;
+
+        // vertex
+        l_hitbox_size.x = atoi(l_xml_hitbox->Attribute( "width") );
+        l_hitbox_size.y = atoi(l_xml_hitbox->Attribute( "hight") );
+
+        //printf( "vertex u%dl%dd%dr%d %d/%d\n", l_vertex_up, l_vertex_left, l_vertex_down, l_vertex_right,l_vertex_pos.x, l_vertex_pos.y);
+        l_type->setHitbox( l_hitbox_offset, l_hitbox_size);
+    }
+
 
     if( !l_idle) {
         printf("entitylist::loadType type %s has no idle action!\n", l_name.c_str());

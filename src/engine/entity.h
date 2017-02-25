@@ -69,6 +69,7 @@ class entitytype
         void setIsPlayer( bool isplayer) { p_isplayer = isplayer; }
         void setScriptName( std::string file) { p_script = file; }
         void setTimer( int time) { p_time = time;}
+        void setHitbox( vec2 offset, vec2 size) { p_hitbox_offset = offset; p_hitbox_size = size; }
 
         std::string getName() { return p_name; }
         std::string getScriptName() { return p_script; }
@@ -78,6 +79,8 @@ class entitytype
         std::vector<vertex> getVertex() { return p_vertex; }
         bool getIsPlayer() { return p_isplayer; }
         int getTimerTime() { return p_time; }
+        vec2 getHitbox() { return p_hitbox_size; }
+        vec2 getHitboxOffset() { return p_hitbox_offset; }
     protected:
 
     private:
@@ -90,6 +93,8 @@ class entitytype
         std::string p_script;
         std::vector<action> p_actions;
         std::vector<vertex> p_vertex;
+        vec2 p_hitbox_offset;
+        vec2 p_hitbox_size;
 };
 
 class entity
@@ -110,7 +115,6 @@ class entity
         void setUpdate( bool set) { p_update = set; }
         void setVertex( std::vector<vertex> vertex) { p_vertex = vertex; }
         bool NeedUpdate() { return p_update; }
-
 
         void loadScript( std::string file);
 
@@ -179,6 +183,7 @@ class entitylist {
         void process( world *world, int dt);
 
         void vertexHit( entity *entity, int vertexid);
+        bool collision_boundingBox( entity* entity);
         bool loadType( std::string folder, graphic *graphic);
         void removeTypes();
         entitytype *getType( std::string name);
