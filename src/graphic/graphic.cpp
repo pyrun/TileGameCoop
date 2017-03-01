@@ -9,13 +9,13 @@ using namespace tinyxml2;
 bool success_initSDL = false;
 
 bool initSDL() {
+    int l_flags;
 
     // set only once
     if( success_initSDL == true)
         return true;
 	//Initialization flag
 	bool success_initSDL = true;
-    int l_flags;
 
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0 )

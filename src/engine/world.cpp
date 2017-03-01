@@ -36,153 +36,104 @@ world::~world()
 }
 
 float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool left) {
-    if( velocity.x > 0 && !left) {
-        int l_x = ( position.x )/p_tilewidth;
-        int l_y = ( position.y )/p_tilehight;
-        tile *l_tile = NULL;
+    int l_tempx;
+    int l_x = ( position.x )/p_tilewidth;
+    int l_y = ( position.y )/p_tilehight;
+    tile *l_tile = NULL;
 
-        for( float i = 0; i < change.x; i+= 0.1f) {
-            l_x = ( position.x + i )/p_tilewidth;
-            l_y = ( position.y )/p_tilehight;
+    // change in steps annähern
+    for( float i = 0; i < fabs(change.x); i+= 0.1f) {
+        l_x = ( position.x + i + p_tilewidth/2)/p_tilewidth;
+        l_y = ( position.y )/p_tilehight;
 
-            // collision tile
-            l_tile = getTile( p_tilemap_foreground, l_x, l_y);
-            if( l_tile != NULL && l_tile->id == 0) {
-                l_tile = NULL;
-                continue;
-            }
-            break;
+        if( left)
+            l_tempx = l_x - 1;
+        else
+            l_tempx = l_x;
+
+        // collision tile
+        l_tile = getTile( p_tilemap_foreground, l_tempx, l_y);
+        if( l_tile != NULL && l_tile->id == 0) {
+            l_tile = NULL;
+            continue;
         }
-
-        float l_pos_change_x = position.x + change.x;
-        float l_bottom = l_x*p_tilehight;
-
-        //
-        if( l_tile == NULL)
-            return MASSIV_TILE;
-
-        // abfragen wo hitbox ist
-        if( l_tile->id == 0)
-            return MASSIV_TILE;
-
-        // massiv
-        return l_pos_change_x-l_bottom;
-    }
-    if( velocity.x < 0 && left) {
-        int l_x = ( position.x )/p_tilewidth;
-        int l_y = ( position.y )/p_tilehight;
-        tile *l_tile = NULL;
-
-        for( float i = 0; i < abs(change.x)+1; i+= 0.1f) {
-            l_x = ( position.x - i)/p_tilewidth;
-            l_x += 1;
-            l_y = ( position.y )/p_tilehight;
-
-            // collision tile
-            l_tile = getTile( p_tilemap_foreground, l_x-1, l_y);
-            if( l_tile != NULL && l_tile->id == 0) {
-                l_tile = NULL;
-                continue;
-            }
-            break;
-        }
-
-        float l_pos_change_x = position.x + change.x;
-        float l_bottom = l_x*p_tilehight;
-
-        //
-        if( l_tile == NULL)
-            return MASSIV_TILE;
-
-        // abfragen wo hitbox ist
-        if( l_tile->id == 0)
-            return MASSIV_TILE;
-
-        // massiv
-        return l_pos_change_x-l_bottom;
+        break;
     }
 
+    // zwischen rechnung
+    float l_pos_change_x = position.x + change.x;
+    float l_bottom = l_x*p_tilewidth;
+
+    // ausrechnung der änderung
+    float l_result = l_pos_change_x-l_bottom;
+
+    // keine tile gefunden
+    if( l_tile == NULL)
+        return MASSIV_TILE;
+
+    // abfragen wo hitbox ist
+    if( l_tile->id == 0)
+        return MASSIV_TILE;
+
+    // massiv -> rechnen
+    if( fabs(l_result) <= fabs(change.x)+10) {
+        // schauen ob die korrektur nötig ist
+        if( (l_result <= 0 && left) || l_result >= 0 && !left )
+            return l_result;
+    }
+
+    // freier weg
     return MASSIV_TILE;
 }
 
 float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool up) {
-    if( velocity.y > 0 && !up) {
-        int l_x = ( position.x )/p_tilewidth;
-        int l_y = ( position.y )/p_tilehight;
-        tile *l_tile = NULL;
+    int l_tempy;
+    int l_x = ( position.x )/p_tilewidth;
+    int l_y = ( position.y )/p_tilehight;
+    tile *l_tile = NULL;
 
-        //printf("%.2f %d/%d\n", change.y, position.tovec2().x, position.tovec2().y);
-        float i;
+    // change in steps annähern
+    for( float i = 0; i < fabs(change.y); i+= 0.1f) {
+        l_x = ( position.x )/p_tilewidth;
+        l_y = ( position.y + i + p_tilehight/2)/p_tilehight;
 
-        for( i = 0; i < change.y; i+= 0.1f) {
-            l_x = ( position.x )/p_tilewidth;
-            l_y = ( position.y + i )/p_tilehight;
+        if( up)
+            l_tempy = l_y - 1;
+        else
+            l_tempy = l_y;
 
-            // collision tile
-            l_tile = getTile( p_tilemap_foreground, l_x, l_y);
-            if( l_tile != NULL && l_tile->id == 0) {
-                l_tile = NULL;
-                continue;
-            }
-            break;
+        // collision tile
+        l_tile = getTile( p_tilemap_foreground, l_x, l_tempy);
+        if( l_tile != NULL && l_tile->id == 0) {
+            l_tile = NULL;
+            continue;
         }
-
-        float l_pos_y = position.y;
-        float l_pos_change_y = position.y + change.y;
-        float l_bottom = l_y*p_tilehight;
-
-        //
-        if( l_tile == NULL)
-            return MASSIV_TILE;
-
-        // abfragen wo hitbox ist
-        if( l_tile->id == 0)
-            return MASSIV_TILE;
-
-        /*if( position.y - ((l_y + i) * p_tilehight) < p_tilehight)
-            return change.y;*/
-        // massiv
-        return l_pos_change_y-l_bottom;//position.y - ((l_y ) * p_tilehight);
+        break;
     }
-    if( velocity.y < 0 && up) {
-        int l_x = ( position.x )/p_tilewidth;
-        int l_y = ( position.y )/p_tilehight;
-        tile *l_tile = NULL;
 
-        //printf("%.2f %d/%d\n", change.y, position.tovec2().x, position.tovec2().y);
-        float i;
+    // zwischen rechnung
+    float l_pos_change_y = position.y + change.y;
+    float l_bottom = l_y*p_tilehight;
 
-        for( i = 0; i < abs(change.y)+1; i+= 0.1f) {
-            l_x = ( position.x )/p_tilewidth;
-            l_y = ( position.y - i )/p_tilehight;
-            l_y += 1;
+    // ausrechnung der änderung
+    float l_result = l_pos_change_y-l_bottom;
 
-            // collision tile
-            l_tile = getTile( p_tilemap_foreground, l_x, l_y-1);
-            if( l_tile != NULL && l_tile->id == 0) {
-                l_tile = NULL;
-                continue;
-            }
-            break;
-        }
+    // keine tile gefunden
+    if( l_tile == NULL)
+        return MASSIV_TILE;
 
-        float l_pos_y = position.y;
-        float l_pos_change_y = position.y + change.y;
-        float l_bottom = l_y*p_tilehight;
+    // abfragen wo hitbox ist
+    if( l_tile->id == 0)
+        return MASSIV_TILE;
 
-        //
-        if( l_tile == NULL)
-            return MASSIV_TILE;
-
-        // abfragen wo hitbox ist
-        if( l_tile->id == 0)
-            return MASSIV_TILE;
-
-        /*if( position.y - ((l_y + i) * p_tilehight) < p_tilehight)
-            return change.y;*/
-        // massiv
-        return l_pos_change_y-l_bottom;//position.y - ((l_y ) * p_tilehight);
+    // massiv -> rechnen
+    if( fabs(l_result) <= fabs(change.y)+10) {
+        // schauen ob die korrektur nötig ist
+        if( (l_result <= 0 && up) || l_result >= 0 && !up )
+            return l_result;
     }
+
+    // freier weg
     return MASSIV_TILE;
 }
 
