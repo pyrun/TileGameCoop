@@ -28,15 +28,15 @@ class player {
 class player_handle
 {
     public:
-        player_handle( config *config);
+        player_handle();
         virtual ~player_handle();
 
-        void handle( entitylist *entity, input *input, graphic* graphic);
+        void handle( entitylist *entity, input *input, graphic* graphic, config* config);
         int getPlayerAmount() { return (int)p_playerlist.size(); }
         int player_getPlayerActive();
     protected:
     private:
-        config *p_config;
+//        config *p_config;
         std::vector<player*> p_playerlist;
 
         void player_add( SDL_GameController *controller);

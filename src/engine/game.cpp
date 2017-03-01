@@ -15,7 +15,7 @@ game::game()
     p_input = new input( &p_config);
 
     // create player_list
-    p_player = new player_handle(&p_config);
+    p_player = new player_handle();
 
     // no wolrd load
     p_world = NULL;
@@ -31,6 +31,7 @@ game::game()
 
     // game running
     p_game_running = true;
+    p_config.setQuit( false);
 }
 
 game::~game()
@@ -133,7 +134,7 @@ int game::process_graphic() {
         p_graphic->flipCamera();
 
         // react of player input
-        p_player->handle( p_entity, p_input, p_graphic);
+        p_player->handle( p_entity, p_input, p_graphic, &p_config);
 
         // process
         process();
@@ -154,6 +155,9 @@ int game::process_graphic() {
 
         // now calc the delay for the framerate
         p_framerate->calc();
+
+        // if someome will quit the program
+        p_game_running = !(p_config.getQuit());
 
     }
 

@@ -21,10 +21,10 @@ input::input( config *config)
     SDL_GameControllerAddMappingsFromFile( config->getControllerMappingsFile().c_str());
 
     // add all exist gamepads
-    for (int i = 0; i < SDL_NumJoysticks(); i++) {
+    /*for (int i = 0; i < SDL_NumJoysticks(); i++) {
         if (SDL_IsGameController(i))
             p_device.push_back( i);
-    }
+    }*/
 
     // link config
     p_config = config;
@@ -41,8 +41,10 @@ bool input::handle( SDL_Window* window) {
 
     while( SDL_PollEvent(&p_event) ) {
         // handle gamepads
-        if(p_event.type == SDL_CONTROLLERDEVICEADDED)
+        if(p_event.type == SDL_CONTROLLERDEVICEADDED) {
+            printf( "input::handle add new controller %d\n", p_event.cdevice.which);
             p_device.push_back( p_event.cdevice.which);
+        }
         if(p_event.type == SDL_CONTROLLERDEVICEREMOVED)
             p_deviceDestroyed.push_back( p_event.cdevice.which);
 

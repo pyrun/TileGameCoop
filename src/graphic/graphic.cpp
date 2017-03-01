@@ -159,11 +159,13 @@ void graphic::loadResolution( std::string file) {
 #define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
 
 void graphic::changeWindowSize() {
+    vec2 l_newres;
+    SDL_GetWindowSize( p_windows, &l_newres.x, &l_newres.y);
     SDL_SetWindowFullscreen( p_windows, 0);
     p_camera_size.x = NATIV_W;
     p_camera_size.y = NATIV_H;
     SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
-    printf( "graphic::changeWindowSize changed\n");
+    printf( "graphic::changeWindowSize changed %dx%d\n", l_newres.x, l_newres.y);
 }
 
 void graphic::setFullscreen( bool fromWindow) {

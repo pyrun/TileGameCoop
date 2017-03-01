@@ -51,7 +51,7 @@ class config
 
         int getInputPadAxisX() { return p_gamepad_x; }
         int getInputPadAxisY() { return p_gamepad_y; }
-
+        bool getQuit() { return p_quit; }
         // graphic
         void setDisplay( int width, int height) {
             p_display_width = width;
@@ -73,6 +73,7 @@ class config
         }
 
         bool getDisplayMaximized() { return p_display_maximazed; }
+        void setQuit( bool set) { p_quit = set; };
         void setDisplayResolutionFile( std::string file) { p_resolution_file = file; }
         void setDisplayChangeMode() { p_display_changemode = true; }
         std::string getDisplayResolutionFile() { return p_resolution_file; }
@@ -100,6 +101,8 @@ class config
         int p_display_mode;
 
         bool p_display_maximazed;
+
+        bool p_quit;
 
 
         std::string p_resolution_file;

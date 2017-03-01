@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 
-player_handle::player_handle( config *config)
+player_handle::player_handle()
 {
-    p_config = config;
+    //p_config = config;
 
     p_playercamerafocus = NULL;
 }
@@ -17,7 +17,7 @@ player_handle::~player_handle() {
     }
 }
 
-void player_handle::handle( entitylist *entitylist, input *input, graphic* graphic) {
+void player_handle::handle( entitylist *entitylist, input *input, graphic* graphic, config* config) {
     // handle new controler
     std::vector<int> l_device = input->getDevice();
     if( l_device.size() > 0) {
@@ -57,8 +57,8 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
         l_map_old = l_player->map_old;
         l_map = l_player->map;
 
-        l_map->x = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)p_config->getInputPadAxisX());
-        l_map->y = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)p_config->getInputPadAxisY());
+        l_map->x = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisX());
+        l_map->y = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisY());
 
         if( l_map->x > 32767/2)
             l_map->dir.right = true;
@@ -80,18 +80,18 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
 
 
         // react
-        l_map->jump = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_run() );
-        l_map->run = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_jump() );
-        l_map->attack = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_attack() );
-        l_map->special = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_special() );
+        l_map->jump = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_run() );
+        l_map->run = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_jump() );
+        l_map->attack = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_attack() );
+        l_map->special = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_special() );
 
         // menu
-        l_map->start = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_start());
-        l_map->select = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_select() );
+        l_map->start = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_start());
+        l_map->select = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_select() );
 
         // right/left
-        l_map->left = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_left());
-        l_map->right = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)p_config->getInputPadButton_right());
+        l_map->left = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_left());
+        l_map->right = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_right());
 
         if( l_map->start && !l_map_old->start)
             l_player->wantToJoin = true;
@@ -133,6 +133,8 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                     l_entity->lua_run( l_entity->getId(), true);
                 if( !l_map->run && l_map_old->run)
                     l_entity->lua_run( l_entity->getId(), false);
+                if( l_map->right && !l_map_old->right)
+                    config->setQuit( true);
 
                 if( l_map->dir.up )
                     l_entity->lua_up( l_entity->getId());
@@ -142,15 +144,19 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                     l_entity->lua_left( l_entity->getId());
                 if( l_map->dir.right )
                     l_entity->lua_right( l_entity->getId());
+
+                // focus
                 if( l_map->left && !l_map_old->left) {
                     if( p_playercamerafocus == l_player)
                         p_playercamerafocus = NULL;
                     else
                         p_playercamerafocus = l_player;
-                }
+                } // end focus
+
+
             } //else if(l_type->getScriptName().length() > 1) l_entity->loadScript( l_type->getScriptName());
 
-            //printf( "x%d y%d %d %d %d %d s%d b%d l%d r%d\n", l_map->x, l_map->y,l_map->jump, l_map->run, l_map->attack, l_map->special, l_map->start, l_map->select, l_map->left, l_map->right);
+            //#printf( "x%d y%d %d %d %d %d s%d b%d l%d r%d\n", l_map->x, l_map->y,l_map->jump, l_map->run, l_map->attack, l_map->special, l_map->start, l_map->select, l_map->left, l_map->right);
             //printf( "%d %d %d %d\n", l_map->dir.right, l_map->dir.left, l_map->dir.up, l_map->dir.down);
         }
     }
