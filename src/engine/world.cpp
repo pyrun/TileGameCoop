@@ -57,6 +57,11 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
             l_tile = NULL;
             continue;
         }
+
+        if( l_tile->type != NULL && l_tile->type->left && change.x > 0) {
+            l_tile = NULL;
+            continue;
+        }
         break;
     }
 
@@ -76,7 +81,7 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
         return MASSIV_TILE;
 
     // massiv -> rechnen
-    if( fabs(l_result) <= fabs(change.x)+10) {
+    if( fabs(l_result) <= fabs(change.x)+0.1) {
         // schauen ob die korrektur nötig ist
         if( (l_result <= 0 && left) || l_result >= 0 && !left )
             return l_result;
@@ -127,7 +132,7 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
         return MASSIV_TILE;
 
     // massiv -> rechnen
-    if( fabs(l_result) <= fabs(change.y)+10) {
+    if( fabs(l_result) <= fabs(change.y)+0.1) {
         // schauen ob die korrektur nötig ist
         if( (l_result <= 0 && up) || l_result >= 0 && !up )
             return l_result;
@@ -155,9 +160,26 @@ void world::loadTypes( std::string file) {
         tiletype *l_type = new tiletype();
         XMLElement* l_animation_tile;
 
-        l_type->speed = atoi(l_tile->Attribute( "speed"));
-        // speed lesen -> falls fehlt eins einsetzten
-        l_type->speed = l_type->speed==0?1:l_type->speed;
+        if( l_tile->Attribute( "speed"))
+            l_type->speed = atoi(l_tile->Attribute( "speed"));
+        else
+            l_type->speed = 0;
+
+
+        l_type->down = 1;
+        l_type->up = 1;
+        l_type->right = 1;
+        l_type->left = 1;
+
+        if( l_tile->Attribute( "down"))
+            l_type->down = atoi(l_tile->Attribute( "down"));
+        if( l_tile->Attribute( "up"))
+            l_type->up = atoi(l_tile->Attribute( "up"));
+        if( l_tile->Attribute( "right"))
+            l_type->right = atoi(l_tile->Attribute( "right"));
+        if( l_tile->Attribute( "left"))
+            l_type->left = atoi(l_tile->Attribute( "left"));
+
 
         l_animation_tile = l_tile->FirstChildElement("tile");
         while( l_animation_tile) {
@@ -359,9 +381,8 @@ void world::drawTile( graphic *graphic, int x, int y, tile *map) {
     int l_x = 0;
 
     // Animation
-    if( l_tile->type != NULL) {
-        l_x = l_tile->type->id[ ((graphic->getFrame()/l_tile->type->speed) + getTypeIndex(l_tile->id, l_tile->type) )%l_tile->type->id.size()]+1;
-    }
+    if( l_tile->type != NULL && l_tile->type->speed != 0)
+            l_x = l_tile->type->id[ ((graphic->getFrame()/l_tile->type->speed) + getTypeIndex(l_tile->id, l_tile->type) )%l_tile->type->id.size()]+1;
     else
         l_x = l_tile->id;
     int l_y = 0;

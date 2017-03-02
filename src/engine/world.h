@@ -13,6 +13,10 @@ class tiletype {
     public:
         std::vector<int> id;
         int speed;
+        int up;
+        int down;
+        int left;
+        int right;
 };
 
 class tile {
