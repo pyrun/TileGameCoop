@@ -40,6 +40,7 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
     int l_x = ( position.x )/p_tilewidth;
     int l_y = ( position.y )/p_tilehight;
     tile *l_tile = NULL;
+    float l_factor = p_tilewidth;
 
     // change in steps annähern
     for( float i = 0; i < fabs(change.x); i+= 0.1f) {
@@ -58,7 +59,11 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
             continue;
         }
 
-        if( l_tile->type != NULL && l_tile->type->left && change.x > 0) {
+        if( l_tile->type != NULL && !l_tile->type->left && change.x > 0) {
+            l_tile = NULL;
+            continue;
+        }
+        if( l_tile->type != NULL && !l_tile->type->right && change.x < 0) {
             l_tile = NULL;
             continue;
         }
@@ -80,8 +85,14 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
     if( l_tile->id == 0)
         return MASSIV_TILE;
 
+    // left stop or right stop
+    if( l_tile->type != NULL && l_tile->type->left == 0 && change.x > 0)
+        l_factor = 1;
+    if( l_tile->type != NULL && l_tile->type->right == 0 && change.x < 0)
+        l_factor = 1;
+
     // massiv -> rechnen
-    if( fabs(l_result) <= fabs(change.x)+0.1) {
+    if( fabs(l_result) <= fabs(change.x)+l_factor) {
         // schauen ob die korrektur nötig ist
         if( (l_result <= 0 && left) || l_result >= 0 && !left )
             return l_result;
@@ -96,6 +107,7 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
     int l_x = ( position.x )/p_tilewidth;
     int l_y = ( position.y )/p_tilehight;
     tile *l_tile = NULL;
+    int l_factor = 10;
 
     // change in steps annähern
     for( float i = 0; i < fabs(change.y); i+= 0.1f) {
@@ -110,6 +122,14 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
         // collision tile
         l_tile = getTile( p_tilemap_foreground, l_x, l_tempy);
         if( l_tile != NULL && l_tile->id == 0) {
+            l_tile = NULL;
+            continue;
+        }
+        if( l_tile->type != NULL && l_tile->type->up && change.y < 0) {
+            l_tile = NULL;
+            continue;
+        }
+        if( l_tile->type != NULL && l_tile->type->down && change.y > 0) {
             l_tile = NULL;
             continue;
         }
@@ -131,8 +151,14 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
     if( l_tile->id == 0)
         return MASSIV_TILE;
 
+    // up stop or down stop
+    if( l_tile->type != NULL && l_tile->type->up && up)
+        return MASSIV_TILE;
+    if( l_tile->type != NULL && l_tile->type->down && !up)
+        return MASSIV_TILE;
+
     // massiv -> rechnen
-    if( fabs(l_result) <= fabs(change.y)+0.1) {
+    if( fabs(l_result) <= fabs(change.y)+l_factor) {
         // schauen ob die korrektur nötig ist
         if( (l_result <= 0 && up) || l_result >= 0 && !up )
             return l_result;
@@ -165,7 +191,6 @@ void world::loadTypes( std::string file) {
         else
             l_type->speed = 0;
 
-
         l_type->down = 1;
         l_type->up = 1;
         l_type->right = 1;
@@ -179,7 +204,6 @@ void world::loadTypes( std::string file) {
             l_type->right = atoi(l_tile->Attribute( "right"));
         if( l_tile->Attribute( "left"))
             l_type->left = atoi(l_tile->Attribute( "left"));
-
 
         l_animation_tile = l_tile->FirstChildElement("tile");
         while( l_animation_tile) {

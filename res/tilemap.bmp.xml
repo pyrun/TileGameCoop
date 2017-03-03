@@ -16,6 +16,9 @@
 <tile>68</tile>
 </animation>
 
-<animation>
-<tile left ="0">545</tile>
+<animation left ="0" right="0" down="0">
+<tile>545</tile>
+</animation>
+<animation left ="0" right="0" up="0">
+<tile>544</tile>
 </animation>
