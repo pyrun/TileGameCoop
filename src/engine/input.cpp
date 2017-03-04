@@ -21,10 +21,10 @@ input::input( config *config)
     SDL_GameControllerAddMappingsFromFile( config->getControllerMappingsFile().c_str());
 
     // add all exist gamepads
-    /*for (int i = 0; i < SDL_NumJoysticks(); i++) {
+    for (int i = 0; i < SDL_NumJoysticks(); i++) {
         if (SDL_IsGameController(i))
             p_device.push_back( i);
-    }*/
+    }
 
     // link config
     p_config = config;

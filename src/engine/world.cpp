@@ -42,7 +42,7 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
     tile *l_tile = NULL;
     float l_factor = p_tilewidth;
 
-    // change in steps ann‰hern
+    // change in steps ann√§hern
     for( float i = 0; i < fabs(change.x); i+= 0.1f) {
         l_x = ( position.x + i + p_tilewidth/2)/p_tilewidth;
         l_y = ( position.y )/p_tilehight;
@@ -74,7 +74,7 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
     float l_pos_change_x = position.x + change.x;
     float l_bottom = l_x*p_tilewidth;
 
-    // ausrechnung der ‰nderung
+    // ausrechnung der √§nderung
     float l_result = l_pos_change_x-l_bottom;
 
     // keine tile gefunden
@@ -87,13 +87,13 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
 
     // left stop or right stop
     if( l_tile->type != NULL && l_tile->type->left == 0 && change.x > 0)
-        l_factor = 1;
+        return MASSIV_TILE;
     if( l_tile->type != NULL && l_tile->type->right == 0 && change.x < 0)
-        l_factor = 1;
+        return MASSIV_TILE;
 
     // massiv -> rechnen
     if( fabs(l_result) <= fabs(change.x)+l_factor) {
-        // schauen ob die korrektur nˆtig ist
+        // schauen ob die korrektur n√∂tig ist
         if( (l_result <= 0 && left) || l_result >= 0 && !left )
             return l_result;
     }
@@ -107,9 +107,9 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
     int l_x = ( position.x )/p_tilewidth;
     int l_y = ( position.y )/p_tilehight;
     tile *l_tile = NULL;
-    int l_factor = 10;
+    int l_factor = p_tilehight;
 
-    // change in steps ann‰hern
+    // change in steps ann√§hern
     for( float i = 0; i < fabs(change.y); i+= 0.1f) {
         l_x = ( position.x )/p_tilewidth;
         l_y = ( position.y + i + p_tilehight/2)/p_tilehight;
@@ -125,13 +125,15 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
             l_tile = NULL;
             continue;
         }
-        if( l_tile->type != NULL && l_tile->type->up && change.y < 0) {
-            l_tile = NULL;
-            continue;
+        if( l_tile->type != NULL && change.y < 0 )
+            if( l_tile->type->top == 0) {
+                l_tile = NULL;
+                continue;
         }
-        if( l_tile->type != NULL && l_tile->type->down && change.y > 0) {
-            l_tile = NULL;
-            continue;
+        if( l_tile->type != NULL && change.y > 0 )
+            if( l_tile->type->down == 0) {
+                l_tile = NULL;
+                continue;
         }
         break;
     }
@@ -140,7 +142,7 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
     float l_pos_change_y = position.y + change.y;
     float l_bottom = l_y*p_tilehight;
 
-    // ausrechnung der ‰nderung
+    // ausrechnung der √§nderung
     float l_result = l_pos_change_y-l_bottom;
 
     // keine tile gefunden
@@ -152,14 +154,18 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
         return MASSIV_TILE;
 
     // up stop or down stop
-    if( l_tile->type != NULL && l_tile->type->up && up)
-        return MASSIV_TILE;
-    if( l_tile->type != NULL && l_tile->type->down && !up)
-        return MASSIV_TILE;
+    if( l_tile->type != NULL && (change.y < 0 || up) )
+        if( l_tile->type->top == 0)
+            return MASSIV_TILE;
+
+    //
+    if( l_tile->type != NULL && (change.y > 0 ||!up) )
+        if( l_tile->type->down == 0)
+            return MASSIV_TILE;
 
     // massiv -> rechnen
     if( fabs(l_result) <= fabs(change.y)+l_factor) {
-        // schauen ob die korrektur nˆtig ist
+        // schauen ob die korrektur n√∂tig ist
         if( (l_result <= 0 && up) || l_result >= 0 && !up )
             return l_result;
     }
@@ -183,35 +189,35 @@ void world::loadTypes( std::string file) {
 
     l_tile = l_file.FirstChildElement( "animation");
     while( l_tile) {
-        tiletype *l_type = new tiletype();
+        tiletype l_type;
         XMLElement* l_animation_tile;
 
         if( l_tile->Attribute( "speed"))
-            l_type->speed = atoi(l_tile->Attribute( "speed"));
+            l_type.speed = atoi(l_tile->Attribute( "speed"));
         else
-            l_type->speed = 0;
+            l_type.speed = 0;
 
-        l_type->down = 1;
-        l_type->up = 1;
-        l_type->right = 1;
-        l_type->left = 1;
+        l_type.down = 1;
+        l_type.top = 1;
+        l_type.right = 1;
+        l_type.left = 1;
 
-        if( l_tile->Attribute( "down"))
+        /*if( l_tile->Attribute( "down"))
             l_type->down = atoi(l_tile->Attribute( "down"));
         if( l_tile->Attribute( "up"))
             l_type->up = atoi(l_tile->Attribute( "up"));
         if( l_tile->Attribute( "right"))
             l_type->right = atoi(l_tile->Attribute( "right"));
         if( l_tile->Attribute( "left"))
-            l_type->left = atoi(l_tile->Attribute( "left"));
+            l_type->left = atoi(l_tile->Attribute( "left"));*/
 
         l_animation_tile = l_tile->FirstChildElement("tile");
         while( l_animation_tile) {
-            l_type->id.push_back( atoi(l_animation_tile->GetText()) );
+            l_type.id.push_back( atoi(l_animation_tile->GetText()) );
             l_animation_tile = l_animation_tile->NextSiblingElement("tile");
         }
 
-        p_tiletypes.push_back( *l_type);
+        p_tiletypes.push_back( l_type);
 
         l_tile = l_tile->NextSiblingElement("animation");
     }
@@ -356,7 +362,7 @@ tiletype *world::findType( int id) {
 tile *world::getTile( tile *tilemap, int x, int y) {
     tile *l_tile = NULL;
 
-    // nicht ¸ber rand
+    // nicht √ºber rand
     if( x >= p_map_width || y >= p_map_hight )
         return NULL;
 

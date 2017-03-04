@@ -1,4 +1,4 @@
-<animation speed="20">
+<animation speed="20" left="1" right="1" down="1">
 <tile>60</tile>
 <tile>120</tile>
 <tile>180</tile>
@@ -16,9 +16,9 @@
 <tile>68</tile>
 </animation>
 
-<animation left ="0" right="0" down="0">
+<animation left="0" right="0" down="0">
 <tile>545</tile>
 </animation>
-<animation left ="0" right="0" up="0">
+<animation left="0" right="0" up="0">
 <tile>544</tile>
 </animation>
