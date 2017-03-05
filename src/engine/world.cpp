@@ -382,7 +382,7 @@ tile *world::getTile( tile *tilemap, int x, int y) {
         return NULL;
 
 
-    return &tilemap[ y * p_map_width + x];;
+    return &tilemap[ y * p_map_width + x];
 }
 
 int world::getTypeIndex( int id, tiletype *type) {
@@ -492,7 +492,7 @@ void world::draw( graphic *graphic) {
             world_background *l_background = &p_backgrounds[0];
             float l_factor = (float)l_background->picture->surface->h/ ((float)p_map_hight * (float)p_tilehight);
 
-            vec2 l_position = { graphic->getCamera().x*0.5, graphic->getCamera().y*0.5};
+            vec2 l_position = { graphic->getCamera().x*0.5, graphic->getCamera().y};
 
             int l_background_x = 0;
             while(l_position.x-graphic->getCamera().x+ l_background->picture->surface->w/l_factor< 0)

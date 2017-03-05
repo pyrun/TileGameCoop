@@ -757,6 +757,10 @@ void entitylist::process( world *world, int deltaTime) {
             }
         }
 
+        // check abount hitbox
+        if(collision_boundingBox( l_entity).size() > 0)
+            l_entity->lua_jump( l_entity->getId());
+
         fvec2 l_velocity;
         fvec2 l_position;
         fvec2 l_change;
@@ -905,16 +909,34 @@ void entitylist::process( world *world, int deltaTime) {
     }
 }
 
-bool entitylist::collision_boundingBox( entity* entity) {
+std::vector <int> entitylist::collision_boundingBox( entity* checkentity) {
+    entitytype *l_type = checkentity->getType();
+    std::vector <int> l_id;
+
+    vec2 l_rect1 = l_type->getHitboxOffset() + checkentity->getPosition().tovec2();
+    vec2 l_rect1_size = l_type->getHitbox();
     //
     for( int i = 0; i < (int)p_entitys.size(); i++)  {
-        /*
-        if (rect1.x < rect2.x + rect2.width)
-            break;
-   rect1.x + rect1.width > rect2.x &&
-   rect1.y < rect2.y + rect2.height &&
-   rect1.height + rect1.y > rect2.y) {*/
+        entity* l_obj = &p_entitys[i];
+        entitytype *l_typeobj = l_obj->getType();
+
+        // self dont regist
+        if( l_obj->getId() == checkentity->getId())
+            continue;
+
+        // calc rect 2
+        vec2 l_rect2 = l_typeobj->getHitboxOffset() + l_obj->getPosition().tovec2();
+        vec2 l_rect2_size = l_typeobj->getHitbox();
+
+        // look if the obj hit the hitbox
+        if ( l_rect1.x < l_rect2.x + l_rect2_size.x &&
+            l_rect1.x + l_rect1_size.x > l_rect2.x &&
+            l_rect1.y < l_rect2.y + l_rect2_size.y &&
+            l_rect1_size.y + l_rect1.y > l_rect2.y) {
+                l_id.push_back( l_obj->getId());
+            }
     }
+    return l_id;
 }
 
 bool entitylist::loadType( std::string folder, graphic *graphic) {

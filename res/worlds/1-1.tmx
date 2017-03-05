@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="24" tilewidth="16" tileheight="16" nextobjectid="26">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="24" tilewidth="16" tileheight="16" nextobjectid="31">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
@@ -92,5 +92,10 @@
  </layer>
  <objectgroup color="#000080" name="Objects">
   <object id="22" name="knight" x="176" y="160" width="32" height="32"/>
+  <object id="26" name="knight" x="96" y="160" width="32" height="32"/>
+  <object id="27" name="snake" x="256" y="160" width="32" height="32"/>
+  <object id="28" name="snake" x="336" y="160" width="32" height="32"/>
+  <object id="29" name="snake" x="432" y="160" width="32" height="32"/>
+  <object id="30" name="snake" x="288" y="80" width="32" height="32"/>
  </objectgroup>
 </map>

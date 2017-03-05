@@ -183,7 +183,7 @@ class entitylist {
         void process( world *world, int dt);
 
         void vertexHit( entity *entity, int vertexid);
-        bool collision_boundingBox( entity* entity);
+        std::vector <int> collision_boundingBox( entity* checkentity);
         bool loadType( std::string folder, graphic *graphic);
         void removeTypes();
         entitytype *getType( std::string name);
