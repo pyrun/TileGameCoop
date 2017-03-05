@@ -54,6 +54,9 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
 
         // collision tile
         l_tile = getTile( p_tilemap_foreground, l_tempx, l_y);
+        if( l_tile == NULL)
+            continue;
+
         if( l_tile != NULL && l_tile->id == 0) {
             l_tile = NULL;
             continue;
@@ -109,6 +112,10 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
     tile *l_tile = NULL;
     int l_factor = p_tilehight;
 
+    // border
+    if( position.x < 0)
+        return MASSIV_TILE;
+
     // change in steps annähern
     for( float i = 0; i < fabs(change.y); i+= 0.1f) {
         l_x = ( position.x )/p_tilewidth;
@@ -121,6 +128,10 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
 
         // collision tile
         l_tile = getTile( p_tilemap_foreground, l_x, l_tempy);
+        if( l_tile == NULL)
+            continue;
+
+        // if air contiinue
         if( l_tile != NULL && l_tile->id == 0) {
             l_tile = NULL;
             continue;
@@ -129,12 +140,12 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
             if( l_tile->type->top == 0) {
                 l_tile = NULL;
                 continue;
-        }
+            }
         if( l_tile->type != NULL && change.y < 0 )
             if( l_tile->type->down == 0) {
                 l_tile = NULL;
                 continue;
-        }
+            }
         break;
     }
 
@@ -487,12 +498,14 @@ void world::draw( graphic *graphic) {
             while(l_position.x-graphic->getCamera().x+ l_background->picture->surface->w/l_factor< 0)
                 l_position.x+=l_background->picture->surface->w/l_factor;
 
-            graphic->drawImage( l_background->picture, l_position, vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight), vec2( 0, 0), 0.0, 0, l_factor);
+            // calc the new postion
+            vec2 l_xvel = vec2( l_background->picture->surface->w/l_factor, 0);
+            vec2 l_size = vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight);
 
-            graphic->drawImage( l_background->picture, l_position + vec2( l_background->picture->surface->w/l_factor, 0), vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight), vec2( 0, 0), 0.0, 0, l_factor);
-
-            graphic->drawImage( l_background->picture, l_position + vec2( l_background->picture->surface->w/l_factor, 0) + vec2( l_background->picture->surface->w/l_factor, 0), vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight), vec2( 0, 0), 0.0, 0, l_factor);
-
+            // draw one left middle and right
+            graphic->drawImage( l_background->picture, l_position, l_size, vec2( 0, 0), 0.0, 0, l_factor);
+            graphic->drawImage( l_background->picture, l_position - l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
+            graphic->drawImage( l_background->picture, l_position + l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
         }
     }
 
