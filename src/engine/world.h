@@ -54,6 +54,7 @@ class world
         void drawBackAndForeground( graphic *graphic);
         void drawOverground( graphic *graphic);
         void draw( graphic *graphic);
+        void loadImageFiles( graphic *graphic);
         float getGravity() { return p_gravity; }
         std::string getFileName() { return p_file; }
     protected:

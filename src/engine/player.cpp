@@ -30,6 +30,18 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
             if( !l_controller)
                 continue;
 
+            // Doppelte Controler auschlieﬂen
+            for( int n = 0; n < (int)p_playerlist.size(); n++) {
+                if( SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(l_controller)) == p_playerlist[n]->device_number) {
+                    SDL_GameControllerClose( l_controller);
+                    l_controller = NULL;
+                    break;
+                }
+            }
+
+            if( !l_controller)
+                continue;
+
             // add controler
             player_add( l_controller);
         }

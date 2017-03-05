@@ -115,6 +115,7 @@ int game::process_graphic() {
 
     p_world = new world( "1-1.tmx", "worlds/");
     p_entity->createFromWorldFile( p_world->getFileName());
+    p_world->loadImageFiles( p_graphic);
 
     // at the moment we have no error
     l_error = 0;

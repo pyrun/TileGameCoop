@@ -83,7 +83,7 @@ function left( id)
 end
 
 function run( id, press)
-	if press then
+	if press and getColision( id, "down") then
 		max_speed = 0.2
 	else
 		max_speed = 0.1
