@@ -3,6 +3,11 @@ end
 
 function update( id)
 	local l_velX, l_velY
+	
+	if isAlive( id) == false then
+		do return end
+	end
+
     	-- get velocity
 	l_velX, l_velY = getVelocity( id)
 
@@ -32,6 +37,9 @@ local jump_two = 0
 local jump_high = -0.32
 
 function jump( id)
+	if isAlive( id) == false then
+		do return end
+	end
 	if getColision( id, "down") then
 		addVelocity( id, 0, jump_high)
 		jump_two = 1
@@ -52,7 +60,16 @@ end
 local max_speed = 0.1
 local walk_speed = 0.03
 
+function collision( id, ...)
+      for k,v in pairs({...}) do
+	setAnimation( id, "die")
+      end
+end
+
 function right( id)
+	if isAlive( id) == false then
+		do return end
+	end
 	local l_velX, l_velY
     	-- get velocity
 	l_velX, l_velY = getVelocity( id)
@@ -68,6 +85,9 @@ function right( id)
 end
 
 function left( id)
+	if isAlive( id) == false then
+		do return end
+	end
     	local l_velX, l_velY
 	-- get velocity
 	l_velX, l_velY = getVelocity( id)

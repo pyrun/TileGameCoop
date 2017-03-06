@@ -59,6 +59,11 @@ static int lua_isAlive( lua_State *state) {
     else
         l_alive = true;
 
+    // tote objekte sind auch "tod"
+    if( l_alive = true && l_obj != NULL)
+        if( l_obj->getAction() == "die")
+            l_alive = false;
+
     lua_pushboolean( state, l_alive);
 
     return 1;
@@ -366,7 +371,7 @@ action* entitytype::getAction( std::string name) {
     return NULL;
 }
 
-void entitytype::addAction( std::string name, std::string file, int frame, int speed, image *image) {
+void entitytype::addAction( std::string name, std::string file, int frame, int speed, int loop, image *image) {
     action *l_action = new action;
 
     l_action->name = name;
@@ -374,6 +379,7 @@ void entitytype::addAction( std::string name, std::string file, int frame, int s
     l_action->frame = frame;
     l_action->speed = speed;
     l_action->imagefile = image;
+    l_action->loop = loop;
 
     p_actions.push_back( *l_action);
 }
@@ -401,6 +407,8 @@ entity::entity( int id)
 
     // timer start
     p_timer.start();
+
+    p_timestartaction = 0;
 }
 
 entity::~entity()
@@ -416,6 +424,10 @@ void entity::draw( graphic *graphic) {
     if( NeedUpdate())
         lua_update( getId());
 
+    // p_timestartaction
+    if( p_timestartaction == -1)
+        p_timestartaction = graphic->getFrame();
+
     action *l_action = p_type->getAction( this->p_action);
     if( l_action == NULL) { // falls animaton fehlt zurück zu idle
         p_action = ACTION_IDLE;
@@ -425,9 +437,16 @@ void entity::draw( graphic *graphic) {
 
     image *l_image = l_action->imagefile;
 
+    if( l_action->loop == 0) {
+        if( l_action->frame-1 != (int)(p_actionframe/l_action->speed)%l_action->frame)
+            p_actionframe = graphic->getFrame() - p_timestartaction;
+
+    }  else {
+        p_actionframe = graphic->getFrame() - p_timestartaction;
+    }
 
     if( l_action->frame != 0)
-        l_frame = p_type->getWidth()*( ((int)(graphic->getFrame()/l_action->speed) ) %l_action->frame);
+        l_frame = p_type->getWidth()*( ((int)(p_actionframe/l_action->speed) ) %l_action->frame);
     else
         l_frame = 0;
     graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( l_frame, 0), 0, p_direction);
@@ -582,6 +601,25 @@ void entity::lua_update( int id) {
     // call the function
     if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_update %s\n", lua_tostring( p_state, -1));
+}
+
+void entity::lua_collision( int id, std::vector<int> ids) {
+    if( p_state == NULL)
+        return;
+    // name the function
+    lua_getglobal( p_state, "collision");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state, 1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    for( int i = 0; i < (int)ids.size(); i++) {
+        lua_pushnumber( p_state, ids[i]);
+    }
+
+    // call the function
+    if( lua_pcall( p_state, (int)ids.size()+1, 0, 0))
+        printf("entity::lua_collision %s\n", lua_tostring( p_state, -1));
 }
 
 int entity::lua_timer( int id, int time) {
@@ -758,8 +796,9 @@ void entitylist::process( world *world, int deltaTime) {
         }
 
         // check abount hitbox
-        if(collision_boundingBox( l_entity).size() > 0)
-            l_entity->lua_jump( l_entity->getId());
+        std::vector<int> l_ids = collision_boundingBox( l_entity);
+        if( l_ids.size() > 0)
+            l_entity->lua_collision( l_entity->getId(), l_ids);
 
         fvec2 l_velocity;
         fvec2 l_position;
@@ -992,6 +1031,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     std::string l_action_file;
     int l_action_frame;
     int l_action_speed;
+    int l_action_loop;
 
     bool l_idle = false;
     // read all actions
@@ -1008,6 +1048,11 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         else
             l_action_speed = 0;
 
+        if( l_xml_action->Attribute( "loop" ))
+            l_action_loop = atoi( l_xml_action->Attribute( "loop" ));
+        else
+            l_action_loop = 1;
+
         // check data
         if( l_action_speed == 0)
             l_action_speed = 1; // verry fast animation
@@ -1016,7 +1061,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
             l_idle = true;
 
         // push back
-        l_type->addAction( l_action_name, l_action_file, l_action_frame, l_action_speed, graphic->loadImage( folder + l_action_file));
+        l_type->addAction( l_action_name, l_action_file, l_action_frame, l_action_speed, l_action_loop,graphic->loadImage( folder + l_action_file));
 
         l_xml_action = l_xml_action->NextSiblingElement("action");
     }
@@ -1118,7 +1163,7 @@ std::vector<int> entitylist::findPlayerObject() {
 
     for( int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_entity = &p_entitys[i];
-        if( l_entity->getType()->getIsPlayer())
+        if( l_entity->getType()->getIsPlayer() && l_entity->getAction() != "die")
             l_obj.push_back( l_entity->getId());
     }
     return l_obj;

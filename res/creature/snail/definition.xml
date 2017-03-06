@@ -6,6 +6,7 @@
 <vertex x="20" y="18">down</vertex>
 <vertex x="5" y="7" id="1">left</vertex>
 <vertex x="23" y="7" id="2">right</vertex>
+<hitbox offsetx="8" offsety="7" width="12" hight="11"/>
 </object>
 
 

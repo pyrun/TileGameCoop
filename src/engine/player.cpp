@@ -130,13 +130,22 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
 
                 l_player->entity_id = l_id;
                 l_player->active = true;
+                l_player->wantToJoin = false;
 
             }
         }
 
         if( l_player->active) {
             entity *l_entity = entitylist->getEntity( l_player->entity_id);
+            if( l_entity == NULL)
+                continue;
             entitytype *l_type = l_entity->getType();
+
+            if( l_entity->getAction() == "die") {
+                l_player->entity_id = -1;
+                l_player->active = 0;
+                continue;
+            }
 
             if( l_entity->lua_hasLoaded()) {
                 if( l_map->jump && !l_map_old->jump)

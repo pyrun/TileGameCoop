@@ -34,6 +34,7 @@ class action {
         std::string file;
         int frame;
         int speed;
+        int loop;
         image *imagefile;
 };
 
@@ -58,7 +59,7 @@ class entitytype
 
         action* getAction( std::string name);
 
-        void addAction( std::string name, std::string file, int frame, int speed, image *image);
+        void addAction( std::string name, std::string file, int frame, int speed, int loop, image *image);
         void addVertex(vec2 pos, bool left, bool right, bool up, bool down, int id);
 
         void setName( std::string name) { p_name = name; }
@@ -106,7 +107,7 @@ class entity
         void draw( graphic *graphic);
 
         void setType( entitytype *type) { this->p_type = type; }
-        void setAction( std::string name) { p_action = name; }
+        void setAction( std::string name) { if( p_action != name) { p_action = name; p_timestartaction = -1;} }
         void setDirection( int dir) { p_direction = dir; }
         int getDirection() { return p_direction; }
         void setPos( vec2 pos) { p_pos = pos; }
@@ -127,6 +128,7 @@ class entity
         void lua_down( int id);
         void lua_run( int id, bool press);
         void lua_update( int id);
+        void lua_collision( int id, std::vector<int> ids);
         int lua_timer( int id, int time);
 
         void lua_printerror();
@@ -147,6 +149,7 @@ class entity
         bool getColisionUp() { return p_up;}
         bool getColisionRight() { return p_right;}
         bool getColisionLeft() { return p_left;}
+        std::string getAction() { return p_action; }
         std::vector<vertex>* getVertex() { return &p_vertex; }
         timer *getTimer() { return &p_timer; }
     protected:
@@ -166,6 +169,8 @@ class entity
         fvec2 p_velocity;
         lua_State *p_state;
         timer p_timer;
+        int p_actionframe;
+        int p_timestartaction;
 };
 
 class entitylist {
