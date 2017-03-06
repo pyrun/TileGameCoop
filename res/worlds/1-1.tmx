@@ -91,8 +91,7 @@
 </data>
  </layer>
  <objectgroup color="#000080" name="Objects">
-  <object id="22" name="knight" x="176" y="160" width="32" height="32"/>
-  <object id="26" name="knight" x="96" y="160" width="32" height="32"/>
+  <object id="26" name="alex" x="96" y="160" width="32" height="32"/>
   <object id="27" name="snake" x="256" y="160" width="32" height="32"/>
   <object id="28" name="snake" x="336" y="160" width="32" height="32"/>
   <object id="29" name="snake" x="432" y="160" width="32" height="32"/>
