@@ -13,10 +13,11 @@ class tiletype {
     public:
         std::vector<int> id;
         int speed;
-        int top;
-        int down;
-        int left;
-        int right;
+        bool top;
+        bool down;
+        bool left;
+        bool right;
+        bool liquid;
 };
 
 class tile {
@@ -47,7 +48,7 @@ class world
         void loadTypes( std::string file);
         bool load( std::string file, std::string ordner);
         tiletype *findType( int id);
-        tile *getTile( tile *tilemap, int x, int y);
+        tile *getTile( tile *tilemap, vec2 pos);
         int getTypeIndex( int id, tiletype *type);
         void addBackground( tinyxml2::XMLElement* background, std::string ordner);
         void drawTile( graphic *graphic, int x, int y, tile *map);
@@ -57,6 +58,8 @@ class world
         void loadImageFiles( graphic *graphic);
         float getGravity() { return p_gravity; }
         std::string getFileName() { return p_file; }
+        vec2 getTileSize() { return vec2( p_tilewidth, p_tilehight); }
+        tile *getCollsionMap() { return p_tilemap_foreground; }
     protected:
 
     private:

@@ -54,7 +54,7 @@ float world::getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool l
             l_tempx = l_x;
 
         // collision tile
-        l_tile = getTile( p_tilemap_foreground, l_tempx, l_y);
+        l_tile = getTile( p_tilemap_foreground, vec2(l_tempx, l_y) );
         if( l_tile == NULL)
             continue;
 
@@ -128,7 +128,7 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
             l_tempy = l_y;
 
         // collision tile
-        l_tile = getTile( p_tilemap_foreground, l_x, l_tempy);
+        l_tile = getTile( p_tilemap_foreground, vec2(l_x, l_tempy) );
         if( l_tile == NULL)
             continue;
 
@@ -209,19 +209,23 @@ void world::loadTypes( std::string file) {
         else
             l_type.speed = 0;
 
-        l_type.down = 1;
-        l_type.top = 1;
-        l_type.right = 1;
-        l_type.left = 1;
+        // vor definierte werte
+        l_type.down = true;
+        l_type.top = true;
+        l_type.right = true;
+        l_type.left = true;
+        l_type.liquid = false;
 
         if( l_tile->Attribute( "down"))
-            l_type.down = atoi(l_tile->Attribute( "down"));
+            l_type.down = atoi(l_tile->Attribute( "down"))==1?true:false;
         if( l_tile->Attribute( "up"))
-            l_type.top = atoi(l_tile->Attribute( "up"));
+            l_type.top = atoi(l_tile->Attribute( "up"))==1?true:false;
         if( l_tile->Attribute( "right"))
-            l_type.right = atoi(l_tile->Attribute( "right"));
+            l_type.right = atoi(l_tile->Attribute( "right"))==1?true:false;
         if( l_tile->Attribute( "left"))
-            l_type.left = atoi(l_tile->Attribute( "left"));
+            l_type.left = atoi(l_tile->Attribute( "left"))==1?true:false;
+        if( l_tile->Attribute( "liquid"))
+            l_type.liquid = atoi(l_tile->Attribute( "liquid"))==1?true:false;
 
         l_animation_tile = l_tile->FirstChildElement("tile");
         while( l_animation_tile) {
@@ -371,19 +375,19 @@ tiletype *world::findType( int id) {
     return NULL;
 }
 
-tile *world::getTile( tile *tilemap, int x, int y) {
+tile *world::getTile( tile *tilemap, vec2 pos) {
     tile *l_tile = NULL;
 
     // nicht über rand
-    if( x >= p_map_width || y >= p_map_hight )
+    if( pos.x >= p_map_width || pos.y >= p_map_hight )
         return NULL;
 
     // keine negative werte
-    if( x < 0 || y < 0)
+    if( pos.x < 0 || pos.y < 0)
         return NULL;
 
 
-    return &tilemap[ y * p_map_width + x];
+    return &tilemap[ pos.y * p_map_width + pos.x];
 }
 
 int world::getTypeIndex( int id, tiletype *type) {
@@ -416,7 +420,7 @@ void world::addBackground( XMLElement* background, std::string ordner) {
 
 void world::drawTile( graphic *graphic, int x, int y, tile *map) {
     // get the tile
-    tile *l_tile = getTile( map, x, y);
+    tile *l_tile = getTile( map, vec2(x, y) );
     if( l_tile == NULL)
         return;
 

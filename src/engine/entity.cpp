@@ -409,6 +409,9 @@ entity::entity( int id)
     p_timer.start();
 
     p_timestartaction = 0;
+
+    // not in p_liquid
+    p_liquid = false;
 }
 
 entity::~entity()
@@ -431,7 +434,7 @@ void entity::draw( graphic *graphic) {
     action *l_action = p_type->getAction( this->p_action);
     if( l_action == NULL) { // falls animaton fehlt zurück zu idle
         p_action = ACTION_IDLE;
-        printf("dont found action, jump to idle\n");
+        printf("entity::draw dont found action, jump to \"idle\"\n");
         return;
     }
 
@@ -440,7 +443,6 @@ void entity::draw( graphic *graphic) {
     if( l_action->loop == 0) {
         if( l_action->frame-1 != (int)(p_actionframe/l_action->speed)%l_action->frame)
             p_actionframe = graphic->getFrame() - p_timestartaction;
-
     }  else {
         p_actionframe = graphic->getFrame() - p_timestartaction;
     }
@@ -622,6 +624,22 @@ void entity::lua_collision( int id, std::vector<int> ids) {
         printf("entity::lua_collision %s\n", lua_tostring( p_state, -1));
 }
 
+void entity::lua_liquid( int id) {
+    if( p_state == NULL)
+        return;
+    // name the function
+    lua_getglobal( p_state, "liquid");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    lua_pushboolean( p_state, this->isInLiquid());
+    // call the function
+    if( lua_pcall( p_state, 2, 0, 0))
+        printf("entity::lua_liquid %s\n", lua_tostring( p_state, -1));
+}
+
 int entity::lua_timer( int id, int time) {
     if( p_state == NULL)
         return 0;
@@ -775,6 +793,7 @@ void entitylist::process( world *world, int deltaTime) {
     float l_velocityDelta;
     float l_collision_y, l_collision_x;
     int l_vertexhitchange = 0;
+    vec2 l_iposition;
 
     // calc delta of velocity
     l_velocityDelta = (float)deltaTime * world->getGravity();
@@ -795,6 +814,21 @@ void entitylist::process( world *world, int deltaTime) {
             }
         }
 
+        // liquid
+        if( l_type->getGravity() == true && l_type->getHitboxOffset().x != 0) {
+            // umrechnen
+            l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset()+l_type->getHitbox()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 ) )
+            /world->getTileSize();
+            tile *l_tile = world->getTile( world->getCollsionMap(), l_iposition);
+
+            if( l_tile != NULL && l_tile->type != NULL) {
+                // only once
+                if(l_entity->isInLiquid() == false)
+                    l_entity->setLiquid( true); // he swim
+            } else if(l_entity->isInLiquid() == true)
+                l_entity->setLiquid( false); // he now not swim anymore
+        }
+
         // check abount hitbox
         std::vector<int> l_ids = collision_boundingBox( l_entity);
         if( l_ids.size() > 0)
@@ -805,18 +839,26 @@ void entitylist::process( world *world, int deltaTime) {
         fvec2 l_change;
 
         // calc gravity
-        if( l_type->getGravity() == false) {
+        if( l_type->getGravity() == true ) {
             // positon ermiteln
             l_position = l_entity->getPosition();
             l_velocity = l_entity->getVelocity();
 
             // änderung rechnen
             l_change.x += l_velocity.x * deltaTime;
-            if( l_velocityDelta)
-                l_change.y += (( l_velocity.y + (l_velocityDelta / 2)) * deltaTime);
+
+            if( l_velocityDelta ) {
+                float l_delta_factor = (( l_velocity.y + (l_velocityDelta / 2.f)) * deltaTime);
+
+                if(l_entity->isInLiquid() == true)
+                    l_delta_factor = l_delta_factor/10.f;
+
+                l_change.y += l_delta_factor;
+            }
 
             // y delta dazurechnen (x nicht nötig da keine gravi. )
             l_velocity.y += l_velocityDelta;
+
             l_collision_y = 0.0f;
             l_collision_x = 0.0f;
 
@@ -931,8 +973,10 @@ void entitylist::process( world *world, int deltaTime) {
                 l_velocity.x = 0;
             }
 
-            if( l_entity->getColisionDown())
+            if( l_entity->getColisionDown() && !l_entity->isInLiquid())
                 l_velocity.x = l_velocity.x*0.9f;
+            else if(l_entity->isInLiquid() == true)
+                l_velocity.x = l_velocity.x*0.5f;
             else
                 l_velocity.x = l_velocity.x*0.99f;
             l_entity->setPos( l_position + l_change );
@@ -987,8 +1031,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
 
     int l_width = 0;
     int l_height = 0;
-    bool l_gravity = 0;
-    bool l_isplayer = 0;
+    bool l_gravity = true;
+    bool l_isplayer = false;
     int l_timer = 0;
     std::string l_script;
 

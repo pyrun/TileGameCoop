@@ -115,6 +115,7 @@ class entity
         void setVelocity( fvec2 velocity) { p_velocity = velocity; }
         void setUpdate( bool set) { p_update = set; }
         void setVertex( std::vector<vertex> vertex) { p_vertex = vertex; }
+        void setLiquid( bool set) { p_liquid = set; lua_liquid( p_id); }
         bool NeedUpdate() { return p_update; }
 
         void loadScript( std::string file);
@@ -129,6 +130,7 @@ class entity
         void lua_run( int id, bool press);
         void lua_update( int id);
         void lua_collision( int id, std::vector<int> ids);
+        void lua_liquid( int id);
         int lua_timer( int id, int time);
 
         void lua_printerror();
@@ -149,6 +151,7 @@ class entity
         bool getColisionUp() { return p_up;}
         bool getColisionRight() { return p_right;}
         bool getColisionLeft() { return p_left;}
+        bool isInLiquid() { return p_liquid;}
         std::string getAction() { return p_action; }
         std::vector<vertex>* getVertex() { return &p_vertex; }
         timer *getTimer() { return &p_timer; }
@@ -171,6 +174,7 @@ class entity
         timer p_timer;
         int p_actionframe;
         int p_timestartaction;
+        bool p_liquid;
 };
 
 class entitylist {

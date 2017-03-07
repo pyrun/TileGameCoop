@@ -90,7 +90,6 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
         else
             l_map->dir.up = false;
 
-
         // react
         l_map->jump = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_run() );
         l_map->run = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_jump() );
