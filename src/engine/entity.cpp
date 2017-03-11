@@ -10,6 +10,42 @@ using namespace tinyxml2;
 
 entitylist *lua_entitylist = NULL;
 
+static int lua_kill( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+
+    if( !lua_isnumber( state, 1) ) {
+        printf( "lua_kill call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_kill obj not found\n");
+        return 0;
+    }
+    // set to die
+    l_obj->setAction( "die");
+    return 0;
+}
+
+static int lua_delete( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+
+    if( !lua_isnumber( state, 1) ) {
+        printf( "lua_delete call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    lua_entitylist->deleteObj( l_id);
+    return 0;
+}
+
+
 static int lua_createObject( lua_State *state) {
     entity *l_obj;
     int l_id;
@@ -304,14 +340,20 @@ static int lua_getPosition( lua_State *state) {
         printf( "lua_getPosition obj not found\n");
         return 0;
     }
-    lua_pushnumber( state, l_obj->getPosition().x );
-    lua_pushnumber( state, l_obj->getPosition().y );
+    lua_pushnumber( state, l_obj->getPosition().tovec2().x );
+    lua_pushnumber( state, l_obj->getPosition().tovec2().y );
 
     return 2;
 }
 
 void lua_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_kill);
+    lua_setglobal( state, "kill");
+
+    lua_pushcfunction( state, lua_delete);
+    lua_setglobal( state, "delete");
+
     lua_pushcfunction( state, lua_createObject);
     lua_setglobal( state, "createObject");
 
@@ -412,6 +454,12 @@ entity::entity( int id)
 
     // not in p_liquid
     p_liquid = false;
+
+    // not yet delete
+    isbedelete = false;
+
+    // start script if write
+    lua_start( id);
 }
 
 entity::~entity()
@@ -429,12 +477,17 @@ void entity::draw( graphic *graphic) {
 
     // p_timestartaction
     if( p_timestartaction == -1)
-        p_timestartaction = graphic->getFrame();
+        p_timestartaction = graphic->getFrame()+1;
+
+    if( p_type == NULL) {
+        printf("entity::draw \"%s\" dont found p_type!\n", this->getType()->getName().c_str());
+        return;
+    }
 
     action *l_action = p_type->getAction( this->p_action);
     if( l_action == NULL) { // falls animaton fehlt zurück zu idle
-        p_action = ACTION_IDLE;
-        printf("entity::draw dont found action, jump to \"idle\"\n");
+        printf("entity::draw \"%s\" \"%s\" dont found action, jump to \"idle\"\n", this->getType()->getName().c_str(),this->p_action.c_str());
+        setAction( ACTION_IDLE);
         return;
     }
 
@@ -483,6 +536,21 @@ void entity::loadScript( std::string file) {
 
     // install lua entity function
     lua_install( p_state);
+}
+
+void entity::lua_start( int id) {
+    if( p_state == NULL)
+        return;
+    // name the function
+    lua_getglobal( p_state, "start");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    // call the function
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entity::lua_start %s\n", lua_tostring( p_state, -1));
 }
 
 void entity::lua_vertexhit( int id) {
@@ -722,6 +790,12 @@ int entitylist::create( entitytype *type, vec2 pos) {
     return (p_id-1);
 }
 
+void entitylist::deleteObj( int id) {
+    for( int i = 0; i < (int)p_entitys.size(); i++)
+        if( p_entitys[i].getId() == id)
+            p_entitys.erase( p_entitys.begin()+i);
+}
+
 void entitylist::createFromWorldFile( std::string file) {
     XMLDocument l_file;
     std::string l_type;
@@ -798,8 +872,18 @@ void entitylist::process( world *world, int deltaTime) {
     // calc delta of velocity
     l_velocityDelta = (float)deltaTime * world->getGravity();
 
+    // again and angain if wie found one more to delete
+    for(int i = 0; i < (int)p_entitys.size(); i++) {
+        if( p_entitys[i].isbedelete == true )
+            p_entitys.erase( p_entitys.begin() + i);
+    }
+
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_entity = &p_entitys[i];
+
+        if( l_entity->isbedelete == true )
+            continue;
+
         entitytype *l_type = l_entity->getType();
 
         l_vertexhitchange = 0;

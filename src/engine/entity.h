@@ -120,8 +120,8 @@ class entity
 
         void loadScript( std::string file);
 
+        void lua_start( int id);
         void lua_vertexhit( int id);
-
         void lua_jump( int id);
         void lua_right( int id);
         void lua_left( int id);
@@ -155,6 +155,7 @@ class entity
         std::string getAction() { return p_action; }
         std::vector<vertex>* getVertex() { return &p_vertex; }
         timer *getTimer() { return &p_timer; }
+        int isbedelete;
     protected:
 
     private:
@@ -183,6 +184,7 @@ class entitylist {
         virtual ~entitylist();
 
         int create( entitytype *type, vec2 pos);
+        void deleteObj( int id);
         void createFromWorldFile( std::string file);
 
         void draw(graphic *graphic);
