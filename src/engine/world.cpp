@@ -518,7 +518,7 @@ void world::draw( graphic *graphic) {
     drawBackAndForeground( graphic);
 
     // draw Overground
-    drawOverground( graphic);
+    //drawOverground( graphic);
 }
 
 void world::loadImageFiles( graphic *graphic) {

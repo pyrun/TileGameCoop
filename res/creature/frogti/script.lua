@@ -5,6 +5,16 @@ function vertexhit( id)
 	if getVertexHit( id, 2) then
 		setAnimationDirection( id, 0)
 	end
+	
+	down1 = getVertexHit( id, 3)
+	down2 = getVertexHit( id, 4)
+
+	if down1 == false and down2 == true then
+		setAnimationDirection( id, 1)
+	end
+	if down1 == true and down2 == false then
+		setAnimationDirection( id, 0)
+	end
 end
 
 local dead_timer = 1
