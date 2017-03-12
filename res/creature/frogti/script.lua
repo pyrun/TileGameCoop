@@ -19,14 +19,8 @@ end
 
 local dead_timer = 1
 
-function timer( id, time)
+function timer( id)
 	if isAlive( id) == false then
---		dead_timer = dead_timer - 1
---		if dead_timer == 0 then
---			l_x, l_y = getPosition( id)
---			createObject( "explode1", l_x, l_y)
---			delete( id);
---		end
 		do return end
 	end
 
@@ -51,8 +45,12 @@ function collision( id, ...)
 		do return end
 	end
 	for k,v in pairs({...}) do
-		if isAlive( v) == true and isenemy( v) == true then		
-			kill( v)
+		if isAlive( v) == true then
+			if isenemy( v) == true then
+				print(k,v)		
+				kill( v)
+				print(k,v)
+			end
 		end
 	end
 end

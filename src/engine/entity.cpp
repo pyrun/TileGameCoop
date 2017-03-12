@@ -28,6 +28,8 @@ static int lua_isenemy( lua_State *state) {
     }
 
     l_type = l_obj->getType();
+    if( l_type == NULL)
+        return 0;
 
     // look if a player
     bool l_enemy = l_type->getIsPlayer();
@@ -50,6 +52,7 @@ static int lua_kill( lua_State *state) {
         printf( "lua_kill obj not found\n");
         return 0;
     }
+    if( l_obj->getAction() != "die")
     // set to die
     l_obj->setAction( "die");
     return 0;
@@ -122,7 +125,7 @@ static int lua_isAlive( lua_State *state) {
 
     // tote objekte sind auch "tod"
     if( l_alive = true && l_obj != NULL)
-        if( l_obj->getAction() == "die")
+        if( l_obj != NULL && l_obj->getAction() == "die")
             l_alive = false;
 
     lua_pushboolean( state, l_alive);
@@ -505,7 +508,7 @@ void entity::draw( graphic *graphic) {
 
     // p_timestartaction
     if( p_timestartaction == -1)
-        p_timestartaction = graphic->getFrame()+1;
+        p_timestartaction = graphic->getFrame();
 
     if( p_type == NULL) {
         printf("entity::draw \"%s\" dont found p_type!\n", this->getType()->getName().c_str());
@@ -702,7 +705,7 @@ void entity::lua_update( int id) {
 }
 
 void entity::lua_collision( int id, std::vector<int> ids) {
-    if( p_state == NULL)
+    if( p_state == NULL || (int)ids.size() == 0)
         return;
     // name the function
     lua_getglobal( p_state, "collision");
@@ -777,7 +780,7 @@ bool entity::getVertexHit( int id) {
 entitylist::entitylist()
 {
     // start at 0
-    p_id = 0;
+    p_id = 1;
     p_playerentity = 0;
 }
 
@@ -949,6 +952,7 @@ void entitylist::process( world *world, int deltaTime) {
         std::vector<int> l_ids = collision_boundingBox( l_entity);
         if( l_ids.size() > 0)
             l_entity->lua_collision( l_entity->getId(), l_ids);
+        l_ids.clear();
 
         fvec2 l_velocity;
         fvec2 l_position;
