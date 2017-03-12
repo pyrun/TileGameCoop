@@ -10,6 +10,31 @@ using namespace tinyxml2;
 
 entitylist *lua_entitylist = NULL;
 
+static int lua_isenemy( lua_State *state) {
+    entity *l_obj;
+    entitytype *l_type;
+    int l_id;
+
+    if( !lua_isnumber( state, 1) ) {
+        printf( "lua_isenemy call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_isenemy obj not found\n");
+        return 0;
+    }
+
+    l_type = l_obj->getType();
+
+    // look if a player
+    bool l_enemy = l_type->getIsPlayer();
+    lua_pushboolean( state, l_enemy);
+    return 1;
+}
+
 static int lua_kill( lua_State *state) {
     entity *l_obj;
     int l_id;
@@ -348,6 +373,9 @@ static int lua_getPosition( lua_State *state) {
 
 void lua_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_isenemy);
+    lua_setglobal( state, "isenemy");
+
     lua_pushcfunction( state, lua_kill);
     lua_setglobal( state, "kill");
 
@@ -874,13 +902,17 @@ void entitylist::process( world *world, int deltaTime) {
 
     // again and angain if wie found one more to delete
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        if( p_entitys[i].isbedelete == true )
+        if( p_entitys[i].isbedelete == true ) {
             p_entitys.erase( p_entitys.begin() + i);
+            i--;
+        }
     }
 
+    // go through
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_entity = &p_entitys[i];
 
+        // no calc anymore if he flag too destory
         if( l_entity->isbedelete == true )
             continue;
 

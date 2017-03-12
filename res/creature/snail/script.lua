@@ -30,5 +30,9 @@ function timer( id, time)
 end
 
 function collision( id, ...)
-	setAnimation( id, "die")
+	for k,v in pairs({...}) do
+		if isAlive( v) == true and isenemy( v) == true then
+			setAnimation( id, "die")
+		end
+	end
 end

@@ -9,9 +9,22 @@ function vertexhit( id)
 end
 
 function liquid( id, swim)
+	if isAlive( id) == false then
+		do return end
+	end
 	inLiquid = swim
 	if swim == false then
-		setVelocityY( id, jump_high*jump_outwater_factor)
+		-- get velocity
+		l_velX, l_velY = getVelocity( id)
+		
+		-- lets look if you fast enough to jump out water
+		if l_velY < -0.5 then
+			-- jump of the water
+			setVelocityY( id, jump_high*jump_outwater_factor)
+		else
+			-- dont jump out
+			setVelocityY( id, 0)
+		end
 	end
 end
 
@@ -81,12 +94,6 @@ function down( id)
 	io.write("down\n")
 end
 
-function collision( id, ...)
-      for k,v in pairs({...}) do
-	--setAnimation( id, "die")
-      end
-end
-
 function right( id)
 	if isAlive( id) == false then
 		do return end
@@ -112,6 +119,9 @@ function left( id)
 end
 
 function run( id, press)
+	if isAlive( id) == false then
+		do return end
+	end
 	if press and getColision( id, "down") then
 		max_speed = 0.1*1.5
 	else
