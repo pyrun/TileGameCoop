@@ -108,7 +108,7 @@ class entity
 
         void setType( entitytype *type) { this->p_type = type; }
         void setAction( std::string name) { if( p_action != name) { p_action = name; p_timestartaction = -1;} }
-        void setDirection( int dir) { p_direction = dir; }
+        void setDirection( bool dir) { p_direction = dir; }
         int getDirection() { return p_direction; }
         void setPos( vec2 pos) { p_pos = pos; }
         void setPos( fvec2 pos) { p_pos = pos; }
@@ -156,6 +156,11 @@ class entity
         std::vector<vertex>* getVertex() { return &p_vertex; }
         timer *getTimer() { return &p_timer; }
         int isbedelete;
+        bool isAlive() {
+            if( getAction() == "die")
+                return false;
+            return true;
+        }
     protected:
 
     private:

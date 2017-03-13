@@ -10,10 +10,10 @@ function vertexhit( id)
 	down2 = getVertexHit( id, 4)
 
 	if down1 == false and down2 == true then
-		setAnimationDirection( id, 1)
+		setAnimationDirection( id, true)
 	end
 	if down1 == true and down2 == false then
-		setAnimationDirection( id, 0)
+		setAnimationDirection( id, false)
 	end
 end
 

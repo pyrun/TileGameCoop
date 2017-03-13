@@ -39,9 +39,9 @@ function update( id)
 	l_velX, l_velY = getVelocity( id)
 
 	if math.abs(l_velX) > 0.0 then
-		local dir = 0
+		local dir = false
 		if l_velX < 0.00 then
-			dir = 1
+			dir = true
 		end
 		setAnimationDirection( id, dir)
 	end

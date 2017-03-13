@@ -124,9 +124,8 @@ static int lua_isAlive( lua_State *state) {
         l_alive = true;
 
     // tote objekte sind auch "tod"
-    if( l_alive = true && l_obj != NULL)
-        if( l_obj != NULL && l_obj->getAction() == "die")
-            l_alive = false;
+    if( l_obj != NULL)
+        l_alive = l_obj->isAlive();
 
     lua_pushboolean( state, l_alive);
 
@@ -159,15 +158,15 @@ static int lua_setAnimation( lua_State *state) {
 static int lua_setAnimationDirection( lua_State *state) {
     entity *l_obj;
     int l_id;
-    int l_dir;
+    bool l_dir;
 
-    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) ) {
+    if( !lua_isnumber( state, 1) || !lua_isboolean( state, 2) ) {
         printf( "lua_setAnimation call wrong argument\n");
         return 0;
     }
 
     l_id = lua_tointeger( state, 1);
-    l_dir = lua_tointeger( state, 2);
+    l_dir = lua_toboolean( state, 2);
 
     l_obj = lua_entitylist->getEntity( l_id);
     if( l_obj == NULL) {
@@ -508,7 +507,7 @@ void entity::draw( graphic *graphic) {
 
     // p_timestartaction
     if( p_timestartaction == -1)
-        p_timestartaction = graphic->getFrame();
+        p_timestartaction = graphic->getFrame()+1;
 
     if( p_type == NULL) {
         printf("entity::draw \"%s\" dont found p_type!\n", this->getType()->getName().c_str());
@@ -879,8 +878,11 @@ void entitylist::createFromWorldFile( std::string file) {
 }
 
 void entitylist::draw(graphic *graphic) {
-    for(int i = 0; i < (int)p_entitys.size(); i++)
-        p_entitys[i].draw( graphic);
+    for(int i = 0; i < (int)p_entitys.size(); i++) {
+        entity *l_obj = &p_entitys[i];
+        if( l_obj != NULL)
+            l_obj->draw( graphic);
+    }
 }
 
 int entitylist::setVertexHit( vertex *vertex, bool set){
@@ -903,7 +905,7 @@ void entitylist::process( world *world, int deltaTime) {
     // calc delta of velocity
     l_velocityDelta = (float)deltaTime * world->getGravity();
 
-    // again and angain if wie found one more to delete
+    // again and again if we found one more to delete we search again
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         if( p_entitys[i].isbedelete == true ) {
             p_entitys.erase( p_entitys.begin() + i);
@@ -914,6 +916,9 @@ void entitylist::process( world *world, int deltaTime) {
     // go through
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_entity = &p_entitys[i];
+
+        if( l_entity == NULL)
+            continue;
 
         // no calc anymore if he flag too destory
         if( l_entity->isbedelete == true )

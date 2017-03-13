@@ -136,15 +136,14 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
 
         if( l_player->active) {
             entity *l_entity = entitylist->getEntity( l_player->entity_id);
-            if( l_entity == NULL)
-                continue;
-            entitytype *l_type = l_entity->getType();
 
-            if( l_entity->getAction() == "die") {
+            if( l_entity == NULL || l_entity->isAlive() == false || l_entity->getAction() == "die") {
                 l_player->entity_id = -1;
                 l_player->active = 0;
                 continue;
             }
+
+            entitytype *l_type = l_entity->getType();
 
             if( l_entity->lua_hasLoaded()) {
                 if( l_map->jump && !l_map_old->jump)
@@ -181,12 +180,15 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
         }
     }
     if( p_playercamerafocus != NULL) {
-        vec2 l_pos = entitylist->getEntity( p_playercamerafocus->entity_id)->getPosition().tovec2();
-        vec2 l_cam = graphic->getCameraSize();
+        entity *l_entity = entitylist->getEntity( p_playercamerafocus->entity_id);
+        if( l_entity != NULL) {
+            vec2 l_pos = l_entity->getPosition().tovec2();
+            vec2 l_cam = graphic->getCameraSize();
 
-        vec2 l_newpos = l_pos - (l_cam/vec2( 2.f, 2.f ));
+            vec2 l_newpos = l_pos - (l_cam/vec2( 2.f, 2.f ));
 
-        graphic->flyTo( l_newpos);
+            graphic->flyTo( l_newpos);
+        }
     }
 
 }
