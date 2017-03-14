@@ -46,10 +46,8 @@ function collision( id, ...)
 	end
 	for k,v in pairs({...}) do
 		if isAlive( v) == true then
-			if isenemy( v) == true then
-				print(k,v)		
+			if isenemy( v) == true then		
 				kill( v)
-				print(k,v)
 			end
 		end
 	end

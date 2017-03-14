@@ -488,8 +488,10 @@ entity::entity( int id)
     // not yet delete
     isbedelete = false;
 
-    // start script if write
-    lua_start( id);
+    p_down = false;
+    p_up = false;
+    p_right = false;
+    p_left = false;
 }
 
 entity::~entity()
@@ -805,8 +807,7 @@ int entitylist::create( entitytype *type, vec2 pos) {
     obj->setPos( pos);
     obj->setVertex( type->getVertex());
 
-    // incress next id
-    p_id++;
+
 
     // player entity incress if he is one
     if( type->getIsPlayer())
@@ -816,6 +817,12 @@ int entitylist::create( entitytype *type, vec2 pos) {
 
     // add to vector
     p_entitys.push_back( *obj);
+
+    // start script if write
+    getEntity( p_id)->lua_start( p_id);
+
+    // incress next id
+    p_id++;
 
     return (p_id-1);
 }
@@ -941,8 +948,7 @@ void entitylist::process( world *world, int deltaTime) {
         // liquid
         if( l_type->getGravity() == true && l_type->getHitboxOffset().x != 0) {
             // umrechnen
-            l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset()+l_type->getHitbox()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 ) )
-            /world->getTileSize();
+            l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset()+l_type->getHitbox()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 ) )/world->getTileSize();
             tile *l_tile = world->getTile( world->getCollsionMap(), l_iposition);
 
             if( l_tile != NULL && l_tile->type != NULL) {
@@ -984,8 +990,8 @@ void entitylist::process( world *world, int deltaTime) {
             // y delta dazurechnen (x nicht nötig da keine gravi. )
             l_velocity.y += l_velocityDelta;
 
-            l_collision_y = 0.0f;
-            l_collision_x = 0.0f;
+            l_collision_y = MASSIV_TILE;
+            l_collision_x = MASSIV_TILE;
 
             l_entity->setColisionDown( false);
             l_entity->setColisionUp( false);

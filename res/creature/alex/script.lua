@@ -81,8 +81,8 @@ function jump( id)
 		addVelocity( id, 0, jump_high)
 		jump_two = 1
     	elseif jump_two == 1 then
-        jump_two = 0
-        setVelocityY( id, jump_high/2)
+		jump_two = 0
+		setVelocityY( id, jump_high/2)
 	end
 end
 

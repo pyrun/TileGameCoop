@@ -1,4 +1,4 @@
-<object name="blueflower" width="16" height="18" script="script.lua" timer="500">
+<object name="blueflower" width="16" height="18" script="script.lua" timer="1500">
 	<action name="idle" frame="3" speed="20">dance.bmp</action>
 	<action name="die" frame="3" speed="20">die.bmp</action>
 	<vertex x="8" y="18">down</vertex>

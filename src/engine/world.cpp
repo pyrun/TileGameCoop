@@ -511,6 +511,7 @@ void world::draw( graphic *graphic) {
             graphic->drawImage( l_background->picture, l_position, l_size, vec2( 0, 0), 0.0, 0, l_factor);
             graphic->drawImage( l_background->picture, l_position - l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
             graphic->drawImage( l_background->picture, l_position + l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
+            graphic->drawImage( l_background->picture, l_position + l_xvel + l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
         }
     }
 
