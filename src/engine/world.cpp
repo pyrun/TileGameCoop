@@ -485,6 +485,28 @@ void world::drawOverground( graphic *graphic) {
     }
 }
 
+void world::process( graphic *graphic) {
+    fvec2 l_cam = graphic->getCamera();
+    vec2 l_camSize = graphic->getCameraSize();
+
+    // not over x
+    if( l_cam.x < 0)
+        l_cam.x = 0;
+
+    // down
+    if( l_cam.y > p_tilehight*p_map_hight - l_camSize.y)
+        l_cam.y = p_tilehight*p_map_hight - l_camSize.y;
+
+    // down
+    if( l_cam.x > p_tilewidth*p_map_width - l_camSize.x)
+        l_cam.x = p_tilewidth*p_map_width - l_camSize.x;
+
+    // set camera x y
+    graphic->setCamera( l_cam.tovec2());
+    // drop old calc
+    graphic->flipCamera();
+}
+
 void world::draw( graphic *graphic) {
     // dont draw if world not loaded or wrong loaded
     if( p_tilemap_foreground == NULL)

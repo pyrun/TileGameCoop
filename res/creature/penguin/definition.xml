@@ -1,0 +1,12 @@
+<object name="penguin" width="16" height="20">
+	<action name="idle" frame="1">walk.bmp</action>
+	<action name="walk" frame="4" speed="12">walk.bmp</action>
+	<action name="die" frame="4" speed="2" loop="0">walk.bmp</action>
+	<vertex x="4" y="20" id="3">down</vertex>
+	<vertex x="12" y="20" id="4">down</vertex>
+	<vertex x="3" y="7" id="1">left</vertex>
+	<vertex x="13" y="7" id="2">right</vertex>
+	<hitbox offsetx="0" offsety="4" width="16" hight="16"/>
+</object>
+
+

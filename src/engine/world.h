@@ -54,6 +54,7 @@ class world
         void drawTile( graphic *graphic, int x, int y, tile *map);
         void drawBackAndForeground( graphic *graphic);
         void drawOverground( graphic *graphic);
+        void process( graphic *graphic);
         void draw( graphic *graphic);
         void loadImageFiles( graphic *graphic);
         float getGravity() { return p_gravity; }

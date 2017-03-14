@@ -113,7 +113,7 @@ int game::process() {
 int game::process_graphic() {
     int l_error;
 
-    p_world = new world( "forest_1.tmx", "worlds/");
+    p_world = new world( "ice_1.tmx", "worlds/");
     p_entity->createFromWorldFile( p_world->getFileName());
     p_world->loadImageFiles( p_graphic);
 
@@ -136,6 +136,8 @@ int game::process_graphic() {
 
         // react of player input
         p_player->handle( p_entity, p_input, p_graphic, &p_config);
+
+        p_world->process( p_graphic);
 
         // process
         process();
