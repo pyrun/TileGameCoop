@@ -74,6 +74,6 @@
   <object id="27" name="frogti" x="240" y="192" width="32" height="32"/>
   <object id="28" name="snail" x="336" y="192" width="32" height="32"/>
   <object id="29" name="snail" x="400" y="192" width="32" height="32"/>
-  <object id="30" name="snail" x="176" y="128" width="32" height="32"/>
+  <object id="30" name="blueflower" x="176" y="128" width="32" height="32"/>
  </objectgroup>
 </map>

@@ -1,21 +1,30 @@
-local flower_id = -1
-local t_time = 0
+local flower_id = 0
+local time_flow = 0
 
 function timer( id, time)
-	if isAlive( flower_id) then
+	shootX = { }
+	shootY = { }
+	--shootX[0] = 0
+	shootY[0] =-0.5
+	time_flow = time_flow + 1
+
+	if time_flow == 10 then
+		time_flow = 0
+	end
+
+	for i=0, 10 do
+		shootX[i] = i/2;
+	end
+
+	for i=0, 10 do
+		shootY[i] = (i-5)/10;
+	end
+
+	if isAlive( id) == true then
 		local x, y = getPosition( id)
-		local flowerx, flowery = getPosition( flower_id )
-		local add = 0
-		if y <= flowery+20 then
-			if t_time > 40 then
-				add = -0.3
-				t_time = 0
-			end
-			addVelocity( flower_id, 0, -0.05 + add)
-		end
-		t_time = t_time + 1
-	else
-		local x,y = getPosition( id)
 		flower_id = createObject( "blueflake", x, y)
+		setVelocityY( flower_id, shootY[time_flow])
+		setVelocityX( flower_id, 0)
+		-- shootX[ tonumber(time_flow) ], 
 	end
 end

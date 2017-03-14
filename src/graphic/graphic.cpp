@@ -34,7 +34,7 @@ bool initSDL() {
 	}
 
 	// This line is only needed, if you want debug the program
-    SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
+    //SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
 
 	return success_initSDL;
 }
