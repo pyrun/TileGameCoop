@@ -56,6 +56,7 @@ class graphic
         void flipCamera() { p_cameraOld = p_camera; }
         int getFrame() { return p_framecount; }
         int getZoom( vec2 display);
+        SDL_Renderer *getRenderer() { return p_renderer;}
     protected:
 
     private:

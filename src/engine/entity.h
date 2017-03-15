@@ -69,6 +69,7 @@ class entitytype
         void setHeight( int height) { p_height = height; }
         void setIsPlayer( bool isplayer) { p_isplayer = isplayer; }
         void setScriptName( std::string file) { p_script = file; }
+        void setSolid( bool set) { p_solid = set; }
         void setTimer( int time) { p_time = time;}
         void setHitbox( vec2 offset, vec2 size) { p_hitbox_offset = offset; p_hitbox_size = size; }
 
@@ -82,6 +83,7 @@ class entitytype
         int getTimerTime() { return p_time; }
         vec2 getHitbox() { return p_hitbox_size; }
         vec2 getHitboxOffset() { return p_hitbox_offset; }
+        bool getIsSolid() { return p_solid; }
     protected:
 
     private:
@@ -96,6 +98,7 @@ class entitytype
         std::vector<vertex> p_vertex;
         vec2 p_hitbox_offset;
         vec2 p_hitbox_size;
+        bool p_solid;
 };
 
 class entity

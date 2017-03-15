@@ -15,7 +15,7 @@
 	<vertex id="7" x="21" y="10">right</vertex>
 	<vertex id="8" x="21" y="16">right</vertex>
 	<vertex id="9" x="21" y="31">right</vertex>
-	<hitbox offsetx="10" offsety="2" width="12" hight="30"/>
+	<hitbox offsetx="8" offsety="6" width="16" hight="28"/>
 </object>
 
 
