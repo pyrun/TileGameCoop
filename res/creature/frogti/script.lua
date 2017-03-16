@@ -1,9 +1,9 @@
 function vertexhit( id)
 	if getVertexHit( id, 1) then
-		setAnimationDirection( id, 1)
+		setAnimationDirection( id, true)
 	end
 	if getVertexHit( id, 2) then
-		setAnimationDirection( id, 0)
+		setAnimationDirection( id, false)
 	end
 	
 	down1 = getVertexHit( id, 3)

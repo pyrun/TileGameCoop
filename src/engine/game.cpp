@@ -113,7 +113,7 @@ int game::process() {
 int game::process_graphic() {
     int l_error;
 
-    p_world = new world( "ice_1.tmx", "worlds/");
+    p_world = new world( "cloud_1.tmx", "worlds/");
     p_entity->createFromWorldFile( p_world->getFileName());
     p_world->loadImageFiles( p_graphic);
 

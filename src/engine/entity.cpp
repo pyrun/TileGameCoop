@@ -138,7 +138,7 @@ static int lua_setAnimation( lua_State *state) {
     std::string l_name;
 
     if( !lua_isnumber( state, 1) || !lua_isstring( state, 2) ) {
-        printf( "lua_setAnimation call wrong argument\n");
+        printf( "lua_setAnimation call wrong argument\n" );
         return 0;
     }
 
@@ -161,7 +161,7 @@ static int lua_setAnimationDirection( lua_State *state) {
     bool l_dir;
 
     if( !lua_isnumber( state, 1) || !lua_isboolean( state, 2) ) {
-        printf( "lua_setAnimation call wrong argument\n");
+        printf( "lua_setAnimationDirection call wrong argument\n");
         return 0;
     }
 
@@ -980,6 +980,7 @@ void entitylist::process( world *world, int deltaTime) {
 
         // calc gravity
         if( l_type->getGravity() == true ) {
+            bool l_iscalc_y = false;
             // positon ermiteln
             l_position = l_entity->getPosition();
             l_velocity = l_entity->getVelocity();
@@ -1023,9 +1024,11 @@ void entitylist::process( world *world, int deltaTime) {
                         for( int i = 0; i < (int)l_ids.size(); i++) {
                             entity *l_obj = getEntity( l_ids[i]);
                             if( l_obj->getType()->getIsSolid()) {
-                                l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y);
+                                l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y);
                                 if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/8 > 1.0)
                                     l_temp = MASSIV_TILE;
+                                else
+                                    l_iscalc_y = true;
                             }
                         }
                     }
@@ -1045,6 +1048,7 @@ void entitylist::process( world *world, int deltaTime) {
                     if( l_temp != MASSIV_TILE)
                         l_vertexhitchange += setVertexHit( l_vertex, true);
                     else l_vertexhitchange += setVertexHit( l_vertex, false);
+
                 }
                 if( l_vertex->up) {
                     float l_temp;
@@ -1052,14 +1056,18 @@ void entitylist::process( world *world, int deltaTime) {
                     // collsion y
                     l_temp = world->getCollisionY( l_position + l_collision_pos, l_change, l_velocity, true);
 
+
+
                     // object collision
                     if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.y < 0) {
                         for( int i = 0; i < (int)l_ids.size(); i++) {
                             entity *l_obj = getEntity( l_ids[i]);
                             if( l_obj->getType()->getIsSolid()) {
-                                l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y + l_obj->getType()->getHeight()+2);
+                                l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y +2 + l_obj->getType()->getHitboxOffset().y + l_obj->getType()->getHitbox().y);
                                 if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/8 > 1)
                                     l_temp = MASSIV_TILE;
+                                else
+                                    l_iscalc_y = true;
                             }
                         }
                     }
@@ -1087,11 +1095,11 @@ void entitylist::process( world *world, int deltaTime) {
                     l_temp = world->getCollisionX( l_position + l_collision_pos, l_change, l_velocity);
 
                     // object collision
-                    if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.x > 0 ) {
+                    if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.x > 0 && l_iscalc_y == false) {
                         for( int i = 0; i < (int)l_ids.size(); i++) {
                             entity *l_obj = getEntity( l_ids[i]);
                             if( l_obj->getType()->getIsSolid()) {
-                                l_temp = (float)(l_position.x + (float)l_collision_pos.x + l_change.x) - (l_obj->getPosition().x-3);
+                                l_temp = (float)(l_position.x + (float)l_collision_pos.x + l_change.x) - (l_obj->getPosition().x-1 + l_obj->getType()->getHitboxOffset().x);
                                 if( fabs(l_temp)-fabs(l_change.x)  > 4)
                                     l_temp = MASSIV_TILE;
                             }
@@ -1121,11 +1129,11 @@ void entitylist::process( world *world, int deltaTime) {
                     l_temp = world->getCollisionX( l_position + l_collision_pos, l_change, l_velocity, true);
 
                     // object collision
-                    if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.x < 0 ) {
+                    if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.x < 0 && l_iscalc_y == false) {
                         for( int i = 0; i < (int)l_ids.size(); i++) {
                             entity *l_obj = getEntity( l_ids[i]);
                             if( l_obj->getType()->getIsSolid()) {
-                                l_temp = (float)(l_position.x + (float)l_collision_pos.x + l_change.x) - (l_obj->getPosition().x + l_obj->getType()->getWidth()+3);
+                                l_temp = (float)(l_position.x + (float)l_collision_pos.x + l_change.x) - (l_obj->getPosition().x +1 + l_obj->getType()->getHitboxOffset().x + + l_obj->getType()->getHitbox().x);
                                 if( fabs(l_temp)-fabs(l_change.x) > 4)
                                     l_temp = MASSIV_TILE;
                             }
