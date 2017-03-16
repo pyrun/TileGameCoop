@@ -1,6 +1,6 @@
 ## Synopsis
 
-![Clouds world](github.com/pyrun/TileGameCoop/ideen/ingame_1.bmp)
+![Clouds world](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_1.bmp)
 
 -TodDo-
 
