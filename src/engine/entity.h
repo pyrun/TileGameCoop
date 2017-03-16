@@ -119,6 +119,7 @@ class entity
         void setUpdate( bool set) { p_update = set; }
         void setVertex( std::vector<vertex> vertex) { p_vertex = vertex; }
         void setLiquid( bool set) { p_liquid = set; lua_liquid( p_id); }
+        void setSolid( bool set) { p_solid = set; }
         bool NeedUpdate() { return p_update; }
 
         void loadScript( std::string file);
@@ -155,6 +156,7 @@ class entity
         bool getColisionRight() { return p_right;}
         bool getColisionLeft() { return p_left;}
         bool isInLiquid() { return p_liquid;}
+        bool isSolid() { return p_solid; }
         std::string getAction() { return p_action; }
         std::vector<vertex>* getVertex() { return &p_vertex; }
         timer *getTimer() { return &p_timer; }
@@ -184,6 +186,7 @@ class entity
         int p_actionframe;
         int p_timestartaction;
         bool p_liquid;
+        bool p_solid;
 };
 
 class entitylist {

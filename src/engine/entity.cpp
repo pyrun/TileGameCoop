@@ -10,6 +10,29 @@ using namespace tinyxml2;
 
 entitylist *lua_entitylist = NULL;
 
+static int lua_setSolid( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    bool l_set;
+
+    if( !lua_isnumber( state, 1) || !lua_isboolean( state, 2) ) {
+        printf( "lua_setSolid call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_set = lua_toboolean( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_setSolid obj not found\n");
+        return 0;
+    }
+
+    l_obj->setSolid( l_set);
+    return 0;
+}
+
 static int lua_isenemy( lua_State *state) {
     entity *l_obj;
     entitytype *l_type;
@@ -178,13 +201,13 @@ static int lua_setAnimationDirection( lua_State *state) {
     return 0;
 }
 
-static int lua_getAnimationDirection( lua_State *state) {
+static int lua_getAnimation( lua_State *state) {
     entity *l_obj;
     int l_id;
-    int l_dir;
+    std::string l_action;
 
     if( !lua_isnumber( state, 1)) {
-        printf( "lua_setAnimation call wrong argument\n");
+        printf( "lua_getAnimation call wrong argument\n");
         return 0;
     }
 
@@ -192,7 +215,30 @@ static int lua_getAnimationDirection( lua_State *state) {
 
     l_obj = lua_entitylist->getEntity( l_id);
     if( l_obj == NULL) {
-        printf( "lua_addVelocity obj not found\n");
+        printf( "lua_getAnimation obj not found\n");
+        return 0;
+    }
+
+    l_action = l_obj->getAction();
+    lua_pushstring( state, l_action.c_str() );
+    return 1;
+}
+
+static int lua_getAnimationDirection( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    int l_dir;
+
+    if( !lua_isnumber( state, 1)) {
+        printf( "lua_getAnimationDirection call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_getAnimationDirection obj not found\n");
         return 0;
     }
 
@@ -375,6 +421,9 @@ static int lua_getPosition( lua_State *state) {
 
 void lua_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_setSolid);
+    lua_setglobal( state, "setSolid");
+
     lua_pushcfunction( state, lua_isenemy);
     lua_setglobal( state, "isenemy");
 
@@ -395,6 +444,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_setAnimationDirection);
     lua_setglobal( state, "setAnimationDirection");
+
+    lua_pushcfunction( state, lua_getAnimation);
+    lua_setglobal( state, "getAnimation");
 
     lua_pushcfunction( state, lua_getAnimationDirection);
     lua_setglobal( state, "getAnimationDirection");
@@ -806,8 +858,7 @@ int entitylist::create( entitytype *type, vec2 pos) {
     obj->setType( type);
     obj->setPos( pos);
     obj->setVertex( type->getVertex());
-
-
+    obj->setSolid( type->getIsSolid());
 
     // player entity incress if he is one
     if( type->getIsPlayer())
@@ -1023,7 +1074,7 @@ void entitylist::process( world *world, int deltaTime) {
                     if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.y > 0) {
                         for( int i = 0; i < (int)l_ids.size(); i++) {
                             entity *l_obj = getEntity( l_ids[i]);
-                            if( l_obj->getType()->getIsSolid()) {
+                            if( l_obj->isSolid()) {
                                 l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y);
                                 if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/8 > 1.0)
                                     l_temp = MASSIV_TILE;
@@ -1062,7 +1113,7 @@ void entitylist::process( world *world, int deltaTime) {
                     if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.y < 0) {
                         for( int i = 0; i < (int)l_ids.size(); i++) {
                             entity *l_obj = getEntity( l_ids[i]);
-                            if( l_obj->getType()->getIsSolid()) {
+                            if( l_obj->isSolid()) {
                                 l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y +2 + l_obj->getType()->getHitboxOffset().y + l_obj->getType()->getHitbox().y);
                                 if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/8 > 1)
                                     l_temp = MASSIV_TILE;
@@ -1098,7 +1149,7 @@ void entitylist::process( world *world, int deltaTime) {
                     if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.x > 0 && l_iscalc_y == false) {
                         for( int i = 0; i < (int)l_ids.size(); i++) {
                             entity *l_obj = getEntity( l_ids[i]);
-                            if( l_obj->getType()->getIsSolid()) {
+                            if( l_obj->isSolid()) {
                                 l_temp = (float)(l_position.x + (float)l_collision_pos.x + l_change.x) - (l_obj->getPosition().x-1 + l_obj->getType()->getHitboxOffset().x);
                                 if( fabs(l_temp)-fabs(l_change.x)  > 4)
                                     l_temp = MASSIV_TILE;
@@ -1132,7 +1183,7 @@ void entitylist::process( world *world, int deltaTime) {
                     if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.x < 0 && l_iscalc_y == false) {
                         for( int i = 0; i < (int)l_ids.size(); i++) {
                             entity *l_obj = getEntity( l_ids[i]);
-                            if( l_obj->getType()->getIsSolid()) {
+                            if( l_obj->isSolid()) {
                                 l_temp = (float)(l_position.x + (float)l_collision_pos.x + l_change.x) - (l_obj->getPosition().x +1 + l_obj->getType()->getHitboxOffset().x + + l_obj->getType()->getHitbox().x);
                                 if( fabs(l_temp)-fabs(l_change.x) > 4)
                                     l_temp = MASSIV_TILE;
