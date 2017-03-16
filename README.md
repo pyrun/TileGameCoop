@@ -1,5 +1,7 @@
 ## Synopsis
 
+![Clouds world](github.com/pyrun/TileGameCoop/ideen/ingame_1.bmp)
+
 -TodDo-
 
 ## Motivation
