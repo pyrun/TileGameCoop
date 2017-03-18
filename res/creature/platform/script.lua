@@ -7,6 +7,7 @@ local down = false
 
 function start( id) 
 	t, start_y = getPosition( id)
+	start_y = start_y - 1
 end
 
 function timer( id, time)

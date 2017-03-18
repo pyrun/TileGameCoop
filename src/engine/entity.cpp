@@ -1009,7 +1009,7 @@ void entitylist::process( world *world, int deltaTime) {
         // liquid
         if( l_type->getGravity() == true && l_type->getHitboxOffset().x != 0) {
             // umrechnen
-            l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset()+l_type->getHitbox()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 ) )/world->getTileSize();
+            l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset()+l_type->getHitbox()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 )-(world->getTileSize()/vec2( 2, 2) ) )/world->getTileSize();
             tile *l_tile = world->getTile( world->getCollsionMap(), l_iposition);
 
             if( l_tile != NULL && l_tile->type != NULL) {
@@ -1222,7 +1222,7 @@ void entitylist::process( world *world, int deltaTime) {
             }
 
             if( l_entity->getColisionDown() && !l_entity->isInLiquid())
-                l_velocity.x = l_velocity.x*0.9f;
+                l_velocity.x = l_velocity.x*0.8f;
             else if(l_entity->isInLiquid() == true)
                 l_velocity.x = l_velocity.x*0.5f;
             else
