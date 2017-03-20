@@ -113,7 +113,7 @@ int game::process() {
 int game::process_graphic() {
     int l_error;
 
-    p_world = new world( "ice_1.tmx", "worlds/");
+    p_world = new world( "labor_1.tmx", "worlds/");
     p_entity->createFromWorldFile( p_world->getFileName());
     p_world->loadImageFiles( p_graphic);
 
@@ -126,6 +126,7 @@ int game::process_graphic() {
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
         l_delta = l_time.getTicks();
+
         if( l_delta < 0.5)
             l_delta = 0.5;
         // start
