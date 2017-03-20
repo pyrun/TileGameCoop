@@ -8,6 +8,35 @@ local jump_outwater_factor = 0.75
 function vertexhit( id)
 end
 
+local cooldown = 0
+local cooldown_time = 20
+local id_attack = -1
+local id_x = 0
+local id_y = 0
+function attack( id)
+	if isAlive(id_attack) == false and cooldown == 0 then
+		l_dir = getAnimationDirection( id)
+		l_x, l_y = getPosition( id)
+		l_factor = 0
+		if l_dir == true then
+			l_factor = -64
+		end
+		id_x = 16 + l_factor
+		id_y = 8
+		
+		cooldown = cooldown_time
+		
+		id_attack = createObject( "electronics whip", l_x + id_x, l_y + id_y);
+		setAnimationDirection( id_attack, l_dir)
+	end
+end
+
+function timer( id, time)
+	if cooldown > 0 then
+		cooldown = cooldown - 1
+	end
+end
+
 function liquid( id, swim)
 	if isAlive( id) == false then
 		do return end
@@ -34,6 +63,11 @@ function update( id)
 	if isAlive( id) == false then
 		do return end
 	end
+	
+	if isAlive( id_attack) then
+		l_x, l_y = getPosition( id)
+		setPosition( id_attack, l_x + id_x, l_y + id_y)
+	end
 
   	-- get velocity
 	l_velX, l_velY = getVelocity( id)
@@ -50,8 +84,6 @@ function update( id)
 		setAnimation( id, "swim")
 		do return end
 	end
-
-  
 
 	if l_velY < 0.0 then
 		setAnimation( id, "jump")

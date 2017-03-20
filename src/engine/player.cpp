@@ -154,6 +154,10 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                     l_entity->lua_run( l_entity->getId(), false);
                 if( l_map->right && !l_map_old->right)
                     config->setQuit( true);
+                if( l_map->attack && !l_map_old->attack)
+                    l_entity->lua_attack( l_entity->getId());
+                if( l_map->special && !l_map_old->special)
+                    l_entity->lua_special( l_entity->getId());
 
                 if( l_map->dir.up )
                     l_entity->lua_up( l_entity->getId());

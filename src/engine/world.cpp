@@ -122,13 +122,14 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
         l_x = ( position.x )/p_tilewidth;
         l_y = ( position.y + i + p_tilehight/2)/p_tilehight;
 
+
         if( up)
             l_tempy = l_y - 1;
         else
             l_tempy = l_y;
 
         // collision tile
-        l_tile = getTile( p_tilemap_foreground, vec2(l_x, l_tempy) );
+        l_tile = getTile( p_tilemap_foreground, vec2( l_x, l_tempy) );
         if( l_tile == NULL)
             continue;
 

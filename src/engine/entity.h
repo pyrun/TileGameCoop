@@ -132,6 +132,8 @@ class entity
         void lua_up( int id);
         void lua_down( int id);
         void lua_run( int id, bool press);
+        void lua_attack( int id);
+        void lua_special( int id);
         void lua_update( int id);
         void lua_collision( int id, std::vector<int> ids);
         void lua_liquid( int id);

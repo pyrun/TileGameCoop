@@ -227,7 +227,7 @@ static int lua_getAnimation( lua_State *state) {
 static int lua_getAnimationDirection( lua_State *state) {
     entity *l_obj;
     int l_id;
-    int l_dir;
+    bool l_dir;
 
     if( !lua_isnumber( state, 1)) {
         printf( "lua_getAnimationDirection call wrong argument\n");
@@ -243,8 +243,32 @@ static int lua_getAnimationDirection( lua_State *state) {
     }
 
     l_dir = l_obj->getDirection();
-    lua_pushnumber( state, l_dir );
+    lua_pushboolean( state, (bool)l_dir );
     return 1;
+}
+
+static int lua_setPosition( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    float l_x, l_y;
+    if ( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) || !lua_isnumber( state, 3)) {
+        printf( "lua_setPosition call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_x = lua_tonumber( state, 2);
+    l_y = lua_tonumber( state, 3);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_setPosition obj not found\n");
+        return 0;
+    }
+    l_obj->setPos( fvec2( l_x, l_y) );
+    l_obj->setUpdate( true);
+
+    return 0;
 }
 
 static int lua_addVelocity( lua_State *state) {
@@ -450,6 +474,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_getAnimationDirection);
     lua_setglobal( state, "getAnimationDirection");
+
+    lua_pushcfunction( state, lua_setPosition);
+    lua_setglobal( state, "setPosition");
 
     lua_pushcfunction( state, lua_addVelocity);
     lua_setglobal( state, "addVelocity");
@@ -740,6 +767,34 @@ void entity::lua_run( int id, bool press) {
     // call the function
     if( lua_pcall( p_state, 2, 0, 0))
         printf("entity::lua_run %s\n", lua_tostring( p_state, -1));
+}
+void entity::lua_attack( int id) {
+    if( p_state == NULL)
+        return;
+    // name the function
+    lua_getglobal( p_state, "attack");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    // call the function
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entity::lua_attack %s\n", lua_tostring( p_state, -1));
+}
+void entity::lua_special( int id) {
+    if( p_state == NULL)
+        return;
+    // name the function
+    lua_getglobal( p_state, "special");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    // call the function
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entity::lua_special %s\n", lua_tostring( p_state, -1));
 }
 
 void entity::lua_update( int id) {
