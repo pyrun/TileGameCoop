@@ -1,4 +1,4 @@
-<object name="frogti" width="16" height="32" script="script.lua" timer="100">
+<object name="frogti" width="16" height="32" script="script.lua" timer="100" isenemy="1">
 	<action name="idle" frame="1">walk.bmp</action>
 	<action name="walk" frame="4" speed="5">walk.bmp</action>
 	<action name="jump" frame="4" speed="5">jump.bmp</action>

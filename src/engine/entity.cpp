@@ -33,7 +33,7 @@ static int lua_setSolid( lua_State *state) {
     return 0;
 }
 
-static int lua_isenemy( lua_State *state) {
+static int lua_isEnemy( lua_State *state) {
     entity *l_obj;
     entitytype *l_type;
     int l_id;
@@ -47,6 +47,33 @@ static int lua_isenemy( lua_State *state) {
     l_obj = lua_entitylist->getEntity( l_id);
     if( l_obj == NULL) {
         printf( "lua_isenemy obj not found\n");
+        return 0;
+    }
+
+    l_type = l_obj->getType();
+    if( l_type == NULL)
+        return 0;
+
+    // look if a player
+    bool l_enemy = l_type->getIsEnemy();
+    lua_pushboolean( state, l_enemy);
+    return 1;
+}
+
+static int lua_isPlayer( lua_State *state) {
+    entity *l_obj;
+    entitytype *l_type;
+    int l_id;
+
+    if( !lua_isnumber( state, 1) ) {
+        printf( "lua_isPlayer call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_isPlayer obj not found\n");
         return 0;
     }
 
@@ -448,8 +475,11 @@ void lua_install( lua_State *state) {
     lua_pushcfunction( state, lua_setSolid);
     lua_setglobal( state, "setSolid");
 
-    lua_pushcfunction( state, lua_isenemy);
-    lua_setglobal( state, "isenemy");
+    lua_pushcfunction( state, lua_isEnemy);
+    lua_setglobal( state, "isEnemy");
+
+    lua_pushcfunction( state, lua_isPlayer);
+    lua_setglobal( state, "isPlayer");
 
     lua_pushcfunction( state, lua_kill);
     lua_setglobal( state, "kill");
@@ -1338,6 +1368,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     bool l_isplayer = false;
     int l_timer = 0;
     bool l_solid = 0;
+    bool l_isEnemy = 0;
     std::string l_script;
 
     std::string l_name;
@@ -1375,6 +1406,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_script = folder + l_object->Attribute( "script");
     if( l_object->Attribute( "solid"))
         l_solid = atoi(l_object->Attribute( "solid" ));
+    if( l_object->Attribute( "isenemy"))
+        l_isEnemy = atoi(l_object->Attribute( "isenemy" ));
 
     entitytype *l_type = new entitytype();
     std::string l_action_name;
@@ -1495,6 +1528,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setScriptName( l_script);
     l_type->setSolid( l_solid);
     l_type->setTimer( l_timer);
+    l_type->setIsEnemy( l_isEnemy);
     lua_setEntity( this);
 
     p_entity_types.push_back( *l_type);

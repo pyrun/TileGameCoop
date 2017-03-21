@@ -32,7 +32,7 @@ function timer( id)
 	if getColision( id, "down") then
 		local dir = getAnimationDirection( id)
 		setAnimation( id, "walk")
-		if dir == 0 then
+		if dir == false then
 			addVelocity( id, -0.03, 0)
 		else
 			addVelocity( id, 0.03, 0)
@@ -46,7 +46,7 @@ function collision( id, ...)
 	end
 	for k,v in pairs({...}) do
 		if isAlive( v) == true then
-			if isenemy( v) == true then		
+			if isPlayer( v) == true then		
 				kill( v)
 			end
 		end

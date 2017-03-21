@@ -72,6 +72,7 @@ class entitytype
         void setSolid( bool set) { p_solid = set; }
         void setTimer( int time) { p_time = time;}
         void setHitbox( vec2 offset, vec2 size) { p_hitbox_offset = offset; p_hitbox_size = size; }
+        void setIsEnemy( bool set) { p_isEnemy = set; }
 
         std::string getName() { return p_name; }
         std::string getScriptName() { return p_script; }
@@ -84,6 +85,8 @@ class entitytype
         vec2 getHitbox() { return p_hitbox_size; }
         vec2 getHitboxOffset() { return p_hitbox_offset; }
         bool getIsSolid() { return p_solid; }
+        bool getIsEnemy() { return p_isEnemy; }
+
     protected:
 
     private:
@@ -99,6 +102,7 @@ class entitytype
         vec2 p_hitbox_offset;
         vec2 p_hitbox_size;
         bool p_solid;
+        bool p_isEnemy;
 };
 
 class entity
@@ -120,6 +124,7 @@ class entity
         void setVertex( std::vector<vertex> vertex) { p_vertex = vertex; }
         void setLiquid( bool set) { p_liquid = set; lua_liquid( p_id); }
         void setSolid( bool set) { p_solid = set; }
+
         bool NeedUpdate() { return p_update; }
 
         void loadScript( std::string file);

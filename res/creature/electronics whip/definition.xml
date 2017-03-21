@@ -1,6 +1,6 @@
 <object name="electronics whip" width="64" height="16" script="script.lua" timer="400" gravity="0">
 	<action name="idle" frame="4" speed="4" loop="0">attack.bmp</action>
-	<hitbox offsetx="32" offsety="0" width="32" hight="16"/>
+	<hitbox offsetx="0" offsety="0" width="64" hight="16"/>
 </object>
 
 
