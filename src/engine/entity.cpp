@@ -1109,18 +1109,20 @@ void entitylist::process( world *world, int deltaTime) {
         // check abount hitbox
         std::vector<int> l_ids = collision_boundingBox( l_entity);
         if( l_ids.size() > 0)
+
             l_entity->lua_collision( l_entity->getId(), l_ids);
 
         fvec2 l_velocity;
         fvec2 l_position;
         fvec2 l_change;
 
+        // positon ermiteln
+        l_position = l_entity->getPosition();
+        l_velocity = l_entity->getVelocity();
+
         // calc gravity
         if( l_type->getGravity() == true ) {
             bool l_iscalc_y = false;
-            // positon ermiteln
-            l_position = l_entity->getPosition();
-            l_velocity = l_entity->getVelocity();
 
             // änderung rechnen
             l_change.x += l_velocity.x * deltaTime;
@@ -1317,6 +1319,13 @@ void entitylist::process( world *world, int deltaTime) {
 
             // add velocity next frame
             l_entity->setVelocity( l_velocity);
+        } else {
+            l_change.x += l_velocity.x * deltaTime;
+            l_change.y += l_velocity.y * deltaTime;
+
+            l_entity->setPos( l_position + l_change );
+
+            //l_entity->setVelocity( l_velocity);
         }
 
         if( l_vertexhitchange > 0)
