@@ -92,6 +92,8 @@
 		<Unit filename="engine/game.h" />
 		<Unit filename="engine/input.cpp" />
 		<Unit filename="engine/input.h" />
+		<Unit filename="engine/level.cpp" />
+		<Unit filename="engine/level.h" />
 		<Unit filename="engine/player.cpp" />
 		<Unit filename="engine/player.h" />
 		<Unit filename="engine/script.h" />
