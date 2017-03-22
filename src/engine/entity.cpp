@@ -1,5 +1,6 @@
 #include "entity.h"
 
+#include <dirent.h>
 using namespace tinyxml2;
 
 #ifndef XMLCheckResult
@@ -1534,6 +1535,28 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     p_entity_types.push_back( *l_type);
 
     return true;
+}
+
+void entitylist::loadTypes( std::string folder, graphic *graphic) {
+    DIR *l_dir;
+
+    struct dirent *l_entry;
+
+    std::string l_path = folder; //"creature/";
+
+    l_dir = opendir(l_path.c_str());
+    if ( l_dir == NULL) {  /* error opening the directory? */
+        printf("game::loadTypes cant load types, dir not found\n");
+    }
+
+    while ((l_entry = readdir(l_dir)) != NULL) {
+        std::string l_file = l_path + l_entry->d_name + "/";
+
+        // load folder
+        loadType( l_file, graphic);
+
+    }
+    closedir(l_dir);
 }
 
 entitytype* entitylist::getType( std::string name) {

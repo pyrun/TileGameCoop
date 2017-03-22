@@ -215,6 +215,7 @@ class entitylist {
         std::vector <int> collision_boundingBox( entity* checkentity);
         bool loadType( std::string folder, graphic *graphic);
         void removeTypes();
+        void loadTypes( std::string folder, graphic *graphic);
         entitytype *getType( std::string name);
         std::vector<int> findPlayerObject();
 

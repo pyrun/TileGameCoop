@@ -17,17 +17,8 @@ game::game()
     // create player_list
     p_player = new player_handle();
 
-    // no wolrd load
-    p_world = NULL;
-
     // load font
     p_font = new font( p_graphic);
-
-    // create entity list
-    p_entity = new entitylist();
-
-    // load types
-    loadTypes();
 
     // game running
     p_game_running = true;
@@ -36,17 +27,12 @@ game::game()
 
 game::~game()
 {
-    // delete entity
-    if( p_entity)
-        delete p_entity;
-
     // delte font
     if( p_font)
         delete p_font;
-
-    // delete world if a there
-    if( p_world)
-        delete p_world;
+    // delete all levels
+    if( p_level)
+        delete p_level;
     // free input
     if( p_input)
         delete p_input;
@@ -74,30 +60,8 @@ void game::drawHUD() {
     sprintf( test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
     p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 30), 1.0f, true);
 
-    sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_entity->getAmountPlayerObject(), p_player->player_getPlayerActive());
-    p_font->drawMessage( p_graphic, test, vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, false, true);
-}
-
-void game::loadTypes() {
-    DIR *l_dir;
-
-    struct dirent *l_entry;
-
-    std::string l_path = "creature/";
-
-    l_dir = opendir(l_path.c_str());
-    if ( l_dir == NULL) {  /* error opening the directory? */
-        printf("game::loadTypes cant load types, dir not found\n");
-    }
-
-    while ((l_entry = readdir(l_dir)) != NULL) {
-        std::string l_file = l_path + l_entry->d_name + "/";
-
-        // load folder
-        p_entity->loadType( l_file, p_graphic);
-
-    }
-    closedir(l_dir);
+    //sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_entity->getAmountPlayerObject(), p_player->player_getPlayerActive());
+    //p_font->drawMessage( p_graphic, test, vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, false, true);
 }
 
 int game::process() {
@@ -113,9 +77,7 @@ int game::process() {
 int game::process_graphic() {
     int l_error;
 
-    p_world = new world( "overworld.tmx", "worlds/");
-    p_entity->createFromWorldFile( p_world->getFileName());
-    p_world->loadImageFiles( p_graphic);
+    p_level = new level( "overworld.tmx", "worlds/", p_graphic);
 
     // at the moment we have no error
     l_error = 0;
@@ -136,22 +98,21 @@ int game::process_graphic() {
         p_graphic->flipCamera();
 
         // react of player input
-        p_player->handle( p_entity, p_input, p_graphic, &p_config);
-
-        p_world->process( p_graphic);
+        p_player->handle( p_level->getEntityList(), p_input, p_graphic, &p_config);
+        p_level->getWorld()->process( p_graphic);
 
         // process
         process();
 
-        p_entity->process( p_world, l_delta);
+        p_level->getEntityList()->process( p_level->getWorld(), l_delta);
 
         // draw world
-        p_world->draw( p_graphic);
+        p_level->getWorld()->draw( p_graphic);
 
         // draw entity
-        p_entity->draw( p_graphic);
+        p_level->getEntityList()->draw( p_graphic);
 
-        p_world->drawOverground( p_graphic);
+        p_level->getWorld()->drawOverground( p_graphic);
 
         // draw info
         drawHUD();
