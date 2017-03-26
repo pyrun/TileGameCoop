@@ -70,7 +70,7 @@
   <object id="26" name="alex" x="16" y="176" width="32" height="32"/>
   <object id="33" name="penguin" x="128" y="176" width="16" height="32">
    <properties>
-    <property name="dir" value="left"/>
+    <property name="dir" value="right"/>
    </properties>
   </object>
   <object id="35" name="penguin" x="256" y="96" width="16" height="32"/>

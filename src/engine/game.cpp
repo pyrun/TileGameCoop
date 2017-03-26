@@ -79,6 +79,9 @@ int game::process_graphic() {
 
     p_level = new level( "overworld.tmx", "worlds/", p_graphic);
 
+    p_level->setLevel( new level( "ice_1.tmx", "worlds/", p_graphic));
+
+
     // at the moment we have no error
     l_error = 0;
 
@@ -104,7 +107,7 @@ int game::process_graphic() {
         // process
         process();
 
-        p_level->getEntityList()->process( p_level->getWorld(), l_delta);
+        p_level->process( l_delta);
 
         // draw world
         p_level->getWorld()->draw( p_graphic);

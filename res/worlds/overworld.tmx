@@ -110,7 +110,11 @@
  </layer>
  <objectgroup name="Objects">
   <object id="1" name="player_overworld" x="96" y="144" width="16" height="16"/>
-  <object id="2" name="world" x="96" y="112" width="16" height="16"/>
+  <object id="2" name="world" x="96" y="112" width="16" height="16">
+   <properties>
+    <property name="global" value="world_0"/>
+   </properties>
+  </object>
   <object id="5" name="world" x="144" y="112" width="16" height="16"/>
   <object id="6" name="world" x="192" y="112" width="16" height="16"/>
   <object id="7" name="world" x="192" y="80" width="16" height="16"/>

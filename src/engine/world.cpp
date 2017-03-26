@@ -10,6 +10,7 @@ using namespace tinyxml2;
 
 world::world(std::string file = "default.tmx", std::string ordner = "worlds/")
 {
+    p_level_end = false;
 
     // tilemap
     p_tilemap_overlap = NULL;

@@ -12,8 +12,35 @@ class level
         level(std::string file, std::string folder, graphic *graphic);
         virtual ~level();
 
-        entitylist *getEntityList() { return p_entity; }
-        world *getWorld() { return p_world; }
+        void process( float l_delta) {
+            // process entity
+            getEntityList()->process( getWorld(), l_delta);
+
+            // check if level finish
+            if( p_level != NULL) {
+                if( p_level->getWorld()->isLevelEnd() == true) {
+                    delete p_level;
+                    p_level = NULL;
+
+                    // set old link
+                    lua_setLink( p_entity, p_world);
+                }
+            }
+        }
+
+        entitylist *getEntityList() {
+            if( p_level != NULL)
+                return p_level->p_entity;
+            return p_entity;
+        }
+        world *getWorld() {
+            if( p_level != NULL)
+                return p_level->p_world;
+            return p_world;
+        }
+        void setLevel( level *level) {
+            p_level = level;
+        }
     protected:
 
     private:

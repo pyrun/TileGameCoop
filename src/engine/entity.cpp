@@ -12,6 +12,12 @@ using namespace tinyxml2;
 entitylist *lua_entitylist = NULL;
 world *lua_worldlist = NULL;
 
+static int lua_end_level( lua_State *state) {
+    lua_worldlist->setEndLevel( true);
+    return 0;
+}
+
+
 static int lua_getTile( lua_State *state) {
     tile *l_tile;
     int l_id;
@@ -25,8 +31,6 @@ static int lua_getTile( lua_State *state) {
 
     l_pos_x = lua_tointeger( state, 1);
     l_pos_y = lua_tointeger( state, 2);
-
-    printf( "%d %d\n",l_pos_x, l_pos_y);
 
     l_tile = lua_worldlist->getTile( lua_worldlist->getCollsionMap(), vec2( l_pos_x, l_pos_y) );
     if(l_tile == NULL)
@@ -515,6 +519,9 @@ static int lua_getPosition( lua_State *state) {
 
 void lua_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_end_level);
+    lua_setglobal( state, "end_level");
+
     lua_pushcfunction( state, lua_getTile);
     lua_setglobal( state, "getTile");
 
@@ -577,7 +584,7 @@ void lua_install( lua_State *state) {
 
 }
 
-void lua_setEntity( entitylist *entity, world *world) {
+void lua_setLink( entitylist *entity, world *world) {
     // set list
     lua_entitylist = entity;
     lua_worldlist = world;
@@ -1045,6 +1052,7 @@ void entitylist::createFromWorldFile( std::string file) {
 
     XMLElement* l_object = l_objectgroup->FirstChildElement( "object" );
 
+    int l_id = 0;
     //
     while( l_object) {
 
@@ -1059,8 +1067,28 @@ void entitylist::createFromWorldFile( std::string file) {
         //
         entitytype *l_entity_type = getType( l_type);
 
-        if( l_entity_type != NULL)
-            create( l_entity_type, l_pos);
+        if( l_entity_type != NULL) {
+            l_id = create( l_entity_type, l_pos);
+            entity *l_entity = getEntity( l_id);
+
+
+            // load properties
+            XMLElement* l_xml_property = NULL;
+            XMLElement* l_xml_properties = l_object->FirstChildElement( "properties" );
+
+            // if properties write
+            if( l_xml_properties != NULL)
+                l_xml_property = l_xml_properties->FirstChildElement( "property" );
+            while( l_xml_property) {
+                std::string l_property = l_xml_property->Attribute("name") == NULL?"":l_xml_property->Attribute("name");
+                std::string l_value = l_xml_property->Attribute("value") == NULL?"":l_xml_property->Attribute("value");
+
+                l_xml_property = l_object->NextSiblingElement( "properties");
+
+                if( l_property == "dir" && l_value == "right")
+                        l_entity->setDirection( true);
+            }
+        }
 
         // next object
         l_object = l_object->NextSiblingElement( "object");
@@ -1504,6 +1532,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
 
         l_xml_action = l_xml_action->NextSiblingElement("action");
     }
+
+
 
     // load vertex
     std::string l_vertex_name;

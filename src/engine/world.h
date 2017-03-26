@@ -57,6 +57,8 @@ class world
         void process( graphic *graphic);
         void draw( graphic *graphic);
         void loadImageFiles( graphic *graphic);
+        void setEndLevel( float set ) { p_level_end = set; }
+        bool isLevelEnd() { return p_level_end; }
         float getGravity() { return p_gravity; }
         std::string getFileName() { return p_file; }
         vec2 getTileSize() { return vec2( p_tilewidth, p_tilehight); }
@@ -85,6 +87,7 @@ class world
         int p_tileset_height;
         int p_tileset_space;
         float p_gravity;
+        bool p_level_end;
 
         std::vector<world_background> p_backgrounds;
 
