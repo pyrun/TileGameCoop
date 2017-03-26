@@ -1,0 +1,8 @@
+<object name="world" width="16" height="16" script="script.lua" timer="100" gravity="0">
+	<action name="idle" frame="4" speed="12">world.bmp</action>
+	<action name="done" frame="1">world_done.bmp</action>
+	<action name="die" frame="4" speed="8">world.bmp</action>
+	<hitbox offsetx="0" offsety="0" width="16" hight="16"/>
+</object>
+
+

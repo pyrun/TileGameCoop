@@ -19,6 +19,7 @@ class level
     private:
         world *p_world;
         entitylist *p_entity;
+        level *p_level = NULL;
 };
 
 #endif // LEVEL_H

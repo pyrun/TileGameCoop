@@ -13,6 +13,9 @@ level::level(std::string file, std::string folder, graphic *graphic)
     // load world
     p_world = new world( file, folder);
 
+    // set lua
+    lua_setEntity( p_entity, p_world);
+
     // load now all entitys
     p_entity->createFromWorldFile( p_world->getFileName());
 

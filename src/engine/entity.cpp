@@ -10,6 +10,48 @@ using namespace tinyxml2;
 /** LUA FUNCTION */
 
 entitylist *lua_entitylist = NULL;
+world *lua_worldlist = NULL;
+
+static int lua_getTile( lua_State *state) {
+    tile *l_tile;
+    int l_id;
+    int l_pos_x;
+    int l_pos_y;
+
+    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) ) {
+        printf( "lua_getTile call wrong argument\n");
+        return 0;
+    }
+
+    l_pos_x = lua_tointeger( state, 1);
+    l_pos_y = lua_tointeger( state, 2);
+
+    printf( "%d %d\n",l_pos_x, l_pos_y);
+
+    l_tile = lua_worldlist->getTile( lua_worldlist->getCollsionMap(), vec2( l_pos_x, l_pos_y) );
+    if(l_tile == NULL)
+        return 0;
+
+    // type regist?
+    if( l_tile->type) {
+        lua_pushboolean( state, l_tile->type->left);
+        lua_pushboolean( state, l_tile->type->right);
+        lua_pushboolean( state, l_tile->type->down);
+        lua_pushboolean( state, l_tile->type->top);
+        lua_pushboolean( state, l_tile->type->liquid);
+    } else { // no -> state
+        lua_pushboolean( state, true);
+        lua_pushboolean( state, true);
+        lua_pushboolean( state, true);
+        lua_pushboolean( state, true);
+        lua_pushboolean( state, false);
+    }
+
+    // return id
+    lua_pushinteger( state, l_tile->id);
+
+    return 6;
+}
 
 static int lua_setSolid( lua_State *state) {
     entity *l_obj;
@@ -473,6 +515,9 @@ static int lua_getPosition( lua_State *state) {
 
 void lua_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_getTile);
+    lua_setglobal( state, "getTile");
+
     lua_pushcfunction( state, lua_setSolid);
     lua_setglobal( state, "setSolid");
 
@@ -532,9 +577,10 @@ void lua_install( lua_State *state) {
 
 }
 
-void lua_setEntity( entitylist *entity) {
+void lua_setEntity( entitylist *entity, world *world) {
     // set list
     lua_entitylist = entity;
+    lua_worldlist = world;
 }
 
 entitytype::entitytype() {
@@ -1539,7 +1585,6 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setSolid( l_solid);
     l_type->setTimer( l_timer);
     l_type->setIsEnemy( l_isEnemy);
-    lua_setEntity( this);
 
     p_entity_types.push_back( *l_type);
 

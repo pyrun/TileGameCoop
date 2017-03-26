@@ -1,0 +1,49 @@
+<animation left="0" right="0" down="1" up="1">
+	<tile>5</tile>
+</animation>
+
+<animation left="1" right="1" down="0" up="0">
+	<tile>6</tile>
+</animation>
+
+<animation left="0" right="0" down="1" up="0">
+	<tile>7</tile>
+</animation>
+
+<animation left="0" right="0" down="0" up="1">
+	<tile>8</tile>
+</animation>
+<animation left="1" right="0" down="0" up="0">
+	<tile>9</tile>
+</animation>
+<animation left="0" right="1" down="0" up="0">
+	<tile>10</tile>
+</animation>
+<animation left="1" right="1" down="1" up="0">
+	<tile>17</tile>
+</animation>
+<animation left="0" right="1" down="1" up="1">
+	<tile>18</tile>
+</animation>
+<animation left="0" right="1" down="1" up="0">
+	<tile>19</tile>
+</animation>
+<animation left="1" right="0" down="1" up="0">
+	<tile>20</tile>
+</animation>
+<animation left="1" right="1" down="0" up="1">
+	<tile>29</tile>
+</animation>
+<animation left="1" right="0" down="1" up="1">
+	<tile>30</tile>
+</animation>
+<animation left="0" right="1" down="0" up="1">
+	<tile>31</tile>
+</animation>
+<animation left="1" right="0" down="0" up="1">
+	<tile>32</tile>
+</animation>
+<animation left="0" right="0" up="0">
+	<tile>544</tile>
+</animation>
+

@@ -233,4 +233,7 @@ class entitylist {
         std::string p_folder;
 };
 
+void lua_setEntity( entitylist *entity, world *world);
+
+
 #endif // ENTITY_H

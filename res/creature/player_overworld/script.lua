@@ -1,10 +1,11 @@
-local move_speed = 0.1
+local move_speed = 0.05
 local move_maxsteps = 16
 local isMoving = false
 local move_ysteps=0
 local move_xsteps=0
 local move_inverted=false
 local move_y_flag=false
+local move_fix = 2 
 
 function vertexhit( id)
 end
@@ -36,26 +37,26 @@ function timer( id, time)
 	l_x, l_y = getPosition( id)
 	if isMoving == true then
 		if move_inverted == false then
-			if move_y_flag == false and move_xsteps < l_x then
+			if move_y_flag == false and move_xsteps-move_fix < l_x then
 				isMoving = false
 				setVelocityX( id, 0)
 				l_x, l_y = getPosition( id)
 				setPosition( id, move_xsteps, l_y)
 			end
-			if move_y_flag == true and move_ysteps < l_y then
+			if move_y_flag == true and move_ysteps-move_fix < l_y then
 				isMoving = false
 				l_x, l_y = getPosition( id)
 				setPosition( id, l_x, move_ysteps)
 				setVelocityY( id, 0)
 			end
 		else
-			if move_y_flag == false and move_xsteps > l_x then
+			if move_y_flag == false and move_xsteps+move_fix > l_x then
 				isMoving = false
 				l_x, l_y = getPosition( id)
 				setPosition( id, move_xsteps, l_y)
 				setVelocityX( id, 0)
 			end
-			if move_y_flag == true and move_ysteps > l_y then
+			if move_y_flag == true and move_ysteps+move_fix > l_y then
 				isMoving = false
 				l_x, l_y = getPosition( id)
 				setPosition( id, l_x, move_ysteps)
@@ -66,9 +67,14 @@ function timer( id, time)
 end
 
 function up( id) 
-	if isMoving == false then
-		isMoving = true
+	l_x1, l_y1 = getPosition( id)
+	tile_x = l_x1/16
+	tile_y = l_y1/16
+	solid_left, solid_right, solid_down, solid_up, isliq, tileid = getTile( tile_x, tile_y)
+
+	if isMoving == false and solid_up == false then
 		l_x, l_y = getPosition( id)
+		isMoving = true
 		l_x = math.floor( l_x/16.0)*16
 		l_y = math.floor( l_y/16.0)*16
 		move_ysteps = l_y - (move_maxsteps)
@@ -79,7 +85,12 @@ function up( id)
 end
 
 function down( id)
-	if isMoving == false then
+	l_x1, l_y1 = getPosition( id)
+	tile_x = l_x1/16
+	tile_y = l_y1/16
+	solid_left, solid_right, solid_down, solid_up, isliq, tileid = getTile( tile_x, tile_y)
+
+	if isMoving == false and solid_down == false then
 		isMoving = true
 		l_x, l_y = getPosition( id)
 		l_x = math.floor( l_x/16.0)*16
@@ -92,7 +103,12 @@ function down( id)
 end
 
 function right( id)
-	if isMoving == false then
+	l_x1, l_y1 = getPosition( id)
+	tile_x = l_x1/16
+	tile_y = l_y1/16
+	solid_left, solid_right, solid_down, solid_up, isliq, tileid = getTile( tile_x, tile_y)
+
+	if isMoving == false and solid_right == false then
 		isMoving = true
 		l_x, l_y = getPosition( id)
 		l_x = math.floor( l_x/16.0)*16
@@ -105,7 +121,12 @@ function right( id)
 end
 
 function left( id)
-	if isMoving == false then
+	l_x1, l_y1 = getPosition( id)
+	tile_x = l_x1/16
+	tile_y = l_y1/16
+	solid_left, solid_right, solid_down, solid_up, isliq, tileid = getTile( tile_x, tile_y)
+
+	if isMoving == false and solid_left == false then
 		isMoving = true
 		l_x, l_y = getPosition( id)
 		l_x = math.floor( l_x/16.0)*16
