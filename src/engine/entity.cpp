@@ -12,11 +12,24 @@ using namespace tinyxml2;
 entitylist *lua_entitylist = NULL;
 world *lua_worldlist = NULL;
 
+static int lua_setLoadLevel( lua_State *state) {
+    std::string l_level;
+
+    if( !lua_isstring( state, 1) ) {
+        printf( "lua_setLoadLevel call wrong argument\n");
+        return 0;
+    }
+
+    l_level = lua_tostring( state, 1);
+
+    lua_worldlist->setLoadWorld( l_level);
+    return 0;
+}
+
 static int lua_end_level( lua_State *state) {
     lua_worldlist->setEndLevel( true);
     return 0;
 }
-
 
 static int lua_getTile( lua_State *state) {
     tile *l_tile;
@@ -519,6 +532,9 @@ static int lua_getPosition( lua_State *state) {
 
 void lua_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_setLoadLevel);
+    lua_setglobal( state, "setLoadLevel");
+
     lua_pushcfunction( state, lua_end_level);
     lua_setglobal( state, "end_level");
 
@@ -1071,7 +1087,6 @@ void entitylist::createFromWorldFile( std::string file) {
             l_id = create( l_entity_type, l_pos);
             entity *l_entity = getEntity( l_id);
 
-
             // load properties
             XMLElement* l_xml_property = NULL;
             XMLElement* l_xml_properties = l_object->FirstChildElement( "properties" );
@@ -1086,9 +1101,15 @@ void entitylist::createFromWorldFile( std::string file) {
                 l_xml_property = l_object->NextSiblingElement( "properties");
 
                 if( l_property == "dir" && l_value == "right")
-                        l_entity->setDirection( true);
+                    l_entity->setDirection( true);
+                if( l_property == "global") {
+                    // gloabl value
+                    lua_pushstring( l_entity->lua_getLua(), l_value.c_str());
+                    lua_setglobal( l_entity->lua_getLua(), "global_value");
+                }
             }
         }
+
 
         // next object
         l_object = l_object->NextSiblingElement( "object");

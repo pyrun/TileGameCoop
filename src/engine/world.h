@@ -63,6 +63,9 @@ class world
         std::string getFileName() { return p_file; }
         vec2 getTileSize() { return vec2( p_tilewidth, p_tilehight); }
         tile *getCollsionMap() { return p_tilemap_foreground; }
+
+        void setLoadWorld( std::string l_set) { p_needloadworld = l_set;}
+        std::string needLoadWorld() { return p_needloadworld; }
     protected:
 
     private:
@@ -92,6 +95,7 @@ class world
         std::vector<world_background> p_backgrounds;
 
         std::vector<tiletype> p_tiletypes;
+        std::string p_needloadworld;
 };
 
 #endif // WORLD_H

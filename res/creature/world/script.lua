@@ -1,5 +1,4 @@
 function timer( id, time)
-
 end
 
 function collision( id, ...)
@@ -7,10 +6,7 @@ function collision( id, ...)
 		do return end
 	end
 	for k,v in pairs({...}) do
-		if isAlive( v) == true then
-			if isEnemy( v) == true then		
-				kill( v)
-			end
-		end
+		setLoadLevel( global_value )
+		kill ( id)
 	end
 end

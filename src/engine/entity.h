@@ -146,6 +146,7 @@ class entity
 
         void lua_printerror();
         bool lua_hasLoaded() { return p_state==NULL?false:true; }
+        lua_State *lua_getLua() { return p_state; }
 
 
         int getId() { return p_id; }

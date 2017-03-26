@@ -12,7 +12,7 @@ class level
         level(std::string file, std::string folder, graphic *graphic);
         virtual ~level();
 
-        void process( float l_delta) {
+        void process( float l_delta, graphic *graphic) {
             // process entity
             getEntityList()->process( getWorld(), l_delta);
 
@@ -25,6 +25,12 @@ class level
                     // set old link
                     lua_setLink( p_entity, p_world);
                 }
+            }
+
+            if( p_level == NULL && p_world->needLoadWorld() != "" ) {
+                std::string l_level = getWorld()->needLoadWorld();
+                p_world->setLoadWorld( ""); // NULL
+                p_level = new level( l_level, "worlds/", graphic);
             }
         }
 
