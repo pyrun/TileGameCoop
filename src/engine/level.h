@@ -5,6 +5,7 @@
 #include "world.h"
 #include "entity.h"
 #include "../graphic/graphic.h"
+#include "types.h"
 
 class level
 {
@@ -28,6 +29,7 @@ class level
             }
 
             if( p_level == NULL && p_world->needLoadWorld() != "" ) {
+
                 std::string l_level = getWorld()->needLoadWorld();
                 p_world->setLoadWorld( ""); // NULL
                 p_level = new level( l_level, "worlds/", graphic);

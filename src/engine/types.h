@@ -109,6 +109,8 @@ class timer {
         void pause();
         void unpause();
 
+        bool isStarted() { return p_started; }
+
         // get the current ticks of this timer
         int getTicks();
 

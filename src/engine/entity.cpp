@@ -1098,15 +1098,17 @@ void entitylist::createFromWorldFile( std::string file) {
                 std::string l_property = l_xml_property->Attribute("name") == NULL?"":l_xml_property->Attribute("name");
                 std::string l_value = l_xml_property->Attribute("value") == NULL?"":l_xml_property->Attribute("value");
 
-                l_xml_property = l_object->NextSiblingElement( "properties");
-
                 if( l_property == "dir" && l_value == "right")
                     l_entity->setDirection( true);
-                if( l_property == "global") {
+                else if( l_property == "action")
+                    l_entity->setAction( l_value);
+                else if( l_property == "global") {
                     // gloabl value
                     lua_pushstring( l_entity->lua_getLua(), l_value.c_str());
                     lua_setglobal( l_entity->lua_getLua(), "global_value");
                 }
+
+                l_xml_property = l_xml_property->NextSiblingElement( "property");
             }
         }
 
