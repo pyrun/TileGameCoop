@@ -34,6 +34,12 @@ class player_handle
         void handle( entitylist *entity, input *input, graphic* graphic, config* config);
         int getPlayerAmount() { return (int)p_playerlist.size(); }
         int player_getPlayerActive();
+        void setAllInavtive() {
+            for( int i = 0; i < (int)p_playerlist.size(); i++) {
+                p_playerlist[i]->entity_id = -1;
+                p_playerlist[i]->active = false;
+            }
+        }
     protected:
     private:
 //        config *p_config;

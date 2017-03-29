@@ -1,31 +1,26 @@
-function vertexhit( id)
-end
+local float_speed = 0.007
 
-local up_time = 100
 local start_y = 0
-local down = false
 
 function start( id) 
+	if global_value == NIL then
+		global_value = "100"
+	end
 	t, start_y = getPosition( id)
 	start_y = start_y - 1
+	addVelocity( id, 0, -0.05)
 end
 
 function timer( id, time)
 	pos_x, pos_y = getPosition( id)
 
-	if start_y-pos_y < up_time and down == false then
-		setVelocityY( id, -0.05)
-	else
-		down = true
-		setVelocityY( id, 0.05)	
+	if start_y-pos_y > tonumber(global_value) then
+		addVelocity( id, 0, float_speed)
 	end
-	
-	if down == true and start_y-pos_y < 0 then
-		down = false
+	if start_y-pos_y < 0 then
+		down = true
+		addVelocity( id, 0, -float_speed)	
 	end
 		
 end
 
-function collision( id, ...)
-
-end

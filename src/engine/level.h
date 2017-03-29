@@ -6,6 +6,7 @@
 #include "entity.h"
 #include "../graphic/graphic.h"
 #include "types.h"
+#include "player.h"
 
 class level
 {
@@ -13,7 +14,7 @@ class level
         level(std::string file, std::string folder, graphic *graphic);
         virtual ~level();
 
-        void process( float l_delta, graphic *graphic) {
+        void process( float l_delta, graphic *graphic, player_handle *playerlist) {
             // process entity
             getEntityList()->process( getWorld(), l_delta);
 
@@ -23,12 +24,17 @@ class level
                     delete p_level;
                     p_level = NULL;
 
+                    // player reset
+                    playerlist->setAllInavtive();
+
                     // set old link
                     lua_setLink( p_entity, p_world);
                 }
             }
 
             if( p_level == NULL && p_world->needLoadWorld() != "" ) {
+                // player reset
+                playerlist->setAllInavtive();
 
                 std::string l_level = getWorld()->needLoadWorld();
                 p_world->setLoadWorld( ""); // NULL

@@ -1,4 +1,4 @@
-<object name="platform" width="64" height="16" script="script.lua" timer="15" gravity="1" solid="1">
+<object name="platform" width="64" height="16" script="script.lua" timer="15" gravity="0" solid="1">
 	<action name="idle" frame="1">platform.bmp</action>
 	<action name="red" frame="1">platform1.bmp</action>
 	<action name="silver" frame="1">platform2.bmp</action>
