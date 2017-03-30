@@ -92,7 +92,12 @@
  </layer>
  <objectgroup color="#000080" name="Objects">
   <object id="26" name="dani" x="48" y="192" width="32" height="32"/>
-  <object id="33" name="platform" x="672" y="304" width="64" height="16"/>
+  <object id="33" name="platform" x="672" y="304" width="64" height="16">
+   <properties>
+    <property name="action" value="red"/>
+    <property name="global" value="234"/>
+   </properties>
+  </object>
   <object id="35" name="door" x="368" y="192" width="16" height="32"/>
   <object id="36" name="human" x="480" y="192" width="16" height="32"/>
   <object id="37" name="human" x="800" y="32" width="16" height="32"/>
@@ -106,6 +111,10 @@
   <object id="45" name="human" x="976" y="128" width="16" height="32"/>
   <object id="46" name="human" x="1088" y="128" width="16" height="32"/>
   <object id="47" name="dani" x="512" y="192" width="32" height="32"/>
-  <object id="48" name="alex" x="416" y="192" width="32" height="32"/>
+  <object id="48" name="alex" x="416" y="192" width="32" height="32">
+   <properties>
+    <property name="dir" value="left"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -1098,7 +1098,7 @@ void entitylist::createFromWorldFile( std::string file) {
                 std::string l_property = l_xml_property->Attribute("name") == NULL?"":l_xml_property->Attribute("name");
                 std::string l_value = l_xml_property->Attribute("value") == NULL?"":l_xml_property->Attribute("value");
 
-                if( l_property == "dir" && l_value == "right")
+                if( l_property == "dir" && l_value == "left")
                     l_entity->setDirection( true);
                 else if( l_property == "action")
                     l_entity->setAction( l_value);

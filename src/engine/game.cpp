@@ -77,7 +77,7 @@ int game::process() {
 int game::process_graphic() {
     int l_error;
 
-    p_level = new level( "world_0.tmx", "worlds/", p_graphic);
+    p_level = new level( "labor_1.tmx", "worlds/", p_graphic);
 
     // at the moment we have no error
     l_error = 0;
