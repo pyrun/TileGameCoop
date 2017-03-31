@@ -6,7 +6,7 @@ function collision( id, ...)
 		do return end
 	end
 	for k,v in pairs({...}) do
-		setLoadLevel( global_value )
+		setLoadLevel( global_value, true )
 		kill ( id)
 	end
 end

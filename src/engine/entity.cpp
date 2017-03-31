@@ -14,19 +14,31 @@ world *lua_worldlist = NULL;
 
 static int lua_setLoadLevel( lua_State *state) {
     std::string l_level;
+    bool l_asPlayer;
 
-    if( !lua_isstring( state, 1) ) {
+    if( !lua_isstring( state, 1) || !lua_isboolean( state, 2) ) {
         printf( "lua_setLoadLevel call wrong argument\n");
         return 0;
     }
 
     l_level = lua_tostring( state, 1);
+    l_asPlayer = lua_toboolean( state, 2);
+
 
     lua_worldlist->setLoadWorld( l_level);
     return 0;
 }
 
 static int lua_end_level( lua_State *state) {
+    bool l_asPlayer;
+
+    if( !lua_isboolean( state, 1) ) {
+        printf( "lua_end_level call wrong argument\n");
+        return 0;
+    }
+
+    l_asPlayer = lua_toboolean( state, 1);
+
     lua_worldlist->setEndLevel( true);
     return 0;
 }
@@ -1098,6 +1110,7 @@ void entitylist::createFromWorldFile( std::string file) {
                 std::string l_property = l_xml_property->Attribute("name") == NULL?"":l_xml_property->Attribute("name");
                 std::string l_value = l_xml_property->Attribute("value") == NULL?"":l_xml_property->Attribute("value");
 
+                //  handle property
                 if( l_property == "dir" && l_value == "left")
                     l_entity->setDirection( true);
                 else if( l_property == "action")
@@ -1111,7 +1124,6 @@ void entitylist::createFromWorldFile( std::string file) {
                 l_xml_property = l_xml_property->NextSiblingElement( "property");
             }
         }
-
 
         // next object
         l_object = l_object->NextSiblingElement( "object");

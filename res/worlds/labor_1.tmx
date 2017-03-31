@@ -91,7 +91,7 @@
 </data>
  </layer>
  <objectgroup color="#000080" name="Objects">
-  <object id="26" name="dani" x="48" y="192" width="32" height="32"/>
+  <object id="26" name="start" x="48" y="192" width="32" height="32"/>
   <object id="33" name="platform" x="672" y="304" width="64" height="16">
    <properties>
     <property name="action" value="red"/>

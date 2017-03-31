@@ -48,6 +48,8 @@ class player_handle
         void player_add( SDL_GameController *controller);
         void player_remove( int id);
         player *p_playercamerafocus;
+
+        std::vector<entity> p_entity;
 };
 
 #endif // PLAYER_H
