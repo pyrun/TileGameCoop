@@ -14,7 +14,7 @@ world *lua_worldlist = NULL;
 
 static int lua_setLoadLevel( lua_State *state) {
     std::string l_level;
-    bool l_asPlayer;
+    //bool l_asPlayer;
 
     if( !lua_isstring( state, 1) || !lua_isboolean( state, 2) ) {
         printf( "lua_setLoadLevel call wrong argument\n");
@@ -22,7 +22,7 @@ static int lua_setLoadLevel( lua_State *state) {
     }
 
     l_level = lua_tostring( state, 1);
-    l_asPlayer = lua_toboolean( state, 2);
+    //l_asPlayer = lua_toboolean( state, 2);
 
 
     lua_worldlist->setLoadWorld( l_level);
@@ -30,14 +30,14 @@ static int lua_setLoadLevel( lua_State *state) {
 }
 
 static int lua_end_level( lua_State *state) {
-    bool l_asPlayer;
+    //bool l_asPlayer;
 
     if( !lua_isboolean( state, 1) ) {
         printf( "lua_end_level call wrong argument\n");
         return 0;
     }
 
-    l_asPlayer = lua_toboolean( state, 1);
+    //l_asPlayer = lua_toboolean( state, 1);
 
     lua_worldlist->setEndLevel( true);
     return 0;
@@ -45,7 +45,6 @@ static int lua_end_level( lua_State *state) {
 
 static int lua_getTile( lua_State *state) {
     tile *l_tile;
-    int l_id;
     int l_pos_x;
     int l_pos_y;
 
@@ -181,7 +180,6 @@ static int lua_kill( lua_State *state) {
 }
 
 static int lua_delete( lua_State *state) {
-    entity *l_obj;
     int l_id;
 
     if( !lua_isnumber( state, 1) ) {
@@ -197,9 +195,7 @@ static int lua_delete( lua_State *state) {
 
 
 static int lua_createObject( lua_State *state) {
-    entity *l_obj;
     int l_id;
-    bool l_alive;
     std::string l_typeName;
     int l_x, l_y;
 
@@ -1051,7 +1047,7 @@ void entitylist::deleteObj( int id) {
             p_entitys.erase( p_entitys.begin()+i);
 }
 
-void entitylist::createFromWorldFile( std::string file) {
+bool entitylist::createFromWorldFile( std::string file) {
     XMLDocument l_file;
     std::string l_type;
 
@@ -1059,23 +1055,25 @@ void entitylist::createFromWorldFile( std::string file) {
 
     // load form world file
     XMLError l_result = l_file.LoadFile( file.c_str());
+    // check the file
+    XMLCheckResult(l_result);
 
     // file exist?
     if( file_exist( file) == false) {
         printf( "entitylist::createFromWorldFile file dont exist \"%s\"\n", file.c_str());
-        return;
+        return false;
     }
 
     XMLElement* l_map = l_file.FirstChildElement( "map" );
     if( !l_map) {
         printf( "entitylist::createFromWorldFile world has no map defined\n");
-        return;
+        return false;
     }
 
     XMLElement* l_objectgroup = l_map->FirstChildElement( "objectgroup" );
     if( !l_objectgroup) {
         printf( "entitylist::createFromWorldFile objectgroup has no map defined\n");
-        return;
+        return false;
     }
 
     XMLElement* l_object = l_objectgroup->FirstChildElement( "object" );
@@ -1128,6 +1126,8 @@ void entitylist::createFromWorldFile( std::string file) {
         // next object
         l_object = l_object->NextSiblingElement( "object");
     }
+
+    return true;
 }
 
 void entitylist::draw(graphic *graphic) {
@@ -1273,7 +1273,7 @@ void entitylist::process( world *world, int deltaTime) {
                             entity *l_obj = getEntity( l_ids[i]);
                             if( l_obj->isSolid()) {
                                 l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y);
-                                if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/8 > 1.0)
+                                if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/4 > 1)
                                     l_temp = MASSIV_TILE;
                                 else
                                     l_iscalc_y = true;
@@ -1312,7 +1312,7 @@ void entitylist::process( world *world, int deltaTime) {
                             entity *l_obj = getEntity( l_ids[i]);
                             if( l_obj->isSolid()) {
                                 l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y +2 + l_obj->getType()->getHitboxOffset().y + l_obj->getType()->getHitbox().y);
-                                if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/8 > 1)
+                                if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/4 > 1)
                                     l_temp = MASSIV_TILE;
                                 else
                                     l_iscalc_y = true;
@@ -1491,7 +1491,6 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     std::string l_script;
 
     std::string l_name;
-    std::vector<action> *l_actions = new std::vector<action>();
 
     // if file dont exist - dont load
     if( file_exist( l_pathfile) == false) {

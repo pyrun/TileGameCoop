@@ -204,7 +204,7 @@ class entitylist {
 
         int create( entitytype *type, vec2 pos);
         void deleteObj( int id);
-        void createFromWorldFile( std::string file);
+        bool createFromWorldFile( std::string file);
 
         void draw(graphic *graphic);
 

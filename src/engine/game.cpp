@@ -53,15 +53,15 @@ void game::drawHUD() {
     float wert = 1000.f/ ( (float)p_framerate->getFramerate() );
 
     sprintf( test, "%s%d %4.0f %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(), wert, (int)p_graphic->getCameraSize().x, (int)p_graphic->getCameraSize().y );
-    p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 10), 1.0f,true);
+    p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() + vec2( (int)p_graphic->getCameraSize().x, 10), 1.0f,true);
 
     //p_font->drawMessage( p_graphic, "Go home your drunk", vec2( 0, 0));
 
     sprintf( test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
-    p_font->drawMessage( p_graphic, test, vec2( (int)p_graphic->getCameraSize().x, 30), 1.0f, true);
+    p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() +vec2( (int)p_graphic->getCameraSize().x, 0), 1.0f, true);
 
     sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_level->getEntityList()->getAmountPlayerObject(), p_player->player_getPlayerActive());
-    p_font->drawMessage( p_graphic, test, vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, false, true);
+    p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() +vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, false, true);
 }
 
 int game::process() {
@@ -77,7 +77,7 @@ int game::process() {
 int game::process_graphic() {
     int l_error;
 
-    p_level = new level( "labor_1.tmx", "worlds/", p_graphic);
+    p_level = new level( "overworld.tmx", "worlds/", p_graphic);
 
     // at the moment we have no error
     l_error = 0;

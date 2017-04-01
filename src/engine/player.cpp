@@ -143,8 +143,6 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                 continue;
             }
 
-            entitytype *l_type = l_entity->getType();
-
             if( l_entity->lua_hasLoaded()) {
                 if( l_map->jump && !l_map_old->jump)
                     l_entity->lua_jump( l_entity->getId());
