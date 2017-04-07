@@ -190,6 +190,53 @@ float world::getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool u
     return MASSIV_TILE;
 }
 
+
+tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bool up) {
+    int l_tempy;
+    int l_x = ( position.x )/p_tilewidth;
+    int l_y = ( position.y )/p_tilehight;
+    tile *l_tile = NULL;
+    int l_factor = p_tilehight;
+
+    // border
+    if( position.x < 0)
+        return NULL;
+
+    // change in steps annähern
+    for( float i = 0; i < fabs(change.y); i+= 0.1f) {
+        l_x = ( position.x )/p_tilewidth;
+        l_y = ( position.y + i)/p_tilehight;
+
+        if( up)            l_tempy = l_y - 1;
+        else
+            l_tempy = l_y;
+
+        // collision tile
+        l_tile = getTile( p_tilemap_foreground, vec2( l_x, l_tempy) );
+        if( l_tile == NULL)
+            continue;
+
+        // if air contiinue
+        if( l_tile != NULL && l_tile->id == 0) {
+            l_tile = NULL;
+            continue;
+        }
+        /*if( l_tile->type != NULL && change.y > 0 )
+            if( l_tile->type->top == 0) {
+                l_tile = NULL;
+                continue;
+            }
+        if( l_tile->type != NULL && change.y < 0 )
+            if( l_tile->type->down == 0) {
+                l_tile = NULL;
+                continue;
+            }*/
+        break;
+    }
+
+    return l_tile;
+}
+
 void world::loadTypes( std::string file) {
     XMLDocument l_file;
     XMLElement* l_tile;
@@ -568,6 +615,15 @@ tile *world::readTilemap( std::string tilemap) {
         // set data
         l_tile.id = atoi( l_data);
         l_tile.type = findType( l_tile.id-1 );
+
+        int x = l_amount, y = 0;
+
+        while( x > p_map_width) {
+            x-= p_map_width;
+            y++;
+        }
+
+        l_tile.pos = vec2( x, y);
 
         // save to the array
         l_tilemap[ l_amount] = l_tile;

@@ -643,7 +643,7 @@ void entitytype::addAction( std::string name, std::string file, int frame, int s
     p_actions.push_back( *l_action);
 }
 
-void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down, int id) {
+void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down, bool middle, int id) {
     vertex *l_vertex = new vertex;
 
     l_vertex->id = id;
@@ -652,6 +652,7 @@ void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down, 
     l_vertex->right = right;
     l_vertex->down = down;
     l_vertex->up = up;
+    l_vertex->middle = middle;
 
     p_vertex.push_back( *l_vertex);
 }
@@ -1135,7 +1136,8 @@ void entitylist::draw(graphic *graphic) {
         entity *l_obj = &p_entitys[i];
         if( l_obj != NULL)
             l_obj->draw( graphic);
-            /*SDL_Rect rect = {   l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x,
+
+            SDL_Rect rect = {   l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x,
                                 l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y,
                                 l_obj->getType()->getHitbox().x,
                                 l_obj->getType()->getHitbox().y};
@@ -1143,7 +1145,16 @@ void entitylist::draw(graphic *graphic) {
             rect.y -= graphic->getCamera().y;
 
             SDL_SetRenderDrawColor( graphic->getRenderer(), 255, 0, 0, 255);
-            SDL_RenderDrawRect( graphic->getRenderer(), &rect );*/
+            SDL_RenderDrawRect( graphic->getRenderer(), &rect );
+
+            SDL_SetRenderDrawColor( graphic->getRenderer(), 0, 255, 0, 255);
+            for( int n = 0; n < (int)l_obj->getVertex()->size(); n++) {
+                vertex *l_vertex = &l_obj->getVertex()->at(n);
+                fvec2 l_position = l_obj->getPosition();
+                vec2 l_collision_pos = l_position.tovec2() + l_vertex->pos - graphic->getCamera().tovec2();
+
+                SDL_RenderDrawPoint( graphic->getRenderer(), l_collision_pos.x, l_collision_pos.y);
+            }
 
     }
 }
@@ -1256,7 +1267,45 @@ void entitylist::process( world *world, int deltaTime) {
             l_entity->setColisionLeft( false);
             l_entity->setColisionRight( false);
 
-#ifdef old_physic
+#ifndef old_physic
+            for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
+                vertex *l_vertex = &l_entity->getVertex()->at(n);
+                fvec2 l_collision_pos = l_position + l_vertex->pos;
+
+                // collison
+                if( l_vertex->down) {
+                    tile *l_tile = NULL;
+                    l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
+                    if( l_tile && l_velocity.y > 0) {
+
+                        // zwischen rechnung
+                        float l_pos_change_y = l_collision_pos.y + l_change.y;
+                        float l_bottom = (l_tile->pos.y)*world->getTileSize().y;
+
+                        // ausrechnung der änderung
+                        float l_result = l_pos_change_y-l_bottom;
+
+                        if(fabs(l_result) > 0.0) {
+
+                            l_change = l_change - fvec2( 0, l_result);
+
+                            //l_change.y = 0;//l_entity->( fvec2());
+                            l_velocity.y = 0;
+
+
+                            l_vertexhitchange += setVertexHit( l_vertex, true);
+                            l_entity->setColisionDown( true);
+                        }
+                    }
+                }
+            }
+
+            // set net position
+            l_entity->setPos( l_position + l_change );
+
+            // add velocity next frame
+            l_entity->setVelocity( l_velocity);
+#else
             for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
                 vertex *l_vertex = &l_entity->getVertex()->at(n);
                 vec2 l_collision_pos = l_vertex->pos;
@@ -1432,12 +1481,6 @@ void entitylist::process( world *world, int deltaTime) {
 
             // add velocity next frame
             l_entity->setVelocity( l_velocity);
-#else
-            // set net position
-            l_entity->setPos( l_position + l_change );
-
-            // add velocity next frame
-            l_entity->setVelocity( l_velocity);
 #endif // old_phyisc
 
         } else {
@@ -1588,6 +1631,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     bool l_vertex_left;
     bool l_vertex_down;
     bool l_vertex_right;
+    bool l_vertex_middle;
     int l_vertex_id;
     XMLElement* l_xml_vertex = l_object->FirstChildElement( "vertex" );
     while( l_xml_vertex) {
@@ -1603,6 +1647,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_vertex_up = false;
         l_vertex_down = false;
         l_vertex_right = false;
+        l_vertex_middle = false;
 
         if( l_vertex_name == "up")
             l_vertex_up = true;
@@ -1612,13 +1657,17 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
             l_vertex_down = true;
         if( l_vertex_name == "right")
             l_vertex_right = true;
+        if( l_vertex_name == "middle_down") {
+            l_vertex_down = true;
+            l_vertex_middle = true;
+        }
 
         // vertex
         l_vertex_pos.x = atoi(l_xml_vertex->Attribute( "x") );
         l_vertex_pos.y = atoi(l_xml_vertex->Attribute( "y") );
 
         //printf( "vertex u%dl%dd%dr%d %d/%d\n", l_vertex_up, l_vertex_left, l_vertex_down, l_vertex_right,l_vertex_pos.x, l_vertex_pos.y);
-        l_type->addVertex( l_vertex_pos, l_vertex_left, l_vertex_right, l_vertex_up, l_vertex_down, l_vertex_id);
+        l_type->addVertex( l_vertex_pos, l_vertex_left, l_vertex_right, l_vertex_up, l_vertex_down, l_vertex_middle, l_vertex_id);
 
         // next vertex
         l_xml_vertex = l_xml_vertex->NextSiblingElement("vertex");

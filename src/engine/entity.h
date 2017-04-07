@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#define old_physic
+//#define old_physic
 
 // debian
 #ifdef IMADEBIAN
@@ -47,6 +47,7 @@ class vertex {
         bool left;
         bool right;
         bool down;
+        bool middle;
         bool hit;
         int id;
 
@@ -62,7 +63,7 @@ class entitytype
         action* getAction( std::string name);
 
         void addAction( std::string name, std::string file, int frame, int speed, int loop, image *image);
-        void addVertex(vec2 pos, bool left, bool right, bool up, bool down, int id);
+        void addVertex(vec2 pos, bool left, bool right, bool up, bool down, bool middle, int id);
 
         void setName( std::string name) { p_name = name; }
         void setGravity( bool mass) { p_gravity = mass; }
