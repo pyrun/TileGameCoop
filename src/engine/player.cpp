@@ -72,6 +72,7 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
         l_map->x = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisX());
         l_map->y = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisY());
 
+        // x&y axies
         if( l_map->x > 32767/2)
             l_map->dir.right = true;
         else
@@ -89,6 +90,23 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
             l_map->dir.up = true;
         else
             l_map->dir.up = false;
+
+
+        // get Buttons
+        bool l_up = SDL_GameControllerGetButton( l_pad, SDL_CONTROLLER_BUTTON_DPAD_UP );
+        bool l_down = SDL_GameControllerGetButton( l_pad, SDL_CONTROLLER_BUTTON_DPAD_DOWN );
+        bool l_right = SDL_GameControllerGetButton( l_pad, SDL_CONTROLLER_BUTTON_DPAD_RIGHT );
+        bool l_left = SDL_GameControllerGetButton( l_pad, SDL_CONTROLLER_BUTTON_DPAD_LEFT );
+
+        // overwrite if press
+        if( l_right && !l_map->dir.right)
+            l_map->dir.right = true;
+        if( l_left && !l_map->dir.left)
+            l_map->dir.left = true;
+        if( l_up && !l_map->dir.up)
+            l_map->dir.up = true;
+        if( l_down && !l_map->dir.down)
+            l_map->dir.down = true;
 
         // react
         l_map->jump = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_run() );

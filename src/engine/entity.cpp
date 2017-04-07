@@ -1256,9 +1256,13 @@ void entitylist::process( world *world, int deltaTime) {
             l_entity->setColisionLeft( false);
             l_entity->setColisionRight( false);
 
+#ifdef old_physic
             for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
                 vertex *l_vertex = &l_entity->getVertex()->at(n);
                 vec2 l_collision_pos = l_vertex->pos;
+
+
+
 
                 // collison
                 if( l_vertex->down) {
@@ -1428,6 +1432,14 @@ void entitylist::process( world *world, int deltaTime) {
 
             // add velocity next frame
             l_entity->setVelocity( l_velocity);
+#else
+            // set net position
+            l_entity->setPos( l_position + l_change );
+
+            // add velocity next frame
+            l_entity->setVelocity( l_velocity);
+#endif // old_phyisc
+
         } else {
             l_change.x += l_velocity.x * deltaTime;
             l_change.y += l_velocity.y * deltaTime;

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#define old_physic
+
 // debian
 #ifdef IMADEBIAN
 #include <lua5.3/lua.hpp>
