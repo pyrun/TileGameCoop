@@ -1273,10 +1273,10 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     fvec2 l_collision_pos = l_position + l_vertex->pos;
 
                     // collison
-                    if( l_vertex->down) {
+                    if( l_vertex->down && l_velocity.y+0.001f > 0) {
                         tile *l_tile = NULL;
                         l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
-                        if( l_tile && l_velocity.y > 0) {
+                        if( l_tile ) {
 
                             // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.y + l_change.y;
@@ -1285,7 +1285,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             // ausrechnung der änderung
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > 0.0 && l_result < l_change.y + 1.f) {
+                            if(fabs(l_result) > l_velocity.y) {
                                 l_change = l_change - fvec2( 0, l_result);
 
                                 //l_change.y = 0;//l_entity->( fvec2());
@@ -1296,12 +1296,41 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                                 l_entity->setColisionDown( true);
                             }
                         }
+
+                        // object collision
+                        if( l_ids.size() > 0 && l_change.y > 0) {
+                            for( int i = 0; i < (int)l_ids.size(); i++) {
+                                entity *l_obj = getEntity( l_ids[i]);
+                                if( l_obj->isSolid()) {
+
+                                  // zwischen rechnung
+                                    float l_pos_change_y = l_collision_pos.y + l_change.y;
+                                    float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y;
+
+                                    float l_result = l_pos_change_y-l_bottom;
+
+                                    if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y) {
+                                        l_change = l_change - fvec2( 0, l_result);
+
+                                        //l_change.y = 0;//l_entity->( fvec2());
+                                        l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
+
+
+                                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                                        l_entity->setColisionDown( true);
+                                    }
+                                }
+                            }
+                        }
                     }
+
+
+
                     // collison
-                    if( l_vertex->up) {
+                    if( l_vertex->up && l_velocity.y < 0) {
                         tile *l_tile = NULL;
                         l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
-                        if( l_tile && l_velocity.y < 0) {
+                        if( l_tile ) {
 
                             // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.y + l_change.y;
@@ -1311,7 +1340,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             // ausrechnung der änderung
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > 0.0 && l_result < l_change.y + 1.f) {
+                            if(fabs(l_result) > l_velocity.y ) {
                                 l_change = l_change - fvec2( 0, l_result);
 
                                 //l_change.y = 0;//l_entity->( fvec2());
@@ -1319,6 +1348,32 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                                 l_vertexhitchange += setVertexHit( l_vertex, true);
                                 l_entity->setColisionUp( true);
+                            }
+                        }
+
+                        // object collision
+                        if( l_ids.size() > 0 && l_change.y < 0) {
+                            for( int i = 0; i < (int)l_ids.size(); i++) {
+                                entity *l_obj = getEntity( l_ids[i]);
+                                if( l_obj->isSolid()) {
+
+                                  // zwischen rechnung
+                                    float l_pos_change_y = l_collision_pos.y + l_change.y;
+                                    float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y+l_obj->getType()->getHitbox().y;
+
+                                    float l_result = l_pos_change_y-l_bottom;
+
+                                    if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y) {
+                                        l_change = l_change - fvec2( 0, l_result);
+
+                                        //l_change.y = 0;//l_entity->( fvec2());
+                                        l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
+
+
+                                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                                        l_entity->setColisionUp( true);
+                                    }
+                                }
                             }
                         }
                     }
@@ -1370,7 +1425,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             // ausrechnung der änderung
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > 0.0  && l_result > l_change.x - 1.f) {
+                            if(fabs(l_result) > 0.0  && l_result +l_velocity.x > l_change.x - 1.f) {
                                 l_change = l_change - fvec2( l_result, 0);
 
                                 //l_change.y = 0;//l_entity->( fvec2());
@@ -1383,6 +1438,13 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                         }
                     }
                 }
+
+                if( l_entity->getColisionDown() && !l_entity->isInLiquid())
+                    l_velocity.x = l_velocity.x*0.8f;
+                else if(l_entity->isInLiquid() == true)
+                    l_velocity.x = l_velocity.x*0.5f;
+                else
+                    l_velocity.x = l_velocity.x*0.99f;
 
                 // set net position
                 l_entity->setPos( l_position + l_change );
