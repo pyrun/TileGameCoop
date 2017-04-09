@@ -221,7 +221,7 @@ tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bo
             l_tile = NULL;
             continue;
         }
-        /*if( l_tile->type != NULL && change.y > 0 )
+        if( l_tile->type != NULL && change.y > 0 )
             if( l_tile->type->top == 0) {
                 l_tile = NULL;
                 continue;
@@ -230,7 +230,51 @@ tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bo
             if( l_tile->type->down == 0) {
                 l_tile = NULL;
                 continue;
-            }*/
+            }
+        break;
+    }
+
+    return l_tile;
+}
+
+tile *world::getCollisionTileX( fvec2 position, fvec2 change, fvec2 velocity) {
+    int l_tempx;
+    int l_x = ( position.x )/p_tilewidth;
+    int l_y = ( position.y )/p_tilehight;
+    tile *l_tile = NULL;
+    int l_factor = p_tilehight;
+
+    // border
+    if( position.x < 0)
+        return NULL;
+
+    // change in steps annähern
+    for( float i = 0; i < fabs(change.x); i+= 0.1f) {
+        l_x = ( position.x + i)/p_tilewidth;
+        l_y = ( position.y )/p_tilehight;
+
+        l_tempx = l_x;
+
+        // collision tile
+        l_tile = getTile( p_tilemap_foreground, vec2( l_tempx, l_y) );
+        if( l_tile == NULL)
+            continue;
+
+        // if air contiinue
+        if( l_tile != NULL && l_tile->id == 0) {
+            l_tile = NULL;
+            continue;
+        }
+        if( l_tile->type != NULL && change.y > 0 )
+            if( l_tile->type->top == 0) {
+                l_tile = NULL;
+                continue;
+            }
+        if( l_tile->type != NULL && change.y < 0 )
+            if( l_tile->type->down == 0) {
+                l_tile = NULL;
+                continue;
+            }
         break;
     }
 

@@ -14,9 +14,9 @@ class level
         level(std::string file, std::string folder, graphic *graphic);
         virtual ~level();
 
-        void process( float l_delta, graphic *graphic, player_handle *playerlist) {
+        void process( float l_delta, config *config, graphic *graphic, player_handle *playerlist) {
             // process entity
-            getEntityList()->process( getWorld(), l_delta);
+            getEntityList()->process( getWorld(), config, l_delta);
 
             // check if level finish
             if( p_level != NULL) {

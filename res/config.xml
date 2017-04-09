@@ -15,4 +15,5 @@
     <Display_maximized>0</Display_maximized>
     <Display_resolution_file>resolution.xml</Display_resolution_file>
     <ControllerMappingsFile>gamecontrollerdb.txt</ControllerMappingsFile>
+    <OldPhysic>0</OldPhysic>
 </Root>

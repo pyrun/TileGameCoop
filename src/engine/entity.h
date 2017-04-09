@@ -213,7 +213,7 @@ class entitylist {
 
         int setVertexHit( vertex *vertex, bool set);
 
-        void process( world *world, int dt);
+        void process( world *world, config *config, int dt);
 
         void vertexHit( entity *entity, int vertexid);
         std::vector <int> collision_boundingBox( entity* checkentity);

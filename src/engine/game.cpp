@@ -105,7 +105,7 @@ int game::process_graphic() {
         process();
 
 
-        p_level->process( l_delta, p_graphic, p_player);
+        p_level->process( l_delta, &p_config, p_graphic, p_player);
 
         // draw world
         p_level->getWorld()->draw( p_graphic);

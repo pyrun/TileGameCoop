@@ -72,6 +72,8 @@ int config::load() {
 
     setControllerMappingsFile( loadParameterString( l_root, "ControllerMappingsFile"));
 
+    setOldPhysic( loadParameter( l_root, "OldPhysic"));
+
     // return a success of loading
     return XML_SUCCESS;
 }
@@ -108,6 +110,8 @@ void config::save() {
     saveParameter( &l_config, l_root, "Display_resolution_file", getDisplayResolutionFile());
 
     saveParameter( &l_config, l_root, "ControllerMappingsFile", getControllerMappingsFile());
+
+    saveParameter( &l_config, l_root, "OldPhysic", getOldPhysic());
 
     // save
     l_config.SaveFile( CONFIG_FILE);
