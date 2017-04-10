@@ -249,7 +249,7 @@ tile *world::getCollisionTileX( fvec2 position, fvec2 change, fvec2 velocity) {
         return NULL;
 
     // change in steps annähern
-    for( float i = 0; i < fabs(change.x); i+= 0.1f) {
+    for( float i = -2; i < fabs(change.x); i+= 0.5f) {
         l_x = ( position.x + i)/p_tilewidth;
         l_y = ( position.y )/p_tilehight;
 

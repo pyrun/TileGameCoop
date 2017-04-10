@@ -1330,8 +1330,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     if( l_vertex->up && l_velocity.y < 0) {
                         tile *l_tile = NULL;
                         l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
-                        if( l_tile ) {
 
+                        if( l_tile ) {
                             // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.y + l_change.y;
                             l_pos_change_y -= world->getTileSize().y;
@@ -1340,7 +1340,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             // ausrechnung der änderung
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > l_velocity.y ) {
+                            if( fabs(l_result) > l_velocity.y ) {
                                 l_change = l_change - fvec2( 0, l_result);
 
                                 //l_change.y = 0;//l_entity->( fvec2());
@@ -1377,16 +1377,6 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             }
                         }
                     }
-                }
-
-                // set net position
-                l_entity->setPos( l_position + fvec2( 0, l_change.y) );
-                l_position = l_entity->getPosition();
-                l_change.y = 0.0f;
-
-                for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
-                    vertex *l_vertex = &l_entity->getVertex()->at(n);
-                    fvec2 l_collision_pos = l_position + l_vertex->pos;
 
                     if( l_vertex->right) {
                         tile *l_tile = NULL;
@@ -1415,17 +1405,17 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     if( l_vertex->left) {
                         tile *l_tile = NULL;
                         l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
-                        if( l_tile && l_velocity.x < 0) {
+                        if( l_tile && l_velocity.x - 0.001f < 0) {
 
                             // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.x + l_change.x;
-                            l_pos_change_y -= world->getTileSize().x-1;
+                            l_pos_change_y -= world->getTileSize().x;
                             float l_bottom = (l_tile->pos.x)*world->getTileSize().x;
 
                             // ausrechnung der änderung
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > 0.0  && l_result +l_velocity.x > l_change.x - 1.f) {
+                            if( fabs(l_result) > 0.0 && l_tile->pos.y*world->getTileSize().y+world->getTileSize().y-1 > l_collision_pos.y ) {
                                 l_change = l_change - fvec2( l_result, 0);
 
                                 //l_change.y = 0;//l_entity->( fvec2());
