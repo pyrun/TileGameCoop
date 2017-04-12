@@ -2,6 +2,9 @@
 	<action name="idle" frame="1">platform.bmp</action>
 	<action name="red" frame="1">platform1.bmp</action>
 	<action name="silver" frame="1">platform2.bmp</action>
+
+	<action name="right" frame="1">platform1.bmp</action>
+
 	<vertex x="32" y="16" id="1">down</vertex>
 	<hitbox offsetx="0" offsety="0" width="64" hight="16"/>
 </object>

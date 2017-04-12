@@ -423,6 +423,7 @@ static int lua_getVelocity( lua_State *state) {
 
     l_id = lua_tointeger( state, 1);
 
+
     l_obj = lua_entitylist->getEntity( l_id);
     if( l_obj == NULL) {
         printf( "lua_getVelocity obj not found\n");
@@ -1309,12 +1310,12 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                                     float l_result = l_pos_change_y-l_bottom;
 
-                                    if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y) {
+                                    if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y && l_result/2 < l_change.y+l_velocity.y ) {
                                         l_change = l_change - fvec2( 0, l_result);
 
                                         //l_change.y = 0;//l_entity->( fvec2());
                                         l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-
+                                        l_iscalc_y = true;
 
                                         l_vertexhitchange += setVertexHit( l_vertex, true);
                                         l_entity->setColisionDown( true);
@@ -1369,6 +1370,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                                         //l_change.y = 0;//l_entity->( fvec2());
                                         l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
 
+                                        l_iscalc_y = true;
+
 
                                         l_vertexhitchange += setVertexHit( l_vertex, true);
                                         l_entity->setColisionUp( true);
@@ -1378,10 +1381,10 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                         }
                     }
 
-                    if( l_vertex->right) {
+                    if( l_vertex->right && l_velocity.x > 0) {
                         tile *l_tile = NULL;
                         l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
-                        if( l_tile && l_velocity.x > 0) {
+                        if( l_tile ) {
 
                             // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.x + l_change.x;
@@ -1401,11 +1404,38 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                                 l_entity->setColisionRight( true);
                             }
                         }
+
+                        // object collision
+                        if( l_ids.size() > 0 && l_change.x > 0) {
+                            for( int i = 0; i < (int)l_ids.size(); i++) {
+                                entity *l_obj = getEntity( l_ids[i]);
+                                if( l_obj->isSolid()) {
+
+                                  // zwischen rechnung
+                                    float l_pos_change_x = l_collision_pos.x + l_change.x;
+                                    float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x;
+
+                                    float l_result = l_pos_change_x-l_bottom;
+
+                                    if(fabs(l_result) > l_velocity.x && fabs(l_result) < world->getTileSize().x && l_iscalc_y == false) {
+                                        l_change = l_change - fvec2( l_result,0 );
+
+                                        //l_change.y = 0;//l_entity->( fvec2());
+                                        l_velocity.x = 0; //l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
+
+
+                                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                                        l_entity->setColisionRight( true);
+
+                                    }
+                                }
+                            }
+                        }
                     }
-                    if( l_vertex->left) {
+                    if( l_vertex->left && l_velocity.x - 0.001f < 0) {
                         tile *l_tile = NULL;
                         l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
-                        if( l_tile && l_velocity.x - 0.001f < 0) {
+                        if( l_tile) {
 
                             // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.x + l_change.x;
@@ -1426,6 +1456,34 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                                 l_entity->setColisionLeft( true);
                             }
                         }
+
+                        // object collision
+                        if( l_ids.size() > 0 && l_change.x < 0) {
+                            for( int i = 0; i < (int)l_ids.size(); i++) {
+                                entity *l_obj = getEntity( l_ids[i]);
+                                if( l_obj->isSolid()) {
+
+                                  // zwischen rechnung
+                                    float l_pos_change_x = l_collision_pos.x + l_change.x;
+                                    float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x + l_obj->getType()->getHitbox().x;
+
+                                    float l_result = l_pos_change_x-l_bottom;
+
+                                    if(fabs(l_result) > l_velocity.x && fabs(l_result) < world->getTileSize().x && l_iscalc_y == false) {
+                                        l_change = l_change - fvec2( l_result,0 );
+
+                                        //l_change.y = 0;//l_entity->( fvec2());
+                                        l_velocity.x = 0; //l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
+
+
+                                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                                        l_entity->setColisionLeft( true);
+
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
 
