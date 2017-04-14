@@ -6,7 +6,7 @@
 	<action name="swim" frame="4" speed="8">swim.bmp</action>
 	<action name="die" frame="4" speed="12" loop="0">die.bmp</action>
 	<vertex id="9" x="12" y="32">down</vertex>
-	<vertex id="1" x="16" y="32">middle_down</vertex>
+	<vertex id="1" x="16" y="32">down</vertex>
 	<vertex id="1" x="20" y="32">down</vertex>
 	<vertex id="2" x="12" y="6">up</vertex>
 	<vertex id="3" x="20" y="6">up</vertex>

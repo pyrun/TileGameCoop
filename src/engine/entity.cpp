@@ -644,7 +644,7 @@ void entitytype::addAction( std::string name, std::string file, int frame, int s
     p_actions.push_back( *l_action);
 }
 
-void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down, bool middle, int id) {
+void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down, int id) {
     vertex *l_vertex = new vertex;
 
     l_vertex->id = id;
@@ -653,7 +653,6 @@ void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down, 
     l_vertex->right = right;
     l_vertex->down = down;
     l_vertex->up = up;
-    l_vertex->middle = middle;
 
     p_vertex.push_back( *l_vertex);
 }
@@ -1826,7 +1825,6 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     bool l_vertex_left;
     bool l_vertex_down;
     bool l_vertex_right;
-    bool l_vertex_middle;
     int l_vertex_id;
     XMLElement* l_xml_vertex = l_object->FirstChildElement( "vertex" );
     while( l_xml_vertex) {
@@ -1842,7 +1840,6 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_vertex_up = false;
         l_vertex_down = false;
         l_vertex_right = false;
-        l_vertex_middle = false;
 
         if( l_vertex_name == "up")
             l_vertex_up = true;
@@ -1852,17 +1849,13 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
             l_vertex_down = true;
         if( l_vertex_name == "right")
             l_vertex_right = true;
-        if( l_vertex_name == "middle_down") {
-            l_vertex_down = true;
-            l_vertex_middle = true;
-        }
 
         // vertex
         l_vertex_pos.x = atoi(l_xml_vertex->Attribute( "x") );
         l_vertex_pos.y = atoi(l_xml_vertex->Attribute( "y") );
 
         //printf( "vertex u%dl%dd%dr%d %d/%d\n", l_vertex_up, l_vertex_left, l_vertex_down, l_vertex_right,l_vertex_pos.x, l_vertex_pos.y);
-        l_type->addVertex( l_vertex_pos, l_vertex_left, l_vertex_right, l_vertex_up, l_vertex_down, l_vertex_middle, l_vertex_id);
+        l_type->addVertex( l_vertex_pos, l_vertex_left, l_vertex_right, l_vertex_up, l_vertex_down, l_vertex_id);
 
         // next vertex
         l_xml_vertex = l_xml_vertex->NextSiblingElement("vertex");
