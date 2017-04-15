@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" nextobjectid="15">
- <tileset firstgid="1" name="overworld" tilewidth="16" tileheight="16" spacing="1" tilecount="60" columns="12">
+ <tileset firstgid="1" name="overworld" tilewidth="16" tileheight="16" spacing="1" tilecount="60">
   <image source="../overworld.bmp" trans="c8bfe7" width="203" height="84"/>
  </tileset>
  <imagelayer name="Background" opacity="0.8">
-  <image source="backgrounds/water.bmp" width="320" height="256"/>
+  <image source="backgrounds/water.bmp"/>
  </imagelayer>
  <layer name="Background" width="30" height="30">
   <data encoding="csv">
@@ -136,6 +136,6 @@
     <property name="global" value="labor_1.tmx"/>
    </properties>
   </object>
-  <object id="14" name="player_overworld" x="96" y="144" width="16" height="16"/>
+  <object id="14" name="player_overworld" x="96" y="112" width="16" height="16"/>
  </objectgroup>
 </map>

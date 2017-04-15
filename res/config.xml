@@ -9,8 +9,8 @@
     <Input_right>10</Input_right>
     <Input_x>0</Input_x>
     <Input_y>1</Input_y>
-    <Display_width>1920</Display_width>
-    <Display_height>1080</Display_height>
+    <Display_width>1680</Display_width>
+    <Display_height>1050</Display_height>
     <Display_mode>1</Display_mode>
     <Display_maximized>0</Display_maximized>
     <Display_resolution_file>resolution.xml</Display_resolution_file>

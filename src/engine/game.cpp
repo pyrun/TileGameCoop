@@ -74,10 +74,10 @@ int game::process() {
     return p_timer.getTicks();
 }
 
-int game::process_graphic() {
+int game::process_graphic( std::string levelName) {
     int l_error;
 
-    p_level = new level( "world_0.tmx", "worlds/", p_graphic);
+    p_level = new level( levelName.size()!=0?"overworld.tmx":levelName.c_str(), "worlds/", p_graphic);
 
     // at the moment we have no error
     l_error = 0;

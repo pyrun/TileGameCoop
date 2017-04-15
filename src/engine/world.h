@@ -66,6 +66,7 @@ class world
         std::string getFileName() { return p_file; }
         vec2 getTileSize() { return vec2( p_tilewidth, p_tilehight); }
         tile *getCollsionMap() { return p_tilemap_foreground; }
+        vec2 getWorld() { return vec2(p_map_width, p_map_hight); }
 
         void setLoadWorld( std::string l_set) { p_needloadworld = l_set;}
         std::string needLoadWorld() { return p_needloadworld; }

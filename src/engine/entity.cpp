@@ -1229,7 +1229,6 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         // check abount hitbox
         std::vector<int> l_ids = collision_boundingBox( l_entity);
         if( l_ids.size() > 0)
-
             l_entity->lua_collision( l_entity->getId(), l_ids);
 
         fvec2 l_velocity;
@@ -1241,8 +1240,9 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         l_velocity = l_entity->getVelocity();
 
         // calc gravity
+        bool l_iscalc_y = false;
+
         if( l_type->getGravity() == true ) {
-            bool l_iscalc_y = false;
 
             // änderung rechnen
             l_change.x += l_velocity.x * deltaTime;
@@ -1258,433 +1258,276 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
             // y delta dazurechnen (x nicht nötig da keine gravi. )
             l_velocity.y += l_velocityDelta;
+        } else {
 
-            l_collision_y = MASSIV_TILE;
-            l_collision_x = MASSIV_TILE;
+            l_change.x += l_velocity.x * deltaTime;
+            l_change.y += l_velocity.y * deltaTime;
+        }
 
-            l_entity->setColisionDown( false);
-            l_entity->setColisionUp( false);
-            l_entity->setColisionLeft( false);
-            l_entity->setColisionRight( false);
+        l_collision_y = MASSIV_TILE;
+        l_collision_x = MASSIV_TILE;
 
-                if( !config->getOldPhysic()) {
-                for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
-                    vertex *l_vertex = &l_entity->getVertex()->at(n);
-                    fvec2 l_collision_pos = l_position + l_vertex->pos;
+        l_entity->setColisionDown( false);
+        l_entity->setColisionUp( false);
+        l_entity->setColisionLeft( false);
+        l_entity->setColisionRight( false);
 
-                    // collison
-                    if( l_vertex->down && l_velocity.y+0.001f > 0) {
-                        tile *l_tile = NULL;
-                        l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
-                        if( l_tile ) {
+        for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
+            vertex *l_vertex = &l_entity->getVertex()->at(n);
+            fvec2 l_collision_pos = l_position + l_vertex->pos;
 
-                            // zwischen rechnung
+            // collison
+            if( l_vertex->down && l_velocity.y+0.001f > 0 ) {
+                tile *l_tile = NULL;
+                l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
+
+                if( l_tile != NULL ) {
+
+                    // zwischen rechnung
+                    float l_pos_change_y = l_collision_pos.y + l_change.y;
+                    float l_bottom = (l_tile->pos.y)*world->getTileSize().y;
+
+                    // ausrechnung der änderung
+                    float l_result = l_pos_change_y-l_bottom;
+
+                    if(fabs(l_result) > l_velocity.y) {
+                        l_change = l_change - fvec2( 0, l_result);
+
+                        //l_change.y = 0;//l_entity->( fvec2());
+                        l_velocity.y = 0;
+
+
+                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                        l_entity->setColisionDown( true);
+                    }
+                }
+
+                // object collision
+                if( l_ids.size() > 0 && l_change.y > 0) {
+                    for( int i = 0; i < (int)l_ids.size(); i++) {
+                        entity *l_obj = getEntity( l_ids[i]);
+                        if( l_obj->isSolid()) {
+
+                          // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.y + l_change.y;
-                            float l_bottom = (l_tile->pos.y)*world->getTileSize().y;
+                            float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y;
 
-                            // ausrechnung der änderung
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > l_velocity.y) {
+                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y && l_result/2 < l_change.y+l_velocity.y ) {
                                 l_change = l_change - fvec2( 0, l_result);
 
                                 //l_change.y = 0;//l_entity->( fvec2());
-                                l_velocity.y = 0;
+                                l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
 
+                                // x achse
+                                l_change.x += l_obj->getVelocity().x*deltaTime;
+
+                                l_iscalc_y = true;
 
                                 l_vertexhitchange += setVertexHit( l_vertex, true);
                                 l_entity->setColisionDown( true);
                             }
                         }
-
-                        // object collision
-                        if( l_ids.size() > 0 && l_change.y > 0) {
-                            for( int i = 0; i < (int)l_ids.size(); i++) {
-                                entity *l_obj = getEntity( l_ids[i]);
-                                if( l_obj->isSolid()) {
-
-                                  // zwischen rechnung
-                                    float l_pos_change_y = l_collision_pos.y + l_change.y;
-                                    float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y;
-
-                                    float l_result = l_pos_change_y-l_bottom;
-
-                                    if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y && l_result/2 < l_change.y+l_velocity.y ) {
-                                        l_change = l_change - fvec2( 0, l_result);
-
-                                        //l_change.y = 0;//l_entity->( fvec2());
-                                        l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-                                        l_iscalc_y = true;
-
-                                        l_vertexhitchange += setVertexHit( l_vertex, true);
-                                        l_entity->setColisionDown( true);
-                                    }
-                                }
-                            }
-                        }
                     }
+                }
+            }
 
 
 
-                    // collison
-                    if( l_vertex->up && l_velocity.y < 0) {
-                        tile *l_tile = NULL;
-                        l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
+            // collison
+            if( l_vertex->up && l_velocity.y < 0) {
+                tile *l_tile = NULL;
+                l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
 
-                        if( l_tile ) {
-                            // zwischen rechnung
+                if( l_tile ) {
+                    // zwischen rechnung
+                    float l_pos_change_y = l_collision_pos.y + l_change.y;
+                    l_pos_change_y -= world->getTileSize().y;
+                    float l_bottom = (l_tile->pos.y)*world->getTileSize().y;
+
+                    // ausrechnung der änderung
+                    float l_result = l_pos_change_y-l_bottom;
+
+                    if( fabs(l_result) > l_velocity.y ) {
+                        l_change = l_change - fvec2( 0, l_result);
+
+                        //l_change.y = 0;//l_entity->( fvec2());
+                        l_velocity.y = 0;
+
+                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                        l_entity->setColisionUp( true);
+                    }
+                }
+
+                // object collision
+                if( l_ids.size() > 0 && l_change.y < 0) {
+                    for( int i = 0; i < (int)l_ids.size(); i++) {
+                        entity *l_obj = getEntity( l_ids[i]);
+                        if( l_obj->isSolid()) {
+
+                          // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.y + l_change.y;
-                            l_pos_change_y -= world->getTileSize().y;
-                            float l_bottom = (l_tile->pos.y)*world->getTileSize().y;
+                            float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y+l_obj->getType()->getHitbox().y;
 
-                            // ausrechnung der änderung
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if( fabs(l_result) > l_velocity.y ) {
+                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y) {
                                 l_change = l_change - fvec2( 0, l_result);
 
                                 //l_change.y = 0;//l_entity->( fvec2());
-                                l_velocity.y = 0;
+                                l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
+
+                                l_iscalc_y = true;
+
 
                                 l_vertexhitchange += setVertexHit( l_vertex, true);
                                 l_entity->setColisionUp( true);
                             }
                         }
-
-                        // object collision
-                        if( l_ids.size() > 0 && l_change.y < 0) {
-                            for( int i = 0; i < (int)l_ids.size(); i++) {
-                                entity *l_obj = getEntity( l_ids[i]);
-                                if( l_obj->isSolid()) {
-
-                                  // zwischen rechnung
-                                    float l_pos_change_y = l_collision_pos.y + l_change.y;
-                                    float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y+l_obj->getType()->getHitbox().y;
-
-                                    float l_result = l_pos_change_y-l_bottom;
-
-                                    if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y) {
-                                        l_change = l_change - fvec2( 0, l_result);
-
-                                        //l_change.y = 0;//l_entity->( fvec2());
-                                        l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-
-                                        l_iscalc_y = true;
-
-
-                                        l_vertexhitchange += setVertexHit( l_vertex, true);
-                                        l_entity->setColisionUp( true);
-                                    }
-                                }
-                            }
-                        }
                     }
+                }
+            }
 
-                    if( l_vertex->right && l_velocity.x > 0) {
-                        tile *l_tile = NULL;
-                        l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
-                        if( l_tile ) {
+            if( l_vertex->right && l_velocity.x + 0.001f > 0 && l_collision_pos.y > 0) {
+                tile *l_tile = NULL;
+                l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
+                if( l_tile ) {
 
-                            // zwischen rechnung
-                            float l_pos_change_y = l_collision_pos.x + l_change.x;
-                            float l_bottom = (l_tile->pos.x)*world->getTileSize().x;
+                    // zwischen rechnung
+                    float l_pos_change_y = l_collision_pos.x + l_change.x;
+                    float l_bottom = (l_tile->pos.x)*world->getTileSize().x;
 
-                            // ausrechnung der änderung
-                            float l_result = l_pos_change_y-l_bottom;
+                    // ausrechnung der änderung
+                    float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > 0.0 && l_result < l_change.x + 1.f) {
-                                l_change = l_change - fvec2( l_result, 0);
+                    if(fabs(l_result) > 0.0 && l_result < l_change.x + 1.f) {
+                        l_change = l_change - fvec2( l_result, 0);
+
+                        //l_change.y = 0;//l_entity->( fvec2());
+                        l_velocity.x = 0;
+
+
+                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                        l_entity->setColisionRight( true);
+                    }
+                }
+
+                // map border
+                if( l_collision_pos.x > world->getWorld().x*world->getTileSize().x) {
+                    l_change = l_change - fvec2( l_change.x, 0);
+
+                    //l_change.y = 0;//l_entity->( fvec2());
+                    l_velocity.x = 0;
+
+                    l_vertexhitchange += setVertexHit( l_vertex, true);
+                    l_entity->setColisionLeft( true);
+                }
+
+                // object collision
+                if( l_ids.size() > 0 /*&& l_change.x > 0*/) {
+                    for( int i = 0; i < (int)l_ids.size(); i++) {
+                        entity *l_obj = getEntity( l_ids[i]);
+                        if( l_obj->isSolid()) {
+
+                          // zwischen rechnung
+                            float l_pos_change_x = l_collision_pos.x + l_change.x+(l_velocity.x*deltaTime)+2.0f;
+                            float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x;
+
+                            float l_result = l_pos_change_x-l_bottom;
+
+                            if(fabs(l_result) > l_velocity.x && fabs(l_result) < world->getTileSize().x && l_iscalc_y == false) {
+                                l_change = l_change - fvec2( l_result,0 );
 
                                 //l_change.y = 0;//l_entity->( fvec2());
-                                l_velocity.x = 0;
+                                l_velocity.x = 0; //l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
 
 
                                 l_vertexhitchange += setVertexHit( l_vertex, true);
                                 l_entity->setColisionRight( true);
-                            }
-                        }
 
-                        // object collision
-                        if( l_ids.size() > 0 && l_change.x > 0) {
-                            for( int i = 0; i < (int)l_ids.size(); i++) {
-                                entity *l_obj = getEntity( l_ids[i]);
-                                if( l_obj->isSolid()) {
-
-                                  // zwischen rechnung
-                                    float l_pos_change_x = l_collision_pos.x + l_change.x;
-                                    float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x;
-
-                                    float l_result = l_pos_change_x-l_bottom;
-
-                                    if(fabs(l_result) > l_velocity.x && fabs(l_result) < world->getTileSize().x && l_iscalc_y == false) {
-                                        l_change = l_change - fvec2( l_result,0 );
-
-                                        //l_change.y = 0;//l_entity->( fvec2());
-                                        l_velocity.x = 0; //l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-
-
-                                        l_vertexhitchange += setVertexHit( l_vertex, true);
-                                        l_entity->setColisionRight( true);
-
-                                    }
-                                }
                             }
                         }
                     }
-                    if( l_vertex->left && l_velocity.x - 0.001f < 0) {
-                        tile *l_tile = NULL;
-                        l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
-                        if( l_tile) {
+                }
+            }
+            if( l_vertex->left && l_velocity.x - 0.001f < 0 && l_collision_pos.y > 0) {
+                tile *l_tile = NULL;
+                l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
+                if( l_tile) {
 
-                            // zwischen rechnung
-                            float l_pos_change_y = l_collision_pos.x + l_change.x;
-                            l_pos_change_y -= world->getTileSize().x;
-                            float l_bottom = (l_tile->pos.x)*world->getTileSize().x;
+                    // zwischen rechnung
+                    float l_pos_change_y = l_collision_pos.x + l_change.x;
+                    l_pos_change_y -= world->getTileSize().x;
+                    float l_bottom = (l_tile->pos.x)*world->getTileSize().x;
 
-                            // ausrechnung der änderung
-                            float l_result = l_pos_change_y-l_bottom;
+                    // ausrechnung der änderung
+                    float l_result = l_pos_change_y-l_bottom;
 
-                            if( fabs(l_result) > 0.0 && l_tile->pos.y*world->getTileSize().y+world->getTileSize().y-1 > l_collision_pos.y ) {
-                                l_change = l_change - fvec2( l_result, 0);
+                    if( fabs(l_result) > 0.0 && l_tile->pos.y*world->getTileSize().y+world->getTileSize().y-1 > l_collision_pos.y ) {
+                        l_change = l_change - fvec2( l_result, 0);
+
+                        //l_change.y = 0;//l_entity->( fvec2());
+                        l_velocity.x = 0;
+
+                        l_vertexhitchange += setVertexHit( l_vertex, true);
+                        l_entity->setColisionLeft( true);
+                    }
+                }
+
+                if( l_collision_pos.x < 0) {
+                    l_change = l_change - fvec2( l_change.x, 0);
+
+                    //l_change.y = 0;//l_entity->( fvec2());
+                    l_velocity.x = 0;
+
+                    l_vertexhitchange += setVertexHit( l_vertex, true);
+                    l_entity->setColisionLeft( true);
+                }
+
+
+                // object collision
+                if( l_ids.size() > 0 /*&& l_change.x < 0*/) {
+                    for( int i = 0; i < (int)l_ids.size(); i++) {
+                        entity *l_obj = getEntity( l_ids[i]);
+                        if( l_obj->isSolid()) {
+
+                          // zwischen rechnung
+                            float l_pos_change_x = l_collision_pos.x + l_change.x - (l_velocity.x*deltaTime)-2.0f;
+                            float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x + l_obj->getType()->getHitbox().x;
+
+                            float l_result = l_pos_change_x-l_bottom;
+
+                            if(fabs(l_result) > l_velocity.x && fabs(l_result) < world->getTileSize().x && l_iscalc_y == false) {
+                                l_change = l_change - fvec2( l_result,0 );
 
                                 //l_change.y = 0;//l_entity->( fvec2());
-                                l_velocity.x = 0;
-
+                                l_velocity.x = 0; //l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
 
                                 l_vertexhitchange += setVertexHit( l_vertex, true);
                                 l_entity->setColisionLeft( true);
+
                             }
                         }
-
-                        // object collision
-                        if( l_ids.size() > 0 && l_change.x < 0) {
-                            for( int i = 0; i < (int)l_ids.size(); i++) {
-                                entity *l_obj = getEntity( l_ids[i]);
-                                if( l_obj->isSolid()) {
-
-                                  // zwischen rechnung
-                                    float l_pos_change_x = l_collision_pos.x + l_change.x;
-                                    float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x + l_obj->getType()->getHitbox().x;
-
-                                    float l_result = l_pos_change_x-l_bottom;
-
-                                    if(fabs(l_result) > l_velocity.x && fabs(l_result) < world->getTileSize().x && l_iscalc_y == false) {
-                                        l_change = l_change - fvec2( l_result,0 );
-
-                                        //l_change.y = 0;//l_entity->( fvec2());
-                                        l_velocity.x = 0; //l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-
-
-                                        l_vertexhitchange += setVertexHit( l_vertex, true);
-                                        l_entity->setColisionLeft( true);
-
-                                    }
-                                }
-                            }
-                        }
-
                     }
                 }
-
-                if( l_entity->getColisionDown() && !l_entity->isInLiquid())
-                    l_velocity.x = l_velocity.x*0.8f;
-                else if(l_entity->isInLiquid() == true)
-                    l_velocity.x = l_velocity.x*0.5f;
-                else
-                    l_velocity.x = l_velocity.x*0.99f;
-
-                // set net position
-                l_entity->setPos( l_position + l_change );
-
-                // add velocity next frame
-                l_entity->setVelocity( l_velocity);
-            } else {
-
-                for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
-                    vertex *l_vertex = &l_entity->getVertex()->at(n);
-                    vec2 l_collision_pos = l_vertex->pos;
-
-
-
-
-                    // collison
-                    if( l_vertex->down) {
-                        float l_temp;
-
-                        // collsion y
-                        l_temp = world->getCollisionY( l_position + l_collision_pos, l_change, l_velocity);
-
-                        // object collision
-                        if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.y > 0) {
-                            for( int i = 0; i < (int)l_ids.size(); i++) {
-                                entity *l_obj = getEntity( l_ids[i]);
-                                if( l_obj->isSolid()) {
-                                    l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y);
-                                    if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/4 > 1)
-                                        l_temp = MASSIV_TILE;
-                                    else
-                                        l_iscalc_y = true;
-                                }
-                            }
-                        }
-
-                        // nur falls alter wert kleiner ist
-                        if( ((l_collision_y == MASSIV_TILE || l_collision_y == 0.0f) && l_temp != MASSIV_TILE) ||
-                           (l_collision_y < l_temp && l_temp != MASSIV_TILE) ||
-                           (l_collision_y == 0.0f)) {
-                            l_collision_y = l_temp;
-                        }
-
-
-                        if( l_collision_y != MASSIV_TILE)
-                            l_entity->setColisionDown( true);
-
-                        // lua event
-                        if( l_temp != MASSIV_TILE)
-                            l_vertexhitchange += setVertexHit( l_vertex, true);
-                        else l_vertexhitchange += setVertexHit( l_vertex, false);
-
-                    }
-                    if( l_vertex->up) {
-                        float l_temp;
-
-                        // collsion y
-                        l_temp = world->getCollisionY( l_position + l_collision_pos, l_change, l_velocity, true);
-
-
-
-                        // object collision
-                        if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.y < 0) {
-                            for( int i = 0; i < (int)l_ids.size(); i++) {
-                                entity *l_obj = getEntity( l_ids[i]);
-                                if( l_obj->isSolid()) {
-                                    l_temp = (float)(l_position.y + (float)l_collision_pos.y + l_change.y) - (l_obj->getPosition().y +2 + l_obj->getType()->getHitboxOffset().y + l_obj->getType()->getHitbox().y);
-                                    if( (fabs(l_temp)-fabs(l_change.y)+fabs(l_velocity.y))/4 > 1)
-                                        l_temp = MASSIV_TILE;
-                                    else
-                                        l_iscalc_y = true;
-                                }
-                            }
-                        }
-
-                        // nur falls alter wert kleiner ist
-                        if( ((l_collision_y == MASSIV_TILE || l_collision_y == 0.0f) && l_temp != MASSIV_TILE) ||
-                           (l_collision_y > l_temp && l_temp != MASSIV_TILE) ||
-                           (l_collision_y == 0.0f)) {
-                            l_collision_y = l_temp;
-                            //
-                        }
-
-                        if( l_collision_y != MASSIV_TILE)
-                            l_entity->setColisionUp( true);
-
-                        // lua event
-                        if( l_temp != MASSIV_TILE)
-                            l_vertexhitchange += setVertexHit( l_vertex, true);
-                        else l_vertexhitchange += setVertexHit( l_vertex, false);
-                    }
-                    if( l_vertex->right) {
-                        float l_temp;
-
-                        // collsion y
-                        l_temp = world->getCollisionX( l_position + l_collision_pos, l_change, l_velocity);
-
-                        // object collision
-                        if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.x > 0 && l_iscalc_y == false) {
-                            for( int i = 0; i < (int)l_ids.size(); i++) {
-                                entity *l_obj = getEntity( l_ids[i]);
-                                if( l_obj->isSolid()) {
-                                    l_temp = (float)(l_position.x + (float)l_collision_pos.x + l_change.x) - (l_obj->getPosition().x-1 + l_obj->getType()->getHitboxOffset().x);
-                                    if( fabs(l_temp)-fabs(l_change.x)  > 4)
-                                        l_temp = MASSIV_TILE;
-                                }
-                            }
-                        }
-
-                        // nur falls alter wert kleiner ist
-                        if( ((l_collision_x == MASSIV_TILE || l_collision_x == 0.0f) && l_temp != MASSIV_TILE) ||
-                           (l_collision_x > l_temp && l_temp != MASSIV_TILE) ||
-                           (l_collision_x == 0.0f)) {
-                            l_collision_x = l_temp;
-                        }
-                        if( l_collision_x != MASSIV_TILE)
-                            l_entity->setColisionRight( true);
-
-                        // lua event
-                        if( l_temp != MASSIV_TILE)
-                            l_vertexhitchange += setVertexHit( l_vertex, true);
-                        else l_vertexhitchange += setVertexHit( l_vertex, false);
-                    }
-
-
-                    if( l_vertex->left) {
-                        float l_temp;
-
-                        // collsion y
-                        l_temp = world->getCollisionX( l_position + l_collision_pos, l_change, l_velocity, true);
-
-                        // object collision
-                        if( l_ids.size() > 0 && l_temp == MASSIV_TILE && l_change.x < 0 && l_iscalc_y == false) {
-                            for( int i = 0; i < (int)l_ids.size(); i++) {
-                                entity *l_obj = getEntity( l_ids[i]);
-                                if( l_obj->isSolid()) {
-                                    l_temp = (float)(l_position.x + (float)l_collision_pos.x + l_change.x) - (l_obj->getPosition().x +1 + l_obj->getType()->getHitboxOffset().x + + l_obj->getType()->getHitbox().x);
-                                    if( fabs(l_temp)-fabs(l_change.x) > 4)
-                                        l_temp = MASSIV_TILE;
-                                }
-                            }
-                        }
-
-                        // nur falls alter wert kleiner ist
-                        if( ((l_collision_x == MASSIV_TILE || l_collision_x == 0.0f) && l_temp != MASSIV_TILE) ||
-                           (l_collision_x < l_temp && l_temp != MASSIV_TILE) ||
-                           (l_collision_x == 0.0f)) {
-                            l_collision_x = l_temp;
-                        }
-                        if( l_collision_x != MASSIV_TILE)
-                            l_entity->setColisionLeft( true);
-
-                        // lua event
-                        if( l_temp != MASSIV_TILE)
-                            l_vertexhitchange += setVertexHit( l_vertex, true);
-                        else l_vertexhitchange += setVertexHit( l_vertex, false);
-                    }
-                }
-                if( l_collision_y != MASSIV_TILE) {
-                    l_change = l_change - fvec2( 0, l_collision_y);
-                    //l_entity->setPos( l_position + l_change - fvec2( 0, l_collision_y) );
-                    l_entity->setVelocity( fvec2() );
-                    l_entity->setUpdate( true);
-                    l_velocity.y = 0;
-                }
-                if( l_collision_x != MASSIV_TILE) {
-                    l_change = l_change - fvec2( l_collision_x, 0);
-                    //l_entity->setPos( l_position + l_change - fvec2( 0, l_collision_y) );
-                    l_entity->setVelocity( fvec2() );
-                    l_entity->setUpdate( true);
-                    l_velocity.x = 0;
-                }
-
-                if( l_entity->getColisionDown() && !l_entity->isInLiquid())
-                    l_velocity.x = l_velocity.x*0.8f;
-                else if(l_entity->isInLiquid() == true)
-                    l_velocity.x = l_velocity.x*0.5f;
-                else
-                    l_velocity.x = l_velocity.x*0.99f;
-                l_entity->setPos( l_position + l_change );
-
-                // add velocity next frame
-                l_entity->setVelocity( l_velocity);
             }
-
-        } else {
-            l_change.x += l_velocity.x * deltaTime;
-            l_change.y += l_velocity.y * deltaTime;
-
-            l_entity->setPos( l_position + l_change );
-
-            //l_entity->setVelocity( l_velocity);
         }
+
+        if( l_type->getGravity() == true) {
+            if( l_entity->getColisionDown() && !l_entity->isInLiquid())
+                l_velocity.x = l_velocity.x*0.8f;
+            else if(l_entity->isInLiquid() == true)
+                l_velocity.x = l_velocity.x*0.5f;
+            else
+                l_velocity.x = l_velocity.x*0.99f;
+        }
+
+        // set net position
+        l_entity->setPos( l_position + l_change );
+
+        // add velocity next frame
+        l_entity->setVelocity( l_velocity);
 
         if( l_vertexhitchange > 0)
             l_entity->lua_vertexhit( l_entity->getId());

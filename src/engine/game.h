@@ -21,7 +21,7 @@ class game {
         void loadTypes();
 
         int process();
-        int process_graphic();
+        int process_graphic( std::string levelName);
 
         graphic *getGraphic() { return p_graphic; }
     protected:

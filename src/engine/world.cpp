@@ -199,7 +199,7 @@ tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bo
     int l_factor = p_tilehight;
 
     // border
-    if( position.x < 0)
+    if( l_x < 0)
         return NULL;
 
     // change in steps annähern
@@ -207,7 +207,8 @@ tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bo
         l_x = ( position.x )/p_tilewidth;
         l_y = ( position.y + i)/p_tilehight;
 
-        if( up)            l_tempy = l_y - 1;
+        if( up)
+            l_tempy = l_y - 1;
         else
             l_tempy = l_y;
 
@@ -662,7 +663,7 @@ tile *world::readTilemap( std::string tilemap) {
 
         int x = l_amount, y = 0;
 
-        while( x > p_map_width) {
+        while( x >= p_map_width) {
             x-= p_map_width;
             y++;
         }
