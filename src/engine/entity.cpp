@@ -1131,29 +1131,32 @@ bool entitylist::createFromWorldFile( std::string file) {
     return true;
 }
 
-void entitylist::draw(graphic *graphic) {
+void entitylist::draw(graphic *graphic, config *config) {
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_obj = &p_entitys[i];
         if( l_obj != NULL)
             l_obj->draw( graphic);
 
-            SDL_Rect rect = {   l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x,
-                                l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y,
-                                l_obj->getType()->getHitbox().x,
-                                l_obj->getType()->getHitbox().y};
-            rect.x -= graphic->getCamera().x;
-            rect.y -= graphic->getCamera().y;
+            // debug
+            if( config->getDebug() ) {
+                SDL_Rect rect = {   l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x,
+                                    l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y,
+                                    l_obj->getType()->getHitbox().x,
+                                    l_obj->getType()->getHitbox().y};
+                rect.x -= graphic->getCamera().x;
+                rect.y -= graphic->getCamera().y;
 
-            SDL_SetRenderDrawColor( graphic->getRenderer(), 255, 0, 0, 255);
-            SDL_RenderDrawRect( graphic->getRenderer(), &rect );
+                SDL_SetRenderDrawColor( graphic->getRenderer(), 255, 0, 0, 255);
+                SDL_RenderDrawRect( graphic->getRenderer(), &rect );
 
-            SDL_SetRenderDrawColor( graphic->getRenderer(), 0, 255, 0, 255);
-            for( int n = 0; n < (int)l_obj->getVertex()->size(); n++) {
-                vertex *l_vertex = &l_obj->getVertex()->at(n);
-                fvec2 l_position = l_obj->getPosition();
-                vec2 l_collision_pos = l_position.tovec2() + l_vertex->pos - graphic->getCamera().tovec2();
+                SDL_SetRenderDrawColor( graphic->getRenderer(), 0, 255, 0, 255);
+                for( int n = 0; n < (int)l_obj->getVertex()->size(); n++) {
+                    vertex *l_vertex = &l_obj->getVertex()->at(n);
+                    fvec2 l_position = l_obj->getPosition();
+                    vec2 l_collision_pos = l_position.tovec2() + l_vertex->pos - graphic->getCamera().tovec2();
 
-                SDL_RenderDrawPoint( graphic->getRenderer(), l_collision_pos.x, l_collision_pos.y);
+                    SDL_RenderDrawPoint( graphic->getRenderer(), l_collision_pos.x, l_collision_pos.y);
+                }
             }
 
     }
@@ -1243,7 +1246,6 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         bool l_iscalc_y = false;
 
         if( l_type->getGravity() == true ) {
-
             // änderung rechnen
             l_change.x += l_velocity.x * deltaTime;
 
@@ -1282,7 +1284,6 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
 
                 if( l_tile != NULL ) {
-
                     // zwischen rechnung
                     float l_pos_change_y = l_collision_pos.y + l_change.y;
                     float l_bottom = (l_tile->pos.y)*world->getTileSize().y;
@@ -1306,15 +1307,15 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 if( l_ids.size() > 0 && l_change.y > 0) {
                     for( int i = 0; i < (int)l_ids.size(); i++) {
                         entity *l_obj = getEntity( l_ids[i]);
+                        // if is solid
                         if( l_obj->isSolid()) {
-
                           // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.y + l_change.y;
                             float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y;
 
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y && l_result/2 < l_change.y+l_velocity.y ) {
+                            if( fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y && l_result/10 < l_change.y+l_velocity.y) {
                                 l_change = l_change - fvec2( 0, l_result);
 
                                 //l_change.y = 0;//l_entity->( fvec2());
@@ -1425,7 +1426,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 }
 
                 // object collision
-                if( l_ids.size() > 0 /*&& l_change.x > 0*/) {
+                if(  l_ids.size() > 0 && l_change.x > 0) {
                     for( int i = 0; i < (int)l_ids.size(); i++) {
                         entity *l_obj = getEntity( l_ids[i]);
                         if( l_obj->isSolid()) {
@@ -1464,7 +1465,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     // ausrechnung der änderung
                     float l_result = l_pos_change_y-l_bottom;
 
-                    if( fabs(l_result) > 0.0 && l_tile->pos.y*world->getTileSize().y+world->getTileSize().y-1 > l_collision_pos.y ) {
+                    if( fabs(l_result) > 0.0 && l_tile->pos.y*world->getTileSize().y+world->getTileSize().y > l_collision_pos.y ) {
                         l_change = l_change - fvec2( l_result, 0);
 
                         //l_change.y = 0;//l_entity->( fvec2());
@@ -1487,7 +1488,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
 
                 // object collision
-                if( l_ids.size() > 0 /*&& l_change.x < 0*/) {
+                if( l_ids.size() > 0 && l_change.x < 0) {
                     for( int i = 0; i < (int)l_ids.size(); i++) {
                         entity *l_obj = getEntity( l_ids[i]);
                         if( l_obj->isSolid()) {

@@ -613,7 +613,7 @@ void world::draw( graphic *graphic) {
             p_backgrounds[0].picture = graphic->loadImage( p_backgrounds[0].picture_file);
         else {
             world_background *l_background = &p_backgrounds[0];
-            float l_factor = (float)l_background->picture->surface->h/ ((float)p_map_hight * (float)p_tilehight);
+            float l_factor = (float)l_background->picture->surface->h/ ((float)p_map_hight * (float)p_tilehight+p_tilehight);
 
             vec2 l_position = { graphic->getCamera().x*0.5, graphic->getCamera().y};
 
@@ -623,7 +623,7 @@ void world::draw( graphic *graphic) {
 
             // calc the new postion
             vec2 l_xvel = vec2( l_background->picture->surface->w/l_factor, 0);
-            vec2 l_size = vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight);
+            vec2 l_size = vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight+p_tilehight);
 
             // draw one left middle and right
             graphic->drawImage( l_background->picture, l_position, l_size, vec2( 0, 0), 0.0, 0, l_factor);

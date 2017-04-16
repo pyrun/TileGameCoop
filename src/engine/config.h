@@ -79,8 +79,8 @@ class config
         std::string getDisplayResolutionFile() { return p_resolution_file; }
         void setControllerMappingsFile( std::string file) { p_controllermappingsfile = file; }
         std::string getControllerMappingsFile() { return p_controllermappingsfile; }
-        void setOldPhysic( bool set) { p_oldphysic = set; }
-        bool getOldPhysic() { return p_oldphysic; }
+        void setDebug( bool set) { p_debug = set; }
+        bool getDebug() { return p_debug; }
     protected:
 
     private:
@@ -106,7 +106,7 @@ class config
 
         bool p_quit;
 
-        bool p_oldphysic;
+        bool p_debug;
 
 
         std::string p_resolution_file;

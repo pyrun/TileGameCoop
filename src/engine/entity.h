@@ -208,7 +208,7 @@ class entitylist {
         void deleteObj( int id);
         bool createFromWorldFile( std::string file);
 
-        void draw(graphic *graphic);
+        void draw(graphic *graphic, config *config);
 
         int setVertexHit( vertex *vertex, bool set);
 
