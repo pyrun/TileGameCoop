@@ -66,10 +66,6 @@ void game::drawHUD() {
 
 int game::process() {
     p_timer.start();
-    //p_graphic->moveCamera( { 1, 0});
-
-    //if( p_graphic->getCamera().y > 500)
-    //p_graphic->setCamera( { 0, 0});
 
     return p_timer.getTicks();
 }
@@ -103,7 +99,6 @@ int game::process_graphic( std::string levelName) {
 
         // process
         process();
-
 
         p_level->process( l_delta, &p_config, p_graphic, p_player);
 

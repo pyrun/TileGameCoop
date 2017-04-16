@@ -17,7 +17,7 @@ level::level(std::string file, std::string folder, graphic *graphic)
     lua_setLink( p_entity, p_world);
 
     // load now all entitys
-    p_entity->createFromWorldFile( p_world->getFileName());
+    p_entity->createFromWorldFile( p_world->getFileName(), p_world);
 
     // load all image files
     p_world->loadImageFiles( graphic);

@@ -40,16 +40,17 @@ class player_handle
                 p_playerlist[i]->active = false;
             }
         }
+        void addEntity( std::string names) { p_entityNames.push_back( names); }
+        std::vector<std::string> getEntityList( std::string names) { return p_entityNames; }
     protected:
     private:
-//        config *p_config;
         std::vector<player*> p_playerlist;
 
         void player_add( SDL_GameController *controller);
         void player_remove( int id);
         player *p_playercamerafocus;
 
-        std::vector<entity> p_entity;
+        std::vector<std::string> p_entityNames;
 };
 
 #endif // PLAYER_H
