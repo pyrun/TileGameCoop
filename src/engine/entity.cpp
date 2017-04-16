@@ -14,7 +14,7 @@ world *lua_worldlist = NULL;
 
 static int lua_setLoadLevel( lua_State *state) {
     std::string l_level;
-    //bool l_asPlayer;
+    bool l_asPlayer;
 
     if( !lua_isstring( state, 1) || !lua_isboolean( state, 2) ) {
         printf( "lua_setLoadLevel call wrong argument\n");
@@ -22,10 +22,10 @@ static int lua_setLoadLevel( lua_State *state) {
     }
 
     l_level = lua_tostring( state, 1);
-    //l_asPlayer = lua_toboolean( state, 2);
+    l_asPlayer = lua_toboolean( state, 2);
 
 
-    lua_worldlist->setLoadWorld( l_level);
+    lua_worldlist->setLoadWorld( l_level, l_asPlayer);
     return 0;
 }
 
@@ -1048,7 +1048,7 @@ void entitylist::deleteObj( int id) {
             p_entitys.erase( p_entitys.begin()+i);
 }
 
-bool entitylist::createFromWorldFile( std::string file) {
+bool entitylist::createFromWorldFile( std::string file, world *world) {
     XMLDocument l_file;
     std::string l_type;
 
@@ -1122,6 +1122,8 @@ bool entitylist::createFromWorldFile( std::string file) {
 
                 l_xml_property = l_xml_property->NextSiblingElement( "property");
             }
+        } else if( l_type == "start"){ // wolrd start point
+            world->setStartPoint( l_pos);
         }
 
         // next object
@@ -1266,9 +1268,6 @@ void entitylist::process( world *world, config *config, int deltaTime) {
             l_change.y += l_velocity.y * deltaTime;
         }
 
-        l_collision_y = MASSIV_TILE;
-        l_collision_x = MASSIV_TILE;
-
         l_entity->setColisionDown( false);
         l_entity->setColisionUp( false);
         l_entity->setColisionLeft( false);
@@ -1315,14 +1314,14 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if( fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y && l_result/10 < l_change.y+l_velocity.y) {
+                            if( fabs(l_result) > l_velocity.y && l_result < l_change.y+5.f) {
                                 l_change = l_change - fvec2( 0, l_result);
 
                                 //l_change.y = 0;//l_entity->( fvec2());
                                 l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
 
                                 // x achse
-                                l_change.x += l_obj->getVelocity().x*deltaTime;
+                                l_change.x += l_obj->getVelocity().x*(deltaTime);
 
                                 l_iscalc_y = true;
 
@@ -1402,7 +1401,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     // ausrechnung der änderung
                     float l_result = l_pos_change_y-l_bottom;
 
-                    if(fabs(l_result) > 0.0 && l_result < l_change.x + 1.f) {
+                    if(fabs(l_result) > 0.0 && l_result < l_change.x + 1.f ) {
                         l_change = l_change - fvec2( l_result, 0);
 
                         //l_change.y = 0;//l_entity->( fvec2());
@@ -1432,7 +1431,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                         if( l_obj->isSolid()) {
 
                           // zwischen rechnung
-                            float l_pos_change_x = l_collision_pos.x + l_change.x+(l_velocity.x*deltaTime)+2.0f;
+                            float l_pos_change_x = l_collision_pos.x + l_change.x+2.0f;
                             float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x;
 
                             float l_result = l_pos_change_x-l_bottom;
@@ -1465,7 +1464,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     // ausrechnung der änderung
                     float l_result = l_pos_change_y-l_bottom;
 
-                    if( fabs(l_result) > 0.0 && l_tile->pos.y*world->getTileSize().y+world->getTileSize().y > l_collision_pos.y ) {
+                    if( fabs(l_result) > 0.0 && l_tile->pos.y*world->getTileSize().y+world->getTileSize().y > l_collision_pos.y
+                       && fabs( l_result) < fabs(l_change.x)+1.f ) {
                         l_change = l_change - fvec2( l_result, 0);
 
                         //l_change.y = 0;//l_entity->( fvec2());
