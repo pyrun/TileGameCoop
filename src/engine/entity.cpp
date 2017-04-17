@@ -1422,7 +1422,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     l_velocity.x = 0;
 
                     l_vertexhitchange += setVertexHit( l_vertex, true);
-                    l_entity->setColisionLeft( true);
+                    l_entity->setColisionRight( true);
                 }
 
                 // object collision
@@ -1530,8 +1530,9 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         // add velocity next frame
         l_entity->setVelocity( l_velocity);
 
-        if( l_vertexhitchange > 0)
+        if( l_vertexhitchange > 0) {
             l_entity->lua_vertexhit( l_entity->getId());
+        }
         /*if( p_entitys[i].getPosition().y+l_velocity.y > 250)
             p_entitys[i].setVelocity( fvec2( 0.1f, -0.375f) );*/
     }
