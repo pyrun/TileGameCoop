@@ -37,7 +37,7 @@ class level
                 playerlist->setAllInavtive();
 
                 std::string l_level = getWorld()->needLoadWorld();
-                p_world->setLoadWorld( ""); // NULL
+                p_world->setLoadWorld( "", false); // NULL
                 p_level = new level( l_level, "worlds/", graphic);
             }
         }

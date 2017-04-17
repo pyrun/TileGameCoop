@@ -7,8 +7,6 @@
 #include "../xml/tinyxml2.h"
 #include "../graphic/graphic.h"
 
-#define MASSIV_TILE 1337.f
-
 class tiletype {
     public:
         std::vector<int> id;
@@ -68,8 +66,9 @@ class world
         tile *getCollsionMap() { return p_tilemap_foreground; }
         vec2 getWorld() { return vec2(p_map_width, p_map_hight); }
 
-        void setLoadWorld( std::string l_set) { p_needloadworld = l_set;}
+        void setLoadWorld( std::string l_set, bool saveplayerdata) { p_needloadworld = l_set; p_saveplayerdata = saveplayerdata; }
         std::string needLoadWorld() { return p_needloadworld; }
+        void setStartPoint( vec2 start) { p_startpoint = start; printf("%d %d\n", start.x, start.y); }
     protected:
 
     private:
@@ -96,10 +95,13 @@ class world
         float p_gravity;
         bool p_level_end;
 
+        vec2 p_startpoint;
+
         std::vector<world_background> p_backgrounds;
 
         std::vector<tiletype> p_tiletypes;
         std::string p_needloadworld;
+        bool p_saveplayerdata;
 };
 
 #endif // WORLD_H
