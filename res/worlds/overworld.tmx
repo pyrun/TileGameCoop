@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="16" tileheight="16" nextobjectid="18">
- <tileset firstgid="1" name="overworld" tilewidth="16" tileheight="16" spacing="1" tilecount="120" columns="12">
+ <tileset firstgid="1" name="overworld" tilewidth="16" tileheight="16" spacing="1" tilecount="120">
   <image source="../overworld.bmp" trans="c8bfe7" width="203" height="169"/>
  </tileset>
  <imagelayer name="Background" opacity="0.8">
-  <image source="backgrounds/water.bmp" width="320" height="256"/>
+  <image source="backgrounds/water.bmp"/>
  </imagelayer>
  <layer name="Background" width="32" height="32">
   <data encoding="csv">
@@ -121,7 +121,7 @@
   <object id="2" name="world" x="192" y="112" width="16" height="16">
    <properties>
     <property name="action" value="red"/>
-    <property name="global" value="world_0.tmx"/>
+    <property name="global" value="starmap.tmx"/>
    </properties>
   </object>
   <object id="5" name="world" x="144" y="112" width="16" height="16">
