@@ -1455,10 +1455,10 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                 // map border
                 if( l_collision_pos.x > world->getWorld().x*world->getTileSize().x) {
-                    l_change = l_change - fvec2( l_change.x, 0);
+                    l_result_change = l_change - fvec2( l_change.x, 0);
 
                     //l_change.y = 0;//l_entity->( fvec2());
-                    l_velocity.x = 0;
+                    l_result_velocity.x = 0;
 
                     l_vertexhitchange += setVertexHit( l_vertex, true);
                     l_entity->setColisionRight( true);
@@ -1523,10 +1523,10 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 }
 
                 if( l_collision_pos.x < 0) {
-                    l_change = l_change - fvec2( l_change.x, 0);
+                    l_result_change = l_change - fvec2( l_change.x, 0);
 
                     //l_change.y = 0;//l_entity->( fvec2());
-                    l_velocity.x = 0;
+                    l_result_velocity.x = 0;
 
                     l_vertexhitchange += setVertexHit( l_vertex, true);
                     l_entity->setColisionLeft( true);
