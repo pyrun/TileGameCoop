@@ -20,28 +20,28 @@
 	<tile>10</tile>
 </animation>
 <animation left="1" right="1" down="1" up="0">
-	<tile>17</tile>
+	<tile>21</tile>
 </animation>
 <animation left="0" right="1" down="1" up="1">
-	<tile>18</tile>
+	<tile>22</tile>
 </animation>
 <animation left="0" right="1" down="1" up="0">
-	<tile>19</tile>
+	<tile>23</tile>
 </animation>
 <animation left="1" right="0" down="1" up="0">
-	<tile>20</tile>
+	<tile>24</tile>
 </animation>
 <animation left="1" right="1" down="0" up="1">
-	<tile>29</tile>
+	<tile>37</tile>
 </animation>
 <animation left="1" right="0" down="1" up="1">
-	<tile>30</tile>
+	<tile>38</tile>
 </animation>
 <animation left="0" right="1" down="0" up="1">
-	<tile>31</tile>
+	<tile>39</tile>
 </animation>
 <animation left="1" right="0" down="0" up="1">
-	<tile>32</tile>
+	<tile>40</tile>
 </animation>
 <animation left="0" right="0" up="0">
 	<tile>544</tile>
