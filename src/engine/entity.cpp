@@ -1227,7 +1227,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
             l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset()+l_type->getHitbox()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 )-(world->getTileSize()/vec2( 2, 2) ) )/world->getTileSize();
             tile *l_tile = world->getTile( world->getCollsionMap(), l_iposition);
 
-            if( l_tile != NULL && l_tile->type != NULL) {
+            if( l_tile != NULL && l_tile->type != NULL && l_tile->type->liquid == true ) {
                 // only once
                 if(l_entity->isInLiquid() == false)
                     l_entity->setLiquid( true); // he swim
