@@ -9,27 +9,18 @@ function vertexhit( id)
 	down1 = getVertexHit( id, 3)
 	down2 = getVertexHit( id, 4)
 
-	if down1 == true then
-		print( "down1")
-	end
-	if down2 == true then
-		print( "down2")
-	end
-
-
 
 	if down1 == false and down2 == true then
-		--setAnimationDirection( id, true)
+		setAnimationDirection( id, true)
 	end
 	if down1 == true and down2 == false then
-		--setAnimationDirection( id, false)
+		setAnimationDirection( id, false)
 	end
 end
 
 local dead_timer = 1
 
 function timer( id)
-	--setAnimationDirection( id, true)
 
 	if isAlive( id) == false then
 		do return end
