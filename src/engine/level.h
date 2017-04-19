@@ -21,6 +21,19 @@ class level
             // check if level finish
             if( p_level != NULL) {
                 if( p_level->getWorld()->isLevelEnd() == true) {
+                    // alle player daten aufnhemen auf die NEUE liste
+                    if( p_level->getWorld()->leaveLevelasPlayer()){
+                        std::vector<int> l_obj = p_level->getEntityList()->findPlayerObject();
+                        for( int n = 0; n < (int)l_obj.size(); n++) {
+                            entity *l_entity = p_level->getEntityList()->getEntity( l_obj[n]);
+                            // ist es am leben
+                            if( l_entity->isAlive()) {
+                                playerlist->addEntity(l_entity->getType()->getName() );
+                                printf( "add %s\n",  l_entity->getType()->getName().c_str());
+                            }
+                        }
+                    }
+
                     delete p_level;
                     p_level = NULL;
 
@@ -30,6 +43,16 @@ class level
                     // set old link
                     lua_setLink( p_entity, p_world);
                 }
+            }
+
+            if( p_level != NULL && !p_level->getWorld()->loadAsPlayer() && playerlist->getEntityList().size()) {
+                std::vector<std::string> l_entity_names = playerlist->getEntityList();
+
+                for( int i = 0; i < (int)l_entity_names.size(); i++) {
+                    entitytype* l_type = getEntityList()->getType( l_entity_names[i]);
+                    getEntityList()->create( l_type, getWorld()->getStartPoint());
+                }
+                playerlist->resetEntitys();
             }
 
             if( p_level == NULL && p_world->needLoadWorld() != "" ) {

@@ -40,8 +40,9 @@ class player_handle
                 p_playerlist[i]->active = false;
             }
         }
+        void resetEntitys() { p_entityNames.clear(); }
         void addEntity( std::string names) { p_entityNames.push_back( names); }
-        std::vector<std::string> getEntityList( std::string names) { return p_entityNames; }
+        std::vector<std::string> getEntityList() { return p_entityNames; }
     protected:
     private:
         std::vector<player*> p_playerlist;
