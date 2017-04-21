@@ -46,4 +46,27 @@
 <animation left="0" right="0" up="0">
 	<tile>544</tile>
 </animation>
-
+<animation speed="20">
+	<tile>55</tile>
+	<tile>57</tile>
+</animation>
+<animation speed="20">
+	<tile>56</tile>
+	<tile>58</tile>
+</animation>
+<animation speed="20">
+	<tile>71</tile>
+	<tile>73</tile>
+</animation>
+<animation speed="20">
+	<tile>72</tile>
+	<tile>74</tile>
+</animation>
+<animation speed="20">
+	<tile>87</tile>
+	<tile>89</tile>
+</animation>
+<animation speed="20">
+	<tile>88</tile>
+	<tile>90</tile>
+</animation>
