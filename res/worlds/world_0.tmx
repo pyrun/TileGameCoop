@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="16" tileheight="16" nextobjectid="56">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="16" tileheight="16" nextobjectid="57">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
@@ -69,7 +69,12 @@
  <objectgroup color="#000080" name="Objects">
   <object id="37" name="dani" x="80" y="112" width="32" height="32"/>
   <object id="38" name="finish" x="96" y="80" width="16" height="16"/>
-  <object id="49" name="frogti" x="288" y="112" width="16" height="32"/>
-  <object id="50" name="snai" x="208" y="160" width="32" height="32"/>
+  <object id="49" name="turtle" x="288" y="112" width="16" height="32"/>
+  <object id="50" name="snail" x="208" y="160" width="32" height="32"/>
+  <object id="56" name="turtle" x="256" y="48" width="16" height="32">
+   <properties>
+    <property name="action" value="fly"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
