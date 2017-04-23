@@ -377,7 +377,7 @@ void world::drawTile( graphic *graphic, int x, int y, tile *map) {
         l_x = l_tile->id;
     int l_y = 0;
     float l_factor = (float)p_tileset_width/(p_tilewidth+p_tileset_space);
-
+    while( (float)(l_x > l_factor+0.5f) ) {
         l_x = l_x - (l_factor);
         l_y = l_y +1;
     }
