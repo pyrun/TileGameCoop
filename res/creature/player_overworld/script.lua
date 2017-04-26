@@ -6,11 +6,13 @@ local move_xsteps=0
 local move_inverted=false
 local move_y_flag=false
 local move_fix = 2 
+local move_back = false
 
 function vertexhit( id)
 end
 
 function attack( id)
+	setAnimation( id, "join")
 end
 
 function liquid( id, swim)
@@ -23,7 +25,7 @@ end
 
 
 function jump( id)
-
+	setAnimation( id, "join")
 end
 
 function setPositionTo16( id)
@@ -35,6 +37,9 @@ end
 
 function timer( id, time)
 	l_x, l_y = getPosition( id)
+	if getAnimation( id ) == "join" then
+		setAnimation( id, "idle")
+	end
 	if isMoving == true then
 		if move_inverted == false then
 			if move_y_flag == false and move_xsteps-move_fix < l_x then
@@ -72,6 +77,14 @@ function up( id)
 	tile_y = l_y1/16
 	solid_left, solid_right, solid_down, solid_up, isliq, tileid = getTile( tile_x, tile_y)
 
+	local velx, vely = getVelocity( id)
+	if math.abs(velx) < 0.01 and math.abs(vely) < 0.01 and isMoving == true then
+		if move_inverted == false and move_y_flag == true then
+			addVelocity( id, 0, move_speed)
+			move_inverted = true
+		end
+	end
+
 	if isMoving == false and solid_up == false then
 		l_x, l_y = getPosition( id)
 		isMoving = true
@@ -89,6 +102,14 @@ function down( id)
 	tile_x = l_x1/16
 	tile_y = l_y1/16
 	solid_left, solid_right, solid_down, solid_up, isliq, tileid = getTile( tile_x, tile_y)
+
+	local velx, vely = getVelocity( id)
+	if math.abs(velx) < 0.01 and math.abs(vely) < 0.01 and isMoving == true then
+		if move_inverted == true and move_y_flag == true then
+			addVelocity( id, 0, -move_speed)
+			move_inverted = false
+		end
+	end
 
 	if isMoving == false and solid_down == false then
 		isMoving = true
@@ -108,6 +129,14 @@ function right( id)
 	tile_y = l_y1/16
 	solid_left, solid_right, solid_down, solid_up, isliq, tileid = getTile( tile_x, tile_y)
 
+	local velx, vely = getVelocity( id)
+	if math.abs(velx) < 0.01 and math.abs(vely) < 0.01 and isMoving == true then
+		if move_inverted == true and move_y_flag == false then
+			addVelocity( id, -move_speed, 0)
+			move_inverted = false
+		end
+	end
+
 	if isMoving == false and solid_right == false then
 		isMoving = true
 		l_x, l_y = getPosition( id)
@@ -125,6 +154,14 @@ function left( id)
 	tile_x = l_x1/16
 	tile_y = l_y1/16
 	solid_left, solid_right, solid_down, solid_up, isliq, tileid = getTile( tile_x, tile_y)
+
+	local velx, vely = getVelocity( id)
+	if math.abs(velx) < 0.01 and math.abs(vely) < 0.01 and isMoving == true then
+		if move_inverted == false and move_y_flag == false then
+			addVelocity( id, move_speed, 0)
+			move_inverted = true
+		end
+	end
 
 	if isMoving == false and solid_left == false then
 		isMoving = true

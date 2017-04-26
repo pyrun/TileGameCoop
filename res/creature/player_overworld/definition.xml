@@ -2,7 +2,8 @@
 	<action name="idle" frame="4" speed="12">idle.bmp</action>
 	<action name="walk" frame="4" speed="3">idle.bmp</action>
 	<action name="swim" frame="4" speed="8">idle.bmp</action>
-	<hitbox offsetx="0" offsety="0" width="16" hight="16"/>
+	<action name="join" frame="1">idle.bmp</action>
+	<hitbox offsetx="6" offsety="6" width="4" hight="4"/>
 </object>
 
 

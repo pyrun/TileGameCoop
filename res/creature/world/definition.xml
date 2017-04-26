@@ -3,7 +3,7 @@
 	<action name="red">red.bmp</action>
 	<action name="warp">warp.bmp</action>
 	<action name="die">die.bmp</action>
-	<hitbox offsetx="6" offsety="6" width="6" hight="6"/>
+	<hitbox offsetx="6" offsety="6" width="4" hight="4"/>
 </object>
 
 

@@ -53,11 +53,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,10,24,0,7,0,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,41,6,6,6,6,6,24,0,105,7,0,105,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,7,106,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,72,73,0,0,0,0,0,0,0,0,0,41,6,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,137,138,139,0,0,0,0,0,0,0,105,0,7,0,12,13,13,14,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,56,88,88,0,0,0,0,0,106,106,105,7,0,44,16,27,31,14,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,89,0,0,0,0,0,0,38,106,105,41,24,0,0,28,29,29,30,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,72,73,0,0,7,0,0,0,0,0,0,41,6,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,137,138,139,39,6,8,6,23,0,0,105,0,7,0,12,13,13,14,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,56,88,88,0,7,0,0,0,106,106,105,7,0,44,16,27,31,14,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,89,0,0,0,22,0,0,38,106,105,41,24,0,0,28,29,29,30,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,89,0,0,0,0,0,0,25,6,6,24,0,0,12,32,27,15,46,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44,45,45,46,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -118,19 +118,19 @@
   <properties>
    <property name="action" value="red"/>
   </properties>
-  <object id="2" name="world" x="192" y="112" width="16" height="16">
+  <object id="2" name="world" x="96" y="208" width="16" height="16">
    <properties>
     <property name="action" value="red"/>
     <property name="global" value="starmap.tmx"/>
    </properties>
   </object>
-  <object id="5" name="world" x="128" y="112" width="16" height="16">
+  <object id="5" name="world" x="64" y="176" width="16" height="16">
    <properties>
     <property name="action" value="red"/>
     <property name="global" value="ice_1.tmx"/>
    </properties>
   </object>
-  <object id="6" name="world" x="96" y="112" width="16" height="16">
+  <object id="6" name="world" x="96" y="144" width="16" height="16">
    <properties>
     <property name="global" value="world_0.tmx"/>
    </properties>
@@ -146,15 +146,15 @@
     <property name="global" value="labor_1.tmx"/>
    </properties>
   </object>
-  <object id="14" name="player_overworld" x="96" y="128" width="16" height="16"/>
   <object id="15" name="world" x="48" y="32" width="16" height="16"/>
   <object id="16" name="world" x="32" y="80" width="16" height="16"/>
   <object id="17" name="world" x="64" y="64" width="16" height="16"/>
-  <object id="18" name="world" x="160" y="112" width="16" height="16">
+  <object id="18" name="world" x="128" y="176" width="16" height="16">
    <properties>
     <property name="action" value="red"/>
     <property name="global" value="ice_1.tmx"/>
    </properties>
   </object>
+  <object id="14" name="player_overworld" x="96" y="176" width="16" height="16"/>
  </objectgroup>
 </map>
