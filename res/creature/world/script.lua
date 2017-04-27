@@ -10,22 +10,17 @@ function getDistance(objAX, objAY, objBX, objBY)
 end
 
 function collision( id, ...)
-	if isAlive( id) == false then
-		do return end
-	end
 	for k,v in pairs({...}) do
-		if getAnimation( v) == "join" then
-			setLoadLevel( global_value, true )
-			kill ( id)
-		end
-		local x, y = getPosition( v)
-		local velx, vely = getVelocity( v)
-		local myX, myY = getPosition( id)
-		if math.abs(velx) > 0.01 or math.abs(vely) > 0.01 then
-			if getDistance( x, y, myX, myY) > getDistance( x + velx, y + vely, myX, myY) then
-				setVelocityX( v, 0)
-				setVelocityY( v, 0)
+		
+		if isAlive( id) == false then
+			if getAnimation( v) == "join" then
+				setLoadLevel( global_value, true )
+				--kill ( id)
 			end
+			do return end
+		else
+			setLoadLevel( global_value, true )
+			kill ( id)	
 		end
 	end
 end
