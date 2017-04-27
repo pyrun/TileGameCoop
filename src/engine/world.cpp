@@ -470,7 +470,7 @@ void world::draw( graphic *graphic) {
 
             // calc the new postion
             vec2 l_xvel = vec2( l_background->picture->surface->w/l_factor, 0);
-            vec2 l_size = vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight+p_tilehight);
+            vec2 l_size = vec2( p_map_width * p_tilewidth+0.5, p_map_hight * p_tilehight+p_tilehight);
 
             // draw one left middle and right
             graphic->drawImage( l_background->picture, l_position, l_size, vec2( 0, 0), 0.0, 0, l_factor);

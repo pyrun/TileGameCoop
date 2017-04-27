@@ -148,7 +148,8 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                 l_player->entity_id = l_id;
                 l_player->active = true;
                 l_player->wantToJoin = false;
-
+                if( p_playercamerafocus == NULL)
+                    p_playercamerafocus = l_player;
             }
         }
 

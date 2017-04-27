@@ -36,8 +36,11 @@ class player_handle
         int player_getPlayerActive();
         void setAllInavtive() {
             for( int i = 0; i < (int)p_playerlist.size(); i++) {
-                p_playerlist[i]->entity_id = -1;
-                p_playerlist[i]->active = false;
+                player *p_player = p_playerlist[i];
+                p_player->entity_id = -1;
+                if( p_player->active == true )
+                    p_player->wantToJoin = true;
+                p_player->active = false;
             }
         }
         void resetEntitys() { p_entityNames.clear(); }
