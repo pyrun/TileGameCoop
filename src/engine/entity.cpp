@@ -539,6 +539,50 @@ static int lua_getPosition( lua_State *state) {
     return 2;
 }
 
+static int lua_setGravity( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    bool l_gravity;
+    if ( !lua_isnumber( state, 1) || !lua_isboolean( state, 2)) {
+        printf( "lua_setGravity call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_gravity = lua_toboolean( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_setGravity obj not found\n");
+        return 0;
+    }
+    l_obj->setGravity( l_gravity);
+    return 0;
+}
+
+static int lua_getGravity( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    bool l_gravity;
+    if ( !lua_isnumber( state, 1) ) {
+        printf( "lua_getGravity call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_getGravity obj not found\n");
+        return 0;
+    }
+    l_gravity = l_obj->getGravity();
+
+    lua_pushboolean ( state, l_gravity);
+
+    return 1;
+}
+
 void lua_install( lua_State *state) {
     // add all entity function ..
     lua_pushcfunction( state, lua_setLoadLevel);
@@ -607,6 +651,11 @@ void lua_install( lua_State *state) {
     lua_pushcfunction( state, lua_getPosition);
     lua_setglobal( state, "getPosition");
 
+    lua_pushcfunction( state, lua_getGravity);
+    lua_setglobal( state, "getGravity");
+
+    lua_pushcfunction( state, lua_setGravity);
+    lua_setglobal( state, "setGravity");
 }
 
 void lua_setLink( entitylist *entity, world *world) {
@@ -1023,6 +1072,7 @@ int entitylist::create( entitytype *type, vec2 pos) {
     obj->setPos( pos);
     obj->setVertex( type->getVertex());
     obj->setSolid( type->getIsSolid());
+    obj->setGravity( type->getGravity());
 
     // player entity incress if he is one
     if( type->getIsPlayer())
@@ -1222,7 +1272,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         }
 
         // liquid
-        if( l_type->getGravity() == true && l_type->getHitboxOffset().x != 0) {
+        if( l_entity->getGravity() == true && l_type->getHitboxOffset().x != 0) {
             // umrechnen
             l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset()+l_type->getHitbox()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 )-(world->getTileSize()/vec2( 2, 2) ) )/world->getTileSize();
             tile *l_tile = world->getTile( world->getCollsionMap(), l_iposition);
@@ -1251,7 +1301,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         // calc gravity
         bool l_iscalc_y = false;
 
-        if( l_type->getGravity() == true ) {
+        if( l_entity->getGravity() == true ) {
             // änderung rechnen
             l_change.x += l_velocity.x * deltaTime;
 

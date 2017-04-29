@@ -18,23 +18,88 @@ function vertexhit( id)
 	end
 end
 
+local fly_y = 0
 local dead_timer = 1
+local start_x = 0
+local float_speed = 0.005
+local float_maxspeed = 0.05
+
+function start( id) 
+	addVelocity( id, 0, 0.003)
+
+	if global_value == NIL then
+		global_value = "200"
+	end
+	
+	start_x, y = getPosition( id)
+end
+
+local fly_right
 
 function timer( id, time)
 	if isAlive( id) == false then
 		do return end
 	end
 
+	pos_x, pos_y = getPosition( id)
+	velx, vely = getVelocity( id)
+
+	-- richtung anzeigen
+	if math.abs(velx) > 0.0 then
+		local dir = false
+		if velx < 0.00 then
+			dir = true
+		end
+		setAnimationDirection( id, dir)
+	end
+
 	if getAnimation( id) == "fly" then
+		temp_x, temp_y = getPosition( id)
+		if fly_y == 0 then
+			fly_y = temp_y
+		end
+
+		if getGravity( id) == true then
+			setGravity( id, false)
+		end
+
+		if temp_y-2 > fly_y and vely > -0.008 then
+			addVelocity( id, 0, -0.008)
+		end
+		if temp_y+2 < fly_y and vely < 0.008 then
+			addVelocity( id, 0, 0.008)
+		end
+
+		if fly_right == true then
+			if velx > -float_maxspeed then
+				addVelocity( id, -float_speed, 0)
+			end
+		else
+			if velx < float_maxspeed then
+				addVelocity( id, float_speed, 0)
+			end
+		end
+		
+		if pos_x-start_x > tonumber(global_value) then
+			fly_right = true
+		end
+		if pos_x-start_x < 0  then
+			fly_right = false
+		end
 		do return end
 	end
 
+	-- richtung
 	local dir = getAnimationDirection( id)
 	setAnimation( id, "walk")
 	if dir == false then
 		addVelocity( id, -0.03, 0)
 	else
 		addVelocity( id, 0.03, 0)
+	end
+
+	if getGravity( id) == false then
+		setGravity( id, true)
 	end
 end
 

@@ -126,6 +126,8 @@ class entity
         void setVertex( std::vector<vertex> vertex) { p_vertex = vertex; }
         void setLiquid( bool set) { p_liquid = set; lua_liquid( p_id); }
         void setSolid( bool set) { p_solid = set; }
+        void setGravity( bool set) { p_gravity = set; }
+        bool getGravity() { return p_gravity; }
 
         bool NeedUpdate() { return p_update; }
 
@@ -197,6 +199,7 @@ class entity
         int p_timestartaction;
         bool p_liquid;
         bool p_solid;
+        bool p_gravity;
 };
 
 class entitylist {

@@ -47,6 +47,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
                 }
             }
 
+            // delete level
             delete p_level;
             p_level = NULL;
 
