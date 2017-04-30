@@ -1,9 +1,9 @@
 function vertexhit( id)
 	if getVertexHit( id, 1) then
-		setAnimationDirection( id, true)
+		setAnimationDirection( id, false)
 	end
 	if getVertexHit( id, 2) then
-		setAnimationDirection( id, false)
+		setAnimationDirection( id, true)
 	end
 
 
@@ -11,10 +11,10 @@ function vertexhit( id)
 	down2 = getVertexHit( id, 4)
 
 	if down1 == false and down2 == true then
-		setAnimationDirection( id, true)
+		setAnimationDirection( id, false)
 	end
 	if down1 == true and down2 == false then
-		setAnimationDirection( id, false)
+		setAnimationDirection( id, true)
 	end
 end
 
@@ -31,6 +31,8 @@ function start( id)
 		global_value = "200"
 	end
 	
+	setAnimation( id, "walk")
+	
 	start_x, y = getPosition( id)
 end
 
@@ -43,6 +45,22 @@ function timer( id, time)
 
 	pos_x, pos_y = getPosition( id)
 	velx, vely = getVelocity( id)
+
+	if getAnimation( id) == "walk" or getAnimation( id) == "idle" then
+		if getGravity( id) == false then
+			setGravity( id, true)
+		end
+
+		if getColision( id, "down") then
+			local dir = getAnimationDirection( id)
+			setAnimation( id, "walk")
+			if dir == false then
+				addVelocity( id, 0.008, 0)
+			else
+				addVelocity( id, -0.008, 0)
+			end
+		end
+	end
 
 	-- richtung anzeigen
 	if math.abs(velx) > 0.0 then
@@ -89,18 +107,9 @@ function timer( id, time)
 		do return end
 	end
 
-	-- richtung
-	local dir = getAnimationDirection( id)
-	setAnimation( id, "walk")
-	if dir == false then
-		addVelocity( id, -0.03, 0)
-	else
-		addVelocity( id, 0.03, 0)
-	end
-
-	if getGravity( id) == false then
-		setGravity( id, true)
-	end
+	--if getGravity( id) == false then
+	--	setGravity( id, true)
+	--end
 end
 
 function collision( id, ...)

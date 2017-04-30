@@ -1238,7 +1238,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
     // calc delta of velocity
     l_velocityDelta = (float)deltaTime * world->getGravity();
 
-    // again and again if we found one more to delete we search again
+    // again and again if we found o+ne more to delete we search again
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         if( p_entitys[i].isbedelete == true ) {
             p_entitys.erase( p_entitys.begin() + i);
@@ -1618,7 +1618,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         l_change = l_result_change;
         l_velocity = l_result_velocity;
 
-        if( l_type->getGravity() == true) {
+        if( l_entity->getGravity() == true) {
             if( l_entity->getColisionDown() && !l_entity->isInLiquid())
                 l_velocity.x = l_velocity.x*0.8f;
             else if(l_entity->isInLiquid() == true)

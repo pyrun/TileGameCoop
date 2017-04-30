@@ -4,5 +4,6 @@
 	<vertex x="4" y="8">down</vertex>
 	<vertex x="8" y="4">right</vertex>
 	<vertex x="0" y="4">left</vertex>
+	<hitbox offsetx="2" offsety="2" width="4" hight="4"/>
 </object>
 
