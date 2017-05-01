@@ -1,4 +1,5 @@
-local float_speed = 0.007
+local float_speed = 0.02
+local float_maxspeed = 0.2
 
 local start_y = 0
 
@@ -19,11 +20,15 @@ function timer( id, time)
 
 	if getAnimation( id) == "right" then
 		if pos_x-start_y > tonumber(global_value) then
-			addVelocity( id, -float_speed, 0)
+			if velx > -float_maxspeed then
+				addVelocity( id, -float_speed, 0)
+			end
 		end
 		if pos_x-start_y < 0 then
 			down = true
-			addVelocity( id, float_speed, 0)	
+			if velx < float_maxspeed then
+				addVelocity( id, float_speed, 0)	
+			end
 		end
 		if velx < 0.1 and velx > -0.1 and velocity == false then
 			addVelocity( id, 0.05, 0)
@@ -34,14 +39,18 @@ function timer( id, time)
 	else
 
 		if start_y-pos_y > tonumber(global_value) then
-			addVelocity( id, 0, float_speed)
+			if velx < float_maxspeed then
+				addVelocity( id, 0, float_speed)
+			end
 		end
 		if start_y-pos_y < 0 then
 			down = true
-			addVelocity( id, 0, -float_speed)	
+			if velx > -float_maxspeed then
+				addVelocity( id, 0, -float_speed)	
+			end
 		end
 		if vely < 0.1 and vely > -0.1 and velocity == false then
-			addVelocity( id, 0, 0.05)
+			--addVelocity( id, 0, 0.05)
 			velocity = true
 		end
 	end

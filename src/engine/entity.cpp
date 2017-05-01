@@ -1063,10 +1063,12 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     if( type == NULL)
         return -1;
 
-    printf( "creating \"%s\" with id %d\n", type->getName().c_str(), l_id);
-
+    // chose l_id or p_id
     if( l_id == -1 )
         l_id = p_id;
+
+    printf( "creating \"%s\" with id %d\n", type->getName().c_str(), l_id);
+
 
     // create object
     obj = new entity( l_id);
@@ -1452,13 +1454,13 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y) {
+                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y ) {
                                 if( l_changed == false ) {
                                     l_changed = true; // we changed
-                                    l_change = l_change - fvec2( 0, l_result);
+                                    l_result_change = l_change - fvec2( 0, l_result);
 
                                     //l_change.y = 0;//l_entity->( fvec2());
-                                    l_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
+                                    l_result_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
                                 }
 
                                 l_iscalc_y = true;
