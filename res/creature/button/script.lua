@@ -14,8 +14,6 @@ function collision( id, ...)
 		do return end
 	end
 	for k,v in pairs({...}) do
-		print("press")
-		print( tonumber(global_value))
 		if getAnimation( tonumber(global_value)) == "close" then
 			setAnimation( tonumber(global_value), "idle")
 			setAnimation( id, "press")
