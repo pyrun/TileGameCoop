@@ -313,7 +313,7 @@
     <property name="global" value="lost_2.tmx"/>
    </properties>
   </object>
-  <object id="4" name="player_overworld" x="721.455" y="946.364" width="16" height="16"/>
+  <object id="4" name="player_overworld" x="688" y="944" width="16" height="16"/>
   <object id="5" name="start" x="672" y="944" width="16" height="16"/>
   <object id="6" name="world" x="720" y="944" width="16" height="16">
    <properties>
