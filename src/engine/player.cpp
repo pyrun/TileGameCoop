@@ -169,7 +169,39 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                     l_entity->lua_run( l_entity->getId(), true);
                 if( !l_map->run && l_map_old->run)
                     l_entity->lua_run( l_entity->getId(), false);
-                if( l_map->right && !l_map_old->right)
+
+                // find next object
+                if( l_map->right && !l_map_old->right) {
+                    std::vector<int> l_obj = entitylist->findPlayerObject();
+                    int l_id = -1;
+                    int found_first = -1;
+
+                    for( int y = 0; y < (int)l_obj.size(); y++) {
+                        bool l_found = true;
+
+                        for( int n = 0; n < (int)p_playerlist.size(); n++)
+                            if( p_playerlist[n]->entity_id == l_obj[y])
+                                l_found = false;
+
+                        if( l_found ) {
+                            if( l_obj[y] > l_player->entity_id) {
+                                l_id = l_obj[y];
+                                break;
+                            }
+                            if( found_first == -1)
+                                found_first = l_obj[y];
+                        }
+                    }
+
+                    if( l_id == -1 && found_first != -1)
+                        l_id = found_first;
+                    if( l_id == -1)
+                        break;
+
+                    l_player->entity_id = l_id;
+                }
+
+                if( l_map->select && !l_map_old->select)
                     config->setQuit( true);
                 if( l_map->attack && !l_map_old->attack)
                     l_entity->lua_attack( l_entity->getId());
