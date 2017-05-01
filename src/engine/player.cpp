@@ -15,6 +15,37 @@ player_handle::~player_handle() {
         SDL_GameController *l_pad = p_playerlist[i]->controller;
         SDL_GameControllerClose(l_pad);
     }
+
+}
+
+void player_handle::next_player_entity( entitylist *entitylist, player *l_player) {
+    std::vector<int> l_obj = entitylist->findPlayerObject();
+    int l_id = -1;
+    int found_first = -1;
+
+    for( int y = 0; y < (int)l_obj.size(); y++) {
+        bool l_found = true;
+
+        for( int n = 0; n < (int)p_playerlist.size(); n++)
+            if( p_playerlist[n]->entity_id == l_obj[y])
+                l_found = false;
+
+        if( l_found ) {
+            if( l_obj[y] > l_player->entity_id) {
+                l_id = l_obj[y];
+                break;
+            }
+            if( found_first == -1)
+                found_first = l_obj[y];
+        }
+    }
+
+    if( l_id == -1 && found_first != -1)
+        l_id = found_first;
+    if( l_id == -1)
+        return;
+
+    l_player->entity_id = l_id;
 }
 
 void player_handle::handle( entitylist *entitylist, input *input, graphic* graphic, config* config) {
@@ -126,26 +157,11 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
             l_player->wantToJoin = true;
         if( l_player->wantToJoin && !l_player->active) {
             if( l_player->entity_id == -1) {
-                std::vector<int> l_obj = entitylist->findPlayerObject();
-                int l_id = -1;
+                // fin a nex player entity
+                next_player_entity( entitylist, l_player);
 
-                for( int y = 0; y < (int)l_obj.size(); y++) {
-                    bool l_found = true;
-
-                    for( int n = 0; n < (int)p_playerlist.size(); n++)
-                        if( p_playerlist[n]->entity_id == l_obj[y])
-                            l_found = false;
-
-                    if( l_found) {
-                        l_id = l_obj[y];
-                        break;
-                    }
-                }
-
-                if( l_id == -1)
+                if( l_player->entity_id == -1 )
                     break;
-
-                l_player->entity_id = l_id;
                 l_player->active = true;
                 l_player->wantToJoin = false;
                 if( p_playercamerafocus == NULL)
@@ -171,35 +187,8 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                     l_entity->lua_run( l_entity->getId(), false);
 
                 // find next object
-                if( l_map->right && !l_map_old->right) {
-                    std::vector<int> l_obj = entitylist->findPlayerObject();
-                    int l_id = -1;
-                    int found_first = -1;
-
-                    for( int y = 0; y < (int)l_obj.size(); y++) {
-                        bool l_found = true;
-
-                        for( int n = 0; n < (int)p_playerlist.size(); n++)
-                            if( p_playerlist[n]->entity_id == l_obj[y])
-                                l_found = false;
-
-                        if( l_found ) {
-                            if( l_obj[y] > l_player->entity_id) {
-                                l_id = l_obj[y];
-                                break;
-                            }
-                            if( found_first == -1)
-                                found_first = l_obj[y];
-                        }
-                    }
-
-                    if( l_id == -1 && found_first != -1)
-                        l_id = found_first;
-                    if( l_id == -1)
-                        break;
-
-                    l_player->entity_id = l_id;
-                }
+                if( l_map->right && !l_map_old->right)
+                    next_player_entity( entitylist, l_player);
 
                 if( l_map->select && !l_map_old->select)
                     config->setQuit( true);

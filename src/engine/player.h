@@ -31,6 +31,7 @@ class player_handle
         player_handle();
         virtual ~player_handle();
 
+        void next_player_entity( entitylist *entitylist, player *l_player);
         void handle( entitylist *entity, input *input, graphic* graphic, config* config);
         int getPlayerAmount() { return (int)p_playerlist.size(); }
         int player_getPlayerActive();

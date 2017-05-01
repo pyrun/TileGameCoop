@@ -207,7 +207,7 @@ class entitylist {
         entitylist();
         virtual ~entitylist();
 
-        int create( entitytype *type, vec2 pos);
+        int create( entitytype *type, vec2 pos, int id = -1);
         void deleteObj( int id);
         bool createFromWorldFile( std::string file, world *world);
 

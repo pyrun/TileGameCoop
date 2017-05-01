@@ -1055,17 +1055,21 @@ entitylist::~entitylist()
     //dtor
 }
 
-int entitylist::create( entitytype *type, vec2 pos) {
+int entitylist::create( entitytype *type, vec2 pos, int id) {
     entity* obj;
+    int l_id = id;
 
     // check data
     if( type == NULL)
         return -1;
 
-    printf( "creating \"%s\" with id %d\n", type->getName().c_str(), p_id);
+    printf( "creating \"%s\" with id %d\n", type->getName().c_str(), l_id);
+
+    if( l_id == -1 )
+        l_id = p_id;
 
     // create object
-    obj = new entity( p_id);
+    obj = new entity( l_id);
     // set data
     obj->setAction( ACTION_IDLE);
     obj->setType( type);
@@ -1084,10 +1088,12 @@ int entitylist::create( entitytype *type, vec2 pos) {
     p_entitys.push_back( *obj);
 
     // start script if write
-    getEntity( p_id)->lua_start( p_id);
+    getEntity( l_id)->lua_start( l_id);
 
     // incress next id
-    p_id++;
+    l_id++;
+
+    p_id = l_id;
 
     return (p_id-1);
 }
@@ -1101,6 +1107,7 @@ void entitylist::deleteObj( int id) {
 bool entitylist::createFromWorldFile( std::string file, world *world) {
     XMLDocument l_file;
     std::string l_type;
+    int l_id;
 
     vec2 l_pos;
 
@@ -1128,16 +1135,15 @@ bool entitylist::createFromWorldFile( std::string file, world *world) {
     }
 
     XMLElement* l_object = l_objectgroup->FirstChildElement( "object" );
-
-    int l_id = 0;
     //
     while( l_object) {
 
         // load data
         l_type = l_object->Attribute("name") == NULL?"":l_object->Attribute("name");
+        l_id = l_object->Attribute("id") == NULL?-1:atoi(l_object->Attribute("id"));
+
         l_pos.x = atoi(l_object->Attribute( "x"));
         l_pos.y = atoi(l_object->Attribute( "y"));
-
 
         //printf("%s %d %d\n", l_type.c_str(), l_pos.x, l_pos.y);
 
@@ -1145,7 +1151,7 @@ bool entitylist::createFromWorldFile( std::string file, world *world) {
         entitytype *l_entity_type = getType( l_type);
 
         if( l_entity_type != NULL) {
-            l_id = create( l_entity_type, l_pos);
+            l_id = create( l_entity_type, l_pos, l_id);
             entity *l_entity = getEntity( l_id);
 
             // load properties
