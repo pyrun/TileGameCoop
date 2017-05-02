@@ -104,6 +104,15 @@ static int lua_setSolid( lua_State *state) {
     return 0;
 }
 
+static int lua_howManyPlayerEntity( lua_State *state) {
+    int l_entitys;
+
+    l_entitys = lua_entitylist->findPlayerObject().size();
+
+    lua_pushnumber( state, l_entitys);
+    return 1;
+}
+
 static int lua_isEnemy( lua_State *state) {
     entity *l_obj;
     entitytype *l_type;
@@ -596,6 +605,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_setSolid);
     lua_setglobal( state, "setSolid");
+
+    lua_pushcfunction( state, lua_howManyPlayerEntity);
+    lua_setglobal( state, "howManyPlayerEntity");
 
     lua_pushcfunction( state, lua_isEnemy);
     lua_setglobal( state, "isEnemy");

@@ -11,11 +11,6 @@
 	<tile>240</tile>
 </animation>
 
-<animation speed="300">
-	<tile>66</tile>
-	<tile>68</tile>
-</animation>
-
 <animation left="0" right="0" down="0">
 	<tile>545</tile>
 </animation>

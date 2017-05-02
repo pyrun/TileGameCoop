@@ -330,7 +330,7 @@
   <object id="8" name="world" x="832" y="944" width="16" height="16">
    <properties>
     <property name="action" value="red"/>
-    <property name="global" value="lost_2.tmx"/>
+    <property name="global" value="lost_3.tmx"/>
    </properties>
   </object>
  </objectgroup>

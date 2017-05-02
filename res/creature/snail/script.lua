@@ -26,7 +26,7 @@ function timer( id, time)
 		if dead_timer == 0 then
 			l_x, l_y = getPosition( id)
 			createObject( "explode1", l_x, l_y)
-			delete( id);
+			delete( id)
 		end
 		do return end
 	end
