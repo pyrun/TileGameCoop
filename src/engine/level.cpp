@@ -32,8 +32,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
     getEntityList()->process( getWorld(), config, l_delta);
 
     // check if level finish
-    if( p_level != NULL) {
-        if( p_level->getWorld()->isLevelEnd() == true) {
+    if( p_level != NULL && p_level->getWorld()->isLevelEnd() == true) {
             // alle player daten aufnhemen auf die NEUE liste
             if( p_level->getWorld()->leaveLevelasPlayer()){
                 std::vector<int> l_obj = p_level->getEntityList()->findPlayerObject();
@@ -60,7 +59,6 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
             // set old camera pos
             graphic->setCamera( p_camere_pos.tovec2());
             graphic->flyTo( p_camere_pos.tovec2());
-        }
     }
 
     if( p_level != NULL && !p_level->getWorld()->loadAsPlayer() && playerlist->getEntityList().size()) {
