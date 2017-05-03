@@ -34,7 +34,7 @@ class action {
     public:
         std::string name;
         std::string file;
-        int frame;
+        int frames;
         int speed;
         int loop;
         image *imagefile;
@@ -61,7 +61,7 @@ class entitytype
 
         action* getAction( std::string name);
 
-        void addAction( std::string name, std::string file, int frame, int speed, int loop, image *image);
+        void addAction( std::string name, std::string file, int frames, int speed, int loop, image *image);
         void addVertex(vec2 pos, bool left, bool right, bool up, bool down, int id);
 
         void setName( std::string name) { p_name = name; }
@@ -116,7 +116,7 @@ class entity
         void draw( graphic *graphic);
 
         void setType( entitytype *type) { this->p_type = type; }
-        void setAction( std::string name) { if( p_action != name) { p_action = name; p_timestartaction = -1;} }
+        void setAction( std::string name) { if( p_action != name) { p_action = name; p_timestartaction = -1; p_frame = 0; } }
         void setDirection( bool dir) { p_direction = dir; }
         int getDirection() { return p_direction; }
         void setPos( vec2 pos) { p_pos = pos; }
@@ -178,6 +178,7 @@ class entity
                 return false;
             return true;
         }
+        int getFrame() { return p_frame; }
     protected:
 
     private:
@@ -195,8 +196,8 @@ class entity
         fvec2 p_velocity;
         lua_State *p_state;
         timer p_timer;
-        int p_actionframe;
         int p_timestartaction;
+        int p_frame;
         bool p_liquid;
         bool p_solid;
         bool p_gravity;

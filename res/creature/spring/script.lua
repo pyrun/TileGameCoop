@@ -18,7 +18,7 @@ function collision( id, ...)
 		do return end
 	end
 	for k,v in pairs({...}) do
-		if getAnimation( id) == "close" then
+		if getAnimation( id) == "close" and getFrame( id) == 3 then
 			setAnimation( id, "open")
 			setVelocityY( v, -jump_speed)
 		end

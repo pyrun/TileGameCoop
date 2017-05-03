@@ -351,6 +351,29 @@ static int lua_getAnimationDirection( lua_State *state) {
     return 1;
 }
 
+static int lua_getFrame( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    int l_frame;
+
+    if( !lua_isnumber( state, 1)) {
+        printf( "lua_getFrame call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_getFrame obj not found\n");
+        return 0;
+    }
+
+    l_frame = l_obj->getFrame();
+    lua_pushnumber( state, l_frame );
+    return 1;
+}
+
 static int lua_setPosition( lua_State *state) {
     entity *l_obj;
     int l_id;
@@ -639,6 +662,9 @@ void lua_install( lua_State *state) {
     lua_pushcfunction( state, lua_getAnimationDirection);
     lua_setglobal( state, "getAnimationDirection");
 
+    lua_pushcfunction( state, lua_getFrame);
+    lua_setglobal( state, "getFrame");
+
     lua_pushcfunction( state, lua_setPosition);
     lua_setglobal( state, "setPosition");
 
@@ -692,12 +718,12 @@ action* entitytype::getAction( std::string name) {
     return NULL;
 }
 
-void entitytype::addAction( std::string name, std::string file, int frame, int speed, int loop, image *image) {
+void entitytype::addAction( std::string name, std::string file, int frames, int speed, int loop, image *image) {
     action *l_action = new action;
 
     l_action->name = name;
     l_action->file = file;
-    l_action->frame = frame;
+    l_action->frames = frames;
     l_action->speed = speed;
     l_action->imagefile = image;
     l_action->loop = loop;
@@ -729,7 +755,11 @@ entity::entity( int id)
     // timer start
     p_timer.start();
 
+    // framecounter
     p_timestartaction = 0;
+
+    // frame 0
+    p_frame = 0;
 
     // not in p_liquid
     p_liquid = false;
@@ -774,18 +804,30 @@ void entity::draw( graphic *graphic) {
 
     image *l_image = l_action->imagefile;
 
-    if( l_action->loop == 0) {
-        if( l_action->frame-1 != (int)(p_actionframe/l_action->speed)%l_action->frame)
-            p_actionframe = graphic->getFrame() - p_timestartaction;
-    }  else {
-        p_actionframe = graphic->getFrame() - p_timestartaction;
+    // if no frames
+    if( l_action->frames == 0)
+        l_action->frames = 1;
+
+    int l_action_frame_time = graphic->getFrame()-p_timestartaction;
+
+    l_frame = (int)(l_action_frame_time/l_action->speed);
+
+    // ende der frames
+    while( l_frame >= l_action->frames) {
+        // loop
+        if( l_action->loop) {
+            p_timestartaction = graphic->getFrame();
+            l_frame--;
+        } else {
+            l_frame--;
+        }
     }
 
-    if( l_action->frame != 0)
-        l_frame = p_type->getWidth()*( ((int)(p_actionframe/l_action->speed) ) %l_action->frame);
-    else
-        l_frame = 0;
-    graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( l_frame, 0), 0, p_direction);
+    // save the frame
+    p_frame = l_frame;
+
+    // draw call
+    graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( p_type->getWidth()*l_frame, 0), 0, p_direction);
 }
 
 void entity::loadScript( std::string file) {
@@ -1747,7 +1789,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     entitytype *l_type = new entitytype();
     std::string l_action_name;
     std::string l_action_file;
-    int l_action_frame;
+    int l_action_frames;
     int l_action_speed;
     int l_action_loop;
 
@@ -1758,9 +1800,9 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_action_file = l_xml_action->GetText();
         l_action_name = l_xml_action->Attribute( "name" );
         if( l_xml_action->Attribute( "frame" ))
-            l_action_frame = atoi( l_xml_action->Attribute( "frame" ));
+            l_action_frames = atoi( l_xml_action->Attribute( "frame" ));
         else
-            l_action_frame = 0;
+            l_action_frames = 1; // default
         if( l_xml_action->Attribute( "speed" ))
             l_action_speed = atoi( l_xml_action->Attribute( "speed" ));
         else
@@ -1779,7 +1821,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
             l_idle = true;
 
         // push back
-        l_type->addAction( l_action_name, l_action_file, l_action_frame, l_action_speed, l_action_loop,graphic->loadImage( folder + l_action_file));
+        l_type->addAction( l_action_name, l_action_file, l_action_frames, l_action_speed, l_action_loop,graphic->loadImage( folder + l_action_file));
 
         l_xml_action = l_xml_action->NextSiblingElement("action");
     }
