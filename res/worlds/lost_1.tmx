@@ -67,7 +67,7 @@
 </data>
  </layer>
  <objectgroup color="#000080" name="Objects">
-  <object id="49" name="player_firstworldstart" x="48" y="96" width="16" height="16">
+  <object id="49" name="start_player" x="48" y="96" width="16" height="16">
    <properties>
     <property name="global" value="alex"/>
    </properties>

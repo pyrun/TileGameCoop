@@ -1210,6 +1210,9 @@ bool entitylist::createFromWorldFile( std::string file, world *world) {
             l_id = create( l_entity_type, l_pos, l_id);
             entity *l_entity = getEntity( l_id);
 
+            // random start animation
+            l_entity->setTimeStartAction( rand()%20);
+
             // load properties
             XMLElement* l_xml_property = NULL;
             XMLElement* l_xml_properties = l_object->FirstChildElement( "properties" );

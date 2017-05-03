@@ -117,6 +117,7 @@ class entity
 
         void setType( entitytype *type) { this->p_type = type; }
         void setAction( std::string name) { if( p_action != name) { p_action = name; p_timestartaction = -1; p_frame = 0; } }
+        void setTimeStartAction( int set) { p_timestartaction = set; }
         void setDirection( bool dir) { p_direction = dir; }
         int getDirection() { return p_direction; }
         void setPos( vec2 pos) { p_pos = pos; }

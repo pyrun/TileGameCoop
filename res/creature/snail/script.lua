@@ -18,12 +18,9 @@ function vertexhit( id)
 	end
 end
 
-local dead_timer = 1
-
 function timer( id, time)
 	if isAlive( id) == false then
-		dead_timer = dead_timer - 1
-		if dead_timer == 0 then
+		if getFrame( id) == 3 then
 			l_x, l_y = getPosition( id)
 			createObject( "explode1", l_x, l_y)
 			delete( id)
