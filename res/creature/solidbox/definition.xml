@@ -1,0 +1,10 @@
+<object name="solidbox" width="32" height="32" script="script.lua" timer="1500" solid="1" gravity="1">
+	<action name="idle">idle.bmp</action>
+	<action name="free">free.bmp</action>
+	<hitbox offsetx="0" offsety="0" width="32" hight="32"/>
+	<vertex x="30" y="32" id="1">down</vertex>
+	<vertex x="2" y="32" id="1">down</vertex>
+	<vertex x="1" y="16" id="1">left</vertex>
+	<vertex x="31" y="16" id="1">right</vertex>
+</object>
+
