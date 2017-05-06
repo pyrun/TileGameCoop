@@ -7,7 +7,7 @@
 	<vertex x="28" y="16" id="4">down</vertex>
 	<vertex x="3" y="7" id="1">left</vertex>
 	<vertex x="29" y="7" id="2">right</vertex>
-	<hitbox offsetx="6" offsety="2" width="26" hight="14"/>
+	<hitbox offsetx="6" offsety="4" width="20" hight="12"/>
 </object>
 
 
