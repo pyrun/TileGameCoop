@@ -39,7 +39,7 @@ class graphic
         graphic( config *config);
         virtual ~graphic();
 
-        void loadResolution( std::string file);
+        int loadResolution( std::string file);
         void changeWindowSize();
         void setFullscreen( bool fromWindow = false);
         void clear( float dt = 1.0f);

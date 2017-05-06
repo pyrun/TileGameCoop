@@ -9,7 +9,7 @@ using namespace tinyxml2;
 bool success_initSDL = false;
 
 bool initSDL() {
-    int l_flags;
+    int l_flags = IMG_INIT_PNG;
 
     // set only once
     if( success_initSDL == true)
@@ -129,16 +129,16 @@ graphic::~graphic()
     SDL_DestroyWindow( p_windows);
 }
 
-void graphic::loadResolution( std::string file) {
+int graphic::loadResolution( std::string file) {
     XMLDocument l_file;
 
     // load form world file
-    XMLError l_result = l_file.LoadFile( file.c_str());
+    l_file.LoadFile( file.c_str());
 
     // file exist?
     if( file_exist( file) == false) {
         printf( "graphic::loadResolution file dont exist \"%s\"\n", file.c_str());
-        return;
+        return 1;
     }
 
     XMLElement* l_xml_resolution = l_file.FirstChildElement( "display" );
@@ -157,6 +157,8 @@ void graphic::loadResolution( std::string file) {
         // next object
         l_xml_resolution = l_xml_resolution->NextSiblingElement( "display");
     }
+
+    return 0;
 }
 
 #define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
@@ -232,8 +234,6 @@ void graphic::clear( float dt) {
 
         // transfer data to sdl
         SDL_RenderSetViewport( p_renderer, &l_viewport);
-
-        SDL_DisplayMode *l_mode;
 
         // Zoom or change window
         if( p_config->getDisplayChangeMode()) {

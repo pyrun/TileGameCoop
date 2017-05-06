@@ -46,7 +46,7 @@ class world
         float getCollisionY( fvec2 position, fvec2 change, fvec2 velocity, bool up = false);
         tile *getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bool up = false);
         tile *getCollisionTileX( fvec2 position, fvec2 change, fvec2 velocity);
-        void loadTypes( std::string file);
+        int loadTypes( std::string file);
         bool load( std::string file, std::string ordner);
         tiletype *findType( int id);
         tile *getTile( tile *tilemap, vec2 pos);

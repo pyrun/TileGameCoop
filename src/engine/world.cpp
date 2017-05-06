@@ -44,7 +44,6 @@ tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bo
     int l_x = ( position.x )/p_tilewidth;
     int l_y = ( position.y )/p_tilehight;
     tile *l_tile = NULL;
-    int l_factor = p_tilehight;
 
     // border
     if( l_x < 0)
@@ -91,7 +90,6 @@ tile *world::getCollisionTileX( fvec2 position, fvec2 change, fvec2 velocity) {
     int l_x = ( position.x )/p_tilewidth;
     int l_y = ( position.y )/p_tilehight;
     tile *l_tile = NULL;
-    int l_factor = p_tilehight;
 
     // border
     if( position.x < 0)
@@ -130,7 +128,7 @@ tile *world::getCollisionTileX( fvec2 position, fvec2 change, fvec2 velocity) {
     return l_tile;
 }
 
-void world::loadTypes( std::string file) {
+int world::loadTypes( std::string file) {
     XMLDocument l_file;
     XMLElement* l_tile;
 
@@ -138,10 +136,11 @@ void world::loadTypes( std::string file) {
 
     // if fille dont found
     if( file_exist( l_xmlfile) == false)
-        return;
+        return 1;
 
     // load the file
     XMLError l_result = l_file.LoadFile( l_xmlfile.c_str());
+    XMLCheckResult(l_result);
 
     l_tile = l_file.FirstChildElement( "animation");
     while( l_tile) {
@@ -182,7 +181,7 @@ void world::loadTypes( std::string file) {
         l_tile = l_tile->NextSiblingElement("animation");
     }
 
-    //printf("%s %d types loaded\n", l_xmlfile.c_str(), (int)p_tiletypes.size());
+    return 0;
 }
 
 bool world::load( std::string file, std::string ordner) {
@@ -320,8 +319,6 @@ tiletype *world::findType( int id) {
 }
 
 tile *world::getTile( tile *tilemap, vec2 pos) {
-    tile *l_tile = NULL;
-
     // nicht über rand
     if( pos.x >= p_map_width || pos.y >= p_map_hight )
         return NULL;
@@ -464,7 +461,6 @@ void world::draw( graphic *graphic) {
 
             vec2 l_position = { graphic->getCamera().x*0.5, graphic->getCamera().y};
 
-            int l_background_x = 0;
             while(l_position.x-graphic->getCamera().x+ l_background->picture->surface->w/l_factor< 0)
                 l_position.x+=l_background->picture->surface->w/l_factor;
 
