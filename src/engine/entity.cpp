@@ -803,6 +803,8 @@ void entity::draw( graphic *graphic) {
     }
 
     image *l_image = l_action->imagefile;
+    if( l_image == NULL)
+        printf("entity::draw no img found %s\n", p_type->getName().c_str());
 
     // if no frames
     if( l_action->frames == 0)
@@ -822,6 +824,10 @@ void entity::draw( graphic *graphic) {
             l_frame--;
         }
     }
+
+    // keine Negative werte
+    if( l_frame < 0)
+        l_frame = 0;
 
     // save the frame
     p_frame = l_frame;
@@ -1256,8 +1262,8 @@ void entitylist::draw(graphic *graphic, config *config) {
 
             // debug
             if( config->getDebug() ) {
-                SDL_Rect rect = {   l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x,
-                                    l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y,
+                SDL_Rect rect = {   l_obj->getPosition().tovec2().x + l_obj->getType()->getHitboxOffset().x,
+                                    l_obj->getPosition().tovec2().y + l_obj->getType()->getHitboxOffset().y,
                                     l_obj->getType()->getHitbox().x,
                                     l_obj->getType()->getHitbox().y};
                 rect.x -= graphic->getCamera().x;
@@ -1296,7 +1302,6 @@ int entitylist::setVertexHit( vertex *vertex, bool set){
 
 void entitylist::process( world *world, config *config, int deltaTime) {
     float l_velocityDelta;
-    float l_collision_y, l_collision_x;
     int l_vertexhitchange = 0;
     vec2 l_iposition;
 
@@ -1435,7 +1440,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 }
 
                 // object collision
-                if( l_ids.size() > 0 && l_change.y > 0) {
+                if( l_ids.size() > 0 && l_change.y > 0 ) {
                     for( int i = 0; i < (int)l_ids.size(); i++) {
                         entity *l_obj = getEntity( l_ids[i]);
                         // if is solid
@@ -1446,7 +1451,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if( fabs(l_result) > l_velocity.y && l_result < l_change.y+5.f) {
+                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < COLLISION_Y_OFFSET + fabs(l_change.y) + fabs(l_velocity.y)) {
+                            //if( fabs(l_result) > l_velocity.y && l_result < l_change.y+5.f) {
                                 if( l_changed == false ) {
                                     l_changed = true; // we changed
                                     l_result_change = l_change - fvec2( 0, l_result);
@@ -1511,7 +1517,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y ) {
+                            //if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y ) {
+                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < COLLISION_Y_OFFSET + fabs(l_change.y) + fabs(l_velocity.y)) {
                                 if( l_changed == false ) {
                                     l_changed = true; // we changed
                                     l_result_change = l_change - fvec2( 0, l_result);
@@ -1591,7 +1598,9 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                             float l_result = l_pos_change_x-l_bottom;
 
-                            if(fabs(l_result) > l_velocity.x && fabs(l_result) < world->getTileSize().x && l_iscalc_y == false) {
+                            if(fabs(l_result) > 0.0 && l_result < fabs(l_change.x) + 1.f && l_iscalc_y == false &&
+                               fabs(l_result) < COLLISION_X_OFFSET + fabs(l_change.x) + fabs(l_velocity.x))
+                            {
                                 if( l_changed == false ) {
                                     l_changed = true;
                                     l_result_change = l_change - fvec2( l_result,0 );
@@ -1660,7 +1669,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                             float l_result = l_pos_change_x-l_bottom;
 
-                            if(fabs(l_result) > l_velocity.x && fabs(l_result) < world->getTileSize().x && l_iscalc_y == false) {
+                            if(fabs(l_result) > 0.0 && l_result < fabs(l_change.x) + 1.f && l_iscalc_y == false &&
+                               fabs(l_result) < COLLISION_X_OFFSET + fabs(l_change.x) + fabs(l_velocity.x)) {
                                 if( l_changed == false ) {
                                     l_changed = true;
                                     l_result_change = l_change - fvec2( l_result,0 );
@@ -1710,8 +1720,8 @@ std::vector <int> entitylist::collision_boundingBox( entity* checkentity) {
     entitytype *l_type = checkentity->getType();
     std::vector <int> l_id;
 
-    vec2 l_rect1 = l_type->getHitboxOffset() + checkentity->getPosition().tovec2();
-    vec2 l_rect1_size = l_type->getHitbox();
+    fvec2 l_rect1 = fvec2(l_type->getHitboxOffset()) + checkentity->getPosition();
+    fvec2 l_rect1_size = l_type->getHitbox();
     //
     for( int i = 0; i < (int)p_entitys.size(); i++)  {
         entity* l_obj = &p_entitys[i];
@@ -1722,8 +1732,8 @@ std::vector <int> entitylist::collision_boundingBox( entity* checkentity) {
             continue;
 
         // calc rect 2
-        vec2 l_rect2 = l_typeobj->getHitboxOffset() + l_obj->getPosition().tovec2();
-        vec2 l_rect2_size = l_typeobj->getHitbox();
+        fvec2 l_rect2 = l_typeobj->getHitboxOffset() + l_obj->getPosition().tovec2();
+        fvec2 l_rect2_size = l_typeobj->getHitbox();
 
         // look if the obj hit the hitbox
         if ( l_rect1.x < l_rect2.x + l_rect2_size.x &&

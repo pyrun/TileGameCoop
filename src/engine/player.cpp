@@ -100,10 +100,11 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
         l_map_old = l_player->map_old;
         l_map = l_player->map;
 
+        // Controller get axis
         l_map->x = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisX());
         l_map->y = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisY());
 
-        // x&y axies
+        // x&y axis
         if( l_map->x > 32767/2)
             l_map->dir.right = true;
         else
@@ -121,7 +122,6 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
             l_map->dir.up = true;
         else
             l_map->dir.up = false;
-
 
         // get Buttons
         bool l_up = SDL_GameControllerGetButton( l_pad, SDL_CONTROLLER_BUTTON_DPAD_UP );
@@ -221,6 +221,8 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
             //printf( "%d %d %d %d\n", l_map->dir.right, l_map->dir.left, l_map->dir.up, l_map->dir.down);
         }
     }
+
+    // calc focus
     if( p_playercamerafocus != NULL) {
         entity *l_entity = entitylist->getEntity( p_playercamerafocus->entity_id);
         if( l_entity != NULL) {
@@ -246,9 +248,9 @@ int player_handle::player_getPlayerActive() {
 
 
 void player_handle::player_add( SDL_GameController *controller) {
-
     player *l_player =  new player();
 
+    // setze die Eigenschaften
     l_player->device_number = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
     l_player->controller = controller;
     l_player->active = false;
@@ -260,23 +262,25 @@ void player_handle::player_add( SDL_GameController *controller) {
 void player_handle::player_remove( int id) {
     player *l_player = NULL;
     int i;
+
+    // find player
     for( i = 0; i < (int)p_playerlist.size(); i++) {
         if( p_playerlist[i]->device_number == id) {
             l_player = p_playerlist[i];
             break;
         }
     }
-
     if( l_player == NULL)
         return;
 
+    // delete focus
     if( p_playercamerafocus == l_player)
         p_playercamerafocus = NULL;
 
     // close the gamepad connection
     SDL_GameControllerClose( l_player->controller );
 
-    // delete now the player
+    // delete now the player in vector
     p_playerlist.erase( p_playerlist.begin() + i);
 }
 

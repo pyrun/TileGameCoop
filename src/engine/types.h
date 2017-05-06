@@ -60,6 +60,10 @@ struct fvec2 {
         this->x = x;
         this->y = y;
     }
+    fvec2( vec2 rect) {
+        this->x = rect.x;
+        this->y = rect.y;
+    }
     float x;
     float y;
 

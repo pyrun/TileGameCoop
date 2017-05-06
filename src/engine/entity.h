@@ -30,6 +30,10 @@
 #define ACTION_SPECIAL "special"
 #define ACTION_DIE "die"
 
+// collsion offset
+#define COLLISION_X_OFFSET 6.0f
+#define COLLISION_Y_OFFSET 6.0f
+
 class action {
     public:
         std::string name;
