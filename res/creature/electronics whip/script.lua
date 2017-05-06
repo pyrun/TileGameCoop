@@ -1,15 +1,5 @@
-function vertexhit( id)
-end
-
-local timer_time = 0
-
-function start( id) 
-
-end
-
 function timer( id)
-	timer_time = timer_time + 1
-	if timer_time == 1 then
+	if getFrame( id) == 5 then
 		delete( id)
 	end
 end

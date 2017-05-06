@@ -6,19 +6,13 @@ local jump_high = -0.32
 local jump_outwater_factor = 0.75
 
 function vertexhit( id)
+
 end
 
-local cooldown = 0
+-- Attack
 local id_attack = -1
-local id_x = 0
-local id_y = 0
-
-function getCooldown()
-	return cooldown
-end
-function setCooldown( time)
-	cooldown_time = time
-end
+local id_attack_x = 0
+local id_attack_y = 0
 function getAttackId()
 	return id_attack
 end
@@ -26,19 +20,25 @@ function setAttackId( id)
 	id_attack = id
 end
 function setAttackPosition( posx, posy) 
-	id_x = posx
-	id_y = posy
+	id_attack_x = posx
+	id_attack_y = posy
+end
+-- Special
+local id_special = -1
+local id_special_x = 0
+local id_special_y = 0
+function getSpecialId()
+	return id_attack
+end
+function setSpecialId( id)
+	id_attack = id
+end
+function setSpecialPosition( posx, posy) 
+	id_special_x = posx
+	id_special_y = posy
 end
 
-function attack( id)
-end
-
-function timer( id, time)
-	if cooldown > 0 then
-		cooldown = cooldown - 1
-	end
-end
-
+-- wasser
 function liquid( id, swim)
 	if isAlive( id) == false then
 		do return end
