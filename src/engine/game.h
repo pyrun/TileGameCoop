@@ -2,14 +2,15 @@
 #define GAME_H
 
 #include "../graphic/graphic.h"
+#include "../graphic/font.h"
 #include "config.h"
 #include "framenrate.h"
 #include "input.h"
 #include "player.h"
 #include "world.h"
-#include "font.h"
 #include "entity.h"
 #include "level.h"
+#include "particle.h"
 #include <dirent.h>
 
 class game {
@@ -28,12 +29,13 @@ class game {
 
     private:
         graphic *p_graphic;
+        font *p_font;
         config p_config;
         framenrate *p_framerate;
         input *p_input;
         player_handle *p_player;
+        particle_list *p_particles;
 
-        font *p_font;
         level *p_level;
 
         timer p_timer;

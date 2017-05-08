@@ -19,6 +19,7 @@
 					<Add directory="../../SDL2_64/include" />
 					<Add directory="../../tinyxml2/inc" />
 					<Add directory="../../lua/include" />
+					<Add directory="engine" />
 				</Compiler>
 				<Linker>
 					<Add option="-lmingw32 -lSDL2main -lSDL2  -lSDL2_image -lSDL2_net" />
@@ -51,6 +52,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-std=c++0x" />
+					<Add directory="engine" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -68,6 +70,7 @@
 				<Compiler>
 					<Add option="-std=c++0x" />
 					<Add option="-DIMADEBIAN" />
+					<Add directory="engine" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -84,8 +87,6 @@
 		<Unit filename="engine/config.h" />
 		<Unit filename="engine/entity.cpp" />
 		<Unit filename="engine/entity.h" />
-		<Unit filename="engine/font.cpp" />
-		<Unit filename="engine/font.h" />
 		<Unit filename="engine/framenrate.cpp" />
 		<Unit filename="engine/framenrate.h" />
 		<Unit filename="engine/game.cpp" />
@@ -94,13 +95,16 @@
 		<Unit filename="engine/input.h" />
 		<Unit filename="engine/level.cpp" />
 		<Unit filename="engine/level.h" />
+		<Unit filename="engine/particle.cpp" />
+		<Unit filename="engine/particle.h" />
 		<Unit filename="engine/player.cpp" />
 		<Unit filename="engine/player.h" />
-		<Unit filename="engine/script.h" />
 		<Unit filename="engine/types.cpp" />
 		<Unit filename="engine/types.h" />
 		<Unit filename="engine/world.cpp" />
 		<Unit filename="engine/world.h" />
+		<Unit filename="graphic/font.cpp" />
+		<Unit filename="graphic/font.h" />
 		<Unit filename="graphic/graphic.cpp" />
 		<Unit filename="graphic/graphic.h" />
 		<Unit filename="main.cpp" />

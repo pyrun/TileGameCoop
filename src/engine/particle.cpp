@@ -1,0 +1,72 @@
+#include "particle.h"
+
+particle::particle( int number)
+{
+    //null
+    p_type = par_none;
+    p_id = number;
+    p_deadtime.start();
+}
+
+particle::~particle()
+{
+    //dtor
+}
+
+void particle::draw( graphic *graphic, font *font) {
+    switch( this->p_type) {
+        case par_text: font->drawMessage( graphic, this->p_data, this->p_pos.tovec2(), this->p_zoom.x, false, false); break;
+        case par_pic: graphic->drawImage( this->p_img, this->p_pos.tovec2(), vec2(), vec2()); break;
+        default: break;
+    }
+}
+
+particle_list::particle_list() {
+     p_number = 0;
+}
+
+particle_list::~particle_list() {
+
+}
+
+int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data) {
+    particle l_par( p_number);
+
+    // Daten setzten
+    l_par.setType( type);
+    l_par.setPosition( pos);
+    l_par.setData( data);
+    l_par.setVelocity( velocity);
+    l_par.setLifeTime( lifetime);
+    l_par.setZoom( fvec2( 1, 1));
+
+    // eindeutige ID erhöhen
+    p_number++;
+
+    // hinzufügen
+    p_particels.push_back( l_par);
+    return p_number;
+}
+
+void particle_list::draw( graphic *graphic, font *font) {
+    for( int i = 0; i < (int)p_particels.size(); i++) {
+        particle *l_par = &p_particels[i];
+
+        // call draw
+        l_par->draw( graphic, font);
+
+        if( l_par->isDead()) {
+            p_particels.erase( p_particels.begin()+i);
+            i--;
+        }
+    }
+}
+
+particle *particle_list::getParticel( int id) {
+    particle *l_par = NULL;
+    for( int i = 0; i < (int)p_particels.size(); i++) {
+        if( p_particels[i].getId() == id)
+            l_par = &p_particels[i];
+    }
+    return l_par;
+}

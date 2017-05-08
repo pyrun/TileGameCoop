@@ -7,7 +7,6 @@
 
 #include "../engine/config.h"
 
-
 #define NATIV_W (1920/4)
 #define NATIV_H (1080/4)
 

@@ -8,17 +8,19 @@ game::game()
     // init graphic
     p_graphic = new graphic( &p_config);
 
+    // load font
+    p_font = new font( p_graphic);
+
     // create the framerate counter
     p_framerate = new framenrate( );
 
-        // input
+    // input
     p_input = new input( &p_config);
 
     // create player_list
     p_player = new player_handle();
 
-    // load font
-    p_font = new font( p_graphic);
+    p_particles = new particle_list();
 
     // game running
     p_game_running = true;
@@ -39,6 +41,9 @@ game::~game()
     // free player
     if( p_player)
         delete p_player;
+    // delete the particle system
+    if( p_particles)
+        delete p_particles;
     // free graphic
     if( p_graphic)
         delete p_graphic;
@@ -73,7 +78,11 @@ int game::process() {
 int game::process_graphic( std::string levelName) {
     int l_error;
 
-    p_level = new level( levelName.size()!=0?"overworld.tmx":levelName.c_str(), "worlds/", p_graphic);
+    levelName = "world_0.tmx";
+
+    p_level = new level( levelName.size()==0?"overworld.tmx":levelName.c_str(), "worlds/", p_graphic);
+
+    p_particles->createParticel( par_text, fvec2( 100,100), fvec2(), 10*100, "test");
 
     // at the moment we have no error
     l_error = 0;
@@ -108,6 +117,10 @@ int game::process_graphic( std::string levelName) {
         // draw entity
         p_level->getEntityList()->draw( p_graphic, &p_config);
 
+        // draw particle
+        p_particles->draw( p_graphic, p_font);
+
+        // draw overground
         p_level->getWorld()->drawOverground( p_graphic);
 
         // draw info

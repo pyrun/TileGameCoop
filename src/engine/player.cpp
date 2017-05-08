@@ -153,7 +153,7 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
         l_map->left = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_left());
         l_map->right = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_right());
 
-        if( l_map->start && !l_map_old->start)
+        if( l_map->start && !l_map_old->start && entitylist->getAmountPlayerObject() > player_getPlayerActive())
             l_player->wantToJoin = true;
         if( l_player->wantToJoin && !l_player->active) {
             if( l_player->entity_id == -1) {

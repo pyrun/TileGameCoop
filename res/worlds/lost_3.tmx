@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="256" height="16" tilewidth="16" tileheight="16" nextobjectid="91">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="256" height="16" tilewidth="16" tileheight="16" nextobjectid="95">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
@@ -156,6 +156,18 @@
   <object id="90" name="portal" x="3952" y="64" width="16" height="32">
    <properties>
     <property name="global" value="jan"/>
+   </properties>
+  </object>
+  <object id="91" name="finish" x="4048" y="48" width="16" height="16"/>
+  <object id="93" name="portal" x="1664" y="176" width="16" height="32">
+   <properties>
+    <property name="global" value="alex"/>
+   </properties>
+  </object>
+  <object id="94" name="turtle" x="624" y="240" width="32" height="16">
+   <properties>
+    <property name="action" value="fly"/>
+    <property name="global" value="15"/>
    </properties>
   </object>
  </objectgroup>

@@ -7,8 +7,8 @@ int main(int argc, char *argv[]) {
 
     std::string l_level;
 
-    if( argc > 0) {
-        l_level = argv[0];
+    if( argc > 1) {
+        l_level = argv[1];
     }
 
     return p_game.process_graphic( l_level);
