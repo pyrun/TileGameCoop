@@ -12,6 +12,35 @@ using namespace tinyxml2;
 entitylist *lua_entitylist = NULL;
 world *lua_worldlist = NULL;
 
+#include <iostream>
+
+static int lua_print(lua_State* state) {
+    if( !lua_isnumber( state, 1) ) {
+        printf( "lua_print call wrong argument\n");
+        return 0;
+    }
+
+    // get obj
+    int l_id = lua_tointeger( state, 1);
+    entity *l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_print obj not found\n");
+        return 0;
+    }
+
+    // process the input
+    int nargs = lua_gettop( state)-1;
+    printf("print id:%d text = ", l_id);
+    for (int i=1; i <= nargs; ++i) {
+		printf( "%s", lua_tostring( state, i+1));
+    }
+    printf("\n");
+
+    // finish
+    return 0;
+}
+
+
 static int lua_setLoadLevel( lua_State *state) {
     std::string l_level;
     bool l_asPlayer;
@@ -617,6 +646,9 @@ static int lua_getGravity( lua_State *state) {
 
 void lua_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_print);
+    lua_setglobal( state, "print");
+
     lua_pushcfunction( state, lua_setLoadLevel);
     lua_setglobal( state, "setLoadLevel");
 

@@ -11,8 +11,10 @@ font::~font()
     //dtor
 }
 
-void font::drawMessage(graphic *graphic, std::string text, vec2 pos, float zoom, bool left, bool up) {
+void font::drawMessage(graphic *graphic, std::string text, vec2 pos, float zoom, int alpha, bool left, bool up) {
     vec2 l_change;
+
+    p_font->setAlpha( alpha);
 
     // draw all leter now
     for( int i = 0; i < (int)text.size(); i++) {
@@ -27,4 +29,5 @@ void font::drawMessage(graphic *graphic, std::string text, vec2 pos, float zoom,
         // draw one letter
         drawLetter( graphic, text.c_str()[i], pos + l_change, 1.0f/zoom);
     }
+    p_font->setAlpha( 255);
 }

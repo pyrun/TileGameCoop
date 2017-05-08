@@ -30,6 +30,7 @@ function special( id)
 end
 
 function attack( id)
+	print( id, "test2")
 	if isAlive(getAttackId()) == false then
 		l_dir = getAnimationDirection( id)
 		l_x, l_y = getPosition( id)
