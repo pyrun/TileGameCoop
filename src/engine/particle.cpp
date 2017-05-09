@@ -13,9 +13,24 @@ particle::~particle()
     //dtor
 }
 
+#include <stdio.h>
+#include <math.h>
+
 void particle::draw( graphic *graphic, font *font) {
+    int l_max = p_lifetime;
+    int l_now = p_lifetime-p_deadtime.getTicks();
+    static float l_e = 2.71;
+
+    // calc alpha - fade out
+    float l_alpha = 8.0f/l_max*l_now; // calc C
+    l_alpha = 1.0f-pow( l_e, -l_alpha); // 1.0f-pow( eule, -Zeitkonstante ); https://de.wikipedia.org/wiki/Zeitkonstante
+    l_alpha *= 255.f;
+    if( l_alpha < 0)
+        l_alpha = 0;
+
+    // draw type
     switch( this->p_type) {
-        case par_text: font->drawMessage( graphic, this->p_data, this->p_pos.tovec2(), this->p_zoom.x, false, false); break;
+        case par_text: font->drawMessage( graphic, this->p_data, this->p_pos.tovec2(), this->p_zoom.x, (int)l_alpha, false, false); break;
         case par_pic: graphic->drawImage( this->p_img, this->p_pos.tovec2(), vec2(), vec2()); break;
         default: break;
     }

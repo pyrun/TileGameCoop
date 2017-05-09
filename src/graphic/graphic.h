@@ -21,6 +21,8 @@ class image {
         image();
         ~image();
 
+        void setAlpha( int alpha) {  SDL_SetTextureAlphaMod( texture, alpha); }
+
         SDL_Texture *texture;
         SDL_Surface *surface;
         std::string file;
