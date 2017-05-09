@@ -17,6 +17,7 @@
 #include "types.h"
 #include "../xml/tinyxml2.h"
 #include "world.h"
+#include "particle.h"
 
 #define ENTITY_FILE "definition.xml"
 
@@ -55,6 +56,12 @@ class vertex {
         int id;
 
         void setHit( bool set) { hit = set; }
+};
+
+class entity_text {
+    public:
+        int id;
+        std::string text;
 };
 
 class entitytype
@@ -217,7 +224,7 @@ class entitylist {
         void deleteObj( int id);
         bool createFromWorldFile( std::string file, world *world);
 
-        void draw(graphic *graphic, config *config);
+        void draw(graphic *graphic, particle_list *particle,config *config);
 
         int setVertexHit( vertex *vertex, bool set);
 
@@ -230,6 +237,7 @@ class entitylist {
         void loadTypes( std::string folder, graphic *graphic);
         entitytype *getType( std::string name);
         std::vector<int> findPlayerObject();
+        void Message( int id, std::string text);
 
         entity *getEntity( int id);
         int getAmountPlayerObject() { return p_playerentity; }
@@ -238,6 +246,7 @@ class entitylist {
     private:
         std::vector<entitytype> p_entity_types;
         std::vector<entity> p_entitys;
+        std::vector<entity_text> p_text;
         int p_id;
 
         int p_playerentity;

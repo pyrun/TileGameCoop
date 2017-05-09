@@ -1254,7 +1254,7 @@ bool entitylist::createFromWorldFile( std::string file, world *world) {
     return true;
 }
 
-void entitylist::draw(graphic *graphic, config *config) {
+void entitylist::draw(graphic *graphic, particle_list* particle, config *config) {
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_obj = &p_entitys[i];
         if( l_obj != NULL)
@@ -1285,8 +1285,21 @@ void entitylist::draw(graphic *graphic, config *config) {
                     SDL_RenderDrawPoint( graphic->getRenderer(), l_collision_pos.x, l_collision_pos.y);
                 }
             }
-
     }
+
+    // draw text
+    for( int i = 0; i < (int)p_text.size(); i++) {
+        entity_text *l_text = &p_text[i];
+        entity *l_obj = getEntity( p_text->id);
+        // if object found add particle
+        if( l_obj) {
+            // anzeigen
+            particle->createParticel( par_text, l_obj->getPosition(), l_obj->getVelocity(), 1000, l_text->text);
+        }
+    }
+    // aufräumen falls was drin ist
+    if( (int)p_text.size())
+        p_text.clear();
 }
 
 int entitylist::setVertexHit( vertex *vertex, bool set){
@@ -1965,6 +1978,15 @@ std::vector<int> entitylist::findPlayerObject() {
             l_obj.push_back( l_entity->getId());
     }
     return l_obj;
+}
+
+void entitylist::Message( int id, std::string text) {
+    entity_text l_text;
+
+    l_text.id = id;
+    l_text.text = text;
+
+    p_text.push_back( l_text);
 }
 
 entity* entitylist::getEntity( int id) {
