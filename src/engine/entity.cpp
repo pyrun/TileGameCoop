@@ -30,11 +30,13 @@ static int lua_print(lua_State* state) {
 
     // process the input
     int nargs = lua_gettop( state)-1;
-    printf("print id:%d text = ", l_id);
+    std::string l_text;
     for (int i=1; i <= nargs; ++i) {
-		printf( "%s", lua_tostring( state, i+1));
+		l_text += lua_tostring( state, i+1);
     }
-    printf("\n");
+
+    // call entity_list to add a new msg
+    lua_entitylist->message( l_id, l_text);
 
     // finish
     return 0;
@@ -1322,7 +1324,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config)
     // draw text
     for( int i = 0; i < (int)p_text.size(); i++) {
         entity_text *l_text = &p_text[i];
-        entity *l_obj = getEntity( p_text->id);
+        entity *l_obj = getEntity( l_text->id);
         // if object found add particle
         if( l_obj) {
             // anzeigen
@@ -2012,7 +2014,7 @@ std::vector<int> entitylist::findPlayerObject() {
     return l_obj;
 }
 
-void entitylist::Message( int id, std::string text) {
+void entitylist::message( int id, std::string text) {
     entity_text l_text;
 
     l_text.id = id;
