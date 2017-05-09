@@ -1,8 +1,8 @@
 ## Synopsis
-
 ![Clouds world](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_1.bmp)
 ![Grasland](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_2.jpg)
-Platform + Jump n Run + endless player support
+
+Platform + Jump n Run + endless player support :)
 
 ## Motivation
 
@@ -28,13 +28,10 @@ Linux
 
 ## API Reference
 
-SDL2.*  http://libsdl.org/
-SDL2_Image  https://www.libsdl.org/projects/SDL_image/
-lua5.3  https://www.lua.org/
-
-## Contributors
-
--ToDo-
+[SDL2.*](http://libsdl.org/) Simple DirectMedia Layer cross-platform development library
+[SDL2_Image](https://www.libsdl.org/projects/SDL_image/)  image file loading library for SDL
+[SDL2_Mixer](https://www.libsdl.org/projects/SDL_mixer/) sample multi-channel audio mixer library for SDL
+[lua5.3](https://www.lua.org/) powerful, efficient, lightweight, embeddable scripting language
 
 ## License
 
