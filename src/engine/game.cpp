@@ -78,7 +78,7 @@ int game::process() {
 int game::process_graphic( std::string levelName) {
     int l_error;
 
-    levelName = "world_0.tmx";
+    //levelName = "world_0.tmx";
 
     p_level = new level( levelName.size()==0?"overworld.tmx":levelName.c_str(), "worlds/", p_graphic);
 
