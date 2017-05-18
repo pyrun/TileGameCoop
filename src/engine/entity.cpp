@@ -144,6 +144,29 @@ static int lua_howManyPlayerEntity( lua_State *state) {
     return 1;
 }
 
+static int lua_findObjects( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    fvec2 l_pos;
+    fvec2 l_rect;
+
+    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) || !lua_isnumber( state, 3) || !lua_isnumber( state, 4) || !lua_isnumber( state, 5)) {
+        printf( "lua_findObjects call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_pos = fvec2( lua_tointeger( state, 2), lua_tointeger( state, 3));
+    l_rect = fvec2( lua_tointeger( state, 4), lua_tointeger( state, 5));
+
+    std::vector<int> l_ids = lua_entitylist->collision_boundingBoxRect( l_pos, l_rect, l_id);
+
+    for( int i  = 0; i < (int)l_ids.size(); i++)
+        lua_pushnumber( state, l_ids[i]);
+
+    return (int)l_ids.size();
+}
+
 static int lua_isEnemy( lua_State *state) {
     entity *l_obj;
     entitytype *l_type;
@@ -665,6 +688,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_howManyPlayerEntity);
     lua_setglobal( state, "howManyPlayerEntity");
+
+    lua_pushcfunction( state, lua_findObjects);
+    lua_setglobal( state, "findObjects");
 
     lua_pushcfunction( state, lua_isEnemy);
     lua_setglobal( state, "isEnemy");
@@ -1501,7 +1527,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             if(fabs(l_result) > l_velocity.y && fabs(l_result) < COLLISION_Y_OFFSET + fabs(l_change.y) + fabs(l_velocity.y)) {
                             //if( fabs(l_result) > l_velocity.y && l_result < l_change.y+5.f) {
                                 if( l_changed == false ) {
-                                    l_changed = true; // we changed
+                                    l_changed = true; // we change
+
                                     l_result_change = l_change - fvec2( 0, l_result);
 
                                     //l_change.y = 0;//l_entity->( fvec2());
@@ -1776,6 +1803,35 @@ std::vector <int> entitylist::collision_boundingBox( entity* checkentity) {
 
         // self dont regist
         if( l_obj->getId() == checkentity->getId())
+            continue;
+
+        // calc rect 2
+        fvec2 l_rect2 = l_typeobj->getHitboxOffset() + l_obj->getPosition().tovec2();
+        fvec2 l_rect2_size = l_typeobj->getHitbox();
+
+        // look if the obj hit the hitbox
+        if ( l_rect1.x < l_rect2.x + l_rect2_size.x &&
+            l_rect1.x + l_rect1_size.x > l_rect2.x &&
+            l_rect1.y < l_rect2.y + l_rect2_size.y &&
+            l_rect1_size.y + l_rect1.y > l_rect2.y) {
+                l_id.push_back( l_obj->getId());
+            }
+    }
+    return l_id;
+}
+
+std::vector <int> entitylist::collision_boundingBoxRect( fvec2 l_postion, fvec2 l_size, int id) {
+    std::vector <int> l_id;
+
+    fvec2 l_rect1 = l_postion;
+    fvec2 l_rect1_size = l_size;
+    //
+    for( int i = 0; i < (int)p_entitys.size(); i++)  {
+        entity* l_obj = &p_entitys[i];
+        entitytype *l_typeobj = l_obj->getType();
+
+        // self dont regist
+        if( l_obj->getId() == id)
             continue;
 
         // calc rect 2

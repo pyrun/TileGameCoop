@@ -207,7 +207,7 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                     l_entity->lua_right( l_entity->getId());
 
                 // focus
-                if( l_map->left && !l_map_old->left) {
+                if( l_map->start && !l_map_old->start) {
                     if( p_playercamerafocus == l_player)
                         p_playercamerafocus = NULL;
                     else

@@ -72,7 +72,7 @@
   </properties>
   <object id="37" name="start_player" x="0" y="144" width="16" height="32">
    <properties>
-    <property name="global" value="alex"/>
+    <property name="global" value="alex alex"/>
    </properties>
   </object>
   <object id="38" name="finish" x="0" y="128" width="16" height="16"/>

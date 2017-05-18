@@ -232,6 +232,7 @@ class entitylist {
 
         void vertexHit( entity *entity, int vertexid);
         std::vector <int> collision_boundingBox( entity* checkentity);
+        std::vector <int> collision_boundingBoxRect( fvec2 l_postion, fvec2 l_size, int id);
         bool loadType( std::string folder, graphic *graphic);
         void removeTypes();
         void loadTypes( std::string folder, graphic *graphic);
