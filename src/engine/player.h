@@ -16,6 +16,7 @@ class player {
         SDL_GameController *controller;
         bool active;
         bool wantToJoin;
+        int id;
 
         SDL_JoystickID device_number;
 
@@ -33,6 +34,7 @@ class player_handle
 
         void next_player_entity( entitylist *entitylist, player *l_player);
         void handle( entitylist *entity, input *input, graphic* graphic, config* config);
+        void draw( entitylist *entitylist, font *font, graphic* graphic);
         int getPlayerAmount() { return (int)p_playerlist.size(); }
         int player_getPlayerActive();
         void setAllInavtive() {
@@ -56,6 +58,7 @@ class player_handle
         player *p_playercamerafocus;
 
         std::vector<std::string> p_entityNames;
+        int p_count;
 };
 
 #endif // PLAYER_H

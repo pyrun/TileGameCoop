@@ -10,7 +10,7 @@ function timer( id, time)
 		local shift = 0
 		for w in global_value:gmatch("%S+") do
 			createObject( w, l_x + shift, l_y)
-			shift = shift + 3
+			shift = shift + 16
 		end
 	end
 	delete( id)

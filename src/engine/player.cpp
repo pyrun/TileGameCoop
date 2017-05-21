@@ -7,6 +7,8 @@ player_handle::player_handle()
     //p_config = config;
 
     p_playercamerafocus = NULL;
+
+    p_count = 1;
 }
 
 player_handle::~player_handle() {
@@ -15,7 +17,6 @@ player_handle::~player_handle() {
         SDL_GameController *l_pad = p_playerlist[i]->controller;
         SDL_GameControllerClose(l_pad);
     }
-
 }
 
 void player_handle::next_player_entity( entitylist *entitylist, player *l_player) {
@@ -187,8 +188,8 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                     l_entity->lua_run( l_entity->getId(), false);
 
                 // find next object
-                if( l_map->right && !l_map_old->right)
-                    next_player_entity( entitylist, l_player);
+                //if( l_map->right && !l_map_old->right)
+                //    next_player_entity( entitylist, l_player);
 
                 if( l_map->select && !l_map_old->select)
                     config->setQuit( true);
@@ -208,9 +209,9 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
 
                 // focus
                 if( l_map->start && !l_map_old->start) {
-                    if( p_playercamerafocus == l_player)
+                    /*if( p_playercamerafocus == l_player)
                         p_playercamerafocus = NULL;
-                    else
+                    else*/
                         p_playercamerafocus = l_player;
                 } // end focus
 
@@ -237,6 +238,21 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
 
 }
 
+void player_handle::draw( entitylist *entitylist, font *font, graphic* graphic) {
+    // react of push bottum
+    for( int i = 0; i < (int)p_playerlist.size(); i++) {
+        player* l_player = p_playerlist[i];
+        if( l_player->active) {
+            entity *l_entity = entitylist->getEntity( l_player->entity_id);
+            if( !l_entity)
+                continue;
+            char l_text[255];
+            sprintf( l_text, "P%d", l_player->id);
+            font->drawMessage( graphic, l_text, l_entity->getPosition().tovec2(), 0.5f, 255, false, true)  ;
+        }
+    }
+}
+
 int player_handle::player_getPlayerActive() {
     int l_number = 0;
     for( int i = 0; i < (int)p_playerlist.size(); i++) {
@@ -255,6 +271,9 @@ void player_handle::player_add( SDL_GameController *controller) {
     l_player->controller = controller;
     l_player->active = false;
     l_player->wantToJoin = false;
+    l_player->id = p_count;
+
+    p_count++;
 
     p_playerlist.push_back( l_player);
 }
