@@ -778,7 +778,7 @@ action* entitytype::getAction( std::string name) {
     return NULL;
 }
 
-void entitytype::addAction( std::string name, std::string file, int frames, int speed, int loop, image *image) {
+void entitytype::addAction( std::string name, std::string file, int frames, int speed, int loop, image *image, std::string startcall, std::string endcall) {
     action *l_action = new action;
 
     l_action->name = name;
@@ -787,6 +787,8 @@ void entitytype::addAction( std::string name, std::string file, int frames, int 
     l_action->speed = speed;
     l_action->imagefile = image;
     l_action->loop = loop;
+    l_action->startcall = startcall;
+    l_action->endcall = endcall;
 
     p_actions.push_back( *l_action);
 }
@@ -875,15 +877,20 @@ void entity::draw( graphic *graphic) {
     l_frame = (int)(l_action_frame_time/l_action->speed);
 
     // ende der frames
+    bool l_flagEnd = false;
     while( l_frame >= l_action->frames) {
         // loop
         if( l_action->loop) {
             p_timestartaction = graphic->getFrame();
             l_frame--;
         } else {
+            l_flagEnd = true;
             l_frame--;
         }
     }
+
+    if( l_flagEnd && l_action->endcall.size() > 0)
+        lua_action( l_action->endcall);
 
     // keine Negative werte
     if( l_frame < 0)
@@ -894,6 +901,25 @@ void entity::draw( graphic *graphic) {
 
     // draw call
     graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( p_type->getWidth()*l_frame, 0), 0, p_direction);
+}
+
+void entity::setAction( std::string name, bool withStartCall) {
+    // check if name is void
+    if( p_action != name) {
+        p_action = name;
+        p_timestartaction = -1;
+        p_frame = 0;
+
+        if( p_type != NULL && withStartCall == true) {
+            // get action
+            action *l_action = p_type->getAction( this->p_action);
+            if( l_action != NULL) {
+                //start lua action
+                if( l_action->startcall.size() > 0)
+                    lua_action( l_action->startcall);
+            }
+        }
+    }
 }
 
 void entity::loadScript( std::string file) {
@@ -1193,7 +1219,7 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     // create object
     obj = new entity( l_id);
     // set data
-    obj->setAction( ACTION_IDLE);
+    obj->setAction( ACTION_IDLE, false);
     obj->setType( type);
     obj->setPos( pos);
     obj->setVertex( type->getVertex());
@@ -1908,6 +1934,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     int l_action_frames;
     int l_action_speed;
     int l_action_loop;
+    std::string l_startCall;
+    std::string l_endCall;
 
     bool l_idle = false;
     // read all actions
@@ -1929,6 +1957,17 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         else
             l_action_loop = 1;
 
+
+        if( l_xml_action->Attribute( "startCall" ))
+            l_startCall = l_xml_action->Attribute( "startCall" );
+        else
+            l_startCall = "";
+
+        if( l_xml_action->Attribute( "endCall" ))
+            l_endCall = l_xml_action->Attribute( "endCall" );
+        else
+            l_endCall = "";
+
         // check data
         if( l_action_speed == 0)
             l_action_speed = 1; // verry fast animation
@@ -1937,7 +1976,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
             l_idle = true;
 
         // push back
-        l_type->addAction( l_action_name, l_action_file, l_action_frames, l_action_speed, l_action_loop,graphic->loadImage( folder + l_action_file));
+        l_type->addAction( l_action_name, l_action_file, l_action_frames, l_action_speed, l_action_loop,graphic->loadImage( folder + l_action_file), l_startCall, l_endCall);
 
         l_xml_action = l_xml_action->NextSiblingElement("action");
     }

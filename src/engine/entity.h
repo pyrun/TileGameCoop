@@ -43,6 +43,8 @@ class action {
         int speed;
         int loop;
         image *imagefile;
+        std::string startcall;
+        std::string endcall;
 };
 
 class vertex {
@@ -72,7 +74,7 @@ class entitytype
 
         action* getAction( std::string name);
 
-        void addAction( std::string name, std::string file, int frames, int speed, int loop, image *image);
+        void addAction( std::string name, std::string file, int frames, int speed, int loop, image *image, std::string startcall, std::string endcall);
         void addVertex(vec2 pos, bool left, bool right, bool up, bool down, int id);
 
         void setName( std::string name) { p_name = name; }
@@ -127,7 +129,7 @@ class entity
         void draw( graphic *graphic);
 
         void setType( entitytype *type) { this->p_type = type; }
-        void setAction( std::string name) { if( p_action != name) { p_action = name; p_timestartaction = -1; p_frame = 0; } }
+        void setAction( std::string name, bool withStartCall = true);
         void setTimeStartAction( int set) { p_timestartaction = set; }
         void setDirection( bool dir) { p_direction = dir; }
         int getDirection() { return p_direction; }
@@ -140,6 +142,22 @@ class entity
         void setSolid( bool set) { p_solid = set; }
         void setGravity( bool set) { p_gravity = set; }
         bool getGravity() { return p_gravity; }
+
+        void lua_action( std::string l_action) {
+            if( p_state == NULL)
+                return;
+
+            // name the function
+            lua_getglobal( p_state, l_action.c_str());
+            if( !lua_isfunction( p_state, -1)) {
+                lua_pop( p_state,1);
+                return;
+            }
+            lua_pushnumber( p_state, this->getId());
+            // call the function
+            if( lua_pcall( p_state, 1, 0, 0))
+                printf("entity::lua_action %s\n", lua_tostring( p_state, -1));
+        }
 
         bool NeedUpdate() { return p_update; }
 
