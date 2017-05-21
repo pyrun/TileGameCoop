@@ -4,8 +4,10 @@ end
 
 function collision( id, ...)
 	for k,v in pairs({...}) do
-		if isAlive( v) == true then	
-			end_level( true)
+		if getPlayer( v) > 0 then
+			if getPlayerChamp( getPlayer( v)) == "" then	
+				setPlayerChamp( "alex", getPlayer( v))
+			end
 		end
 	end
 end

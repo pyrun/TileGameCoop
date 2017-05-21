@@ -72,6 +72,15 @@ function timer( id, time)
 end
 
 function up( id) 
+	-- look if player
+	if getPlayer( id) > 0 then
+		-- if set not more move
+		name = getPlayerChamp( getPlayer( id))
+		if string.len(name) > 0 then			
+			do return end
+		end
+	end
+
 	l_x1, l_y1 = getPosition( id)
 	tile_x = l_x1/16
 	tile_y = l_y1/16-1
@@ -98,6 +107,14 @@ function up( id)
 end
 
 function down( id)
+	-- look if player
+	if getPlayer( id) > 0 then
+		-- if set not more move
+		name = getPlayerChamp( getPlayer( id))
+		if string.len(name) > 0 then			
+			do return end
+		end
+	end
 	l_x1, l_y1 = getPosition( id)
 	tile_x = l_x1/16
 	tile_y = l_y1/16+1
@@ -124,6 +141,14 @@ function down( id)
 end
 
 function right( id)
+	-- look if player
+	if getPlayer( id) > 0 then
+		-- if set not more move
+		name = getPlayerChamp( getPlayer( id))
+		if string.len(name) > 0 then			
+			do return end
+		end
+	end
 	l_x1, l_y1 = getPosition( id)
 	tile_x = l_x1/16+1
 	tile_y = l_y1/16
@@ -150,6 +175,14 @@ function right( id)
 end
 
 function left( id)
+	-- look if player
+	if getPlayer( id) > 0 then
+		-- if set not more move
+		name = getPlayerChamp( getPlayer( id))
+		if string.len(name) > 0 then			
+			do return end
+		end
+	end
 	l_x1, l_y1 = getPosition( id)
 	tile_x = l_x1/16-1
 	tile_y = l_y1/16

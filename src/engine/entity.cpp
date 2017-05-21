@@ -1252,34 +1252,35 @@ void entitylist::deleteObj( int id) {
             p_entitys.erase( p_entitys.begin()+i);
 }
 
-bool entitylist::createFromWorldFile( std::string file, world *world) {
+std::vector<int> entitylist::createFromWorldFile( std::string file, world *world) {
     XMLDocument l_file;
     std::string l_type;
     int l_id;
+    std::vector<int> l_ids;
 
     vec2 l_pos;
 
     // load form world file
     XMLError l_result = l_file.LoadFile( file.c_str());
     // check the file
-    XMLCheckResult(l_result);
+    //XMLCheckResult(l_result);
 
     // file exist?
     if( file_exist( file) == false) {
         printf( "entitylist::createFromWorldFile file dont exist \"%s\"\n", file.c_str());
-        return false;
+        return l_ids;
     }
 
     XMLElement* l_map = l_file.FirstChildElement( "map" );
     if( !l_map) {
         printf( "entitylist::createFromWorldFile world has no map defined\n");
-        return false;
+        return l_ids;
     }
 
     XMLElement* l_objectgroup = l_map->FirstChildElement( "objectgroup" );
     if( !l_objectgroup) {
         printf( "entitylist::createFromWorldFile objectgroup has no map defined\n");
-        return false;
+        return l_ids;
     }
 
     XMLElement* l_object = l_objectgroup->FirstChildElement( "object" );
@@ -1301,6 +1302,9 @@ bool entitylist::createFromWorldFile( std::string file, world *world) {
         if( l_entity_type != NULL) {
             l_id = create( l_entity_type, l_pos, l_id);
             entity *l_entity = getEntity( l_id);
+
+            // sammel alle ids
+            l_ids.push_back( l_id);
 
             // random start animation
             l_entity->setTimeStartAction( rand()%20);
@@ -1337,7 +1341,7 @@ bool entitylist::createFromWorldFile( std::string file, world *world) {
         l_object = l_object->NextSiblingElement( "object");
     }
 
-    return true;
+    return l_ids;
 }
 
 void entitylist::draw(graphic *graphic, particle_list* particle, config *config) {

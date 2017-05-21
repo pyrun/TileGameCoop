@@ -11,7 +11,7 @@
 
 class player {
     public:
-        player() { map = new input_map; map_old = new input_map; entity_id = -1;}
+        player() { map = new input_map; map_old = new input_map; entity_id = -1; champ = ""; }
         ~player() { SDL_GameControllerClose(controller); }
         SDL_GameController *controller;
         bool active;
@@ -24,6 +24,8 @@ class player {
         input_map *map_old;
 
         int entity_id;
+
+        std::string champ;
 };
 
 class player_handle
@@ -35,6 +37,14 @@ class player_handle
         void next_player_entity( entitylist *entitylist, player *l_player);
         void handle( entitylist *entity, input *input, graphic* graphic, config* config);
         void draw( entitylist *entitylist, font *font, graphic* graphic);
+        void join( entitylist *entitylist) {
+            for( int i = 0; i < (int)p_playerlist.size(); i++) {
+                player *l_player = p_playerlist[i];
+                entitytype *l_type = entitylist->getType( l_player->champ );
+                if( l_type)
+                    entitylist->create( l_type, vec2( 100, 100));
+            }
+        }
         int getPlayerAmount() { return (int)p_playerlist.size(); }
         int player_getPlayerActive();
         void setAllInavtive() {
@@ -46,9 +56,36 @@ class player_handle
                 p_player->active = false;
             }
         }
+        void setPlayerChamp( int id, std::string name) {
+            player* l_player = getPlayer( id);
+            if( l_player)
+                l_player->champ = name;
+        }
+        std::string getPlayerChamp( int id) {
+            player* l_player = getPlayer( id);
+            if( l_player)
+                return l_player->champ;
+            return "";
+        }
         void resetEntitys() { p_entityNames.clear(); }
         void addEntity( std::string names) { p_entityNames.push_back( names); }
         std::vector<std::string> getEntityList() { return p_entityNames; }
+        player *getPlayer( int id) {
+            for( int i = 0; i < (int)p_playerlist.size(); i++) {
+                player *p_player = p_playerlist[i];
+                if( p_player->id == id)
+                    return p_player;
+            }
+            return NULL;
+        }
+        player *getPlayerByEntity( int id) {
+            for( int i = 0; i < (int)p_playerlist.size(); i++) {
+                player *p_player = p_playerlist[i];
+                if( p_player->entity_id == id)
+                    return p_player;
+            }
+            return NULL;
+        }
     protected:
     private:
         std::vector<player*> p_playerlist;
@@ -60,5 +97,8 @@ class player_handle
         std::vector<std::string> p_entityNames;
         int p_count;
 };
+
+void lua_player_setLink( player_handle *player);
+void lua_player_install( lua_State *state);
 
 #endif // PLAYER_H

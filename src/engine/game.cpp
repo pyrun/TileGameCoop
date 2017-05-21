@@ -80,7 +80,7 @@ int game::process_graphic( std::string levelName) {
 
     levelName = "champselect.tmx";
 
-    p_level = new level( levelName.size()==0?"overworld.tmx":levelName.c_str(), "worlds/", p_graphic);
+    p_level = new level( levelName.size()==0?"overworld.tmx":levelName.c_str(), "worlds/", p_graphic, p_player);
 
     p_particles->createParticel( par_text, fvec2( 100,100), fvec2(), 10*100, "test");
 

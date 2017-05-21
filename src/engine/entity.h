@@ -209,6 +209,7 @@ class entity
             return true;
         }
         int getFrame() { return p_frame; }
+        lua_State *getState() { return p_state; }
     protected:
 
     private:
@@ -240,7 +241,7 @@ class entitylist {
 
         int create( entitytype *type, vec2 pos, int id = -1);
         void deleteObj( int id);
-        bool createFromWorldFile( std::string file, world *world);
+        std::vector<int> createFromWorldFile( std::string file, world *world);
 
         void draw(graphic *graphic, particle_list *particle,config *config);
 

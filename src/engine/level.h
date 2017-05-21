@@ -11,7 +11,7 @@
 class level
 {
     public:
-        level(std::string file, std::string folder, graphic *graphic);
+        level(std::string file, std::string folder, graphic *graphic, player_handle *player);
         virtual ~level();
 
         void process( float l_delta, config *config, graphic *graphic, player_handle *playerlist);

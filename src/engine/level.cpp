@@ -1,6 +1,6 @@
 #include "level.h"
 
-level::level(std::string file, std::string folder, graphic *graphic)
+level::level(std::string file, std::string folder, graphic *graphic, player_handle *player)
 {
     p_entity = NULL;
     p_world = NULL;
@@ -15,9 +15,16 @@ level::level(std::string file, std::string folder, graphic *graphic)
 
     // set link
     lua_setLink( p_entity, p_world);
+    lua_player_setLink( player);
 
     // load now all entitys
-    p_entity->createFromWorldFile( p_world->getFileName(), p_world);
+    std::vector<int> l_ids = p_entity->createFromWorldFile( p_world->getFileName(), p_world);
+
+    for( int i = 0; i < l_ids.size(); i++) {
+        entity *l_entity = p_entity->getEntity( l_ids[i]);
+        if( l_entity)
+            lua_player_install( l_entity->getState());
+    }
 
     // load all image files
     p_world->loadImageFiles( graphic);
@@ -38,6 +45,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
                 std::vector<int> l_obj = p_level->getEntityList()->findPlayerObject();
                 for( int n = 0; n < (int)l_obj.size(); n++) {
                     entity *l_entity = p_level->getEntityList()->getEntity( l_obj[n]);
+
                     // ist es am leben
                     if( l_entity->isAlive()) {
                         playerlist->addEntity(l_entity->getType()->getName() );
@@ -80,7 +88,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
 
         std::string l_level = getWorld()->needLoadWorld();
         p_world->setLoadWorld( "", false); // NULL
-        p_level = new level( l_level, "worlds/", graphic);
+        p_level = new level( l_level, "worlds/", graphic, playerlist);
     }
 }
 
