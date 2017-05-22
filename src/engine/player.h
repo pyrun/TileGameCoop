@@ -47,6 +47,15 @@ class player_handle
         }
         int getPlayerAmount() { return (int)p_playerlist.size(); }
         int player_getPlayerActive();
+        int getAmountPlayerChamps() {
+            int amount = 0;
+            for( int i = 0; i < (int)p_playerlist.size(); i++) {
+                player *p_player = p_playerlist[i];
+                if( p_player->champ.size() > 0)
+                    amount++;
+            }
+            return amount;
+        }
         void setAllInavtive() {
             for( int i = 0; i < (int)p_playerlist.size(); i++) {
                 player *p_player = p_playerlist[i];
@@ -86,6 +95,21 @@ class player_handle
             }
             return NULL;
         }
+        void createChamps( entitylist *entitylist, vec2 start) {
+            for( int i = 0; i < (int)p_playerlist.size(); i++) {
+                player *p_player = p_playerlist[i];
+                if( p_player->champ.size() > 0) {
+                    entitytype *l_type = entitylist->getType( p_player->champ);
+                    if( l_type) {
+                        int l_id = entitylist->create( l_type, start);
+                        p_player->entity_id = l_id;
+                        p_player->active = true;
+                    }
+                    p_player->champ = "";
+                }
+            }
+        }
+
     protected:
     private:
         std::vector<player*> p_playerlist;

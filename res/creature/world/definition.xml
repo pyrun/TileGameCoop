@@ -1,4 +1,4 @@
-<object name="world" width="16" height="16" script="script.lua" timer="100" gravity="0">
+<object name="world" width="16" height="16" script="script.lua" timer="5" gravity="0">
 	<action name="idle">blue.bmp</action>
 	<action name="red">red.bmp</action>
 	<action name="warp">warp.bmp</action>

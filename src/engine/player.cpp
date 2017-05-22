@@ -6,6 +6,21 @@
 
 player_handle *lua_player = NULL;
 
+static int lua_addPlayerEntity( lua_State *state) {
+    std::string l_name;
+
+    if( !lua_isstring( state, 1) ) {
+        printf( "lua_addPlayerEntity call wrong argument\n");
+        return 0;
+    }
+
+    l_name = lua_tostring( state, 1);
+
+    lua_player->addEntity( l_name);
+
+    return 0;
+}
+
 static int lua_setPlayerChamp( lua_State *state) {
     std::string l_name;
     int l_id;
@@ -40,6 +55,26 @@ static int lua_getPlayerChamp( lua_State *state) {
     return 1;
 }
 
+static int lua_getAmountPlayerActive( lua_State *state) {
+    int l_id;
+
+    l_id = lua_player->player_getPlayerActive();
+
+    lua_pushnumber( state, l_id);
+
+    return 1;
+}
+
+static int lua_getAmountPlayerChamps( lua_State *state) {
+    int l_id;
+
+    l_id = lua_player->getAmountPlayerChamps();
+
+    lua_pushnumber( state, l_id);
+
+    return 1;
+}
+
 static int lua_getPlayer( lua_State *state) {
     std::string l_name;
     int l_id;
@@ -66,11 +101,20 @@ static int lua_getPlayer( lua_State *state) {
 
 void lua_player_install( lua_State *state) {
     // add all entity function ..
+    lua_pushcfunction( state, lua_addPlayerEntity);
+    lua_setglobal( state, "addPlayerEntity");
+
     lua_pushcfunction( state, lua_setPlayerChamp);
     lua_setglobal( state, "setPlayerChamp");
 
     lua_pushcfunction( state, lua_getPlayerChamp);
     lua_setglobal( state, "getPlayerChamp");
+
+    lua_pushcfunction( state, lua_getAmountPlayerActive);
+    lua_setglobal( state, "getAmountPlayerActive");
+
+    lua_pushcfunction( state, lua_getAmountPlayerChamps);
+    lua_setglobal( state, "getAmountPlayerChamps");
 
     lua_pushcfunction( state, lua_getPlayer);
     lua_setglobal( state, "getPlayer");

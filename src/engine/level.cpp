@@ -69,15 +69,17 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
             graphic->flyTo( p_camere_pos.tovec2());
     }
 
-    if( p_level != NULL && !p_level->getWorld()->loadAsPlayer() && playerlist->getEntityList().size()) {
+    /*if( p_level != NULL && p_level->getWorld()->loadAsPlayer()) {
+        playerlist->createChamps( getEntityList(), getWorld()->getStartPoint());
+        exit(1);
         std::vector<std::string> l_entity_names = playerlist->getEntityList();
 
         for( int i = 0; i < (int)l_entity_names.size(); i++) {
             entitytype* l_type = getEntityList()->getType( l_entity_names[i]);
             getEntityList()->create( l_type, getWorld()->getStartPoint());
         }
-        playerlist->resetEntitys();
-    }
+        //playerlist->resetEntitys();
+    }*/
 
     if( p_level == NULL && p_world->needLoadWorld() != "" ) {
         // player reset
@@ -87,8 +89,14 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         p_camere_pos = graphic->getCamera();
 
         std::string l_level = getWorld()->needLoadWorld();
+        bool l_loadAsPlayer = getWorld()->loadAsPlayer();
         p_world->setLoadWorld( "", false); // NULL
         p_level = new level( l_level, "worlds/", graphic, playerlist);
+
+        if( l_loadAsPlayer ) {
+            playerlist->createChamps( getEntityList(), getWorld()->getStartPoint());
+        }
+        printf( "getWorld()->loadAsPlayer() %d\n" ,l_loadAsPlayer);
     }
 }
 

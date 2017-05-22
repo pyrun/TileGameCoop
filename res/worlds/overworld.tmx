@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="96" height="96" tilewidth="16" tileheight="16" nextobjectid="9">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="96" height="96" tilewidth="16" tileheight="16" nextobjectid="10">
  <tileset firstgid="1" name="overworld" tilewidth="16" tileheight="16" spacing="1" tilecount="176" columns="16">
   <image source="../overworld.bmp" trans="c8bfe7" width="271" height="187"/>
  </tileset>
@@ -333,5 +333,6 @@
     <property name="global" value="lost_3.tmx"/>
    </properties>
   </object>
+  <object id="9" name="overworld_handle" x="640" y="1008" width="16" height="16"/>
  </objectgroup>
 </map>
