@@ -58,7 +58,7 @@ static int lua_getPlayerChamp( lua_State *state) {
 static int lua_getAmountPlayerActive( lua_State *state) {
     int l_id;
 
-    l_id = lua_player->player_getPlayerActive();
+    l_id = lua_player->getPlayerActive();
 
     lua_pushnumber( state, l_id);
 
@@ -99,6 +99,42 @@ static int lua_getPlayer( lua_State *state) {
     return 1;
 }
 
+static int lua_getPlayerEntityAmount( lua_State *state) {
+    std::string l_name;
+
+    if( !lua_isstring( state, 1) ) {
+        printf( "lua_getPlayerEntityAmount call wrong argument\n");
+        return 0;
+    }
+
+    l_name = lua_tostring( state, 1);
+    std::vector<std::string> l_list= lua_player->getEntityList();
+
+    int amount = 0;
+    for( int i = 0; i < (int)l_list.size(); i++)
+        if( l_list[i] == l_name)
+            amount++;
+
+    lua_pushnumber( state, amount);
+
+    return 1;
+}
+
+static int lua_removePlayerEntity( lua_State *state) {
+    std::string l_name;
+
+    if( !lua_isstring( state, 1) ) {
+        printf( "lua_removePlayerEntity call wrong argument\n");
+        return 0;
+    }
+
+    l_name = lua_tostring( state, 1);
+    lua_player->delEntity( l_name);
+
+    return 0;
+}
+
+
 void lua_player_install( lua_State *state) {
     // add all entity function ..
     lua_pushcfunction( state, lua_addPlayerEntity);
@@ -118,6 +154,12 @@ void lua_player_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_getPlayer);
     lua_setglobal( state, "getPlayer");
+
+    lua_pushcfunction( state, lua_getPlayerEntityAmount);
+    lua_setglobal( state, "getPlayerEntityAmount");
+
+    lua_pushcfunction( state, lua_removePlayerEntity);
+    lua_setglobal( state, "removePlayerEntity");
 }
 
 void lua_player_setLink( player_handle* player) {
@@ -216,20 +258,18 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
         player* l_player = p_playerlist[i];
         SDL_GameController *l_pad = l_player->controller;
 
-        // wechseln
+        // wechseln der Input map
         delete p_playerlist[i]->map_old;
         l_player->map_old = p_playerlist[i]->map;
         l_player->map = new input_map();
 
-        // pointer
+        // pointer auf die Input map
         l_map_old = l_player->map_old;
         l_map = l_player->map;
 
-        // Controller get axis
+        // get controller axis
         l_map->x = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisX());
         l_map->y = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisY());
-
-        // x&y axis
         if( l_map->x > 32767/2)
             l_map->dir.right = true;
         else
@@ -238,7 +278,6 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
             l_map->dir.left = true;
         else
             l_map->dir.left = false;
-
         if( l_map->y > 32767/2)
             l_map->dir.down = true;
         else
@@ -248,13 +287,13 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
         else
             l_map->dir.up = false;
 
-        // get Buttons
+        // get pushed buttons
         bool l_up = SDL_GameControllerGetButton( l_pad, SDL_CONTROLLER_BUTTON_DPAD_UP );
         bool l_down = SDL_GameControllerGetButton( l_pad, SDL_CONTROLLER_BUTTON_DPAD_DOWN );
         bool l_right = SDL_GameControllerGetButton( l_pad, SDL_CONTROLLER_BUTTON_DPAD_RIGHT );
         bool l_left = SDL_GameControllerGetButton( l_pad, SDL_CONTROLLER_BUTTON_DPAD_LEFT );
 
-        // overwrite if press
+        // handle d-pad as axis
         if( l_right && !l_map->dir.right)
             l_map->dir.right = true;
         if( l_left && !l_map->dir.left)
@@ -278,24 +317,10 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
         l_map->left = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_left());
         l_map->right = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_right());
 
-        if( l_map->start && !l_map_old->start && entitylist->getAmountPlayerObject() > player_getPlayerActive())
-            l_player->wantToJoin = true;
-        if( l_player->wantToJoin && !l_player->active) {
-            if( l_player->entity_id == -1) {
-                // fin a nex player entity
-                next_player_entity( entitylist, l_player);
-
-                if( l_player->entity_id == -1 )
-                    break;
-                l_player->active = true;
-                l_player->wantToJoin = false;
-                if( p_playercamerafocus == NULL)
-                    p_playercamerafocus = l_player;
-            }
-        }
-
+        // handle active player
         if( l_player->active) {
             entity *l_entity = entitylist->getEntity( l_player->entity_id);
+
 
             if( l_entity == NULL || l_entity->isAlive() == false || l_entity->getAction() == "die") {
                 l_player->entity_id = -1;
@@ -304,17 +329,13 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
             }
 
             if( l_entity->lua_hasLoaded()) {
+
                 if( l_map->jump && !l_map_old->jump)
                     l_entity->lua_jump( l_entity->getId());
                 if( l_map->run && !l_map_old->run)
                     l_entity->lua_run( l_entity->getId(), true);
                 if( !l_map->run && l_map_old->run)
                     l_entity->lua_run( l_entity->getId(), false);
-
-                // find next object
-                //if( l_map->right && !l_map_old->right)
-                //    next_player_entity( entitylist, l_player);
-
                 if( l_map->select && !l_map_old->select)
                     config->setQuit( true);
                 if( l_map->attack && !l_map_old->attack)
@@ -331,19 +352,33 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                 if( l_map->dir.right )
                     l_entity->lua_right( l_entity->getId());
 
-                // focus
-                if( l_map->start && !l_map_old->start) {
-                    /*if( p_playercamerafocus == l_player)
-                        p_playercamerafocus = NULL;
-                    else*/
-                        p_playercamerafocus = l_player;
-                } // end focus
+                if( l_map->start && !l_map_old->start)
+                    if( l_player->champ.size() == 0)
+                        setInactiv( l_player);
 
+                if( l_map->left && !l_map_old->left);
+                if( l_map->right && !l_map_old->right);
+            }
+        }
 
-            } //else if(l_type->getScriptName().length() > 1) l_entity->loadScript( l_type->getScriptName());
+        // find player
+        else if( l_map->start && !l_map_old->start && entitylist->getAmountPlayerObject() > getPlayerActive())
+            l_player->wantToJoin = true;
 
-            //#printf( "x%d y%d %d %d %d %d s%d b%d l%d r%d\n", l_map->x, l_map->y,l_map->jump, l_map->run, l_map->attack, l_map->special, l_map->start, l_map->select, l_map->left, l_map->right);
-            //printf( "%d %d %d %d\n", l_map->dir.right, l_map->dir.left, l_map->dir.up, l_map->dir.down);
+        // if he want too join and is not active
+        if( l_player->wantToJoin && !l_player->active) {
+            // search a entity and bind
+            if( l_player->entity_id == -1) {
+                // fin a nex player entity
+                next_player_entity( entitylist, l_player);
+
+                if( l_player->entity_id == -1 )
+                    break;
+                l_player->active = true;
+                l_player->wantToJoin = false;
+                if( p_playercamerafocus == NULL)
+                    p_playercamerafocus = l_player;
+            }
         }
     }
 
@@ -377,7 +412,16 @@ void player_handle::draw( entitylist *entitylist, font *font, graphic* graphic) 
     }
 }
 
-int player_handle::player_getPlayerActive() {
+void player_handle::join( entitylist *entitylist) {
+    for( int i = 0; i < (int)p_playerlist.size(); i++) {
+        player *l_player = p_playerlist[i];
+        entitytype *l_type = entitylist->getType( l_player->champ );
+        if( l_type)
+            entitylist->create( l_type, vec2( 100, 100));
+    }
+}
+
+int player_handle::getPlayerActive() {
     int l_number = 0;
     for( int i = 0; i < (int)p_playerlist.size(); i++) {
         if( p_playerlist[i]->active)
@@ -386,6 +430,15 @@ int player_handle::player_getPlayerActive() {
     return l_number;
 }
 
+int player_handle::getAmountPlayerChamps() {
+    int amount = 0;
+    for( int i = 0; i < (int)p_playerlist.size(); i++) {
+        player *p_player = p_playerlist[i];
+        if( p_player->champ.size() > 0)
+            amount++;
+    }
+    return amount;
+}
 
 void player_handle::player_add( SDL_GameController *controller) {
     player *l_player =  new player();

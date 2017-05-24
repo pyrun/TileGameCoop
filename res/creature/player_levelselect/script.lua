@@ -12,7 +12,7 @@ function vertexhit( id)
 end
 
 function attack( id)
-	setAnimation( id, "join")
+
 end
 
 function liquid( id, swim)
@@ -25,7 +25,7 @@ end
 
 
 function jump( id)
-	setAnimation( id, "join")
+
 end
 
 function setPositionTo16( id)
@@ -37,8 +37,14 @@ end
 
 function timer( id, time)
 	l_x, l_y = getPosition( id)
-	if getAnimation( id ) == "join" then
-		setAnimation( id, "idle")
+	if getPlayer( id) > 0 then
+		-- if set not more move
+		name = getPlayerChamp( getPlayer( id))
+		if string.len(name) > 0 then		
+			if getAnimation( id ) == "idle" then
+				setAnimation( id, "chose")
+			end
+		end
 	end
 	if isMoving == true then
 		if move_inverted == false then

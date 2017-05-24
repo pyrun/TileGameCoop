@@ -65,7 +65,7 @@ void game::drawHUD() {
     sprintf( test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
     p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() +vec2( (int)p_graphic->getCameraSize().x, 0), 1.0f, 255, true);
 
-    sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_player->getAmountPlayerChamps(), p_player->player_getPlayerActive());
+    sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_player->getAmountPlayerChamps(), p_player->getPlayerActive());
     p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() +vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, 255, false, true);
 }
 
@@ -94,6 +94,8 @@ int game::process_graphic( std::string levelName) {
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
         l_delta = l_time.getTicks();
 
+        // PROCESS:
+        // calc delta
         if( l_delta < 0.5)
             l_delta = 0.5;
         // start
@@ -109,8 +111,9 @@ int game::process_graphic( std::string levelName) {
         // process
         process();
 
-        p_level->process( l_delta, &p_config, p_graphic, p_player);
+        p_level->process( l_delta, &p_config, p_graphic, p_player, p_particles);
 
+        // DRAW:
         // draw world
         p_level->getWorld()->draw( p_graphic);
 
@@ -129,13 +132,25 @@ int game::process_graphic( std::string levelName) {
         // player dra
         p_player->draw( p_level->getEntityList(), p_font, p_graphic);
 
+
+        /*SDL_Surface* l_temp_screen= SDL_CreateRGBSurface( 0, p_graphic->getCameraSize().x, p_graphic->getCameraSize().y, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+        SDL_Rect screenRect = {0, 0, p_graphic->getCameraSize().x, p_graphic->getCameraSize().y};
+        SDL_FillRect( l_temp_screen, &screenRect, 0xFF202020);
+        SDL_Texture* l_temp_screen_texture = SDL_CreateTextureFromSurface( p_graphic->getRenderer(), l_temp_screen);
+        SDL_FreeSurface( l_temp_screen);
+
+        SDL_RenderCopy( p_graphic->getRenderer(), l_temp_screen_texture, NULL, &screenRect);
+
+        SDL_DestroyTexture( l_temp_screen_texture);*/
+
+
         // graphic clear/draw
         p_graphic->clear( l_delta);
 
         // now calc the delay for the framerate
         p_framerate->calc();
 
-        // if someome will quit the program
+        // if someone will quit the program
         p_game_running = !(p_config.getQuit());
 
     }

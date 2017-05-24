@@ -37,25 +37,10 @@ class player_handle
         void next_player_entity( entitylist *entitylist, player *l_player);
         void handle( entitylist *entity, input *input, graphic* graphic, config* config);
         void draw( entitylist *entitylist, font *font, graphic* graphic);
-        void join( entitylist *entitylist) {
-            for( int i = 0; i < (int)p_playerlist.size(); i++) {
-                player *l_player = p_playerlist[i];
-                entitytype *l_type = entitylist->getType( l_player->champ );
-                if( l_type)
-                    entitylist->create( l_type, vec2( 100, 100));
-            }
-        }
+        void join( entitylist *entitylist);
         int getPlayerAmount() { return (int)p_playerlist.size(); }
-        int player_getPlayerActive();
-        int getAmountPlayerChamps() {
-            int amount = 0;
-            for( int i = 0; i < (int)p_playerlist.size(); i++) {
-                player *p_player = p_playerlist[i];
-                if( p_player->champ.size() > 0)
-                    amount++;
-            }
-            return amount;
-        }
+        int getPlayerActive();
+        int getAmountPlayerChamps();
         void setAllInavtive() {
             for( int i = 0; i < (int)p_playerlist.size(); i++) {
                 player *p_player = p_playerlist[i];
@@ -78,7 +63,20 @@ class player_handle
         }
         void resetEntitys() { p_entityNames.clear(); }
         void addEntity( std::string names) { p_entityNames.push_back( names); }
+        void delEntity( std::string name ) {
+            for( int i = 0; i < (int)p_entityNames.size(); i++ ) {
+                if( name == p_entityNames[i]) {
+                        p_entityNames.erase (p_entityNames.begin()+i);
+                        return;
+                }
+            }
+        }
         std::vector<std::string> getEntityList() { return p_entityNames; }
+        void setInactiv( player *player) {
+            player->entity_id = -1;
+            player->active = 0;
+        }
+
         player *getPlayer( int id) {
             for( int i = 0; i < (int)p_playerlist.size(); i++) {
                 player *p_player = p_playerlist[i];

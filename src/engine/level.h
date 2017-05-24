@@ -7,6 +7,7 @@
 #include "../graphic/graphic.h"
 #include "types.h"
 #include "player.h"
+#include "particle.h"
 
 class level
 {
@@ -14,7 +15,7 @@ class level
         level(std::string file, std::string folder, graphic *graphic, player_handle *player);
         virtual ~level();
 
-        void process( float l_delta, config *config, graphic *graphic, player_handle *playerlist);
+        void process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list* particle);
 
         entitylist *getEntityList() {
             if( p_level != NULL)

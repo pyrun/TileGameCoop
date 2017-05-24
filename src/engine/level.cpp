@@ -34,13 +34,13 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     graphic->setCamera(l_start);
 }
 
-void level::process( float l_delta, config *config, graphic *graphic, player_handle *playerlist) {
+void level::process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list *particle) {
     // process entity
     getEntityList()->process( getWorld(), config, l_delta);
 
     // check if level finish
     if( p_level != NULL && p_level->getWorld()->isLevelEnd() == true) {
-            // alle player daten aufnhemen auf die NEUE liste
+            // alle player daten aufnhemen auf die neue liste
             if( p_level->getWorld()->leaveLevelasPlayer()){
                 std::vector<int> l_obj = p_level->getEntityList()->findPlayerObject();
                 for( int n = 0; n < (int)l_obj.size(); n++) {
@@ -97,6 +97,9 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
             playerlist->createChamps( getEntityList(), getWorld()->getStartPoint());
         }
         printf( "getWorld()->loadAsPlayer() %d\n" ,l_loadAsPlayer);
+
+        // reset particle system
+        particle->clear();
     }
 }
 

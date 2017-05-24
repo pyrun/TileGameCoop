@@ -1,8 +1,6 @@
 <object name="player_levelselect" width="16" height="16" player="1" script="script.lua" timer="1" gravity="0">
 	<action name="idle" frame="4" speed="12">idle.bmp</action>
-	<action name="walk" frame="4" speed="3">idle.bmp</action>
-	<action name="swim" frame="4" speed="8">idle.bmp</action>
-	<action name="join" frame="1">idle.bmp</action>
+	<action name="chose">chose.bmp</action>
 	<hitbox offsetx="6" offsety="6" width="4" hight="4"/>
 </object>
 

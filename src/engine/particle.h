@@ -51,6 +51,8 @@ class particle_list
         void draw( graphic *graphic, font *font);
 
         particle *getParticel( int id);
+
+        void clear() { p_particels.clear(); }
     protected:
 
     private:

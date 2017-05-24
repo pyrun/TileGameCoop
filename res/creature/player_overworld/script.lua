@@ -12,7 +12,9 @@ function vertexhit( id)
 end
 
 function attack( id)
-	setAnimation( id, "join")
+	if getAnimation( id ) == "idle" then
+		setAnimation( id, "join")
+	end
 end
 
 function liquid( id, swim)
@@ -25,7 +27,13 @@ end
 
 
 function jump( id)
-	setAnimation( id, "join")
+	if getAnimation( id ) == "idle" then
+		setAnimation( id, "join")
+	end
+end
+
+function joined( id)
+	setAnimation( id, "idle")
 end
 
 function setPositionTo16( id)
@@ -37,9 +45,6 @@ end
 
 function timer( id, time)
 	l_x, l_y = getPosition( id)
-	if getAnimation( id ) == "join" then
-		setAnimation( id, "idle")
-	end
 	if isMoving == true then
 		if move_inverted == false then
 			if move_y_flag == false and move_xsteps-move_fix < l_x then

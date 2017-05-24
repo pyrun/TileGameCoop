@@ -2,7 +2,7 @@
 	<action name="idle" frame="4" speed="12">idle.bmp</action>
 	<action name="walk" frame="4" speed="3">idle.bmp</action>
 	<action name="swim" frame="4" speed="8">idle.bmp</action>
-	<action name="join" frame="1">idle.bmp</action>
+	<action name="join" frame="4" speed="3" loop="0" endCall="joined">join.bmp</action>
 	<hitbox offsetx="6" offsety="6" width="4" hight="4"/>
 </object>
 
