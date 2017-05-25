@@ -4,6 +4,7 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
 {
     p_entity = NULL;
     p_world = NULL;
+    p_transition = NULL;
 
     // create entity list
     p_entity = new entitylist();
@@ -16,6 +17,8 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     // set link
     lua_setLink( p_entity, p_world);
     lua_player_setLink( player);
+
+    //p_transition = new transition( graphic);
 
     // load now all entitys
     std::vector<int> l_ids = p_entity->createFromWorldFile( p_world->getFileName(), p_world);
@@ -35,10 +38,27 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
 }
 
 void level::process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list *particle) {
-    // process entity
-    getEntityList()->process( getWorld(), config, l_delta);
+    // transition
+    if( p_transition == NULL) {
+        getWorld()->process( graphic);
+        // process entity
+        getEntityList()->process( getWorld(), config, l_delta);
+    }
 
-    // check if level finish
+
+    /*if( p_level != NULL && p_level->getWorld()->loadAsPlayer()) {
+        playerlist->createChamps( getEntityList(), getWorld()->getStartPoint());
+        exit(1);
+        std::vector<std::string> l_entity_names = playerlist->getEntityList();
+
+        for( int i = 0; i < (int)l_entity_names.size(); i++) {
+            entitytype* l_type = getEntityList()->getType( l_entity_names[i]);
+            getEntityList()->create( l_type, getWorld()->getStartPoint());
+        }
+        //playerlist->resetEntitys();
+    }*/
+
+     // check if level finish
     if( p_level != NULL && p_level->getWorld()->isLevelEnd() == true) {
             // alle player daten aufnhemen auf die neue liste
             if( p_level->getWorld()->leaveLevelasPlayer()){
@@ -69,18 +89,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
             graphic->flyTo( p_camere_pos.tovec2());
     }
 
-    /*if( p_level != NULL && p_level->getWorld()->loadAsPlayer()) {
-        playerlist->createChamps( getEntityList(), getWorld()->getStartPoint());
-        exit(1);
-        std::vector<std::string> l_entity_names = playerlist->getEntityList();
-
-        for( int i = 0; i < (int)l_entity_names.size(); i++) {
-            entitytype* l_type = getEntityList()->getType( l_entity_names[i]);
-            getEntityList()->create( l_type, getWorld()->getStartPoint());
-        }
-        //playerlist->resetEntitys();
-    }*/
-
+    // load new world?
     if( p_level == NULL && p_world->needLoadWorld() != "" ) {
         // player reset
         playerlist->setAllInavtive();
@@ -101,6 +110,11 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         // reset particle system
         particle->clear();
     }
+}
+
+void level::draw( graphic* graphic) {
+    if( p_transition)
+        p_transition->draw( graphic);
 }
 
 level::~level()

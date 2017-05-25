@@ -8,6 +8,7 @@
 #include "types.h"
 #include "player.h"
 #include "particle.h"
+#include "transition.h"
 
 class level
 {
@@ -16,6 +17,7 @@ class level
         virtual ~level();
 
         void process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list* particle);
+        void draw( graphic* graphic);
 
         entitylist *getEntityList() {
             if( p_level != NULL)
@@ -36,6 +38,8 @@ class level
         world *p_world;
         entitylist *p_entity;
         level *p_level = NULL;
+
+        transition *p_transition;
 
         fvec2 p_camere_pos;
 };

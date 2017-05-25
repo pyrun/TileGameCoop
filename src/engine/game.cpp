@@ -69,12 +69,6 @@ void game::drawHUD() {
     p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() +vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, 255, false, true);
 }
 
-int game::process() {
-    p_timer.start();
-
-    return p_timer.getTicks();
-}
-
 int game::process_graphic( std::string levelName) {
     int l_error;
 
@@ -106,10 +100,6 @@ int game::process_graphic( std::string levelName) {
 
         // react of player input
         p_player->handle( p_level->getEntityList(), p_input, p_graphic, &p_config);
-        p_level->getWorld()->process( p_graphic);
-
-        // process
-        process();
 
         p_level->process( l_delta, &p_config, p_graphic, p_player, p_particles);
 
@@ -129,20 +119,11 @@ int game::process_graphic( std::string levelName) {
         // draw info
         drawHUD();
 
-        // player dra
+        // player draw
         p_player->draw( p_level->getEntityList(), p_font, p_graphic);
 
-
-        /*SDL_Surface* l_temp_screen= SDL_CreateRGBSurface( 0, p_graphic->getCameraSize().x, p_graphic->getCameraSize().y, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
-        SDL_Rect screenRect = {0, 0, p_graphic->getCameraSize().x, p_graphic->getCameraSize().y};
-        SDL_FillRect( l_temp_screen, &screenRect, 0xFF202020);
-        SDL_Texture* l_temp_screen_texture = SDL_CreateTextureFromSurface( p_graphic->getRenderer(), l_temp_screen);
-        SDL_FreeSurface( l_temp_screen);
-
-        SDL_RenderCopy( p_graphic->getRenderer(), l_temp_screen_texture, NULL, &screenRect);
-
-        SDL_DestroyTexture( l_temp_screen_texture);*/
-
+        // level draw
+        p_level->draw( p_graphic);
 
         // graphic clear/draw
         p_graphic->clear( l_delta);

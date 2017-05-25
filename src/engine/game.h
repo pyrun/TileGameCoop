@@ -21,7 +21,6 @@ class game {
         void drawHUD();
         void loadTypes();
 
-        int process();
         int process_graphic( std::string levelName);
 
         graphic *getGraphic() { return p_graphic; }
@@ -37,8 +36,6 @@ class game {
         particle_list *p_particles;
 
         level *p_level;
-
-        timer p_timer;
 
         bool p_game_running;
 };

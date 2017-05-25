@@ -1,5 +1,5 @@
 <object name="player_championselect_watcher" width="16" height="16" script="script.lua" timer="1" gravity="0">
-	<action name="idle" frame="0" speed="12">icon.bmp</action>
+	<action name="idle" frame="4" speed="6">icon.bmp</action>
 	<hitbox offsetx="0" offsety="0" width="16" hight="16"/>
 </object>
 
