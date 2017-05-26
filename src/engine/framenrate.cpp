@@ -1,6 +1,7 @@
 #include "framenrate.h"
 
 #include <stdio.h>
+#include "timer.h"
 
 framenrate::framenrate( int framerate)
 {

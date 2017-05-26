@@ -99,6 +99,8 @@
 		<Unit filename="engine/particle.h" />
 		<Unit filename="engine/player.cpp" />
 		<Unit filename="engine/player.h" />
+		<Unit filename="engine/timer.cpp" />
+		<Unit filename="engine/timer.h" />
 		<Unit filename="engine/transition.cpp" />
 		<Unit filename="engine/transition.h" />
 		<Unit filename="engine/types.cpp" />

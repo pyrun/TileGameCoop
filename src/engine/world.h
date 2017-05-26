@@ -58,7 +58,7 @@ class world
         void process( graphic *graphic);
         void draw( graphic *graphic);
         void loadImageFiles( graphic *graphic);
-        void setEndLevel( float add_player ) { p_level_end = true; p_add_player = add_player; }
+        void setEndLevel( bool add_player ) { p_level_end = true; p_add_player = add_player;}
         bool leaveLevelasPlayer() { return p_add_player; }
         bool isLevelEnd() { return p_level_end; }
         bool loadAsPlayer() { return p_loadplayerdata; }

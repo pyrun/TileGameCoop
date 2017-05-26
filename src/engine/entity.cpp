@@ -55,7 +55,6 @@ static int lua_setLoadLevel( lua_State *state) {
     l_level = lua_tostring( state, 1);
     l_asPlayer = lua_toboolean( state, 2);
 
-
     lua_worldlist->setLoadWorld( l_level, l_asPlayer);
     return 0;
 }
@@ -67,6 +66,7 @@ static int lua_end_level( lua_State *state) {
         printf( "lua_end_level call wrong argument\n");
         return 0;
     }
+
 
     l_addPlayer = lua_toboolean( state, 1);
 

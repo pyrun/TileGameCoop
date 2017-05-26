@@ -39,6 +39,60 @@ bool initSDL() {
 	return success_initSDL;
 }
 
+void pixel_set(SDL_Surface *surface, int x, int y, Uint32 pixel) {
+    int bpp = surface->format->BytesPerPixel;
+    // Here p is the address to the pixel we want to set
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+    switch(bpp) {
+    case 1:
+        *p = pixel;
+        break;
+    case 2:
+        *(Uint16 *)p = pixel;
+        break;
+    case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+            p[0] = (pixel >> 16) & 0xff;
+            p[1] = (pixel >> 8) & 0xff;
+            p[2] = pixel & 0xff;
+        } else {
+            p[0] = pixel & 0xff;
+            p[1] = (pixel >> 8) & 0xff;
+            p[2] = (pixel >> 16) & 0xff;
+        }
+        break;
+    case 4:
+        *(Uint32 *)p = pixel;
+        break;
+    }
+}
+
+Uint32 pixel_get(SDL_Surface *surface, int x, int y) {
+    int bpp = surface->format->BytesPerPixel;
+    // Here p is the address to the pixel we want to retrieve
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+    switch(bpp) {
+    case 1:
+        return *p;
+        break;
+    case 2:
+        return *(Uint16 *)p;
+        break;
+    case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            return p[0] << 16 | p[1] << 8 | p[2];
+        else
+            return p[0] | p[1] << 8 | p[2] << 16;
+        break;
+    case 4:
+        return *(Uint32 *)p;
+        break;
+    default:
+        return 0;
+    }
+}
+
 image::image() {
     // set all to NULL
     surface = NULL;
@@ -54,6 +108,33 @@ image::~image() {
     if( texture != NULL)
         SDL_DestroyTexture( texture);
 }
+
+void image::resizeSurface( vec2 size) {
+    // create a new surface
+    SDL_Surface *l_resize_surface = SDL_CreateRGBSurface(surface->flags, size.x, size.y, surface->format->BitsPerPixel,
+        surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);
+
+    // calc factor
+    fvec2 l_factor;
+    l_factor.x = (static_cast<double>(size.x) / static_cast<double>(surface->w));
+    l_factor.y = (static_cast<double>(size.y) / static_cast<double>(surface->h));
+
+    for(int y = 0; y < surface->h; y++)
+        for(int x = 0; x < surface->w; x++)
+            for(int zoom_y = 0; zoom_y < l_factor.y; ++zoom_y)
+                for(int zoom_x = 0; zoom_x < l_factor.x; ++zoom_x)
+                    pixel_set(l_resize_surface, (l_factor.x * x) + zoom_x,
+                        (l_factor.y * y) + zoom_y, pixel_get(surface, x, y));
+
+    // redraw resize
+    SDL_FreeSurface( surface);
+    surface = l_resize_surface;
+}
+
+/*void image::resizeSurface( vec2 size) {
+
+    surface = ScaleSurface( surface, size.x, size.y);
+}*/
 
 graphic::graphic( config *config)
 {
@@ -327,6 +408,28 @@ void graphic::drawImage( image *image, vec2 position, vec2 size, vec2 source, do
 
     // call the draw fuction of sdl
     SDL_RenderCopyEx( p_renderer, image->texture, &l_source, &l_destination, angle, NULL, l_flip);
+}
+
+void graphic::cutImageFrom( SDL_Surface *srcImage, SDL_Surface *cutImage, vec2 position) {
+    // set variable
+    SDL_Rect l_sourceRect = { 0, 0, cutImage->w, cutImage->h };
+    SDL_Rect l_destRect = { position.x, position.y, cutImage->w, cutImage->h };
+
+    // lock surface to edit
+    SDL_LockSurface(srcImage);
+
+    // look at every pixel
+    for(int x = 0; x < l_destRect.w; ++x) {
+        for(int y = 0; y < l_destRect.h; ++y) {
+            // if alpha pixel set source pixel too to alpha
+            if( pixel_get( cutImage, x, y) == SDL_MapRGB(cutImage->format, BMP_ALPHA))
+                if( l_destRect.x + x > 0 && l_destRect.y + y > 0 && l_destRect.x + x - srcImage->w < 0 && l_destRect.y + y - srcImage->h < 0)
+                    pixel_set( srcImage, l_destRect.x + x, l_destRect.y + y, SDL_MapRGB(cutImage->format, BMP_ALPHA));
+        }
+    }
+
+    // unlock the surface
+    SDL_UnlockSurface(srcImage);
 }
 
 int graphic::getZoom( vec2 display) {

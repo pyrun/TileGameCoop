@@ -10,6 +10,8 @@
 #include "particle.h"
 #include "transition.h"
 
+#define transition_time 1000
+
 class level
 {
     public:
@@ -40,6 +42,8 @@ class level
         level *p_level = NULL;
 
         transition *p_transition;
+
+        bool p_loadworld;
 
         fvec2 p_camere_pos;
 };

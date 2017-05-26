@@ -2,6 +2,7 @@
 #define FRAMENRATE_H
 
 #include "types.h"
+#include "timer.h"
 #include <vector>
 
 #define FPS(x) (1.0f/x*1000.0f)

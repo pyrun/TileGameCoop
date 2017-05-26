@@ -6,6 +6,8 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     p_world = NULL;
     p_transition = NULL;
 
+    p_loadworld = false;
+
     // create entity list
     p_entity = new entitylist();
 
@@ -18,11 +20,10 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     lua_setLink( p_entity, p_world);
     lua_player_setLink( player);
 
-    //p_transition = new transition( graphic);
+    p_transition = new transition( graphic, transition_time, true);
 
     // load now all entitys
     std::vector<int> l_ids = p_entity->createFromWorldFile( p_world->getFileName(), p_world);
-
     for( int i = 0; i < l_ids.size(); i++) {
         entity *l_entity = p_entity->getEntity( l_ids[i]);
         if( l_entity)
@@ -34,32 +35,39 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
 
     // camera set at start point
     vec2 l_start = p_world->getStartPoint()-graphic->getCameraSize()/vec2(2, 2);
+
+    //
     graphic->setCamera(l_start);
 }
 
 void level::process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list *particle) {
     // transition
-    if( p_transition == NULL) {
-        getWorld()->process( graphic);
+    getWorld()->process( graphic);
+
+    if( !p_loadworld || ( p_transition && p_transition->blendout()) ) {
         // process entity
         getEntityList()->process( getWorld(), config, l_delta);
     }
 
+    if( p_transition)
+        return;
 
-    /*if( p_level != NULL && p_level->getWorld()->loadAsPlayer()) {
-        playerlist->createChamps( getEntityList(), getWorld()->getStartPoint());
-        exit(1);
-        std::vector<std::string> l_entity_names = playerlist->getEntityList();
+    if( p_loadworld == false && p_level == NULL && p_world->needLoadWorld() != "" ) {
+        p_transition = p_transition = new transition( graphic, transition_time, false);
+        p_loadworld = true;
+        return;
+    }
 
-        for( int i = 0; i < (int)l_entity_names.size(); i++) {
-            entitytype* l_type = getEntityList()->getType( l_entity_names[i]);
-            getEntityList()->create( l_type, getWorld()->getStartPoint());
-        }
-        //playerlist->resetEntitys();
-    }*/
+    if( p_loadworld == false && p_level != NULL && p_level->getWorld()->isLevelEnd() == true ) {
+        p_transition = p_transition = new transition( graphic, transition_time, false);
+        p_loadworld = true;
+        return;
+    }
 
      // check if level finish
     if( p_level != NULL && p_level->getWorld()->isLevelEnd() == true) {
+            p_loadworld = false;
+
             // alle player daten aufnhemen auf die neue liste
             if( p_level->getWorld()->leaveLevelasPlayer()){
                 std::vector<int> l_obj = p_level->getEntityList()->findPlayerObject();
@@ -73,6 +81,8 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
                     }
                 }
             }
+
+            p_transition = new transition( graphic, transition_time, true);
 
             // delete level
             delete p_level;
@@ -91,6 +101,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
 
     // load new world?
     if( p_level == NULL && p_world->needLoadWorld() != "" ) {
+        p_loadworld = false;
         // player reset
         playerlist->setAllInavtive();
 
@@ -102,10 +113,17 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         p_world->setLoadWorld( "", false); // NULL
         p_level = new level( l_level, "worlds/", graphic, playerlist);
 
-        if( l_loadAsPlayer ) {
+        p_transition = new transition( graphic, transition_time, true);
+
+        if( l_loadAsPlayer )
             playerlist->createChamps( getEntityList(), getWorld()->getStartPoint());
-        }
         printf( "getWorld()->loadAsPlayer() %d\n" ,l_loadAsPlayer);
+
+        // transition
+        getWorld()->process( graphic);
+
+        // process entity
+        getEntityList()->process( getWorld(), config, l_delta);
 
         // reset particle system
         particle->clear();
@@ -114,7 +132,10 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
 
 void level::draw( graphic* graphic) {
     if( p_transition)
-        p_transition->draw( graphic);
+        if( p_transition->draw( graphic)) {
+            delete p_transition;
+            p_transition = NULL;
+        }
 }
 
 level::~level()

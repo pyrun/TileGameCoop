@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "../engine/config.h"
+#include "../engine/timer.h"
 
 #define NATIV_W (1920/4)
 #define NATIV_H (1080/4)
@@ -22,6 +23,7 @@ class image {
         ~image();
 
         void setAlpha( int alpha) {  SDL_SetTextureAlphaMod( texture, alpha); }
+        void resizeSurface( vec2 size);
 
         SDL_Texture *texture;
         SDL_Surface *surface;
@@ -47,6 +49,8 @@ class graphic
 
         image *loadImage( std::string file);
         void drawImage( image *image, vec2 position, vec2 size, vec2 source, double angle = 0.0f, int flip = 0, double factor = 0);
+
+        void cutImageFrom( SDL_Surface *srcImage, SDL_Surface *cutImage, vec2 position);
 
         SDL_Window *getWindow() { return p_windows; }
         void moveCamera( vec2 move) { p_camera = p_camera + move; }
