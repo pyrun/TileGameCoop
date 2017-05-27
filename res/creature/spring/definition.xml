@@ -1,6 +1,7 @@
 <object name="spring" width="16" height="16" script="script.lua" solid="0">
 	<action name="open" frame="4" speed="1" loop="0" endCall="EndCallOpen">release.bmp</action>
 	<action name="close" frame="4" speed="10" loop="0" endCall="EndCall">idle.bmp</action>
+	<action name="closed" frame="1" loop="0">release.bmp</action>
 	<action name="idle" frame="1" speed="4" loop="0">idle.bmp</action>
 	<vertex x="4" y="16" id="1">down</vertex>
 	<hitbox offsetx="0" offsety="0" width="16" hight="16"/>
