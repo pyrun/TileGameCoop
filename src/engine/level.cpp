@@ -1,6 +1,6 @@
 #include "level.h"
 
-level::level(std::string file, std::string folder, graphic *graphic, player_handle *player)
+level::level(std::string file, std::string folder, graphic *graphic, player_handle *player, entitylist *t_entitylist)
 {
     p_entity = NULL;
     p_world = NULL;
@@ -8,10 +8,18 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
 
     p_loadworld = false;
 
-    // create entity list
-    p_entity = new entitylist();
+    // create entity list if we have no
+    if( t_entitylist == NULL) {
+        p_entity = new entitylist();
 
-    p_entity->loadTypes( "creature/", graphic);
+        p_entity->loadTypes( "creature/", graphic);
+
+        p_notMyEntityList = false;
+    } else {
+        p_entity = t_entitylist;
+        // we become a clear list :) thanks
+        p_notMyEntityList = true;
+    }
 
     // load world
     p_world = new world( file, folder);
@@ -40,6 +48,16 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     graphic->setCamera(l_start);
 }
 
+level::~level()
+{
+    // delete entity
+    if( p_entity && !p_notMyEntityList)
+        delete p_entity;
+    // delete world if a there
+    if( p_world)
+        delete p_world;
+}
+
 void level::process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list *particle) {
     // transition
     getWorld()->process( graphic);
@@ -49,6 +67,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         getEntityList()->process( getWorld(), config, l_delta);
     }
 
+    // if transition cancel process
     if( p_transition)
         return;
 
@@ -82,11 +101,16 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
                 }
             }
 
+            // create a transition
             p_transition = new transition( graphic, transition_time, true);
 
             // delete level
             delete p_level;
             p_level = NULL;
+
+            // clear old list and load list from this level
+            p_entity->clearEntitys();
+            p_entity->setEntitys( p_entityListSave);
 
             // player reset
             playerlist->setAllInavtive();
@@ -108,10 +132,14 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         // save old cam position
         p_camere_pos = graphic->getCamera();
 
+        // save old entity's and clear the list
+        p_entityListSave = getEntityList()->getEntitys();
+        getEntityList()->clearEntitys();
+
         std::string l_level = getWorld()->needLoadWorld();
         bool l_loadAsPlayer = getWorld()->loadAsPlayer();
         p_world->setLoadWorld( "", false); // NULL
-        p_level = new level( l_level, "worlds/", graphic, playerlist);
+        p_level = new level( l_level, "worlds/", graphic, playerlist, p_entity );
 
         p_transition = new transition( graphic, transition_time, true);
 
@@ -136,14 +164,4 @@ void level::draw( graphic* graphic) {
             delete p_transition;
             p_transition = NULL;
         }
-}
-
-level::~level()
-{
-    // delete entity
-    if( p_entity)
-        delete p_entity;
-    // delete world if a there
-    if( p_world)
-        delete p_world;
 }

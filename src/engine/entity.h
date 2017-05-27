@@ -261,6 +261,9 @@ class entitylist {
 
         entity *getEntity( int id);
         int getAmountPlayerObject() { return p_playerentity; }
+        std::vector<entity> getEntitys() { return p_entitys; }
+        void clearEntitys( ) { p_entitys.clear(); }
+        void setEntitys( std::vector<entity> entitys) { p_entitys = entitys; }
     protected:
 
     private:

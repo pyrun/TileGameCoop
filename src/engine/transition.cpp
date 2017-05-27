@@ -17,8 +17,6 @@ transition::transition( graphic* graphic, int deadtime, bool inout) {
     // set death time
     p_deadtime = deadtime;
 
-    p_finish = false;
-
     // out in
     p_inout = inout;
 
@@ -28,34 +26,22 @@ transition::transition( graphic* graphic, int deadtime, bool inout) {
 
 transition::~transition() {
     delete p_image;
-    //dtor
 }
 
 bool transition::draw( graphic* graphic) {
-    /*vec2 l_size = vec2(200+1*p_timer.getTicks(), 200+1*p_timer.getTicks());
-
-    p_cutimage->resizeSurface(  l_size);*/
-
+    // calculate alpha channel
     int l_alpha = 255.f/p_deadtime*p_timer.getTicks();
     if( l_alpha > 255.f)
         l_alpha = 255;
 
+    // set alpha image
     p_image->setAlpha( p_inout==true?255.f-l_alpha:l_alpha );
 
-    //vec2 l_pos;
-
-    //l_pos.x = cos(p_timer.getTicks())*(p_timer.getTicks()/10);
-    //l_pos.y = sin(p_timer.getTicks())*(p_timer.getTicks()/10);
-
-    //graphic->cutImageFrom( p_temp_screen, p_cutimage->surface, l_pos+vec2( graphic->getCameraSize().x/2, graphic->getCameraSize().y/2) );
-
-    //SDL_RenderCopy( graphic->getRenderer(), l_tex, NULL, &p_screenRect);
+    // draw image to the screen
     graphic->drawImage( p_image, graphic->getCamera().tovec2(), graphic->getCameraSize(), vec2( 0, 0));
 
     // look if the time reach death time
-    if( p_deadtime < p_timer.getTicks()) {
-        p_finish = true;
+    if( p_deadtime < p_timer.getTicks())
         return true;
-    }
     return false;
 }

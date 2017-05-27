@@ -15,7 +15,7 @@
 class level
 {
     public:
-        level(std::string file, std::string folder, graphic *graphic, player_handle *player);
+        level(std::string file, std::string folder, graphic *graphic, player_handle *player, entitylist *t_entitylist = NULL);
         virtual ~level();
 
         void process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list* particle);
@@ -40,10 +40,12 @@ class level
         world *p_world;
         entitylist *p_entity;
         level *p_level = NULL;
+        std::vector<entity> p_entityListSave;
 
         transition *p_transition;
 
         bool p_loadworld;
+        bool p_notMyEntityList;
 
         fvec2 p_camere_pos;
 };
