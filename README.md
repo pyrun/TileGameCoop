@@ -1,6 +1,7 @@
 ## Synopsis
-![Clouds world](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_1.bmp)
-![Grasland](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_2.jpg)
+![Overworld](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_2.jpg)
+![Grasland](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_3.jpg)
+![Clouds world](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_1.jpg)
 <br>
 Platform + Jump n Run + endless player support :)
 
