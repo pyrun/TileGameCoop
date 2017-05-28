@@ -65,14 +65,14 @@ void game::drawHUD() {
     sprintf( test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
     p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() +vec2( (int)p_graphic->getCameraSize().x, 0), 1.0f, 255, true);
 
-    sprintf( test, "%d Player %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_player->getAmountPlayerChamps(), p_player->getPlayerActive());
+    sprintf( test, "%d Player %d PlayerChamps %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_level->getEntityList()->getAmountPlayerObject(), p_player->getAmountPlayerChamps(), p_player->getPlayerActive());
     p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() +vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, 255, false, true);
 }
 
 int game::process_graphic( std::string levelName) {
     int l_error;
 
-//    levelName = "world_0.tmx";
+    //levelName = "intro.tmx";
 
     p_level = new level( levelName.size()==0?"overworld.tmx":levelName.c_str(), "worlds/", p_graphic, p_player);
 

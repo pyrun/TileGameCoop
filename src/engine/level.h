@@ -10,7 +10,7 @@
 #include "particle.h"
 #include "transition.h"
 
-#define transition_time 1000
+#define transition_time 500
 
 class level
 {

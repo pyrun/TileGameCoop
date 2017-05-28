@@ -62,7 +62,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
     // transition
     getWorld()->process( graphic);
 
-    if( !p_loadworld || ( p_transition && p_transition->blendout()) ) {
+    if( !p_loadworld && !p_transition ) {
         // process entity
         getEntityList()->process( getWorld(), config, l_delta);
     }

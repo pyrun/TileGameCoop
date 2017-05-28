@@ -4,6 +4,6 @@
 	<action name="closed" frame="1" loop="0">release.bmp</action>
 	<action name="idle" frame="1" speed="4" loop="0">idle.bmp</action>
 	<vertex x="4" y="16" id="1">down</vertex>
-	<hitbox offsetx="0" offsety="0" width="16" hight="16"/>
+	<hitbox offsetx="0" offsety="13" width="16" hight="3"/>
 </object>
 

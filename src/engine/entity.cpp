@@ -1248,8 +1248,15 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
 
 void entitylist::deleteObj( int id) {
     for( int i = 0; i < (int)p_entitys.size(); i++)
-        if( p_entitys[i].getId() == id)
+        if( p_entitys[i].getId() == id) {
+            entity *l_entity = &p_entitys[i];
+            entitytype *l_type = l_entity->getType();
+            // decreasing if type is a player file
+            if( l_type && l_type->getIsPlayer())
+                p_playerentity--;
+
             p_entitys.erase( p_entitys.begin()+i);
+        }
 }
 
 std::vector<int> entitylist::createFromWorldFile( std::string file, world *world) {
@@ -1405,7 +1412,7 @@ int entitylist::setVertexHit( vertex *vertex, bool set){
 
 void entitylist::process( world *world, config *config, int deltaTime) {
     float l_velocityDelta;
-    int l_vertexhitchange = 0;
+    int l_vertexhitchange;
     vec2 l_iposition;
 
     // calc delta of velocity
@@ -1423,18 +1430,26 @@ void entitylist::process( world *world, config *config, int deltaTime) {
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_entity = &p_entitys[i];
 
-        if( l_entity == NULL)
+        // skip if entity null -> it cant be happen but
+        if( l_entity == NULL) {
+            printf( "entitylist::process l_entity == NULL - fataler fehler\n");
             continue;
+        }
 
-        // no calc anymore if he flag too destory
+        // deleting flag is set, no calculation
         if( l_entity->isbedelete == true )
             continue;
 
+        // get type
         entitytype *l_type = l_entity->getType();
 
-        l_vertexhitchange = 0;
+        // delete obj if he go out
+        if( l_entity->getPosition().y > world->getWorld().y*world->getTileSize().y) {
+            deleteObj( l_entity->getId());
+            continue;
+        }
 
-        // lua timer for simple ai
+        // lua timer for simple ai or all other timing aspects
         if( l_type->getTimerTime() > 0) {
             // time over
             if( l_entity->getTimer()->getTicks() > l_type->getTimerTime() ) {
@@ -1458,7 +1473,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 l_entity->setLiquid( false); // he now not swim anymore
         }
 
-        // check abount hitbox
+        // check about the hitting box
         std::vector<int> l_ids = collision_boundingBox( l_entity);
         if( l_ids.size() > 0)
             l_entity->lua_collision( l_entity->getId(), l_ids);
@@ -1490,19 +1505,21 @@ void entitylist::process( world *world, config *config, int deltaTime) {
             // y delta dazurechnen (x nicht nötig da keine gravi. )
             l_velocity.y += l_velocityDelta;
         } else {
-
             l_change.x += l_velocity.x * deltaTime;
             l_change.y += l_velocity.y * deltaTime;
         }
 
+        // reset collision
         l_entity->setColisionDown( false);
         l_entity->setColisionUp( false);
         l_entity->setColisionLeft( false);
         l_entity->setColisionRight( false);
 
-
         fvec2 l_result_change = l_change;
         fvec2 l_result_velocity = l_velocity;
+
+        // vertex change set to 0
+        l_vertexhitchange = 0;
 
         for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
             vertex *l_vertex = &l_entity->getVertex()->at(n);
