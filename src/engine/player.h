@@ -74,13 +74,23 @@ class player_handle
         std::vector<std::string> getEntityList() { return p_entityNames; }
         void setInactiv( player *player) {
             player->entity_id = -1;
-            player->active = 0;
+            player->active = false;
+            if( player == p_playercamerafocus)
+                p_playercamerafocus = findActivePlayer();
         }
 
         player *getPlayer( int id) {
             for( int i = 0; i < (int)p_playerlist.size(); i++) {
                 player *p_player = p_playerlist[i];
                 if( p_player->id == id)
+                    return p_player;
+            }
+            return NULL;
+        }
+        player *findActivePlayer() {
+            for( int i = 0; i < (int)p_playerlist.size(); i++) {
+                player *p_player = p_playerlist[i];
+                if( p_player->active == true)
                     return p_player;
             }
             return NULL;

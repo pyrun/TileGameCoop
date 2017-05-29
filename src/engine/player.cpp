@@ -398,7 +398,7 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
 }
 
 void player_handle::draw( entitylist *entitylist, font *font, graphic* graphic) {
-    // react of push bottum
+    // react pushed button
     for( int i = 0; i < (int)p_playerlist.size(); i++) {
         player* l_player = p_playerlist[i];
         if( l_player->active) {
