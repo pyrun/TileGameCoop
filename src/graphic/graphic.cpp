@@ -191,14 +191,15 @@ graphic::graphic( config *config)
     // windows maxed in config?
     clear();
 
-    // set change flag
-    p_config->setDisplayChange();
-
     // scale set
     if( p_config->getDisplayMode())
         setFullscreen( );
     else
-        p_config->setDisplayChangeMode();
+        changeWindowSize(); //p_config->setDisplayChangeMode();
+
+    // set change flag
+    p_config->setDisplayChange();
+
 }
 
 graphic::~graphic()
@@ -323,7 +324,6 @@ void graphic::clear( float dt) {
             else
                 setFullscreen( true);
         }
-
 
         // set config if windows maxmazed
         Uint32 l_flags = SDL_GetWindowFlags( p_windows);
