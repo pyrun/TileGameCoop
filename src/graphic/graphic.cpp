@@ -333,6 +333,8 @@ void graphic::clear( float dt) {
             p_config->setDisplayMaximized( false);
     }
 
+    SDL_SetRenderDrawColor( p_renderer, 0, 0, 0, 255);
+
     // anzeigen lassen
     SDL_RenderPresent(p_renderer);
 
