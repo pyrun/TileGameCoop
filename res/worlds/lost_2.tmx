@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="265" height="16" tilewidth="16" tileheight="16" nextobjectid="96">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="265" height="16" tilewidth="16" tileheight="16" nextobjectid="99">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
@@ -77,7 +77,7 @@
   <object id="61" name="snail" x="3936" y="144" width="32" height="32"/>
   <object id="62" name="turtle" x="816" y="112" width="32" height="32"/>
   <object id="63" name="turtle" x="960" y="112" width="32" height="32"/>
-  <object id="64" name="turtle" x="1296" y="144" width="16" height="16"/>
+  <object id="64" name="snail" x="1296" y="144" width="16" height="16"/>
   <object id="65" name="turtle" x="1408" y="176" width="16" height="16"/>
   <object id="66" name="start" x="0" y="96" width="16" height="16"/>
   <object id="67" name="turtle" x="368" y="160" width="32" height="32">
@@ -111,7 +111,7 @@
   </object>
   <object id="78" name="button" x="1920" y="32" width="16" height="16">
    <properties>
-    <property name="global" value="73"/>
+    <property name="global" value="72"/>
    </properties>
   </object>
   <object id="79" name="turtle" x="2048" y="128" width="32" height="16">
@@ -152,7 +152,7 @@
     <property name="global" value="110"/>
    </properties>
   </object>
-  <object id="88" name="finsih" x="4176" y="176" width="16" height="16"/>
+  <object id="88" name="finish" x="4160" y="144" width="48" height="48"/>
   <object id="89" name="player_firstworldstart" x="16" y="96" width="16" height="16">
    <properties>
     <property name="global" value="alex"/>
@@ -193,5 +193,6 @@
     <property name="global" value="111"/>
    </properties>
   </object>
+  <object id="96" name="start_player" x="32" y="16" width="16" height="32"/>
  </objectgroup>
 </map>
