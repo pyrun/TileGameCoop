@@ -20,8 +20,11 @@ function collision( id, ...)
 		local found = false
 		ids = {findObjects( id, l_x, l_y, l_rect_x, l_rect_y)}
 		for object_id = 1, #ids do
-			found = true
-			setVelocityY( ids[object_id], -jump_speed)
+			local obj = ids[object_id]
+			if isEnemy(obj) == true or isPlayer( obj) == true then
+				found = true
+				setVelocityY( obj, -jump_speed)
+			end
 		end
 		if found == true then
 			setAnimation( id, "open")
