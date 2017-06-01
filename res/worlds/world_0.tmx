@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="16" tileheight="16" nextobjectid="88">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="16" tileheight="16" nextobjectid="90">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
@@ -81,15 +81,16 @@
   </object>
   <object id="84" name="start_player" x="16" y="160" width="16" height="16">
    <properties>
-    <property name="global" value="alex"/>
+    <property name="global" value="jan"/>
    </properties>
   </object>
   <object id="85" name="portal" x="32" y="128" width="16" height="32">
    <properties>
-    <property name="global" value="dani"/>
+    <property name="global" value="jan"/>
    </properties>
   </object>
-  <object id="86" name="frog" x="192" y="176" width="16" height="16"/>
-  <object id="87" name="snake" x="144" y="176" width="16" height="16"/>
+  <object id="86" name="door" x="176" y="160" width="32" height="32"/>
+  <object id="87" name="snake" x="112" y="112" width="16" height="16"/>
+  <object id="89" name="door" x="208" y="160" width="32" height="32"/>
  </objectgroup>
 </map>

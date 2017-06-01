@@ -11,7 +11,7 @@ function collision( id, ...)
       for k,v in pairs({...}) do
 	if v == id then
 	elseif isEnemy( v) == true then
-		setAnimationDirection( v, getAnimationDirection(id))
+		setAnimationDirection( v, not getAnimationDirection( v))
 	end
       end
 end

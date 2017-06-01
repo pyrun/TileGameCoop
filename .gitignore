@@ -16,6 +16,7 @@ src/TileGameCoop.cscope_file_list
 build/win/
 build/linux/
 build/mac/
+res/level.bat
 
 # Windows Installer files
 *.cab
