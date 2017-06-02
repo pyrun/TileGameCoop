@@ -38,7 +38,7 @@ function attack( id)
 
 		-- dir offset calc
 		if l_dir == true then
-			l_factor = -64
+			l_factor = -32
 		end
 		-- calc offset
 		id_x = 16 + l_factor

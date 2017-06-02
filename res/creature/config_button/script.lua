@@ -2,9 +2,9 @@ function vertexhit( id)
 end
 
 function start( id) 
-	global_value = "Test"
+	global_value = "Debug"
 end
 
 function timer( id) 
-	message( id, 1, 0, 0, global_value)
+	message( id, 0.9, 18, 2, global_value)
 end

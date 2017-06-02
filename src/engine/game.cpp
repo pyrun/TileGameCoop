@@ -99,7 +99,7 @@ int game::process_graphic( std::string levelName) {
         p_graphic->flipCamera();
 
         // react of player input
-        p_player->handle( p_level->getEntityList(), p_input, p_graphic, &p_config);
+        p_player->handle( p_level->getEntityList(), p_level->getWorld(), p_input, p_graphic, &p_config);
 
         p_level->process( l_delta, &p_config, p_graphic, p_player, p_particles);
 

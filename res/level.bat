@@ -1,1 +1,1 @@
-"..\bin\WinDebug32\TileGameCoop.exe" desert_2.tmx
+"..\bin\WinDebug32\TileGameCoop.exe" menu.tmx

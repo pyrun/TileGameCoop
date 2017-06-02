@@ -1,4 +1,4 @@
-<object name="message" width="9" height="9" script="script.lua" timer="1" solid="0" gravity="0">
+<object name="message" width="16" height="16" script="script.lua" timer="1" solid="0" gravity="0">
 	<action name="idle" frame="1" speed="0" loop="0">idle.bmp</action>
 </object>
 

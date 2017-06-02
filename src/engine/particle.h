@@ -46,7 +46,7 @@ class particle_list
         particle_list();
         virtual ~particle_list();
 
-        int createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data);
+        int createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data, fvec2 zoom = fvec2( 1, 1));
 
         void draw( graphic *graphic, font *font);
 

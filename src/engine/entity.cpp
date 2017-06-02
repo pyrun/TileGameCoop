@@ -42,6 +42,35 @@ static int lua_print(lua_State* state) {
     return 0;
 }
 
+static int lua_message(lua_State* state) {
+    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) || !lua_isnumber( state, 3) || !lua_isnumber( state, 4)) {
+        printf( "lua_message call wrong argument\n");
+        return 0;
+    }
+
+    // get obj
+    int l_id = lua_tointeger( state, 1);
+    float l_size = lua_tonumber( state, 2);
+    vec2 l_offset = vec2( lua_tonumber( state, 3), lua_tonumber( state, 4));
+    entity *l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_message obj not found\n");
+        return 0;
+    }
+
+    // process the input
+    int nargs = lua_gettop( state)-4;
+    std::string l_text;
+    for (int i=1; i <= nargs; ++i) {
+		l_text += lua_tostring( state, i+4);
+    }
+
+    // call entity_list to add a new msg
+    lua_entitylist->message( l_id, l_text, l_size, l_offset);
+
+    // finish
+    return 0;
+}
 
 static int lua_setLoadLevel( lua_State *state) {
     std::string l_level;
@@ -673,6 +702,9 @@ void lua_install( lua_State *state) {
     // add all entity function ..
     lua_pushcfunction( state, lua_print);
     lua_setglobal( state, "print");
+
+    lua_pushcfunction( state, lua_message);
+    lua_setglobal( state, "message");
 
     lua_pushcfunction( state, lua_setLoadLevel);
     lua_setglobal( state, "setLoadLevel");
@@ -1391,7 +1423,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config)
         // if object found add particle
         if( l_obj) {
             // anzeigen
-            particle->createParticel( par_text, l_obj->getPosition(), l_obj->getVelocity(), 1000, l_text->text);
+            particle->createParticel( par_text, l_obj->getPosition() + l_text->offset, l_obj->getVelocity(), 1000, l_text->text, fvec2( l_text->size, l_text->size));
         }
     }
     // aufräumen falls was drin ist
@@ -2129,11 +2161,13 @@ std::vector<int> entitylist::findPlayerObject() {
     return l_obj;
 }
 
-void entitylist::message( int id, std::string text) {
+void entitylist::message( int id, std::string text, float size, vec2 offset) {
     entity_text l_text;
 
     l_text.id = id;
     l_text.text = text;
+    l_text.size = size;
+    l_text.offset = offset;
 
     p_text.push_back( l_text);
 }

@@ -64,6 +64,8 @@ class entity_text {
     public:
         int id;
         std::string text;
+        float size;
+        vec2 offset;
 };
 
 class entitytype
@@ -257,7 +259,7 @@ class entitylist {
         void loadTypes( std::string folder, graphic *graphic);
         entitytype *getType( std::string name);
         std::vector<int> findPlayerObject();
-        void message( int id, std::string text);
+        void message( int id, std::string text, float size = 1.0f, vec2 offset = vec2( 0, 0));
 
         entity *getEntity( int id);
         int getAmountPlayerObject() { return p_playerentity; }

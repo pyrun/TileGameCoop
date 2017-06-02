@@ -35,7 +35,7 @@ class player_handle
         virtual ~player_handle();
 
         void next_player_entity( entitylist *entitylist, player *l_player);
-        void handle( entitylist *entity, input *input, graphic* graphic, config* config);
+        void handle( entitylist *entity, world* world, input *input, graphic* graphic, config* config);
         void draw( entitylist *entitylist, font *font, graphic* graphic);
         void join( entitylist *entitylist);
         int getPlayerAmount() { return (int)p_playerlist.size(); }

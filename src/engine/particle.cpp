@@ -44,7 +44,7 @@ particle_list::~particle_list() {
 
 }
 
-int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data) {
+int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data, fvec2 zoom) {
     particle l_par( p_number);
 
     // Daten setzten
@@ -53,7 +53,7 @@ int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity
     l_par.setData( data);
     l_par.setVelocity( velocity);
     l_par.setLifeTime( lifetime);
-    l_par.setZoom( fvec2( 1, 1));
+    l_par.setZoom( zoom);
 
     // eindeutige ID erhöhen
     p_number++;

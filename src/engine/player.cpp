@@ -215,7 +215,7 @@ void player_handle::next_player_entity( entitylist *entitylist, player *l_player
     l_player->entity_id = l_id;
 }
 
-void player_handle::handle( entitylist *entitylist, input *input, graphic* graphic, config* config) {
+void player_handle::handle( entitylist *entitylist, world* world, input *input, graphic* graphic, config* config) {
     // handle new controler
     std::vector<int> l_device = input->getDevice();
     if( l_device.size() > 0) {
@@ -337,7 +337,9 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                 if( !l_map->run && l_map_old->run)
                     l_entity->lua_run( l_entity->getId(), false);
                 if( l_map->select && !l_map_old->select)
-                    config->setQuit( true);
+                    if( world->getFileName() != "menu.tmx")
+                        world->setLoadWorld( "menu.tmx", false);
+
                 if( l_map->attack && !l_map_old->attack)
                     l_entity->lua_attack( l_entity->getId());
                 if( l_map->special && !l_map_old->special)
@@ -356,7 +358,8 @@ void player_handle::handle( entitylist *entitylist, input *input, graphic* graph
                     if( l_player->champ.size() == 0)
                         setInactiv( l_player);
 
-                if( l_map->left && !l_map_old->left);
+                if( l_map->left && !l_map_old->left)
+                    config->setQuit( true);
                 if( l_map->right && !l_map_old->right);
             }
         }
