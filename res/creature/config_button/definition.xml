@@ -1,5 +1,7 @@
 <object name="config_button" width="16" height="16" script="script.lua" timer="1" solid="0" gravity="0">
 	<action name="idle" frame="1" speed="0" loop="0">idle.bmp</action>
+	<action name="active" frame="1" speed="0" loop="0">active.bmp</action>
+	<action name="die" frame="1" speed="0" loop="0">active.bmp</action>
 	<hitbox offsetx="0" offsety="0" width="16" hight="16"/>
 </object>
 

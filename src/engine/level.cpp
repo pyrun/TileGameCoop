@@ -1,6 +1,6 @@
 #include "level.h"
 
-level::level(std::string file, std::string folder, graphic *graphic, player_handle *player, entitylist *t_entitylist)
+level::level(std::string file, std::string folder, graphic *graphic, player_handle *player, config *config, entitylist *t_entitylist)
 {
     p_entity = NULL;
     p_world = NULL;
@@ -26,6 +26,7 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
 
     // set link
     lua_setLink( p_entity, p_world);
+    lua_config_setLink( config);
     lua_player_setLink( player);
 
     p_transition = new transition( graphic, transition_time, true);
@@ -34,8 +35,10 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     std::vector<int> l_ids = p_entity->createFromWorldFile( p_world->getFileName(), p_world);
     for( int i = 0; i < l_ids.size(); i++) {
         entity *l_entity = p_entity->getEntity( l_ids[i]);
-        if( l_entity)
+        if( l_entity) {
             lua_player_install( l_entity->getState());
+            lua_config_install( l_entity->getState());
+        }
     }
 
     // load all image files
@@ -139,7 +142,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         std::string l_level = getWorld()->needLoadWorld();
         bool l_loadAsPlayer = getWorld()->loadAsPlayer();
         p_world->setLoadWorld( "", false); // NULL
-        p_level = new level( l_level, "worlds/", graphic, playerlist, p_entity );
+        p_level = new level( l_level, "worlds/", graphic, playerlist, config, p_entity);
 
         p_transition = new transition( graphic, transition_time, true);
 

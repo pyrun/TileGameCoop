@@ -1,5 +1,69 @@
 #include "config.h"
 
+
+/** LUA FUNCTION */
+
+config *lua_config = NULL;
+
+static int lua_setconfig( lua_State *state) {
+    std::string l_name;
+    bool l_set;
+
+    if( !lua_isstring( state, 1) || !lua_isboolean( state, 2) ) {
+        printf( "lua_setconfig call wrong argument\n");
+        return 0;
+    }
+
+    l_name = lua_tostring( state, 1);
+    l_set = lua_toboolean( state, 2);
+
+    if( l_name == "Fullscreen") {
+        lua_config->setDisplayMode( l_set);
+        lua_config->setDisplayChangeMode();
+        lua_config->setDisplay( 604, 400); // just a magic resolution
+    }
+    if( l_name == "Debug")
+        lua_config->setDebug( l_set);
+
+    return 0;
+}
+
+static int lua_getconfig( lua_State *state) {
+    std::string l_name;
+    bool l_set = false;
+
+    if( !lua_isstring( state, 1) ) {
+        printf( "lua_getconfig call wrong argument\n");
+        return 0;
+    }
+
+    l_name = lua_tostring( state, 1);
+
+    if( l_name == "Fullscreen")
+        l_set = lua_config->getDisplayMode();
+    if( l_name == "Debug")
+        l_set = lua_config->getDebug();
+
+    lua_pushboolean( state, l_set);
+
+    return 1;
+}
+
+void lua_config_install( lua_State *state) {
+    // add all entity function ..
+    lua_pushcfunction( state, lua_setconfig);
+    lua_setglobal( state, "setconfig");
+
+    lua_pushcfunction( state, lua_getconfig);
+    lua_setglobal( state, "getconfig");
+}
+
+void lua_config_setLink( config* config) {
+    // set list
+    lua_config = config;
+}
+
+
 using namespace tinyxml2;
 
 #ifndef XMLCheckResult

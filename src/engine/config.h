@@ -8,6 +8,13 @@
 #include "../xml/tinyxml2.h"
 #include "types.h"
 
+// debian
+#ifdef IMADEBIAN
+#include <lua5.3/lua.hpp>
+#else
+#include <lua.hpp>
+#endif // IMADEBIAN
+
 //#define DEBUG_CONFIG 1
 
 class config
@@ -112,5 +119,9 @@ class config
         std::string p_resolution_file;
         std::string p_controllermappingsfile;
 };
+
+void lua_config_setLink( config *config);
+void lua_config_install( lua_State *state);
+
 
 #endif // CONFIG_H

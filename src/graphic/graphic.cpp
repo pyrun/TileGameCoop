@@ -246,8 +246,9 @@ int graphic::loadResolution( std::string file) {
 #define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
 
 void graphic::changeWindowSize() {
-    vec2 l_newres;
-    SDL_GetWindowSize( p_windows, &l_newres.x, &l_newres.y);
+    vec2 l_newres = p_config->getDisplay();
+    SDL_SetWindowSize( p_windows, l_newres.x, l_newres.y);
+    //SDL_GetWindowSize( p_windows, &l_newres.x, &l_newres.y);
     SDL_SetWindowFullscreen( p_windows, 0);
     p_camera_size.x = NATIV_W;
     p_camera_size.y = NATIV_H;
