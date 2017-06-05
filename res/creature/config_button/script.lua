@@ -2,7 +2,8 @@ function vertexhit( id)
 end
 
 function start( id) 
-	global_value = "Debug"
+	global_value = "debug"
+	global_value_2 = "Debug - Text"
 end
 
 function timer( id) 
@@ -12,7 +13,7 @@ function timer( id)
 	else
 		setAnimation( id, "idle")
 	end
-	message( id, 0.9, 18, 2, global_value)
+	message( id, 0.9, 18, 2, global_value_2)
 end
 
 function collision( id, ...)

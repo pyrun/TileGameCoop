@@ -23,12 +23,12 @@ class level
 
         entitylist *getEntityList() {
             if( p_level != NULL)
-                return p_level->p_entity;
+                return p_level->getEntityList();
             return p_entity;
         }
         world *getWorld() {
             if( p_level != NULL)
-                return p_level->p_world;
+                return p_level->getWorld();
             return p_world;
         }
         void setLevel( level *level) {

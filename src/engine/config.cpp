@@ -17,13 +17,16 @@ static int lua_setconfig( lua_State *state) {
     l_name = lua_tostring( state, 1);
     l_set = lua_toboolean( state, 2);
 
-    if( l_name == "Fullscreen") {
+    if( l_name == "fullscreen") {
         lua_config->setDisplayMode( l_set);
         lua_config->setDisplayChangeMode();
         lua_config->setDisplay( 604, 400); // just a magic resolution
     }
-    if( l_name == "Debug")
+    if( l_name == "debug")
         lua_config->setDebug( l_set);
+    if( l_name == "exit")
+        lua_config->setQuit( true);
+
 
     return 0;
 }
@@ -39,10 +42,12 @@ static int lua_getconfig( lua_State *state) {
 
     l_name = lua_tostring( state, 1);
 
-    if( l_name == "Fullscreen")
+    if( l_name == "fullscreen")
         l_set = lua_config->getDisplayMode();
-    if( l_name == "Debug")
+    if( l_name == "debug")
         l_set = lua_config->getDebug();
+    if( l_name == "quit")
+        l_set = lua_config->getQuit();
 
     lua_pushboolean( state, l_set);
 

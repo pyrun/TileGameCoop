@@ -169,9 +169,13 @@ class entity
         void lua_vertexhit( int id);
         void lua_jump( int id);
         void lua_right( int id);
+        void lua_right_once( int id);
         void lua_left( int id);
+        void lua_left_once( int id);
         void lua_up( int id);
+        void lua_up_once( int id);
         void lua_down( int id);
+        void lua_down_once( int id);
         void lua_run( int id, bool press);
         void lua_attack( int id);
         void lua_special( int id);

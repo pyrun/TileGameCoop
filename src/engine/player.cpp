@@ -337,7 +337,7 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                 if( !l_map->run && l_map_old->run)
                     l_entity->lua_run( l_entity->getId(), false);
                 if( l_map->select && !l_map_old->select)
-                    if( world->getFileName() != "menu.tmx")
+                    //if( world->getFileName() != "menu.tmx")
                         world->setLoadWorld( "menu.tmx", false);
 
                 if( l_map->attack && !l_map_old->attack)
@@ -345,21 +345,33 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                 if( l_map->special && !l_map_old->special)
                     l_entity->lua_special( l_entity->getId());
 
-                if( l_map->dir.up )
+                if( l_map->dir.up ) {
                     l_entity->lua_up( l_entity->getId());
-                if( l_map->dir.down )
+                    if( !l_map_old->dir.up)
+                        l_entity->lua_up_once( l_entity->getId());
+                }
+                if( l_map->dir.down ) {
                     l_entity->lua_down( l_entity->getId());
-                if( l_map->dir.left )
+                    if( !l_map_old->dir.down)
+                        l_entity->lua_down_once( l_entity->getId());
+                }
+                if( l_map->dir.left ) {
                     l_entity->lua_left( l_entity->getId());
-                if( l_map->dir.right )
+                    if( !l_map_old->dir.left)
+                        l_entity->lua_left_once( l_entity->getId());
+                }
+                if( l_map->dir.right ) {
                     l_entity->lua_right( l_entity->getId());
+                    if( !l_map_old->dir.right)
+                        l_entity->lua_right_once( l_entity->getId());
+                }
 
                 if( l_map->start && !l_map_old->start)
                     if( l_player->champ.size() == 0)
                         setInactiv( l_player);
 
                 if( l_map->left && !l_map_old->left)
-                    config->setQuit( true);
+                    ;//config->setQuit( true);
                 if( l_map->right && !l_map_old->right);
             }
         }

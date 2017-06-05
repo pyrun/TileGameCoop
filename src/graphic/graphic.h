@@ -55,7 +55,7 @@ class graphic
         SDL_Window *getWindow() { return p_windows; }
         void moveCamera( vec2 move) { p_camera = p_camera + move; }
         void flyTo( vec2 pos) { p_cameraFlyTo = pos; p_flyTo = true; }
-        void setCamera( vec2 pos) { p_camera = pos; }
+        void setCamera( vec2 pos) { p_camera = pos; p_cameraOld = pos; }
         fvec2 getCamera() { return p_cameraOld; }
         vec2 getCameraSize() { return p_camera_size; }
         void flipCamera() { p_cameraOld = p_camera; }

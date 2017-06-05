@@ -22,12 +22,12 @@
 0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
@@ -46,13 +46,13 @@
 0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,136,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,136,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,136,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,136,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,136,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,136,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,136,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,136,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,136,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,150,151,151,151,151,151,151,151,151,151,151,151,151,151,152,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
@@ -83,17 +83,11 @@
  </layer>
  <objectgroup color="#000080" name="Objects">
   <object id="62" name="player_levelselect" x="192" y="80" width="16" height="16"/>
-  <object id="63" name="player_levelselect" x="192" y="176" width="16" height="16"/>
-  <object id="64" name="player_levelselect" x="192" y="128" width="16" height="16"/>
-  <object id="65" name="player_levelselect" x="192" y="112" width="16" height="16"/>
-  <object id="66" name="player_levelselect" x="192" y="192" width="16" height="16"/>
-  <object id="67" name="player_levelselect" x="192" y="160" width="16" height="16"/>
-  <object id="68" name="player_levelselect" x="192" y="96" width="16" height="16"/>
   <object id="69" name="start" x="256" y="160" width="16" height="16"/>
-  <object id="70" name="player_levelselect" x="192" y="144" width="16" height="16"/>
   <object id="71" name="config_button" x="224" y="80" width="16" height="16">
    <properties>
-    <property name="global" value="Fullscreen"/>
+    <property name="global" value="fullscreen"/>
+    <property name="global2" value="Fullscreen"/>
    </properties>
   </object>
   <object id="73" name="message" x="224" y="48" width="16" height="16">
@@ -101,27 +95,31 @@
     <property name="global" value="Config Menu"/>
    </properties>
   </object>
-  <object id="76" name="config_button" x="224" y="112" width="16" height="16">
+  <object id="76" name="config_button" x="224" y="96" width="16" height="16">
    <properties>
-    <property name="global" value="Debug"/>
+    <property name="global" value="debug"/>
+    <property name="global2" value="Debug draw"/>
    </properties>
   </object>
-  <object id="82" name="config_button" x="224" y="240" width="16" height="16">
+  <object id="82" name="config_button" x="224" y="192" width="16" height="16">
    <properties>
-    <property name="global" value="Exit game"/>
+    <property name="global" value="exit"/>
+    <property name="global2" value="Exit the Game"/>
    </properties>
   </object>
-  <object id="83" name="config_button" x="224" y="272" width="16" height="16">
+  <object id="83" name="config_button" x="224" y="176" width="16" height="16">
    <properties>
-    <property name="global" value="Quit menu"/>
+    <property name="global" value="quit"/>
+    <property name="global2" value="Return"/>
    </properties>
   </object>
-  <object id="84" name="config_button" x="224" y="144" width="16" height="16">
+  <object id="84" name="config_button" x="224" y="128" width="16" height="16">
    <properties>
     <property name="global" value="LoL"/>
+    <property name="global2" value="Lea"/>
    </properties>
   </object>
-  <object id="85" name="config_button" x="224" y="176" width="16" height="16">
+  <object id="85" name="config_button" x="224" y="144" width="16" height="16">
    <properties>
     <property name="global" value="Hello World"/>
    </properties>

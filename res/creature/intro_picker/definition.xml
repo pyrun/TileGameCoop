@@ -1,0 +1,5 @@
+<object name="intro_picker" width="80" height="20" player="1" script="script.lua" timer="1" gravity="0">
+	<action name="idle" frame="1">idle.bmp</action>
+</object>
+
+

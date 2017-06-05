@@ -45,7 +45,7 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     p_world->loadImageFiles( graphic);
 
     // camera set at start point
-    vec2 l_start = p_world->getStartPoint()-graphic->getCameraSize()/vec2(2, 2);
+    vec2 l_start = p_world->getStartPoint();
 
     //
     graphic->setCamera(l_start);

@@ -674,7 +674,29 @@ static int lua_setGravity( lua_State *state) {
     l_obj->setGravity( l_gravity);
     return 0;
 }
+static int lua_getName( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    std::string l_name;
 
+    if ( !lua_isnumber( state, 1) ) {
+        printf( "lua_getName call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_getName obj not found\n");
+        return 0;
+    }
+    l_name = l_obj->getType()->getName();
+
+    lua_pushstring ( state, l_name.c_str());
+
+    return 1;
+}
 static int lua_getGravity( lua_State *state) {
     entity *l_obj;
     int l_id;
@@ -780,6 +802,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_getPosition);
     lua_setglobal( state, "getPosition");
+
+    lua_pushcfunction( state, lua_getName);
+    lua_setglobal( state, "getName");
 
     lua_pushcfunction( state, lua_getGravity);
     lua_setglobal( state, "getGravity");
@@ -1046,6 +1071,19 @@ void entity::lua_right( int id) {
         printf("entity::lua_right %s\n", lua_tostring( p_state, -1));
 }
 
+void entity::lua_right_once( int id) {
+    // name the function
+    lua_getglobal( p_state, "right_once");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    // call the function
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entity::lua_right_once %s\n", lua_tostring( p_state, -1));
+}
+
 void entity::lua_left( int id) {
     if( p_state == NULL)
         return;
@@ -1060,6 +1098,20 @@ void entity::lua_left( int id) {
     if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_left %s\n", lua_tostring( p_state, -1));
 }
+
+void entity::lua_left_once( int id) {
+    // name the function
+    lua_getglobal( p_state, "left_once");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    // call the function
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entity::lua_left_once %s\n", lua_tostring( p_state, -1));
+}
+
 void entity::lua_up( int id) {
     if( p_state == NULL)
         return;
@@ -1074,6 +1126,20 @@ void entity::lua_up( int id) {
     if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_up %s\n", lua_tostring( p_state, -1));
 }
+
+void entity::lua_up_once( int id) {
+    // name the function
+    lua_getglobal( p_state, "up_once");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    // call the function
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entity::lua_up_once %s\n", lua_tostring( p_state, -1));
+}
+
 void entity::lua_down( int id) {
     if( p_state == NULL)
         return;
@@ -1087,6 +1153,19 @@ void entity::lua_down( int id) {
     // call the function
     if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_down %s\n", lua_tostring( p_state, -1));
+}
+
+void entity::lua_down_once( int id) {
+    // name the function
+    lua_getglobal( p_state, "down_once");
+    if( !lua_isfunction( p_state, -1)) {
+        lua_pop( p_state,1);
+        return;
+    }
+    lua_pushnumber( p_state, id);
+    // call the function
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entity::lua_down_once %s\n", lua_tostring( p_state, -1));
 }
 
 void entity::lua_run( int id, bool press) {
@@ -1368,6 +1447,14 @@ std::vector<int> entitylist::createFromWorldFile( std::string file, world *world
                     // gloabl value
                     lua_pushstring( l_entity->lua_getLua(), l_value.c_str());
                     lua_setglobal( l_entity->lua_getLua(), "global_value");
+                } else if( l_property == "global2") {
+                    // gloabl value
+                    lua_pushstring( l_entity->lua_getLua(), l_value.c_str());
+                    lua_setglobal( l_entity->lua_getLua(), "global_value_2");
+                }else if( l_property == "global3") {
+                    // gloabl value
+                    lua_pushstring( l_entity->lua_getLua(), l_value.c_str());
+                    lua_setglobal( l_entity->lua_getLua(), "global_value_3");
                 }
 
                 l_xml_property = l_xml_property->NextSiblingElement( "property");
