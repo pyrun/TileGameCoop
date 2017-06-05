@@ -31,8 +31,25 @@ class level
                 return p_level->getWorld();
             return p_world;
         }
+
+        world *getWorldOnce() {
+            return p_world;
+        }
+        /*world *getLevel() {
+            if( p_level != NULL)
+                return p_level->getWorld();
+            return p_world;
+        }*/
         void setLevel( level *level) {
             p_level = level;
+        }
+
+        level *getLevel() {
+            return p_level;
+        }
+        bool isWorking() {
+            printf( "%d %d\n", !p_loadworld, !p_transition);
+            return (!p_loadworld && !p_transition);
         }
     protected:
 

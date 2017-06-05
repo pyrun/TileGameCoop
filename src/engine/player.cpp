@@ -337,8 +337,10 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                 if( !l_map->run && l_map_old->run)
                     l_entity->lua_run( l_entity->getId(), false);
                 if( l_map->select && !l_map_old->select)
-                    //if( world->getFileName() != "menu.tmx")
+                    if( world->getFileName() == "worlds/overworld.tmx")
                         world->setLoadWorld( "menu.tmx", false);
+                    else
+                        printf( "%s\n",world->getFileName().c_str());
 
                 if( l_map->attack && !l_map_old->attack)
                     l_entity->lua_attack( l_entity->getId());

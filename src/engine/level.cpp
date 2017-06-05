@@ -62,36 +62,19 @@ level::~level()
 }
 
 void level::process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list *particle) {
-    // transition
-    getWorld()->process( graphic);
-
-    if( !p_loadworld && !p_transition ) {
-        // process entity
-        getEntityList()->process( getWorld(), config, l_delta);
-    }
-
-    // if transition cancel process
-    if( p_transition)
-        return;
-
-    if( p_loadworld == false && p_level == NULL && p_world->needLoadWorld() != "" ) {
+    // world end transition
+    if( p_loadworld == false && p_level != NULL && p_level->getWorldOnce()->isLevelEnd() == true ) {
         p_transition = p_transition = new transition( graphic, transition_time, false);
         p_loadworld = true;
         return;
     }
 
-    if( p_loadworld == false && p_level != NULL && p_level->getWorld()->isLevelEnd() == true ) {
-        p_transition = p_transition = new transition( graphic, transition_time, false);
-        p_loadworld = true;
-        return;
-    }
-
-     // check if level finish
-    if( p_level != NULL && p_level->getWorld()->isLevelEnd() == true) {
+    // check if level finish
+    if( p_level != NULL && p_level->getWorldOnce()->isLevelEnd() == true && p_transition == NULL) {
             p_loadworld = false;
 
             // alle player daten aufnhemen auf die neue liste
-            if( p_level->getWorld()->leaveLevelasPlayer()){
+            if( p_level->getWorldOnce()->leaveLevelasPlayer()){
                 std::vector<int> l_obj = p_level->getEntityList()->findPlayerObject();
                 for( int n = 0; n < (int)l_obj.size(); n++) {
                     entity *l_entity = p_level->getEntityList()->getEntity( l_obj[n]);
@@ -126,6 +109,28 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
             graphic->flyTo( p_camere_pos.tovec2());
     }
 
+    if( p_transition == NULL && p_level != NULL) {
+        p_level->process( l_delta, config, graphic, playerlist, particle);
+        return;
+    }
+    // transition
+    p_world->process( graphic);
+
+    if( !p_loadworld && !p_transition ) {
+        p_entity->process( p_world, config, l_delta);
+    }
+
+    // transition wolrd go in
+    if( p_loadworld == false && p_level == NULL && p_world->needLoadWorld() != "") {
+        p_transition = new transition( graphic, transition_time, false);
+        p_loadworld = true;
+        return;
+    }
+
+    // if transition cancel process
+    if( p_transition)
+        return;
+
     // load new world?
     if( p_level == NULL && p_world->needLoadWorld() != "" ) {
         p_loadworld = false;
@@ -136,19 +141,18 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         p_camere_pos = graphic->getCamera();
 
         // save old entity's and clear the list
-        p_entityListSave = getEntityList()->getEntitys();
-        getEntityList()->clearEntitys();
+        p_entityListSave = p_entity->getEntitys();
+        p_entity->clearEntitys();
 
-        std::string l_level = getWorld()->needLoadWorld();
-        bool l_loadAsPlayer = getWorld()->loadAsPlayer();
+        std::string l_level = p_world->needLoadWorld();
+        bool l_loadAsPlayer = p_world->loadAsPlayer();
         p_world->setLoadWorld( "", false); // NULL
         p_level = new level( l_level, "worlds/", graphic, playerlist, config, p_entity);
 
-        p_transition = new transition( graphic, transition_time, true);
+        //p_transition = new transition( graphic, transition_time, true);
 
         if( l_loadAsPlayer )
             playerlist->createChamps( getEntityList(), getWorld()->getStartPoint());
-        printf( "getWorld()->loadAsPlayer() %d\n" ,l_loadAsPlayer);
 
         // transition
         getWorld()->process( graphic);
@@ -156,12 +160,15 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         // process entity
         getEntityList()->process( getWorld(), config, l_delta);
 
+
         // reset particle system
         particle->clear();
     }
 }
 
 void level::draw( graphic* graphic) {
+    if( p_transition == NULL && p_level != NULL)
+        p_level->draw( graphic);
     if( p_transition)
         if( p_transition->draw( graphic)) {
             delete p_transition;

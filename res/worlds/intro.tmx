@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0.0" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="16" tileheight="16" nextobjectid="82">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="16" tileheight="16" nextobjectid="82">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
@@ -98,19 +98,19 @@
    </properties>
   </object>
   <object id="73" name="human" x="268" y="15" width="16" height="32"/>
-  <object id="74" name="intro_title" x="144" y="16" width="16" height="16"/>
+  <object id="74" name="intro_title" x="80" y="16" width="16" height="16"/>
   <object id="76" x="112" y="-32"/>
-  <object id="78" name="intro_button" x="240" y="128" width="16" height="16">
+  <object id="78" name="intro_button" x="176" y="128" width="16" height="16">
    <properties>
     <property name="global" value="Reset"/>
    </properties>
   </object>
-  <object id="80" name="intro_button" x="128" y="128" width="16" height="16">
+  <object id="80" name="intro_button" x="64" y="128" width="16" height="16">
    <properties>
     <property name="global" value="Continue"/>
     <property name="global2" value="overworld.tmx"/>
    </properties>
   </object>
-  <object id="81" name="intro_picker" x="128" y="128" width="16" height="16"/>
+  <object id="81" name="intro_picker" x="64" y="128" width="16" height="16"/>
  </objectgroup>
 </map>
