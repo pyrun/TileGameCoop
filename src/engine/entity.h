@@ -145,6 +145,30 @@ class entity
         void setGravity( bool set) { p_gravity = set; }
         bool getGravity() { return p_gravity; }
 
+        void setGlobal( std::string data) {
+            p_global_1 = data;
+            // set global
+            lua_pushstring( lua_getLua(), data.c_str());
+            lua_setglobal( lua_getLua(), "global_value");
+        }
+        std::string getGlobal() { return p_global_1; }
+
+        void setGlobal2( std::string data) {
+            p_global_1 = data;
+            // set global
+            lua_pushstring( lua_getLua(), data.c_str());
+            lua_setglobal( lua_getLua(), "global_value_2");
+        }
+        std::string getGlobal2() { return p_global_2; }
+
+        void setGlobal3( std::string data) {
+            p_global_1 = data;
+            // set global
+            lua_pushstring( lua_getLua(), data.c_str());
+            lua_setglobal( lua_getLua(), "global_value_3");
+        }
+        std::string getGlobal3() { return p_global_3; }
+
         void lua_action( std::string l_action) {
             if( p_state == NULL)
                 return;
@@ -238,6 +262,11 @@ class entity
         bool p_liquid;
         bool p_solid;
         bool p_gravity;
+
+        std::string p_global_1;
+        std::string p_global_2;
+        std::string p_global_3;
+
 };
 
 class entitylist {

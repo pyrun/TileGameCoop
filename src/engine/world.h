@@ -39,7 +39,7 @@ class world_background {
 class world
 {
     public:
-        world( std::string file, std::string ordner );
+        world( std::string file = "default.tmx", std::string ordner = "worlds/");
         virtual ~world();
 
         float getCollisionX( fvec2 position, fvec2 change, fvec2 velocity, bool left = false);
@@ -63,7 +63,8 @@ class world
         bool isLevelEnd() { return p_level_end; }
         bool loadAsPlayer() { return p_loadplayerdata; }
         float getGravity() { return p_gravity; }
-        std::string getFileName() { return p_file; }
+        std::string getFileName() { return p_filename; }
+        std::string getFile() { return p_file; }
         vec2 getTileSize() { return vec2( p_tilewidth, p_tilehight); }
         tile *getCollsionMap() { return p_tilemap_foreground; }
         vec2 getWorld() { return vec2(p_map_width, p_map_hight); }
@@ -72,10 +73,16 @@ class world
         std::string needLoadWorld() { return p_needloadworld; }
         void setStartPoint( vec2 start) { p_startpoint = start; printf("%d %d\n", start.x, start.y); }
         vec2 getStartPoint() { return p_startpoint; }
+
+        // get tile map
+        tile *getOverlap() { return p_tilemap_overlap; }
+        tile *getForeground() { return p_tilemap_foreground; }
+        tile *getBackground() { return p_tilemap_background; }
     protected:
 
     private:
         std::string p_file;
+        std::string p_filename;
         std::string loadParameter( tinyxml2::XMLNode *root, std::string name);
 
         tile *readTilemap( std::string tilemap);

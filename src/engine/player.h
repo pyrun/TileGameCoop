@@ -7,6 +7,7 @@
 #include "input.h"
 #include "config.h"
 #include "entity.h"
+
 #include "../graphic/graphic.h"
 
 class player {
@@ -132,5 +133,6 @@ class player_handle
 
 void lua_player_setLink( player_handle *player);
 void lua_player_install( lua_State *state);
+extern player_handle *lua_player;
 
 #endif // PLAYER_H

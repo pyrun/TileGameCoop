@@ -18,9 +18,10 @@ function start( id)
 	for object_id = 1, #ids do
 		local obj = ids[object_id]
 		if getName( obj) == "intro_button" then
-			--item_id = obj
-			--l_x, l_y = getPosition( item_id)
-			--setPosition( id, l_x, l_y)
+			item_id = obj
+			l_x, l_y = getPosition( item_id)
+			setPosition( id, l_x, l_y)
+			do return end
 		end
 	end
 end

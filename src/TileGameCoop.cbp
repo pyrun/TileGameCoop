@@ -20,6 +20,7 @@
 					<Add directory="../../tinyxml2/inc" />
 					<Add directory="../../lua/include" />
 					<Add directory="engine" />
+					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lmingw32 -lSDL2main -lSDL2  -lSDL2_image -lSDL2_net" />
@@ -53,6 +54,7 @@
 				<Compiler>
 					<Add option="-std=c++0x" />
 					<Add directory="engine" />
+					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -71,6 +73,7 @@
 					<Add option="-std=c++0x" />
 					<Add option="-DIMADEBIAN" />
 					<Add directory="engine" />
+					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -99,6 +102,8 @@
 		<Unit filename="engine/particle.h" />
 		<Unit filename="engine/player.cpp" />
 		<Unit filename="engine/player.h" />
+		<Unit filename="engine/save.cpp" />
+		<Unit filename="engine/save.h" />
 		<Unit filename="engine/timer.cpp" />
 		<Unit filename="engine/timer.h" />
 		<Unit filename="engine/transition.cpp" />

@@ -296,6 +296,8 @@ static int lua_createObject( lua_State *state) {
         return 0;
     }
 
+    printf( "lua_createObject call wrong argument\n");
+
     l_typeName = lua_tostring( state, 1);
     l_x = lua_tointeger( state, 2);
     l_y = lua_tointeger( state, 3);
@@ -1321,7 +1323,7 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
         return -1;
 
     // chose l_id or p_id
-    if( l_id == -1 )
+    if( l_id == -1)
         l_id = p_id;
 
     printf( "creating \"%s\" with id %d\n", type->getName().c_str(), l_id);
@@ -1352,9 +1354,10 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     // incress next id
     l_id++;
 
-    p_id = l_id;
+    if( p_id < l_id)
+        p_id = l_id;
 
-    return (p_id-1);
+    return (l_id-1);
 }
 
 void entitylist::deleteObj( int id) {
@@ -1443,19 +1446,12 @@ std::vector<int> entitylist::createFromWorldFile( std::string file, world *world
                     l_entity->setDirection( true);
                 else if( l_property == "action")
                     l_entity->setAction( l_value);
-                else if( l_property == "global") {
-                    // gloabl value
-                    lua_pushstring( l_entity->lua_getLua(), l_value.c_str());
-                    lua_setglobal( l_entity->lua_getLua(), "global_value");
-                } else if( l_property == "global2") {
-                    // gloabl value
-                    lua_pushstring( l_entity->lua_getLua(), l_value.c_str());
-                    lua_setglobal( l_entity->lua_getLua(), "global_value_2");
-                }else if( l_property == "global3") {
-                    // gloabl value
-                    lua_pushstring( l_entity->lua_getLua(), l_value.c_str());
-                    lua_setglobal( l_entity->lua_getLua(), "global_value_3");
-                }
+                else if( l_property == "global")
+                    l_entity->setGlobal( l_value);
+                else if( l_property == "global2")
+                    l_entity->setGlobal2( l_value);
+                else if( l_property == "global3")
+                    l_entity->setGlobal3( l_value);
 
                 l_xml_property = l_xml_property->NextSiblingElement( "property");
             }

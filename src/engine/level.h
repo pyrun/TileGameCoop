@@ -10,7 +10,11 @@
 #include "particle.h"
 #include "transition.h"
 
+#include "../xml/tinyxml2.h"
+
 #define transition_time 500
+
+#define SAVE_FILE "savefile.xml"
 
 class level
 {
@@ -35,22 +39,14 @@ class level
         world *getWorldOnce() {
             return p_world;
         }
-        /*world *getLevel() {
-            if( p_level != NULL)
-                return p_level->getWorld();
-            return p_world;
-        }*/
         void setLevel( level *level) {
             p_level = level;
         }
 
-        level *getLevel() {
-            return p_level;
-        }
-        bool isWorking() {
-            printf( "%d %d\n", !p_loadworld, !p_transition);
-            return (!p_loadworld && !p_transition);
-        }
+        void setSave() { p_setSave = true; }
+        void setLoad() { p_setLoad = true; }
+        void save( player_handle *player);
+        void load( player_handle *player);
     protected:
 
     private:
@@ -63,8 +59,12 @@ class level
 
         bool p_loadworld;
         bool p_notMyEntityList;
+        bool p_setLoad;
+        bool p_setSave;
 
         fvec2 p_camere_pos;
 };
+
+void lua_level_setLink( level* level);
 
 #endif // LEVEL_H

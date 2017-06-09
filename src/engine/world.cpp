@@ -8,7 +8,7 @@ using namespace tinyxml2;
 	#define XMLCheckResult(a_eResult) if (a_eResult != XML_SUCCESS) { printf("Error: %i\n", a_eResult); return a_eResult; }
 #endif
 
-world::world(std::string file = "default.tmx", std::string ordner = "worlds/")
+world::world(std::string file, std::string ordner)
 {
     p_level_end = false;
 
@@ -20,7 +20,7 @@ world::world(std::string file = "default.tmx", std::string ordner = "worlds/")
     p_tilemap_background = NULL;
     p_tileset = NULL;
 
-    p_file = file;
+    p_filename = file;
     if(!load( file, ordner))
         printf( "world::world cant load the file\n");
 
