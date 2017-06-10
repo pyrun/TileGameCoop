@@ -98,7 +98,7 @@
    </properties>
   </object>
   <object id="73" name="human" x="268" y="15" width="16" height="32"/>
-  <object id="74" name="intro_title" x="128" y="16" width="16" height="16"/>
+  <object id="74" name="intro_title" x="56.5" y="16.5" width="16" height="16"/>
   <object id="80" name="intro_button" x="176" y="112" width="16" height="16">
    <properties>
     <property name="global" value="Continue"/>

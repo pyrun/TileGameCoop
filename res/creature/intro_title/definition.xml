@@ -1,5 +1,5 @@
 <object name="intro_title" width="320" height="120" script="script.lua" gravity="0">
-	<action name="idle" frame="1" speed="0" loop="0">title_2.bmp</action>
+	<action name="idle" frame="1" speed="0" loop="0">intro.png</action>
 	<hitbox offsetx="0" offsety="0" width="0" hight="0"/>
 </object>
 
