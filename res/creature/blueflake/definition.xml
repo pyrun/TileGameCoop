@@ -1,5 +1,0 @@
-<object name="blueflake" width="15" height="15" script="script.lua">
-	<action name="idle" frame="3" speed="20">flake.bmp</action>
-	<vertex x="7" y="7" id="1">down</vertex>
-	<hitbox offsetx="0" offsety="0" width="15" hight="15"/>
-</object>

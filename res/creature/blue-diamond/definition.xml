@@ -1,3 +1,0 @@
-<object name="blue-diamond" width="16" height="16" gravity="1">
-<action name="idle">coin.bmp</action>
-</object>

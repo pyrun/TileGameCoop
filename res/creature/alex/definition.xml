@@ -1,10 +1,10 @@
-<object name="alex" width="32" height="32" player="1" script="script.lua" timer="100">
-	<action name="idle" frame="4" speed="12">idle.bmp</action>
-	<action name="walk" frame="4" speed="3">walk.bmp</action>
-	<action name="run" frame="4" speed="1">walk.bmp</action>
-	<action name="jump" frame="4" speed="8">jump.bmp</action>
-	<action name="swim" frame="4" speed="8">swim.bmp</action>
-	<action name="die" frame="4" speed="12" loop="0">die.bmp</action>
+<object name="alex" width="15" height="20" player="1" script="script.lua" timer="100" gravity="0">
+	<action name="idle" frame="0" speed="12">idle.bmp</action>
+	<action name="walk" frame="4" speed="3">idle.bmp</action>
+	<action name="run" frame="4" speed="1">idle.bmp</action>
+	<action name="jump" frame="4" speed="8">idle.bmp</action>
+	<action name="swim" frame="4" speed="8">idle.bmp</action>
+	<action name="die" frame="4" speed="12" loop="0">idle.bmp</action>
 	<vertex id="9" x="12" y="32">down</vertex>
 	<vertex id="1" x="16" y="32">down</vertex>
 	<vertex id="1" x="20" y="32">down</vertex>

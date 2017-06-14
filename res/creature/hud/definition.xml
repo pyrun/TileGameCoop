@@ -1,5 +1,0 @@
-<object name="hud" width="132" height="18" gravity="1">
-<action name="idle" frame="1">huddisplay.bmp</action>
-</object>
-
-

@@ -1,1 +1,1 @@
-"..\bin\WinDebug32\TileGameCoop.exe" labor_1.tmx
+"..\bin\WinDebug32\TileGameCoop.exe" template.tmx

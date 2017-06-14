@@ -1,2 +1,0 @@
-Sprungbrett (Um auf andere Objekte zu springen)
-- hinzugefügt 01.05.2017 alex

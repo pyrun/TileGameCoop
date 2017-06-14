@@ -1,7 +1,0 @@
-beschleunigung
-lua_addVelocity
-ID	int
-xVel	float
-yVel	float
-return NILL
-

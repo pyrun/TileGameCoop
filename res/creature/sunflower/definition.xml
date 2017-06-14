@@ -1,8 +1,0 @@
-<object name="sunflower" width="16" height="23" script="script.lua" timer="100" isenemy="1">
-	<action name="idle" frame="4" speed="15">idle.bmp</action>
-	<action name="die">die.bmp</action>
-	<vertex x="8" y="22" id="1">down</vertex>
-	<hitbox offsetx="3" offsety="4" width="7" hight="18"/>
-</object>
-
-

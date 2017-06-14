@@ -1,7 +1,0 @@
-<object name="portal" width="10" height="32" gravity="0" script="script.lua" timer="300">
-	<action name="idle" frame="4" speed="6">idle.bmp</action>
-	<action name="die" frame="7" speed="2" loop="0">transfer.bmp</action>
-	<hitbox offsetx="2" offsety="2" width="12" hight="28"/>
-</object>
-
-

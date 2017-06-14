@@ -1,6 +1,0 @@
-<object name="button" width="9" height="9" script="script.lua" timer="10" solid="0" gravity="0">
-	<action name="idle" frame="1" speed="0" loop="0">idle.bmp</action>
-	<action name="press" frame="1" speed="0" loop="0">press.bmp</action>
-	<hitbox offsetx="0" offsety="0" width="9" hight="9"/>
-</object>
-
