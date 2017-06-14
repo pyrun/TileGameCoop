@@ -1,0 +1,8 @@
+<object name="table" width="30" height="10" script="script.lua" solid="1" gravity="1">
+	<action name="idle">idle.bmp</action>
+	<vertex x="15" y="10" id="1">down</vertex>
+	<hitbox offsetx="0" offsety="0" width="30" hight="1"/>
+</object>
+
+
+

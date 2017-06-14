@@ -74,7 +74,7 @@ int game::process_graphic( std::string levelName) {
 
     //levelName = "world_0.tmx";
 
-    p_level = new level( levelName.size()==0?"intro.tmx":levelName.c_str(), "worlds/", p_graphic, p_player, &p_config);
+    p_level = new level( levelName.size()==0?"overworld.tmx":levelName.c_str(), "worlds/", p_graphic, p_player, &p_config);
 
     lua_level_setLink( p_level);
 

@@ -108,7 +108,7 @@
   <object id="83" name="intro_button" x="176" y="144" width="16" height="16">
    <properties>
     <property name="global" value="Reset"/>
-    <property name="global2" value="overworld.tmx"/>
+    <property name="global2" value="labor_1.tmx"/>
    </properties>
   </object>
   <object id="81" name="intro_picker" x="176" y="112" width="16" height="16"/>
