@@ -88,6 +88,8 @@ class config
         std::string getControllerMappingsFile() { return p_controllermappingsfile; }
         void setDebug( bool set) { p_debug = set; }
         bool getDebug() { return p_debug; }
+        std::string getStartfile() { return p_startfile; }
+        void setStartfile( std::string file) { p_startfile = file; }
     protected:
 
     private:
@@ -118,6 +120,7 @@ class config
 
         std::string p_resolution_file;
         std::string p_controllermappingsfile;
+        std::string p_startfile;
 };
 
 void lua_config_setLink( config *config);

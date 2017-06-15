@@ -243,17 +243,42 @@ int graphic::loadResolution( std::string file) {
     return 0;
 }
 
-#define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
-
 void graphic::changeWindowSize() {
+    int l_width, l_height;
+    // get new resolution
     vec2 l_newres = p_config->getDisplay();
+    // window's client area set
     SDL_SetWindowSize( p_windows, l_newres.x, l_newres.y);
-    //SDL_GetWindowSize( p_windows, &l_newres.x, &l_newres.y);
+
+    // set a window's fullscreen state false
     SDL_SetWindowFullscreen( p_windows, 0);
+
+    // set native screen
     p_camera_size.x = NATIV_W;
     p_camera_size.y = NATIV_H;
+
+    // set whether to force integer scales for resolution-independent rendering
+    SDL_RenderSetIntegerScale( p_renderer, SDL_TRUE);
+
+    // set device independent resolution
     SDL_RenderSetLogicalSize( p_renderer, NATIV_W, NATIV_H);
-    printf( "graphic::changeWindowSize changed %dx%d\n", l_newres.x, l_newres.y);
+
+    // get zoom factor
+    int l_factor = 0;
+    for( int i = 0; l_newres.x-i >= NATIV_W; i+=NATIV_W)
+        l_factor++;
+
+    // set new window size
+    SDL_SetWindowSize( p_windows, NATIV_W*l_factor, NATIV_H*l_factor);
+
+    // set config display
+    p_config->setDisplay( NATIV_W*l_factor, NATIV_H*l_factor);
+
+    // get new resolution
+    l_newres = p_config->getDisplay();
+
+    // print changed
+    printf( "graphic::changeWindowSize changed %dx%d zoom factor x%d\n", l_newres.x, l_newres.y, l_factor);
 }
 
 void graphic::setFullscreen( bool fromWindow) {
@@ -282,6 +307,8 @@ void graphic::setFullscreen( bool fromWindow) {
     SDL_RenderSetScale( p_renderer, (int)l_zoom, (int)l_zoom);
 }
 
+#define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
+
 void graphic::clear( float dt) {
     if( p_flyTo ) {
         float l_speed;
@@ -302,9 +329,11 @@ void graphic::clear( float dt) {
         p_flyTo = NULL;
     }
 
-    // fame count
-    if( p_frame.getTicks() > FRAME) {
+    // frame counter
+    if( p_frame.getTicks() > FRAME_COUNTER) {
+        // increase
         p_framecount++;
+        // frame counter
         p_frame.start();
     }
 
@@ -312,10 +341,7 @@ void graphic::clear( float dt) {
     if( p_config->displayChange()) {
         SDL_Rect l_viewport = { 0, 0, p_config->getDisplay().x, p_config->getDisplay().y};
 
-        //p_camera_size = p_config->getDisplay();
-
-
-        // transfer data to sdl
+        // set render view port
         SDL_RenderSetViewport( p_renderer, &l_viewport);
 
         // Zoom or change window
@@ -334,12 +360,13 @@ void graphic::clear( float dt) {
             p_config->setDisplayMaximized( false);
     }
 
+    // set background draw color
     SDL_SetRenderDrawColor( p_renderer, 0, 0, 0, 255);
 
-    // anzeigen lassen
+    // display the buffer
     SDL_RenderPresent(p_renderer);
 
-    // renderer aufräumen
+    // clean the buffer
     SDL_RenderClear( p_renderer);
 }
 

@@ -53,29 +53,26 @@ game::~game()
 }
 
 void game::drawHUD() {
-    char test[255];
+    char l_test[255];
 
-    float wert = 1000.f/ ( (float)p_framerate->getFramerate() );
+    float l_wert = 1000.f/ ( (float)p_framerate->getFramerate() );
 
-    sprintf( test, "%s%d %4.0f %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(), wert, (int)p_graphic->getCameraSize().x, (int)p_graphic->getCameraSize().y );
-    p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() + vec2( (int)p_graphic->getCameraSize().x, 10), 1.0f, 255,true);
+    sprintf( l_test, "%s%d %4.0f %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(), l_wert, (int)p_graphic->getCameraSize().x, (int)p_graphic->getCameraSize().y );
+    p_font->drawMessage( p_graphic, l_test, p_graphic->getCamera().tovec2() + vec2( (int)p_graphic->getCameraSize().x, 10), 1.0f, 255,true);
 
-    //p_font->drawMessage( p_graphic, "Go home your drunk", vec2( 0, 0));
+    sprintf( l_test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
+    p_font->drawMessage( p_graphic, l_test, p_graphic->getCamera().tovec2() +vec2( (int)p_graphic->getCameraSize().x, 0), 1.0f, 255, true);
 
-    sprintf( test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
-    p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() +vec2( (int)p_graphic->getCameraSize().x, 0), 1.0f, 255, true);
-
-    sprintf( test, "%d Player %d PlayerChamps %d Figuren %d Player aktiv", p_player->getPlayerAmount(), p_level->getEntityList()->getAmountPlayerObject(), p_player->getAmountPlayerChamps(), p_player->getPlayerActive());
-    p_font->drawMessage( p_graphic, test, p_graphic->getCamera().tovec2() +vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, 255, false, true);
+    sprintf( l_test, "Player: %d Player Champs: %d Figures: %d Player active: %d", p_player->getPlayerAmount(), p_level->getEntityList()->getAmountPlayerObject(), p_player->getAmountPlayerChamps(), p_player->getPlayerActive());
+    p_font->drawMessage( p_graphic, l_test, p_graphic->getCamera().tovec2() +vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, 255, false, true);
 }
 
 int game::process_graphic( std::string levelName) {
     int l_error;
 
-    //levelName = "world_0.tmx";
+    p_level = new level( levelName.size()==0?p_config.getStartfile():levelName.c_str(), "worlds/", p_graphic, p_player, &p_config);
 
-    p_level = new level( levelName.size()==0?"overworld.tmx":levelName.c_str(), "worlds/", p_graphic, p_player, &p_config);
-
+    // set lua link
     lua_level_setLink( p_level);
 
     // at the moment we have no error

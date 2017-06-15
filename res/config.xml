@@ -9,11 +9,12 @@
     <Input_right>10</Input_right>
     <Input_x>0</Input_x>
     <Input_y>1</Input_y>
-    <Display_width>1290</Display_width>
-    <Display_height>835</Display_height>
+    <Display_width>960</Display_width>
+    <Display_height>540</Display_height>
     <Display_mode>0</Display_mode>
     <Display_maximized>0</Display_maximized>
     <Display_resolution_file>resolution.xml</Display_resolution_file>
     <ControllerMappingsFile>gamecontrollerdb.txt</ControllerMappingsFile>
-    <Debug>0</Debug>
+    <Debug>1</Debug>
+    <Start_file>template.tmx</Start_file>
 </Root>

@@ -143,6 +143,8 @@ int config::load() {
 
     setDebug( loadParameter( l_root, "Debug"));
 
+    setStartfile( loadParameterString( l_root, "Start_file"));
+
     // return a success of loading
     return XML_SUCCESS;
 }
@@ -181,6 +183,8 @@ void config::save() {
     saveParameter( &l_config, l_root, "ControllerMappingsFile", getControllerMappingsFile());
 
     saveParameter( &l_config, l_root, "Debug", getDebug());
+
+    saveParameter( &l_config, l_root, "Start_file", getStartfile());
 
     // save
     l_config.SaveFile( CONFIG_FILE);

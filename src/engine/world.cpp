@@ -18,6 +18,8 @@ world::world(std::string file, std::string ordner)
     p_tilemap_overlap = NULL;
     p_tilemap_foreground = NULL;
     p_tilemap_background = NULL;
+    p_tilemap_floorground = NULL;
+
     p_tileset = NULL;
 
     p_filename = file;
@@ -201,6 +203,7 @@ bool world::load( std::string file, std::string ordner) {
     std::string l_overlap;
     std::string l_foreground;
     std::string l_background;
+    std::string l_floorground;
 
     std::string l_map_temp;
 
@@ -258,14 +261,17 @@ bool world::load( std::string file, std::string ordner) {
         l_map_temp = l_layer->FirstChildElement("data")->GetText();
         std::string l_name = l_layer->Attribute( "name" );
 
-        // background zuweisen
+        // background target
         if( l_name == "Background" )
             l_background = l_map_temp;
         if( l_name == "Foreground" )
             l_foreground = l_map_temp;
         if( l_name == "Overlap" )
             l_overlap = l_map_temp;
+        if( l_name == "Floorground" )
+            l_floorground = l_map_temp;
 
+        // next layer
         l_layer = l_layer->NextSiblingElement("layer");
     }
 
@@ -281,7 +287,6 @@ bool world::load( std::string file, std::string ordner) {
         printf( "world cant be loaded - world data \"Background\", \"Foreground\", or \"Overlap\" missing\n");
     }
 
-
     // map size save
     p_map_width = l_map_width;
     p_map_hight = l_map_height;
@@ -295,16 +300,18 @@ bool world::load( std::string file, std::string ordner) {
     p_tilemap_foreground = readTilemap( l_foreground);
     p_tilemap_background = readTilemap( l_background);
 
-    // safe tileset path
+    // set floor ground
+    if( l_floorground.size() > 0)
+        p_tilemap_floorground = readTilemap( l_floorground);
+
+    // safe tile set path
     p_tilesetpath = ordner + l_tileset;
     p_tileset_width = l_tileset_width;
     p_tileset_height = l_tileset_height;
 
+    // save tile size
     p_tilewidth = l_tilewidth;
     p_tilehight = l_tilehight;
-
-    //printf( "Tileset %s %d %d\n", p_tilesetpath.c_str(), p_tileset_width/p_tilewidth, l_tileset_height/l_tilehight);
-
     return true;
 }
 
@@ -399,6 +406,8 @@ void world::drawBackAndForeground( graphic *graphic) {
         for( int l_x = l_camera_x; l_x <= l_camera_x+l_max_x+1; l_x++) {
             for( int l_y = l_camera_y; l_y <= l_camera_y+l_max_y+1; l_y++) {
                 drawTile( graphic, l_x, l_y, p_tilemap_background);
+                if( p_tilemap_floorground != NULL)
+                    drawTile( graphic, l_x, l_y, p_tilemap_floorground);
                 drawTile( graphic, l_x, l_y, p_tilemap_foreground);
             }
         }

@@ -89,6 +89,7 @@ class world
 
         tile *p_tilemap_overlap;
         tile *p_tilemap_foreground;
+        tile *p_tilemap_floorground;
         tile *p_tilemap_background;
 
         int p_map_width;

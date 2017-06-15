@@ -90,6 +90,7 @@ class entitytype
         void setTimer( int time) { p_time = time;}
         void setHitbox( vec2 offset, vec2 size) { p_hitbox_offset = offset; p_hitbox_size = size; }
         void setIsEnemy( bool set) { p_isEnemy = set; }
+        void setIsTopView( bool set) { p_isTopView = set; }
 
         std::string getName() { return p_name; }
         std::string getScriptName() { return p_script; }
@@ -103,6 +104,7 @@ class entitytype
         vec2 getHitboxOffset() { return p_hitbox_offset; }
         bool getIsSolid() { return p_solid; }
         bool getIsEnemy() { return p_isEnemy; }
+        bool getIsTopView() { return p_isTopView; }
 
     protected:
 
@@ -120,6 +122,7 @@ class entitytype
         vec2 p_hitbox_size;
         bool p_solid;
         bool p_isEnemy;
+        bool p_isTopView;
 };
 
 class entity

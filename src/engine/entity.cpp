@@ -1604,7 +1604,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         // calc gravity
         bool l_iscalc_y = false;
 
-        if( l_entity->getGravity() == true ) {
+        // add gravity
+        if( l_entity->getGravity() == true && l_type->getIsTopView() == false) {
             // änderung rechnen
             l_change.x += l_velocity.x * deltaTime;
 
@@ -1928,7 +1929,17 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         l_change = l_result_change;
         l_velocity = l_result_velocity;
 
-        if( l_entity->getGravity() == true) {
+
+        // calc gravity
+        if( l_type->getIsTopView()) {
+            if(l_entity->isInLiquid() == true) {
+                l_velocity.x = l_velocity.x*0.5f;
+                l_velocity.y = l_velocity.y*0.5f;
+            } else {
+                l_velocity.x = l_velocity.x*0.8f;
+                l_velocity.y = l_velocity.y*0.8f;
+            }
+        } else if( l_entity->getGravity() == true) {
             if( l_entity->getColisionDown() && !l_entity->isInLiquid())
                 l_velocity.x = l_velocity.x*0.8f;
             else if(l_entity->isInLiquid() == true)
@@ -1936,6 +1947,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
             else
                 l_velocity.x = l_velocity.x*0.99f;
         }
+
 
         // set net position
         l_entity->setPos( l_position + l_change );
@@ -2024,6 +2036,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     int l_timer = 0;
     bool l_solid = 0;
     bool l_isEnemy = 0;
+    bool l_isTopView = false;
     std::string l_script;
 
     std::string l_name;
@@ -2062,6 +2075,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_solid = atoi(l_object->Attribute( "solid" ));
     if( l_object->Attribute( "isenemy"))
         l_isEnemy = atoi(l_object->Attribute( "isenemy" ));
+    if( l_object->Attribute( "isTopView"))
+        l_isTopView = atoi(l_object->Attribute( "isTopView" ));
 
     entitytype *l_type = new entitytype();
     std::string l_action_name;
@@ -2198,6 +2213,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setSolid( l_solid);
     l_type->setTimer( l_timer);
     l_type->setIsEnemy( l_isEnemy);
+    l_type->setIsTopView( l_isTopView);
 
     p_entity_types.push_back( *l_type);
 

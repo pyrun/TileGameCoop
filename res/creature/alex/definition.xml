@@ -1,4 +1,4 @@
-<object name="alex" width="15" height="20" player="1" script="script.lua" timer="100" gravity="0">
+<object name="alex" width="15" height="20" player="1" script="script.lua" timer="100" isTopView="1">
 	<action name="idle" frame="0" speed="12">idle.bmp</action>
 	<action name="walk" frame="4" speed="3">idle.bmp</action>
 	<action name="run" frame="4" speed="1">idle.bmp</action>
@@ -16,7 +16,7 @@
 	<vertex id="7" x="21" y="10">right</vertex>
 	<vertex id="8" x="21" y="16">right</vertex>
 	<vertex id="9" x="21" y="31">right</vertex>
-	<hitbox offsetx="8" offsety="6" width="16" hight="28"/>
+	<hitbox offsetx="0" offsety="0" width="15" hight="20"/>
 </object>
 
 
