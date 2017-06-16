@@ -1,20 +1,26 @@
-<Root>
-    <Input_run>0</Input_run>
-    <Input_jump>2</Input_jump>
-    <Input_attack>3</Input_attack>
-    <Input_special>1</Input_special>
-    <Input_select>4</Input_select>
-    <Input_start>6</Input_start>
-    <Input_left>9</Input_left>
-    <Input_right>10</Input_right>
-    <Input_x>0</Input_x>
-    <Input_y>1</Input_y>
-    <Display_width>960</Display_width>
-    <Display_height>540</Display_height>
-    <Display_mode>0</Display_mode>
-    <Display_maximized>0</Display_maximized>
-    <Display_resolution_file>resolution.xml</Display_resolution_file>
-    <ControllerMappingsFile>gamecontrollerdb.txt</ControllerMappingsFile>
-    <Debug>1</Debug>
-    <Start_file>template.tmx</Start_file>
-</Root>
+<config>
+    <input>
+        <run>0</run>
+        <jump>2</jump>
+        <attack>3</attack>
+        <special>1</special>
+        <select>4</select>
+        <start>6</start>
+        <left>9</left>
+        <right>10</right>
+        <x_axis>0</x_axis>
+        <y_axis>1</y_axis>
+    </input>
+    <display>
+        <width>960</width>
+        <height>540</height>
+        <isFullScreen>0</isFullScreen>
+        <isMaximized>0</isMaximized>
+        <resolution_file>resolution.xml</resolution_file>
+    </display>
+    <game>
+        <debug>1</debug>
+        <start_file>template.tmx</start_file>
+        <controllerMappingsFile>gamecontrollerdb.txt</controllerMappingsFile>
+    </game>
+</config>

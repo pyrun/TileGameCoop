@@ -144,7 +144,7 @@ graphic::graphic( config *config)
 
     Uint32 l_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
 
-    if( p_config->getDisplayMode())
+    if( p_config->isDisplayFullscreen())
         l_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
     l_displayResolution = p_config->getDisplay();
@@ -192,7 +192,7 @@ graphic::graphic( config *config)
     clear();
 
     // scale set
-    if( p_config->getDisplayMode())
+    if( p_config->isDisplayFullscreen())
         setFullscreen( );
     else
         changeWindowSize(); //p_config->setDisplayChangeMode();
@@ -338,15 +338,15 @@ void graphic::clear( float dt) {
     }
 
     // react of change
-    if( p_config->displayChange()) {
+    if( p_config->isDisplayChanged()) {
         SDL_Rect l_viewport = { 0, 0, p_config->getDisplay().x, p_config->getDisplay().y};
 
         // set render view port
         SDL_RenderSetViewport( p_renderer, &l_viewport);
 
         // Zoom or change window
-        if( p_config->getDisplayChangeMode()) {
-            if( !p_config->getDisplayMode())
+        if( p_config->isChangeDisplayMode()) {
+            if( !p_config->isDisplayFullscreen())
                 changeWindowSize();
             else
                 setFullscreen( true);

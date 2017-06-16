@@ -18,7 +18,7 @@ static int lua_setconfig( lua_State *state) {
     l_set = lua_toboolean( state, 2);
 
     if( l_name == "fullscreen") {
-        lua_config->setDisplayMode( l_set);
+        lua_config->setDisplayFullscreen( l_set);
         lua_config->setDisplayChangeMode();
         lua_config->setDisplay( 604, 400); // just a magic resolution
     }
@@ -43,7 +43,7 @@ static int lua_getconfig( lua_State *state) {
     l_name = lua_tostring( state, 1);
 
     if( l_name == "fullscreen")
-        l_set = lua_config->getDisplayMode();
+        l_set = lua_config->isDisplayFullscreen();
     if( l_name == "debug")
         l_set = lua_config->getDebug();
     if( l_name == "quit")
@@ -78,14 +78,14 @@ using namespace tinyxml2;
 config::config()
 {
 #ifdef DEBUG_CONFIG
-    printf("start config...");
+    printf("config::config loading ...");
 #endif // DEBUG_CONFIG
 
     // load config
     load();
 
 #ifdef DEBUG_CONFIG
-    printf("fine\n");
+    printf("finish\n");
 #endif // DEBUG_CONFIG
     p_display_changemode = false;
 }
@@ -93,7 +93,7 @@ config::config()
 config::~config()
 {
 #ifdef DEBUG_CONFIG
-    printf("close config...");
+    printf("config::~config save...");
 #endif // DEBUG_CONFIG
 
     // load config
@@ -117,33 +117,48 @@ int config::load() {
     XMLNode * l_root = l_config.FirstChild();
     if (l_root == nullptr) return XML_ERROR_FILE_READ_ERROR;
 
-    // load data
-    setDisplay( loadParameter( l_root, "Display_width"), loadParameter( l_root, "Display_height"));
-    setDisplayMode( loadParameter( l_root, "Display_mode"));
+    // get input node
+    XMLElement* l_xml_input = l_root->FirstChildElement( "input" );
+    if( l_xml_input) {
+        // load input
+        setInputPadButton( loadParameter( l_xml_input, "run"),
+                           loadParameter( l_xml_input, "jump"),
+                           loadParameter( l_xml_input, "attack"),
+                           loadParameter( l_xml_input, "special"),
+                           loadParameter( l_xml_input, "select"),
+                           loadParameter( l_xml_input, "start"),
+                           loadParameter( l_xml_input, "left"),
+                           loadParameter( l_xml_input, "right"));
 
-    setDisplayMaximized( loadParameter( l_root, "Display_maximized"));
+        // input axis
+        setInputPadAxis(    loadParameter( l_xml_input, "x_axis"),
+                            loadParameter( l_xml_input, "y_axis"));
+    }
 
-    setDisplayResolutionFile( loadParameterString( l_root, "Display_resolution_file"));
+    // get display node
+    XMLElement* l_xml_display = l_root->FirstChildElement( "display" );
+    if( l_xml_display) {
+        // load the resolution
+        setDisplay( loadParameter( l_xml_display, "width"), loadParameter( l_xml_display, "height"));
 
-    // load input
-    setInputPadButton( loadParameter( l_root, "Input_run"),
-                       loadParameter( l_root, "Input_jump"),
-                       loadParameter( l_root, "Input_attack"),
-                       loadParameter( l_root, "Input_special"),
-                       loadParameter( l_root, "Input_select"),
-                       loadParameter( l_root, "Input_start"),
-                       loadParameter( l_root, "Input_left"),
-                       loadParameter( l_root, "Input_right"));
+        // get display flags
+        setDisplayFullscreen( loadParameter( l_xml_display, "isFullScreen"));
+        setDisplayMaximized( loadParameter( l_xml_display, "isMaximized"));
 
-    // input axis
-    setInputPadAxis(    loadParameter( l_root, "Input_x"),
-                        loadParameter( l_root, "Input_y"));
+        // get display resolution file
+        setDisplayResolutionFile( loadParameterString( l_xml_display, "resolution_file"));
+    }
 
-    setControllerMappingsFile( loadParameterString( l_root, "ControllerMappingsFile"));
+    // get display node
+    XMLElement* l_xml_game = l_root->FirstChildElement( "game" );
+    if( l_xml_game) {
+        // get controller mapping file
+        setControllerMappingsFile( loadParameterString( l_xml_game, "controllerMappingsFile"));
 
-    setDebug( loadParameter( l_root, "Debug"));
-
-    setStartfile( loadParameterString( l_root, "Start_file"));
+        // load the rest
+        setDebug( loadParameter( l_xml_game, "debug"));
+        setStartfile( loadParameterString( l_xml_game, "start_file"));
+    }
 
     // return a success of loading
     return XML_SUCCESS;
@@ -153,53 +168,77 @@ void config::save() {
     XMLDocument l_config;
 
     // create root node
-    XMLNode * l_root = l_config.NewElement("Root");
+    XMLNode * l_root = l_config.NewElement("config");
 
     // insert the root node
     l_config.InsertFirstChild(l_root);
 
-    // input
-    saveParameter( &l_config, l_root, "Input_run", getInputPadButton_run() );
-    saveParameter( &l_config, l_root, "Input_jump", getInputPadButton_jump() );
-    saveParameter( &l_config, l_root, "Input_attack", getInputPadButton_attack() );
-    saveParameter( &l_config, l_root, "Input_special", getInputPadButton_special() );
-    saveParameter( &l_config, l_root, "Input_select", getInputPadButton_select() );
-    saveParameter( &l_config, l_root, "Input_start", getInputPadButton_start() );
-    saveParameter( &l_config, l_root, "Input_left", getInputPadButton_left() );
-    saveParameter( &l_config, l_root, "Input_right", getInputPadButton_right() );
+    // creating input node
+    XMLElement *l_xmlInput = l_config.NewElement( "input");
+    // look if node corrupt
+    if( l_xmlInput) {
+        // save the parameters
+        saveParameter( &l_config, l_xmlInput, "run", getInputPadButton_run() );
+        saveParameter( &l_config, l_xmlInput, "jump", getInputPadButton_jump() );
+        saveParameter( &l_config, l_xmlInput, "attack", getInputPadButton_attack() );
+        saveParameter( &l_config, l_xmlInput, "special", getInputPadButton_special() );
+        saveParameter( &l_config, l_xmlInput, "select", getInputPadButton_select() );
+        saveParameter( &l_config, l_xmlInput, "start", getInputPadButton_start() );
+        saveParameter( &l_config, l_xmlInput, "left", getInputPadButton_left() );
+        saveParameter( &l_config, l_xmlInput, "right", getInputPadButton_right() );
+        // input axis
+        saveParameter( &l_config, l_xmlInput, "x_axis", getInputPadAxisX() );
+        saveParameter( &l_config, l_xmlInput, "y_axis", getInputPadAxisY() );
 
-    // input axis
-    saveParameter( &l_config, l_root, "Input_x", getInputPadAxisX() );
-    saveParameter( &l_config, l_root, "Input_y", getInputPadAxisY() );
+        // link to the root node
+        l_root->LinkEndChild( l_xmlInput);
+    }
 
-    // save parameter
-    saveParameter( &l_config, l_root, "Display_width", getDisplay().x);
-    saveParameter( &l_config, l_root, "Display_height", getDisplay().y);
-    saveParameter( &l_config, l_root, "Display_mode", getDisplayMode());
+    // creating display node
+    XMLElement *l_xmlDisplay = l_config.NewElement( "display");
+    // look if node corrupt
+    if( l_xmlDisplay) {
+        // save parameter
+        saveParameter( &l_config, l_xmlDisplay, "width", getDisplay().x);
+        saveParameter( &l_config, l_xmlDisplay, "height", getDisplay().y);
+        saveParameter( &l_config, l_xmlDisplay, "isFullScreen", isDisplayFullscreen());
 
-    saveParameter( &l_config, l_root, "Display_maximized", getDisplayMaximized());
-    saveParameter( &l_config, l_root, "Display_resolution_file", getDisplayResolutionFile());
+        saveParameter( &l_config, l_xmlDisplay, "isMaximized", isDisplayMaximized());
+        saveParameter( &l_config, l_xmlDisplay, "resolution_file", getDisplayResolutionFile());
 
-    saveParameter( &l_config, l_root, "ControllerMappingsFile", getControllerMappingsFile());
+        // link to the root node
+        l_root->LinkEndChild( l_xmlDisplay);
+    }
 
-    saveParameter( &l_config, l_root, "Debug", getDebug());
+    // creating game node
+    XMLElement *l_xmlGame = l_config.NewElement( "game");
+    // look if node corrupt
+    if( l_xmlGame) {
+        // save parameter
+        saveParameter( &l_config, l_xmlGame, "debug", getDebug());
+        saveParameter( &l_config, l_xmlGame, "start_file", getStartfile());
+        // game pad driver file
+        saveParameter( &l_config, l_xmlGame, "controllerMappingsFile", getControllerMappingsFile());
 
-    saveParameter( &l_config, l_root, "Start_file", getStartfile());
+        // link to the root node
+        l_root->LinkEndChild( l_xmlGame);
+    }
 
     // save
     l_config.SaveFile( CONFIG_FILE);
+
 }
 
 void config::saveParameter( XMLDocument *config, XMLNode *root, std::string name, int data) {
     XMLElement * l_element = config->NewElement( name.c_str());
     l_element->SetText( data);
-    root->InsertEndChild(l_element);
+    root->LinkEndChild( l_element);
 }
 
 void config::saveParameter( XMLDocument *config, XMLNode *root, std::string name, std::string data) {
     XMLElement * l_element = config->NewElement( name.c_str());
     l_element->SetText( data.c_str());
-    root->InsertEndChild(l_element);
+    root->LinkEndChild(l_element);
 }
 
 int config::loadParameter( XMLNode *root, std::string name) {

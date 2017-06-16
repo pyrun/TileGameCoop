@@ -15,7 +15,7 @@
 #include <lua.hpp>
 #endif // IMADEBIAN
 
-//#define DEBUG_CONFIG 1
+//#define DEBUG_CONFIG
 
 class config
 {
@@ -58,36 +58,49 @@ class config
 
         int getInputPadAxisX() { return p_gamepad_x; }
         int getInputPadAxisY() { return p_gamepad_y; }
+
         bool getQuit() { return p_quit; }
-        // graphic
+
+        // display resolution
         void setDisplay( int width, int height) {
             p_display_width = width;
             p_display_height = height;
             p_display_change = true;
         }
-        void setDisplayMode( int mode) {
-            p_display_mode = mode;
-        }
-        void setDisplayChange() { p_display_change = true; }
-
         vec2 getDisplay() { return vec2{ p_display_width, p_display_height}; }
-        int getDisplayMode()  { return p_display_mode; }
-        bool displayChange() { bool l_return = p_display_change; p_display_change = false; return l_return; }
-        bool getDisplayChangeMode() { bool l_return = p_display_changemode; p_display_changemode = false; return l_return; }
 
-        void setDisplayMaximized( bool set) {
-            p_display_maximazed = set;
-        }
+        // full screen
+        void setDisplayFullscreen( bool mode) { p_display_Fullscreen = mode; }
+        bool isDisplayFullscreen()  { return p_display_Fullscreen; }
 
-        bool getDisplayMaximized() { return p_display_maximazed; }
-        void setQuit( bool set) { p_quit = set; };
-        void setDisplayResolutionFile( std::string file) { p_resolution_file = file; }
+        // display change ( resize, moved)
+        void setDisplayChange() { p_display_change = true; }
+        bool isDisplayChanged() { bool l_return = p_display_change; p_display_change = false; return l_return; }
+
+        // change the display mode -> full screen, window mode, maximized
         void setDisplayChangeMode() { p_display_changemode = true; }
+        bool isChangeDisplayMode() { bool l_return = p_display_changemode; p_display_changemode = false; return l_return; }
+
+        // display maximized
+        void setDisplayMaximized( bool set) { p_display_maximazed = set; }
+        bool isDisplayMaximized() { return p_display_maximazed; }
+
+        // display resolution file
+        void setDisplayResolutionFile( std::string file) { p_resolution_file = file; }
         std::string getDisplayResolutionFile() { return p_resolution_file; }
+
+        // game rule quit
+        void setQuit( bool set) { p_quit = set; };
+
+        // controller map
         void setControllerMappingsFile( std::string file) { p_controllermappingsfile = file; }
         std::string getControllerMappingsFile() { return p_controllermappingsfile; }
+
+        // debug draw flag
         void setDebug( bool set) { p_debug = set; }
         bool getDebug() { return p_debug; }
+
+        // game start file
         std::string getStartfile() { return p_startfile; }
         void setStartfile( std::string file) { p_startfile = file; }
     protected:
@@ -109,7 +122,7 @@ class config
         int p_display_height;
         bool p_display_change;
         bool p_display_changemode;
-        int p_display_mode;
+        bool p_display_Fullscreen;
 
         bool p_display_maximazed;
 

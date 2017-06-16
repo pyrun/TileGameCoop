@@ -228,7 +228,7 @@ void level::save( player_handle *player) {
     XMLDocument l_savefile;
 
     // create root node
-    XMLNode * l_root = l_savefile.NewElement("savefile");
+    XMLNode *l_root = l_savefile.NewElement("savefile");
 
     // insert the root node
     l_savefile.InsertFirstChild(l_root);
