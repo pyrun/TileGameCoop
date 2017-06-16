@@ -1343,7 +1343,9 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     if( type->getIsPlayer())
         p_playerentity++;
 
-    obj->loadScript( type->getScriptName());
+    // load if script are set
+    if( type->getScriptName().size() > 0)
+        obj->loadScript( type->getScriptName());
 
     // add to vector
     p_entitys.push_back( *obj);

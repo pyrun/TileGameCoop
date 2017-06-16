@@ -71,7 +71,8 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     std::vector<int> l_ids = p_entity->createFromWorldFile( p_world->getFile(), p_world);
     for( int i = 0; i < l_ids.size(); i++) {
         entity *l_entity = p_entity->getEntity( l_ids[i]);
-        if( l_entity) {
+
+        if( l_entity && l_entity->getType()->getScriptName().size() > 0) {
             lua_player_install( l_entity->getState());
             lua_config_install( l_entity->getState());
             lua_level_install( l_entity->getState());

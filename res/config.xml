@@ -20,7 +20,7 @@
     </display>
     <game>
         <debug>1</debug>
-        <start_file>template.tmx</start_file>
+        <start_file>intro.tmx</start_file>
         <controllerMappingsFile>gamecontrollerdb.txt</controllerMappingsFile>
     </game>
 </config>
