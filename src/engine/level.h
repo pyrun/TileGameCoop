@@ -12,7 +12,7 @@
 
 #include "../xml/tinyxml2.h"
 
-#define transition_time 500
+#define transition_time 200
 
 #define SAVE_FILE "savefile.xml"
 
