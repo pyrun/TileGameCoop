@@ -12,15 +12,13 @@
 	<vertex id="9" x="9" y="27">down</vertex>
 	<vertex id="1" x="14" y="27">down</vertex>
 	<vertex id="1" x="19" y="27">down</vertex>
-	<vertex id="2" x="9" y="5">up</vertex>
-	<vertex id="3" x="19" y="5">up</vertex>
-	<vertex id="4" x="8" y="6">left</vertex>
-	<vertex id="5" x="8" y="16">left</vertex>
+	<vertex id="2" x="9" y="17">up</vertex>
+	<vertex id="3" x="19" y="17">up</vertex>
+	<vertex id="4" x="8" y="18">left</vertex>
 	<vertex id="6" x="8" y="26">left</vertex>
-	<vertex id="7" x="20" y="6">right</vertex>
-	<vertex id="8" x="20" y="16">right</vertex>
+	<vertex id="7" x="20" y="18">right</vertex>
 	<vertex id="9" x="20" y="26">right</vertex>
-	<hitbox offsetx="7" offsety="4" width="15" hight="22"/>
+	<hitbox offsetx="7" offsety="16" width="15" hight="10"/>
 </object>
 
 
