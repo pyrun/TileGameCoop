@@ -71,7 +71,7 @@ class world
 
         void setLoadWorld( std::string l_set, bool loadplayerdata) { p_needloadworld = l_set; p_loadplayerdata = loadplayerdata; }
         std::string needLoadWorld() { return p_needloadworld; }
-        void setStartPoint( vec2 start) { p_startpoint = start; printf("%d %d\n", start.x, start.y); }
+        void setStartPoint( vec2 start) { p_startpoint = start; }
         vec2 getStartPoint() { return p_startpoint; }
 
         // get tile map

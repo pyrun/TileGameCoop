@@ -24,7 +24,7 @@ static int lua_setconfig( lua_State *state) {
     }
     if( l_name == "debug")
         lua_config->setDebug( l_set);
-    if( l_name == "exit")
+    if( l_name == "exit" || l_name == "quit")
         lua_config->setQuit( true);
 
 

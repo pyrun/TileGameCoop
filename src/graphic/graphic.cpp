@@ -390,21 +390,21 @@ image *graphic::loadImage( std::string file) {
             l_textureclass->surface = l_surface;
             l_textureclass->texture = l_texture;
         } else {
-            printf( "graphic::loadImage Datei %s konnte nicht zur Textur gemacht werden\n", file.c_str());
+            printf( "graphic::loadImage Datei \"%s\" konnte nicht zur Textur gemacht werden\n", file.c_str());
             printf( "graphic::loadImage SDL_Error: %s\n", SDL_GetError());
             // free the ram data
             SDL_FreeSurface( l_surface);
             l_textureclass = NULL;
         }
     } else {
-        printf( "graphic::loadImage Datei %s konnte nicht geladen werden\n", file.c_str());
+        printf( "graphic::loadImage Datei \"%s\" konnte nicht geladen werden\n", file.c_str());
         printf( "graphic::loadImage SDL_Error: %s\n", IMG_GetError());
         l_textureclass = NULL;
     }
 
     // ausgeben falls detei geladen werde konnte
     if( l_textureclass != NULL)
-        printf("graphic::loadImage Datei %s wurde geladen\n", file.c_str());
+        printf("graphic::loadImage Datei \"%s\" wurde geladen\n", file.c_str());
     return l_textureclass;
 }
 

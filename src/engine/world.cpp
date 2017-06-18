@@ -355,7 +355,7 @@ void world::addBackground( XMLElement* background, std::string ordner) {
     image = background->FirstChildElement("image");
     // if didnt have just say i cant load it - not to bad
     if( !image ) {
-        printf( "background not right defined\n");
+        printf( "world::addBackground background not right defined\n");
         return;
     }
     // set the background data
