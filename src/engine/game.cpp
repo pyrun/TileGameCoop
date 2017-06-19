@@ -117,6 +117,8 @@ int game::process_graphic( std::string levelName) {
         // draw info
         drawHUD();
 
+        p_level->getEntityList()->drawHUD( p_graphic);
+
         // player draw
         p_player->draw( p_level->getEntityList(), p_font, p_graphic);
 

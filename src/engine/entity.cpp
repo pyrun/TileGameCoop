@@ -958,8 +958,16 @@ void entity::draw( graphic *graphic) {
     // save the frame
     p_frame = l_frame;
 
+    fvec2 l_pos_tmp;
+
+    // HUD move with camera
+    if( getType()->getIsHUD())
+        l_pos_tmp = p_pos + graphic->getCamera();
+    else
+        l_pos_tmp = p_pos;
+
     // draw call
-    graphic->drawImage( l_image, p_pos.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( p_type->getWidth()*l_frame, 0), 0, p_direction);
+    graphic->drawImage( l_image, l_pos_tmp.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( p_type->getWidth()*l_frame, 0), 0, p_direction);
 }
 
 void entity::setAction( std::string name, bool withStartCall) {
@@ -1471,9 +1479,14 @@ std::vector<int> entitylist::createFromWorldFile( std::string file, world *world
 void entitylist::draw(graphic *graphic, particle_list* particle, config *config) {
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_obj = &p_entitys[i];
+        // if not NULL
         if( l_obj != NULL)
-            l_obj->draw( graphic);
+            // HUD element skip
+            if( l_obj->getType()->getIsHUD())
+                continue;
 
+            // draw the entity
+            l_obj->draw( graphic);
             // debug
             if( config->getDebug() ) {
                 SDL_Rect rect = {   l_obj->getPosition().tovec2().x + l_obj->getType()->getHitboxOffset().x,
@@ -1514,6 +1527,21 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config)
     // aufräumen falls was drin ist
     if( (int)p_text.size())
         p_text.clear();
+}
+
+void entitylist::drawHUD( graphic *graphic) {
+    for(int i = 0; i < (int)p_entitys.size(); i++) {
+        entity *l_obj = &p_entitys[i];
+        // if not NULL
+        if( l_obj != NULL)
+            // only HUD elements
+            if( l_obj->getType()->getIsHUD() == false)
+                continue;
+
+            // draw the entity
+            l_obj->draw( graphic);
+    }
+    return;
 }
 
 int entitylist::setVertexHit( vertex *vertex, bool set){
@@ -2039,6 +2067,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     bool l_solid = 0;
     bool l_isEnemy = 0;
     bool l_isTopView = false;
+    bool l_isHUD = false;
     std::string l_script;
 
     std::string l_name;
@@ -2079,6 +2108,9 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_isEnemy = atoi(l_object->Attribute( "isenemy" ));
     if( l_object->Attribute( "isTopView"))
         l_isTopView = atoi(l_object->Attribute( "isTopView" ));
+    if( l_object->Attribute( "isHUD"))
+        l_isHUD = atoi(l_object->Attribute( "isHUD" ));
+
 
     entitytype *l_type = new entitytype();
     std::string l_action_name;
@@ -2216,6 +2248,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setTimer( l_timer);
     l_type->setIsEnemy( l_isEnemy);
     l_type->setIsTopView( l_isTopView);
+    l_type->setIsHUD( l_isHUD);
+
 
     p_entity_types.push_back( *l_type);
 

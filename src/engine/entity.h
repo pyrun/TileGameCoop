@@ -91,6 +91,7 @@ class entitytype
         void setHitbox( vec2 offset, vec2 size) { p_hitbox_offset = offset; p_hitbox_size = size; }
         void setIsEnemy( bool set) { p_isEnemy = set; }
         void setIsTopView( bool set) { p_isTopView = set; }
+        void setIsHUD( bool set) { p_isHUD = set; }
 
         std::string getName() { return p_name; }
         std::string getScriptName() { return p_script; }
@@ -105,6 +106,8 @@ class entitytype
         bool getIsSolid() { return p_solid; }
         bool getIsEnemy() { return p_isEnemy; }
         bool getIsTopView() { return p_isTopView; }
+        bool getIsHUD() { return p_isHUD; }
+
 
     protected:
 
@@ -123,6 +126,7 @@ class entitytype
         bool p_solid;
         bool p_isEnemy;
         bool p_isTopView;
+        bool p_isHUD;
 };
 
 class entity
@@ -282,6 +286,7 @@ class entitylist {
         std::vector<int> createFromWorldFile( std::string file, world *world);
 
         void draw(graphic *graphic, particle_list *particle,config *config);
+        void drawHUD( graphic *graphic);
 
         int setVertexHit( vertex *vertex, bool set);
 
