@@ -1,1 +1,1 @@
-"..\bin\WinDebug32\TileGameCoop.exe"
+"..\bin\WinDebug32\TileGameCoop.exe" labor.tmx

@@ -247,6 +247,8 @@ class entity
         }
         int getFrame() { return p_frame; }
         lua_State *getState() { return p_state; }
+        void setAlpha( int alpha) { p_alpha = alpha; }
+        int getAlpha() { return p_alpha; }
     protected:
 
     private:
@@ -270,10 +272,11 @@ class entity
         bool p_solid;
         bool p_gravity;
 
+        int p_alpha;
+
         std::string p_global_1;
         std::string p_global_2;
         std::string p_global_3;
-
 };
 
 class entitylist {

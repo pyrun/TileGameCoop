@@ -164,6 +164,29 @@ static int lua_setSolid( lua_State *state) {
     return 0;
 }
 
+static int lua_setAlpha( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    int l_alpha;
+
+    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) ) {
+        printf( "lua_setAlpha call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_alpha = lua_tointeger( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_setAlpha obj not found\n");
+        return 0;
+    }
+
+    l_obj->setAlpha( l_alpha);
+    return 0;
+}
+
 static int lua_howManyPlayerEntity( lua_State *state) {
     int l_entitys;
 
@@ -742,6 +765,9 @@ void lua_install( lua_State *state) {
     lua_pushcfunction( state, lua_setSolid);
     lua_setglobal( state, "setSolid");
 
+    lua_pushcfunction( state, lua_setAlpha);
+    lua_setglobal( state, "setAlpha");
+
     lua_pushcfunction( state, lua_howManyPlayerEntity);
     lua_setglobal( state, "howManyPlayerEntity");
 
@@ -882,6 +908,9 @@ entity::entity( int id)
     // frame 0
     p_frame = 0;
 
+    // standard alpha
+    setAlpha( 255);
+
     // not in p_liquid
     p_liquid = false;
 
@@ -966,8 +995,15 @@ void entity::draw( graphic *graphic) {
     else
         l_pos_tmp = p_pos;
 
+    // alpha
+    if( this->getAlpha() != 255)
+        l_image->setAlpha( getAlpha());
+
     // draw call
     graphic->drawImage( l_image, l_pos_tmp.tovec2(), vec2( p_type->getWidth(),p_type->getHeight()), vec2( p_type->getWidth()*l_frame, 0), 0, p_direction);
+
+    if( this->getAlpha() != 255)
+        l_image->setAlpha( 255);
 }
 
 void entity::setAction( std::string name, bool withStartCall) {
