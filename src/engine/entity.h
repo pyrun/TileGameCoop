@@ -249,10 +249,19 @@ class entity
         lua_State *getState() { return p_state; }
         void setAlpha( int alpha) { p_alpha = alpha; }
         int getAlpha() { return p_alpha; }
+        void setDepth( int depth) { p_depth = depth; }
+        int getDepth() { return p_depth; }
+
+        int p_depth;
+        bool operator < (const entity& obj) const
+        {
+            return ( p_depth < obj.p_depth);
+        }
     protected:
 
     private:
         int p_id;
+
         fvec2 p_pos;
         std::string p_action;
         std::vector<vertex> p_vertex;

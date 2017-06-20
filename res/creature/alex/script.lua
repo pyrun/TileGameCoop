@@ -38,15 +38,11 @@ function update( id)
 		if math.abs(l_velY) < 0.01 then
 			setAnimation( id, "idle_n")
 		end
-	end
-	
-	if getAnimation( id) == "walk_s" then
+	elseif getAnimation( id) == "walk_s" then
 		if math.abs(l_velY) < 0.01 then
 			setAnimation( id, "idle_s")
 		end
-	end
-	
-	if getAnimation( id) == "walk_side" then
+	elseif getAnimation( id) == "walk_side" then
 		if math.abs(l_velX) < 0.01 then
 			setAnimation( id, "idle_side")
 		end

@@ -1,6 +1,7 @@
 #include "entity.h"
 
 #include <dirent.h>
+#include <algorithm>
 using namespace tinyxml2;
 
 #ifndef XMLCheckResult
@@ -907,6 +908,7 @@ entity::entity( int id)
 
     // frame 0
     p_frame = 0;
+    p_depth = 0;
 
     // standard alpha
     setAlpha( 255);
@@ -1513,6 +1515,9 @@ std::vector<int> entitylist::createFromWorldFile( std::string file, world *world
 }
 
 void entitylist::draw(graphic *graphic, particle_list* particle, config *config) {
+    // depth
+    std::sort( p_entitys.begin(), p_entitys.end());
+
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_obj = &p_entitys[i];
         // if not NULL
@@ -2014,6 +2019,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 l_velocity.x = l_velocity.x*0.99f;
         }
 
+        // calculate depth
+        l_entity->setDepth( l_entity->getPosition().tovec2().x + (l_entity->getPosition().tovec2().y * world->getWorld().x * world->getTileSize().x) );
 
         // set net position
         l_entity->setPos( l_position + l_change );
