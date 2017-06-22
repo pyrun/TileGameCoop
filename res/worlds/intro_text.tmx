@@ -152,6 +152,5 @@
  </layer>
  <objectgroup color="#000080" name="Objects">
   <object id="49" name="start" x="27" y="38" width="16" height="16"/>
-  <object id="50" name="alex" x="85" y="120" width="16" height="16"/>
  </objectgroup>
 </map>
