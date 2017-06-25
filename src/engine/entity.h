@@ -92,6 +92,7 @@ class entitytype
         void setIsEnemy( bool set) { p_isEnemy = set; }
         void setIsTopView( bool set) { p_isTopView = set; }
         void setIsHUD( bool set) { p_isHUD = set; }
+        void setHasTimeCall( bool set) { p_hasTimeCall = set; }
 
         std::string getName() { return p_name; }
         std::string getScriptName() { return p_script; }
@@ -107,8 +108,7 @@ class entitytype
         bool getIsEnemy() { return p_isEnemy; }
         bool getIsTopView() { return p_isTopView; }
         bool getIsHUD() { return p_isHUD; }
-
-
+        bool getHasTimeCall() { return p_hasTimeCall; }
     protected:
 
     private:
@@ -127,6 +127,7 @@ class entitytype
         bool p_isEnemy;
         bool p_isTopView;
         bool p_isHUD;
+        bool p_hasTimeCall;
 };
 
 class entity
@@ -214,6 +215,7 @@ class entity
         void lua_collision( int id, std::vector<int> ids);
         void lua_liquid( int id);
         int lua_timer( int id, int time);
+        void lua_timeCall( int id);
 
         void lua_printerror();
         bool lua_hasLoaded() { return p_state==NULL?false:true; }
@@ -239,6 +241,7 @@ class entity
         std::string getAction() { return p_action; }
         std::vector<vertex>* getVertex() { return &p_vertex; }
         timer *getTimer() { return &p_timer; }
+        timer *getTimeCall() { return &p_timeCall; }
         int isbedelete;
         bool isAlive() {
             if( getAction() == "die")
@@ -257,6 +260,7 @@ class entity
         {
             return ( p_depth < obj.p_depth);
         }
+        void resetCallTime() { p_timeCall.start(); }
     protected:
 
     private:
@@ -275,6 +279,8 @@ class entity
         fvec2 p_velocity;
         lua_State *p_state;
         timer p_timer;
+        timer p_timeCall;
+        timer p_time;
         int p_timestartaction;
         int p_frame;
         bool p_liquid;

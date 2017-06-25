@@ -901,7 +901,9 @@ entity::entity( int id)
     p_state = NULL;
 
     // timer start
+    p_time.start();
     p_timer.start();
+    p_timeCall.start();
 
     // framecounter
     p_timestartaction = 0;
@@ -1327,6 +1329,30 @@ int entity::lua_timer( int id, int time) {
     return time;
 }
 
+void entity::lua_timeCall( int id) {
+    if( p_state == NULL)
+        return;
+    // get count number
+    int l_time = p_time.getTicks()/1000;// seconds
+
+    // write the function
+    char l_function[256]; // long ._.
+    sprintf( l_function, "time%d", l_time);
+
+    // search after the function
+    lua_getglobal( p_state, l_function);
+    if( !lua_isfunction( p_state, -1)) { // not found -> cancel
+        lua_pop( p_state,1);
+        return;
+    }
+    // push id
+    lua_pushnumber( p_state, id);
+
+    // call the function
+    if( lua_pcall( p_state, 1, 0, 0))
+        printf("entity::lua_timeCall %s\n", lua_tostring( p_state, -1));
+}
+
 void entity::lua_printerror() {
   // The error message is on top of the stack.
   // Fetch it, print it and then pop it off the stack.
@@ -1643,6 +1669,14 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 l_entity->getTimer()->start();
                 l_entity->lua_timer( l_entity->getId(), l_type->getTimerTime());
             }
+        }
+
+        // timeCall
+        if( l_type->getHasTimeCall() == true && l_entity->getTimeCall()->getTicks() > 1000) {
+            // reset counter
+            l_entity->resetCallTime();
+
+            l_entity->lua_timeCall( l_entity->getId());
         }
 
         // liquid
@@ -2111,6 +2145,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     bool l_isEnemy = 0;
     bool l_isTopView = false;
     bool l_isHUD = false;
+    bool l_hasTimeCall = false;
     std::string l_script;
 
     std::string l_name;
@@ -2153,7 +2188,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         l_isTopView = atoi(l_object->Attribute( "isTopView" ));
     if( l_object->Attribute( "isHUD"))
         l_isHUD = atoi(l_object->Attribute( "isHUD" ));
-
+    if( l_object->Attribute( "hasTimeCall"))
+        l_hasTimeCall = atoi(l_object->Attribute( "hasTimeCall" ));
 
     entitytype *l_type = new entitytype();
     std::string l_action_name;
@@ -2292,7 +2328,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     l_type->setIsEnemy( l_isEnemy);
     l_type->setIsTopView( l_isTopView);
     l_type->setIsHUD( l_isHUD);
-
+    l_type->setHasTimeCall( l_hasTimeCall);
 
     p_entity_types.push_back( *l_type);
 
