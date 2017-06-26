@@ -7,7 +7,7 @@ function start( id)
 end
 
 function timer( id) 
-	message( id, 1.5, 18, 2, global_value_2)
+	message( id, 1.5, 18, 2, false, global_value_2)
 end
 
 function collision( id, ...)

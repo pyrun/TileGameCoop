@@ -6,5 +6,5 @@ function start( id)
 end
 
 function timer( id) 
-	message( id, 1, 0, 0, global_value)
+	message( id, 1, 0, 0, false, global_value)
 end

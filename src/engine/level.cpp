@@ -125,7 +125,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
             p_loadworld = false;
 
             // alle player daten aufnhemen auf die neue liste
-            if( p_level->getWorldOnce()->leaveLevelasPlayer()){
+            if( p_level->getWorldOnce()->leaveLevelasPlayer()) {
                 std::vector<int> l_obj = p_level->getEntityList()->findPlayerObject();
                 for( int n = 0; n < (int)l_obj.size(); n++) {
                     entity *l_entity = p_level->getEntityList()->getEntity( l_obj[n]);

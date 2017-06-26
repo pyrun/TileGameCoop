@@ -108,9 +108,6 @@ int game::process_graphic( std::string levelName) {
         // draw entity
         p_level->getEntityList()->draw( p_graphic, p_particles, &p_config);
 
-        // draw particle
-        p_particles->draw( p_graphic, p_font);
-
         // draw overground
         p_level->getWorld()->drawOverground( p_graphic);
 
@@ -124,6 +121,9 @@ int game::process_graphic( std::string levelName) {
 
         // level draw
         p_level->draw( p_graphic);
+
+        // draw particle
+        p_particles->draw( p_graphic, p_font);
 
         // graphic clear/draw
         p_graphic->clear( l_delta);

@@ -37,14 +37,15 @@ static int lua_print(lua_State* state) {
     }
 
     // call entity_list to add a new msg
-    lua_entitylist->message( l_id, l_text);
+    lua_entitylist->message( l_id, l_text, 1.f, vec2(), false);
 
     // finish
     return 0;
 }
 
 static int lua_message(lua_State* state) {
-    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) || !lua_isnumber( state, 3) || !lua_isnumber( state, 4)) {
+    bool l_asHUD = false;
+    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) || !lua_isnumber( state, 3) || !lua_isnumber( state, 4) || !lua_isboolean( state, 5)) {
         printf( "lua_message call wrong argument\n");
         return 0;
     }
@@ -60,14 +61,16 @@ static int lua_message(lua_State* state) {
     }
 
     // process the input
-    int nargs = lua_gettop( state)-4;
+    int nargs = lua_gettop( state)-5;
     std::string l_text;
     for (int i=1; i <= nargs; ++i) {
-		l_text += lua_tostring( state, i+4);
+		l_text += lua_tostring( state, i+5);
     }
 
+    l_asHUD = lua_toboolean( state, 5);
+
     // call entity_list to add a new msg
-    lua_entitylist->message( l_id, l_text, l_size, l_offset);
+    lua_entitylist->message( l_id, l_text, l_size, l_offset, l_asHUD);
 
     // finish
     return 0;
@@ -1588,7 +1591,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config)
         // if object found add particle
         if( l_obj) {
             // anzeigen
-            particle->createParticel( par_text, l_obj->getPosition() + l_text->offset, l_obj->getVelocity(), 1000, l_text->text, fvec2( l_text->size, l_text->size));
+            particle->createParticel( par_text, l_obj->getPosition() + l_text->offset, l_obj->getVelocity(), 1000, l_text->text, fvec2( l_text->size, l_text->size), l_text->asHUD);
         }
     }
     // aufräumen falls was drin ist
@@ -2375,13 +2378,14 @@ std::vector<int> entitylist::findPlayerObject() {
     return l_obj;
 }
 
-void entitylist::message( int id, std::string text, float size, vec2 offset) {
+void entitylist::message( int id, std::string text, float size, vec2 offset, bool asHUD) {
     entity_text l_text;
 
     l_text.id = id;
     l_text.text = text;
     l_text.size = size;
     l_text.offset = offset;
+    l_text.asHUD = asHUD,
 
     p_text.push_back( l_text);
 }

@@ -20,6 +20,7 @@ void particle::draw( graphic *graphic, font *font) {
     int l_max = p_lifetime;
     int l_now = p_lifetime-p_deadtime.getTicks();
     static float l_e = 2.71;
+    fvec2 l_pos = this->p_pos;
 
     // calc alpha - fade out
     float l_alpha = 8.0f/l_max*l_now; // calc C
@@ -28,10 +29,13 @@ void particle::draw( graphic *graphic, font *font) {
     if( l_alpha < 0)
         l_alpha = 0;
 
+    if( p_hud == true)
+        l_pos = this->p_pos + graphic->getCamera();
+
     // draw type
     switch( this->p_type) {
-        case par_text: font->drawMessage( graphic, this->p_data, this->p_pos.tovec2(), this->p_zoom.x, (int)l_alpha, false, false); break;
-        case par_pic: graphic->drawImage( this->p_img, this->p_pos.tovec2(), vec2(), vec2()); break;
+        case par_text: font->drawMessage( graphic, this->p_data, l_pos.tovec2(), this->p_zoom.x, (int)l_alpha, false, false); break;
+        case par_pic: graphic->drawImage( this->p_img, l_pos.tovec2(), vec2(), vec2()); break;
         default: break;
     }
 }
@@ -44,7 +48,7 @@ particle_list::~particle_list() {
 
 }
 
-int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data, fvec2 zoom) {
+int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data, fvec2 zoom, bool asHUD) {
     particle l_par( p_number);
 
     // Daten setzten
@@ -54,6 +58,7 @@ int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity
     l_par.setVelocity( velocity);
     l_par.setLifeTime( lifetime);
     l_par.setZoom( zoom);
+    l_par.setAsHUD( asHUD);
 
     // eindeutige ID erhöhen
     p_number++;
