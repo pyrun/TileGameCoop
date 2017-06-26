@@ -37,40 +37,45 @@ static int lua_print(lua_State* state) {
     }
 
     // call entity_list to add a new msg
-    lua_entitylist->message( l_id, l_text, 1.f, vec2(), false);
+    lua_entitylist->message( l_id, l_text, 1.f, vec2(), false, 500); // ms
 
     // finish
     return 0;
 }
 
 static int lua_message(lua_State* state) {
-    bool l_asHUD = false;
-    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) || !lua_isnumber( state, 3) || !lua_isnumber( state, 4) || !lua_isboolean( state, 5)) {
+    int l_lifetime;
+    bool l_asHUD;
+    float l_size;
+    vec2 l_offset;
+
+    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) || !lua_isnumber( state, 3) || !lua_isnumber( state, 4) || !lua_isboolean( state, 5) || !lua_isnumber( state, 6)) {
         printf( "lua_message call wrong argument\n");
         return 0;
     }
 
     // get obj
     int l_id = lua_tointeger( state, 1);
-    float l_size = lua_tonumber( state, 2);
-    vec2 l_offset = vec2( lua_tonumber( state, 3), lua_tonumber( state, 4));
     entity *l_obj = lua_entitylist->getEntity( l_id);
     if( l_obj == NULL) {
         printf( "lua_message obj not found\n");
         return 0;
     }
 
+    l_size = lua_tonumber( state, 2);
+    l_offset = vec2( lua_tonumber( state, 3), lua_tonumber( state, 4));
+    l_asHUD = lua_toboolean( state, 5);
+    l_lifetime = lua_tonumber( state, 6);
+
     // process the input
-    int nargs = lua_gettop( state)-5;
+    int nargs = lua_gettop( state)-6;
     std::string l_text;
     for (int i=1; i <= nargs; ++i) {
-		l_text += lua_tostring( state, i+5);
+		l_text += lua_tostring( state, i+6);
     }
 
-    l_asHUD = lua_toboolean( state, 5);
-
     // call entity_list to add a new msg
-    lua_entitylist->message( l_id, l_text, l_size, l_offset, l_asHUD);
+    lua_entitylist->message( l_id, l_text, l_size, l_offset, l_asHUD, l_lifetime);
 
     // finish
     return 0;
@@ -1591,7 +1596,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config)
         // if object found add particle
         if( l_obj) {
             // anzeigen
-            particle->createParticel( par_text, l_obj->getPosition() + l_text->offset, l_obj->getVelocity(), 1000, l_text->text, fvec2( l_text->size, l_text->size), l_text->asHUD);
+            particle->createParticel( par_text, l_obj->getPosition() + l_text->offset, l_obj->getVelocity(), l_text->lifetime, l_text->text, fvec2( l_text->size, l_text->size), l_text->asHUD, false);
         }
     }
     // aufräumen falls was drin ist
@@ -2378,7 +2383,7 @@ std::vector<int> entitylist::findPlayerObject() {
     return l_obj;
 }
 
-void entitylist::message( int id, std::string text, float size, vec2 offset, bool asHUD) {
+void entitylist::message( int id, std::string text, float size, vec2 offset, bool asHUD, int lifetime) {
     entity_text l_text;
 
     l_text.id = id;
@@ -2386,6 +2391,7 @@ void entitylist::message( int id, std::string text, float size, vec2 offset, boo
     l_text.size = size;
     l_text.offset = offset;
     l_text.asHUD = asHUD,
+    l_text.lifetime = lifetime;
 
     p_text.push_back( l_text);
 }

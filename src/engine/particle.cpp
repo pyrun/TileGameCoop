@@ -17,17 +17,20 @@ particle::~particle()
 #include <math.h>
 
 void particle::draw( graphic *graphic, font *font) {
+    float l_alpha = 255.f;
     int l_max = p_lifetime;
     int l_now = p_lifetime-p_deadtime.getTicks();
     static float l_e = 2.71;
     fvec2 l_pos = this->p_pos;
 
-    // calc alpha - fade out
-    float l_alpha = 8.0f/l_max*l_now; // calc C
-    l_alpha = 1.0f-pow( l_e, -l_alpha); // 1.0f-pow( eule, -Zeitkonstante ); https://de.wikipedia.org/wiki/Zeitkonstante
-    l_alpha *= 255.f;
-    if( l_alpha < 0)
-        l_alpha = 0;
+    if( p_fade) {
+        // calc alpha - fade out
+        l_alpha = 8.0f/l_max*l_now; // calc C
+        l_alpha = 1.0f-pow( l_e, -l_alpha); // 1.0f-pow( eule, -Zeitkonstante ); https://de.wikipedia.org/wiki/Zeitkonstante
+        l_alpha *= 255.f;
+        if( l_alpha < 0)
+            l_alpha = 0;
+    }
 
     if( p_hud == true)
         l_pos = this->p_pos + graphic->getCamera();
@@ -48,7 +51,7 @@ particle_list::~particle_list() {
 
 }
 
-int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data, fvec2 zoom, bool asHUD) {
+int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data, fvec2 zoom, bool asHUD, bool fadeOut) {
     particle l_par( p_number);
 
     // Daten setzten
@@ -59,6 +62,7 @@ int particle_list::createParticel( particle_type type, fvec2 pos, fvec2 velocity
     l_par.setLifeTime( lifetime);
     l_par.setZoom( zoom);
     l_par.setAsHUD( asHUD);
+    l_par.setFadeOut( fadeOut);
 
     // eindeutige ID erhöhen
     p_number++;

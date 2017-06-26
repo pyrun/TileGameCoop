@@ -21,6 +21,7 @@ class particle
         void setZoom( fvec2 zoom) { p_zoom = zoom; }
         void setLifeTime( int time) { p_lifetime = time; }
         void setAsHUD( bool set) { p_hud = set; }
+        void setFadeOut( bool set) { p_fade = set; }
 
         int getId() { return p_id; }
         bool isDead() { return p_deadtime.getTicks() > p_lifetime?true:false; }
@@ -37,6 +38,7 @@ class particle
         image *p_img;
         fvec2 p_zoom;
         bool p_hud;
+        bool p_fade;
 
         int p_lifetime;
         timer p_deadtime;
@@ -48,7 +50,7 @@ class particle_list
         particle_list();
         virtual ~particle_list();
 
-        int createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data, fvec2 zoom = fvec2( 1, 1), bool asHUD = false);
+        int createParticel( particle_type type, fvec2 pos, fvec2 velocity, int lifetime, std::string data, fvec2 zoom = fvec2( 1, 1), bool asHUD = false, bool fadeOut = true);
 
         void draw( graphic *graphic, font *font);
 

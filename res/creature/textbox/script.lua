@@ -22,6 +22,7 @@ function mysplit(inputstr, sep)
         return t
 end
 
+local text_lifetime = 10
 local text_move = 0
 local text_sentence = 0
 local text_offset = { 14, 14}
@@ -69,8 +70,8 @@ function timer( id)
 		end
 
 		if text == "ENTER" then
-			for variable = 1, text_sentence, 1 do
-				text_lib.del( variable)
+			for variable = 1, text_sentence+1, 1 do
+				text_lib.del( 1)
 			end
 			text_move = 0
 			text_sentence = 0
@@ -85,11 +86,11 @@ function timer( id)
 		end
 		
 		for variable = 1, text_sentence, 1 do
-			message( id, 1.5, text_offset[1], text_offset[2] + ( 16 * (variable - 1)), true, text_lib.get( variable ) )
+			message( id, 1.5, text_offset[1], text_offset[2] + ( 16 * (variable - 1)), true, text_lifetime, text_lib.get( variable ) )
 		end
 		
 		text_cut = string.sub( text, 0, text_move)
-		message( id, 1.5, text_offset[1], text_offset[2] + ( 16 * text_sentence) , true, text_cut )
+		message( id, 1.5, text_offset[1], text_offset[2] + ( 16 * text_sentence) , true, text_lifetime, text_cut )
 	end
 end
 
