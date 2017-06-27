@@ -76,9 +76,7 @@ class entity_sound {
         entity_sound() {
             sound = NULL;
         }
-        ~entity_sound() {
-            if( sound)
-                delete sound;
+        virtual ~entity_sound() {
         }
         sound *sound;
         int volume;

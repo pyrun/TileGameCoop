@@ -7,6 +7,10 @@ function start( id)
 	setPosition( id, 40, 170)
 end
 
+function up( id)
+	play_sound( id, "test")
+end
+
 local fade_finish = false
 local next_text = false
 

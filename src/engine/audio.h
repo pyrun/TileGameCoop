@@ -41,7 +41,7 @@ class music
 class audio
 {
     public:
-        audio( int frequency = 66150, Uint16 format = AUDIO_S16, int channels = 2, int chunksize = 4096);
+        audio( int frequency = 66150, Uint16 format = AUDIO_S16, int channels = 2, int chunksize = 1024);
         virtual ~audio();
 
         sound *loadSound( std::string file);

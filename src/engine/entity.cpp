@@ -894,8 +894,18 @@ entitytype::entitytype() {
 }
 
 entitytype::~entitytype() {
+        // free action
         p_actions.clear();
+
+        // free vector
         p_vertex.clear();
+
+        // free all sounds
+        for( int i = 0; i < (int)p_sound.size(); i++)
+            if( p_sound[i].sound != NULL)
+                delete p_sound[i].sound;
+
+        // finally clear the vector
         p_sound.clear();
 }
 
@@ -937,18 +947,19 @@ void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down, 
 }
 
 void entitytype::addSound( std::string name, std::string file, int volume) {
-    sound *l_sound_chunk = new sound();
-    entity_sound *l_sound = new entity_sound();
+    entity_sound l_sound;
 
-    // load file
-    l_sound_chunk->loadSound( file);
+    // creating sound obj
+    l_sound.sound = new sound();
 
-    // save file
-    l_sound->sound = l_sound_chunk;
-    l_sound->name = name;
-    l_sound->volume = volume;
+     // load file
+    l_sound.sound->loadSound( file);
 
-    p_sound.push_back( *l_sound);
+    // set values
+    l_sound.name = name;
+    l_sound.volume = volume;
+
+    p_sound.push_back( l_sound);
 }
 
 entity::entity( int id)

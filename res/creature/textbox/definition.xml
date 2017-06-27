@@ -2,4 +2,5 @@
 	<action name="idle" frame="1" speed="0" loop="0">open.bmp</action>
 	<action name="die" frame="1" speed="0" loop="0">open.bmp</action>
 	<sound name="talk_intro" volume="5">talk_intro.wav</sound>
+	<sound name="test" volume="20">test.wav</sound>
 </object>
