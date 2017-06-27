@@ -11,6 +11,7 @@
 #include "entity.h"
 #include "level.h"
 #include "particle.h"
+#include "audio.h"
 #include <dirent.h>
 
 class game {
@@ -34,6 +35,7 @@ class game {
         input *p_input;
         player_handle *p_player;
         particle_list *p_particles;
+        audio *p_audio;
 
         level *p_level;
 

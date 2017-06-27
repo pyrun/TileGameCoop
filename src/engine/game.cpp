@@ -22,6 +22,9 @@ game::game()
 
     p_particles = new particle_list();
 
+    // audio
+    p_audio = new audio();
+
     // game running
     p_game_running = true;
     p_config.setQuit( false);
@@ -50,6 +53,9 @@ game::~game()
     // delete framecounter
     if( p_framerate)
         delete p_framerate;
+    // free audio
+    if( p_audio)
+        delete p_audio;
 }
 
 void game::drawHUD() {
@@ -80,6 +86,12 @@ int game::process_graphic( std::string levelName) {
 
     timer l_time;
     float l_delta = 0.0f;
+
+    sound* test = p_audio->loadSound( "test.wav");
+
+    test->play();
+
+    delete test;
 
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {

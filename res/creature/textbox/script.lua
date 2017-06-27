@@ -1,4 +1,4 @@
-package.path = package.path .. ";creature/textbox/?.lua"
+package.path = package.path .. ";text/?.lua"
 local text_lib = nil
 local fade = 0
 
@@ -25,7 +25,7 @@ end
 local text_lifetime = 10
 local text_move = 0
 local text_sentence = 0
-local text_offset = { 14, 14}
+local text_offset = { 14, 10}
 
 function timer( id)
 	-- get lib

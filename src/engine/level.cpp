@@ -76,6 +76,9 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
             lua_player_install( l_entity->getState());
             lua_config_install( l_entity->getState());
             lua_level_install( l_entity->getState());
+
+            // call once the timer script
+            l_entity->lua_timer( l_entity->getId(), 1);
         }
     }
 
