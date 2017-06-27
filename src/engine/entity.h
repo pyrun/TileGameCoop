@@ -18,6 +18,7 @@
 #include "../xml/tinyxml2.h"
 #include "world.h"
 #include "particle.h"
+#include "audio.h"
 
 #define ENTITY_FILE "definition.xml"
 
@@ -70,6 +71,20 @@ class entity_text {
         int lifetime;
 };
 
+class entity_sound {
+    public:
+        entity_sound() {
+            sound = NULL;
+        }
+        ~entity_sound() {
+            if( sound)
+                delete sound;
+        }
+        sound *sound;
+        int volume;
+        std::string name;
+};
+
 class entitytype
 {
     public:
@@ -80,6 +95,7 @@ class entitytype
 
         void addAction( std::string name, std::string file, int frames, int speed, int loop, image *image, std::string startcall, std::string endcall);
         void addVertex(vec2 pos, bool left, bool right, bool up, bool down, int id);
+        void addSound( std::string name, std::string file, int volume);
 
         void setName( std::string name) { p_name = name; }
         void setGravity( bool mass) { p_gravity = mass; }
@@ -111,6 +127,14 @@ class entitytype
         bool getIsTopView() { return p_isTopView; }
         bool getIsHUD() { return p_isHUD; }
         bool getHasTimeCall() { return p_hasTimeCall; }
+
+        entity_sound *getSound( std::string name) {
+            for( int i = 0; i < (int)p_sound.size(); i++) {
+                if( p_sound[i].name == name)
+                    return &p_sound[i];
+            }
+            return NULL;
+        }
     protected:
 
     private:
@@ -123,6 +147,7 @@ class entitytype
         std::string p_script;
         std::vector<action> p_actions;
         std::vector<vertex> p_vertex;
+        std::vector<entity_sound> p_sound;
         vec2 p_hitbox_offset;
         vec2 p_hitbox_size;
         bool p_solid;

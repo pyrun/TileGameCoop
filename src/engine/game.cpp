@@ -87,11 +87,11 @@ int game::process_graphic( std::string levelName) {
     timer l_time;
     float l_delta = 0.0f;
 
-    sound* test = p_audio->loadSound( "test.wav");
+    //sound* test = p_audio->loadSound( "test.wav");
 
-    test->play();
+    //test->play();
 
-    delete test;
+
 
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
@@ -125,7 +125,6 @@ int game::process_graphic( std::string levelName) {
 
         // draw info
         drawHUD();
-
         p_level->getEntityList()->drawHUD( p_graphic);
 
         // player draw
@@ -147,6 +146,8 @@ int game::process_graphic( std::string levelName) {
         p_game_running = !(p_config.getQuit());
 
     }
+
+    //delete test;
 
     return l_error;
 }

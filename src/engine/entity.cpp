@@ -43,6 +43,37 @@ static int lua_print(lua_State* state) {
     return 0;
 }
 
+static int lua_play_sound(lua_State* state) {
+    std::string l_name;
+    if( !lua_isnumber( state, 1) || !lua_isstring( state, 2) ) {
+        printf( "lua_play_sound call wrong argument\n");
+        return 0;
+    }
+
+    // get obj
+    int l_id = lua_tointeger( state, 1);
+    entity *l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_play_sound obj not found\n");
+        return 0;
+    }
+
+    // get sound name
+    l_name = lua_tostring( state, 2);
+
+    entity_sound *l_sound = l_obj->getType()->getSound( l_name);
+    if( l_sound == NULL) {
+        printf( "lua_play_sound sound obj not found\n");
+        return 0;
+    }
+
+    if( l_sound->sound)
+        l_sound->sound->play();
+
+    // finish
+    return 0;
+}
+
 static int lua_message(lua_State* state) {
     int l_lifetime;
     bool l_asHUD;
@@ -759,6 +790,9 @@ void lua_install( lua_State *state) {
     lua_pushcfunction( state, lua_print);
     lua_setglobal( state, "print");
 
+    lua_pushcfunction( state, lua_play_sound);
+    lua_setglobal( state, "play_sound");
+
     lua_pushcfunction( state, lua_message);
     lua_setglobal( state, "message");
 
@@ -860,7 +894,9 @@ entitytype::entitytype() {
 }
 
 entitytype::~entitytype() {
-
+        p_actions.clear();
+        p_vertex.clear();
+        p_sound.clear();
 }
 
 action* entitytype::getAction( std::string name) {
@@ -898,6 +934,21 @@ void entitytype::addVertex(vec2 pos, bool left, bool right, bool up, bool down, 
     l_vertex->up = up;
 
     p_vertex.push_back( *l_vertex);
+}
+
+void entitytype::addSound( std::string name, std::string file, int volume) {
+    sound *l_sound_chunk = new sound();
+    entity_sound *l_sound = new entity_sound();
+
+    // load file
+    l_sound_chunk->loadSound( file);
+
+    // save file
+    l_sound->sound = l_sound_chunk;
+    l_sound->name = name;
+    l_sound->volume = volume;
+
+    p_sound.push_back( *l_sound);
 }
 
 entity::entity( int id)
@@ -2139,6 +2190,7 @@ std::vector <int> entitylist::collision_boundingBoxRect( fvec2 l_postion, fvec2 
 
 bool entitylist::loadType( std::string folder, graphic *graphic) {
     XMLDocument l_file;
+    bool l_idle = false;
 
     p_folder = folder;
 
@@ -2208,7 +2260,6 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     std::string l_startCall;
     std::string l_endCall;
 
-    bool l_idle = false;
     // read all actions
     XMLElement* l_xml_action = l_object->FirstChildElement( "action" );
     while( l_xml_action) {
@@ -2317,6 +2368,31 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
 
         //printf( "vertex u%dl%dd%dr%d %d/%d\n", l_vertex_up, l_vertex_left, l_vertex_down, l_vertex_right,l_vertex_pos.x, l_vertex_pos.y);
         l_type->setHitbox( l_hitbox_offset, l_hitbox_size);
+    }
+
+    // sound items load
+    XMLElement* l_xml_sound = l_object->FirstChildElement( "sound" );
+    while( l_xml_sound) {
+        std::string l_name;
+        std::string l_file;
+        int l_volume = 100;
+
+        // get file
+        l_file = l_xml_sound->GetText();
+
+        // standard volume
+        if( l_xml_sound->Attribute( "volume"))
+            l_volume = atoi( l_xml_sound->Attribute( "volume"));
+
+        // sound name
+        if( l_xml_sound->Attribute( "name"))
+            l_name = l_xml_sound->Attribute( "name");
+
+        //printf( "sound %s\n", (folder + l_file).c_str() );
+        l_type->addSound( l_name, folder + l_file, l_volume);
+
+        // next vertex
+        l_xml_sound = l_xml_sound->NextSiblingElement("sound");
     }
 
 

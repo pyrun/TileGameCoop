@@ -9,7 +9,25 @@ sound::sound()
 
 sound::~sound()
 {
-    //dtor
+    // free the sample
+    if( p_sound != NULL) {
+        printf( "sound::~sound free \"%s\" sound\n", p_file.c_str());
+        Mix_FreeChunk( p_sound);
+    }
+}
+
+void sound::loadSound( std::string file) {
+    Mix_Chunk *l_chunk;
+
+    // load chunk
+    l_chunk = Mix_LoadWAV( file.c_str());
+    if(!l_chunk) {
+        printf("sound::loadSound Mix_LoadWAV: %s\n", Mix_GetError());
+    } else {
+        // creating sound object
+        setChunk( l_chunk);
+        setFile( file);
+    }
 }
 
 music::music()
@@ -40,24 +58,16 @@ audio::audio( int frequency, Uint16 format, int channels, int chunksize)
 	}
 }
 
-sound *audio::loadSound( std::string file) {
-    Mix_Chunk *l_chunk;
-    sound *l_sound = NULL;
-
-    // load chunk
-    l_chunk = Mix_LoadWAV( file.c_str());
-    if(!l_chunk) {
-        printf("audio::loadSound Mix_LoadWAV: %s\n", Mix_GetError());
-    } else {
-        // creating sound object
-        l_sound = new sound();
-        l_sound->setChunk( l_chunk);
-    }
-    return l_sound;
-}
-
 audio::~audio()
 {
     // quit SDL_mixer
 	Mix_CloseAudio();
+}
+
+sound *audio::loadSound( std::string file) {
+    sound *l_sound = new sound();
+    // load
+    l_sound->loadSound( file);
+    // return
+    return l_sound;
 }

@@ -55,6 +55,10 @@ function timer( id)
 	end
 
 	if fade_finish == true then
+		if text_move == 0 then
+			text_move = 1
+			play_sound( id, "talk_intro")
+		end
 		-- next sentence
 		if next_text == true then
 			text_sentence = text_sentence + 1
@@ -80,7 +84,6 @@ function timer( id)
 		
 		local text_length = string.len( text )
 		
-		text_move = text_move + 1
 		if text_length < text_move then
 			text_move = text_move - 1
 		end
@@ -89,8 +92,13 @@ function timer( id)
 			message( id, 1.5, text_offset[1], text_offset[2] + ( 16 * (variable - 1)), true, text_lifetime, text_lib.get( variable ) )
 		end
 		
+		if text_length > text_move then
+			play_sound( id, "talk_intro")
+		end
+		
 		text_cut = string.sub( text, 0, text_move)
 		message( id, 1.5, text_offset[1], text_offset[2] + ( 16 * text_sentence) , true, text_lifetime, text_cut )
+		text_move = text_move + 1
 	end
 end
 
