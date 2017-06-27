@@ -1,5 +1,5 @@
 <object name="textbox" width="400" height="100" player="1" script="script.lua" timer="10" solid="0" gravity="0" isHUD="1">
 	<action name="idle" frame="1" speed="0" loop="0">open.bmp</action>
 	<action name="die" frame="1" speed="0" loop="0">open.bmp</action>
-	<sound name="talk_intro" volume="50">talk_intro.wav</sound>
+	<sound name="talk_intro" volume="5">talk_intro.wav</sound>
 </object>

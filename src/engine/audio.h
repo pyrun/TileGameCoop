@@ -14,7 +14,11 @@ class sound
         void loadSound( std::string file);
         void setChunk( Mix_Chunk *chunk) { p_sound = chunk; }
         void setFile( std::string file) { p_file = file; }
-        void play() { Mix_PlayChannel( -1, p_sound, 0); }
+        void play( int volume) {
+            float l_volume = (float)MIX_MAX_VOLUME/100.f*volume;
+            int l_channel = Mix_PlayChannel( -1, p_sound, 0);
+            Mix_Volume( l_channel, l_volume);
+        }
     protected:
 
     private:
