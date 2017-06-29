@@ -268,6 +268,10 @@ void graphic::changeWindowSize() {
     for( int i = 0; l_newres.x-i >= NATIV_W; i+=NATIV_W)
         l_factor++;
 
+    // no zero factor
+    if( l_factor == 0)
+        l_factor = 1;
+
     // set new window size
     SDL_SetWindowSize( p_windows, NATIV_W*l_factor, NATIV_H*l_factor);
 

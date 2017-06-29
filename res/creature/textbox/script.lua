@@ -96,10 +96,11 @@ function timer( id)
 			message( id, 1.5, text_offset[1], text_offset[2] + ( 16 * (variable - 1)), true, text_lifetime, text_lib.get( variable ) )
 		end
 		
-		if text_length > text_move then
+		if string.sub( text, text_move, text_move) == " " then
+		elseif text_length > text_move then
 			play_sound( id, "talk_intro")
 		end
-		
+
 		text_cut = string.sub( text, 0, text_move)
 		message( id, 1.5, text_offset[1], text_offset[2] + ( 16 * text_sentence) , true, text_lifetime, text_cut )
 		text_move = text_move + 1

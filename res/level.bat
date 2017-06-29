@@ -1,2 +1,2 @@
-"..\bin\WinDebug32\TileGameCoop.exe" stone.tmx
+"..\bin\WinDebug32\TileGameCoop.exe" house.tmx
 PAUSE
