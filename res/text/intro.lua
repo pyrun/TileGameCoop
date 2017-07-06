@@ -3,10 +3,17 @@ local text = {}
 local table_text = {}
 
 function text.table_start()
-	table.insert( table_text, "Hello World long . ZZZZZZZZZ")
-	table.insert( table_text, "This is a Test")
+	table.insert( table_text, "Once a programmer write a")
+	table.insert( table_text, "simple app and insert a copy")
+	table.insert( table_text, "of his brain. He didnt know")
+	table.insert( table_text, "what he does but it works")
 	table.insert( table_text, "ENTER")
-	table.insert( table_text, "Side 2")
+	table.insert( table_text, "This release LUA the KI")
+	table.insert( table_text, "SHE or IT helps the humans")
+	table.insert( table_text, "but the military dont like her")
+	table.insert( table_text, "and wanna kill the ki with")
+	table.insert( table_text, "ENTER")
+	table.insert( table_text, "the owner.")
 	table.insert( table_text, "END")
 end
 
