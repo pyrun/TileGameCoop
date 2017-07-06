@@ -3,7 +3,7 @@ local text = {}
 local table_text = {}
 
 function text.table_start()
-	table.insert( table_text, "Once a programmer write a")
+	table.insert( table_text, "Once a programmer wrote a")
 	table.insert( table_text, "simple app and insert a copy")
 	table.insert( table_text, "of his brain. He didnt know")
 	table.insert( table_text, "what he does but it works")

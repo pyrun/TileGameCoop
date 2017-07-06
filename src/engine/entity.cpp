@@ -901,9 +901,9 @@ entitytype::~entitytype() {
         p_vertex.clear();
 
         // free all sounds
-        for( int i = 0; i < (int)p_sound.size(); i++)
+        /*for( int i = 0; i < (int)p_sound.size(); i++)
             if( p_sound[i].sound != NULL)
-                delete p_sound[i].sound;
+                delete p_sound[i].sound;*/
 
         // finally clear the vector
         p_sound.clear();
@@ -2124,7 +2124,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         }
 
         // calculate depth
-        l_entity->setDepth( l_entity->getPosition().tovec2().x + (l_entity->getPosition().tovec2().y * world->getWorld().x * world->getTileSize().x) );
+        l_entity->setDepth( l_entity->getPosition().tovec2().x + ( (l_entity->getPosition().tovec2().y+l_type->getHitbox().y ) * world->getWorld().x * world->getTileSize().x) );
 
         // set net position
         l_entity->setPos( l_position + l_change );
