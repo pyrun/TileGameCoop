@@ -1,0 +1,8 @@
+<object name="shield" width="35" height="40" script="script.lua" timer="1000" solid="1" gravity="0">
+	<action name="idle" frame="6" speed="6" loop="0" endCall="action_idle">idle.bmp</action>
+	<action name="open" frame="3" speed="6" loop="0" endCall="action_open">open.bmp</action>
+	<hitbox offsetx="15" offsety="5" width="5" hight="29"/>
+</object>
+
+
+

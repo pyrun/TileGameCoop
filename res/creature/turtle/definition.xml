@@ -1,0 +1,13 @@
+<object name="turtle" width="32" height="16" script="script.lua" timer="40" gravity="0">
+	<action name="idle" frame="3">idle.bmp</action>
+	<action name="walk" frame="3" speed="6">walk.bmp</action>
+	<action name="fly" frame="3" speed="12">fly.bmp</action>
+	<action name="die" frame="3" speed="2" loop="0">die.bmp</action>
+	<vertex x="4" y="16" id="3">down</vertex>
+	<vertex x="28" y="16" id="4">down</vertex>
+	<vertex x="3" y="7" id="1">left</vertex>
+	<vertex x="29" y="7" id="2">right</vertex>
+	<hitbox offsetx="6" offsety="4" width="20" hight="12"/>
+</object>
+
+

@@ -87,12 +87,6 @@ int game::process_graphic( std::string levelName) {
     timer l_time;
     float l_delta = 0.0f;
 
-    //sound* test = p_audio->loadSound( "test.wav");
-
-    //test->play();
-
-
-
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
         l_delta = l_time.getTicks();

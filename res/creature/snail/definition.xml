@@ -1,0 +1,12 @@
+<object name="snail" width="28" height="18" script="script.lua" timer="500">
+	<action name="idle" frame="1">walk.png</action>
+	<action name="walk" frame="4" speed="12">walk.png</action>
+	<action name="die" frame="4" speed="1" loop="0">die.png</action>
+	<vertex x="8" y="18" id="3">down</vertex>
+	<vertex x="20" y="18" id="4">down</vertex>
+	<vertex x="5" y="7" id="1">left</vertex>
+	<vertex x="23" y="7" id="2">right</vertex>
+	<hitbox offsetx="7" offsety="0" width="16" hight="18"/>
+</object>
+
+

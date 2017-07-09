@@ -1,0 +1,5 @@
+<object name="cry" width="40" height="40" gravity="0" script="script.lua">
+	<action name="idle" frame="3" speed="6" loop="0" endCall="action_die">idle.bmp</action>
+	<action name="die" frame="1" speed="5" loop="0">idle.bmp</action>
+	<hitbox offsetx="2" offsety="2" width="36" hight="36"/>
+</object>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="16" tileheight="16" nextobjectid="57">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
-  <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
+  <image source="../tilemap_topview.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
  <imagelayer name="Background">
   <image source="backgrounds/back.bmp" width="320" height="256"/>

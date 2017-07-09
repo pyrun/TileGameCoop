@@ -1,76 +1,54 @@
---package.path = package.path .. ";creature/human/?.lua"
---require( "script")
+package.path = package.path .. ";creature/human/?.lua"
+require( "script")
 
-local move_speed = 0.02
+local id_special_object = -1
+local id_offset = 30
 
-function vertexhit( id)
+function special( id)
+	if isAlive( id_special_object) == false then
+		l_dir = getAnimationDirection( id)
+		l_x, l_y = getPosition( id)
+		l_velX, l_velY = getVelocity( id)
+		l_factor = 0
+
+		-- dir offset calc
+		if l_dir == true then
+			l_factor = -(16 + id_offset)
+		end
+
+		-- calc offset
+		id_x = id_offset + l_factor
+		id_y = 8
+		
+		--script.id_attack 
+		id_special_object = createObject( "solidbox", l_x + id_x, l_y + id_y)
+		setVelocityX( id_special_object, l_velX)
+		setVelocityY( id_special_object, l_velY)
+	elseif isAlive( id_special_object) == true and getAnimation( id_special_object) == "free" then
+		delete( id_special_object)
+	end
 end
 
 function attack( id)
-
-end
-
-function liquid( id, swim)
-
-end
-
-function update( id)
-	l_velX, l_velY = getVelocity( id)
 	
-	if math.abs(l_velX) > 0.0 then
-		local dir = false
-		if l_velX < 0.00 then
-			dir = true
+	if isAlive(getAttackId()) == false then
+		l_dir = getAnimationDirection( id)
+		l_x, l_y = getPosition( id)
+		l_factor = 0
+
+		-- dir offset calc
+		if l_dir == true then
+			l_factor = -32
 		end
-		setAnimationDirection( id, dir)
+		-- calc offset
+		id_x = 16 + l_factor
+		id_y = 8
+		
+		--script.id_attack 
+		id_attack = createObject( "electronics whip", l_x + id_x, l_y + id_y)
+		setAnimationDirection( id_attack, l_dir) -- dir
+		setAttackPosition( id_x, id_y) -- offset
+		setAttackId( id_attack) -- attach to the player
 	end
-
-	if math.abs(l_velX) > 0.01 then
-		setAnimation( id, "walk_side")
-	elseif l_velY < -0.01 then
-		setAnimation( id, "walk_n")
-	elseif l_velY > 0.01 then
-		setAnimation( id, "walk_s")
-	end
-
-
-	if getAnimation( id) == "walk_n" then
-		if math.abs(l_velY) < 0.01 then
-			setAnimation( id, "idle_n")
-		end
-	elseif getAnimation( id) == "walk_s" then
-		if math.abs(l_velY) < 0.01 then
-			setAnimation( id, "idle_s")
-		end
-	elseif getAnimation( id) == "walk_side" then
-		if math.abs(l_velX) < 0.01 then
-			setAnimation( id, "idle_side")
-		end
-	end
-end
-
-
-function jump( id)
-
-end
-
-function up( id) 
-	addVelocity( id, 0, -move_speed)
-end
-
-function down( id)
-	addVelocity( id, 0, move_speed)
-end
-
-function right( id)
-	addVelocity( id, move_speed, 0)
-end
-
-function left( id)
-	addVelocity( id, -move_speed, 0)
-end
-
-function run( id, press)
-
 end
 

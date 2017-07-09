@@ -1,0 +1,24 @@
+<object name="alex_topview" width="31" height="32" player="1" script="script.lua" timer="100" isTopView="1">
+	<action name="idle" frame="1" speed="12">walk_s.bmp</action>
+	<action name="idle_s" frame="1" speed="12">walk_s.bmp</action>
+	<action name="walk_s" frame="4" speed="5">walk_s.bmp</action>
+
+	<action name="idle_n" frame="1" speed="12">walk_n.bmp</action>
+	<action name="walk_n" frame="4" speed="5">walk_n.bmp</action>
+
+	<action name="idle_side" frame="1" speed="12">walk_side.bmp</action>
+	<action name="walk_side" frame="4" speed="5">walk_side.bmp</action>
+
+	<vertex id="9" x="9" y="27">down</vertex>
+	<vertex id="1" x="14" y="27">down</vertex>
+	<vertex id="1" x="19" y="27">down</vertex>
+	<vertex id="2" x="9" y="17">up</vertex>
+	<vertex id="3" x="19" y="17">up</vertex>
+	<vertex id="4" x="8" y="18">left</vertex>
+	<vertex id="6" x="8" y="26">left</vertex>
+	<vertex id="7" x="20" y="18">right</vertex>
+	<vertex id="9" x="20" y="26">right</vertex>
+	<hitbox offsetx="7" offsety="16" width="15" hight="10"/>
+</object>
+
+

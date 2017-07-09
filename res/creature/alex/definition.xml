@@ -1,24 +1,22 @@
-<object name="alex" width="31" height="32" player="1" script="script.lua" timer="100" isTopView="1">
-	<action name="idle" frame="1" speed="12">walk_s.bmp</action>
-	<action name="idle_s" frame="1" speed="12">walk_s.bmp</action>
-	<action name="walk_s" frame="4" speed="5">walk_s.bmp</action>
-
-	<action name="idle_n" frame="1" speed="12">walk_n.bmp</action>
-	<action name="walk_n" frame="4" speed="5">walk_n.bmp</action>
-
-	<action name="idle_side" frame="1" speed="12">walk_side.bmp</action>
-	<action name="walk_side" frame="4" speed="5">walk_side.bmp</action>
-
-	<vertex id="9" x="9" y="27">down</vertex>
-	<vertex id="1" x="14" y="27">down</vertex>
-	<vertex id="1" x="19" y="27">down</vertex>
-	<vertex id="2" x="9" y="17">up</vertex>
-	<vertex id="3" x="19" y="17">up</vertex>
-	<vertex id="4" x="8" y="18">left</vertex>
-	<vertex id="6" x="8" y="26">left</vertex>
-	<vertex id="7" x="20" y="18">right</vertex>
-	<vertex id="9" x="20" y="26">right</vertex>
-	<hitbox offsetx="7" offsety="16" width="15" hight="10"/>
+<object name="alex" width="32" height="32" player="1" script="script.lua" timer="100">
+	<action name="idle" frame="4" speed="12">idle.bmp</action>
+	<action name="walk" frame="4" speed="3">walk.bmp</action>
+	<action name="run" frame="4" speed="1">walk.bmp</action>
+	<action name="jump" frame="4" speed="8">jump.bmp</action>
+	<action name="swim" frame="4" speed="8">swim.bmp</action>
+	<action name="die" frame="4" speed="12" loop="0">die.bmp</action>
+	<vertex id="9" x="12" y="32">down</vertex>
+	<vertex id="1" x="16" y="32">down</vertex>
+	<vertex id="1" x="20" y="32">down</vertex>
+	<vertex id="2" x="12" y="6">up</vertex>
+	<vertex id="3" x="20" y="6">up</vertex>
+	<vertex id="4" x="11" y="10">left</vertex>
+	<vertex id="5" x="11" y="16">left</vertex>
+	<vertex id="6" x="11" y="31">left</vertex>
+	<vertex id="7" x="21" y="10">right</vertex>
+	<vertex id="8" x="21" y="16">right</vertex>
+	<vertex id="9" x="21" y="31">right</vertex>
+	<hitbox offsetx="8" offsety="6" width="16" hight="28"/>
 </object>
 
 

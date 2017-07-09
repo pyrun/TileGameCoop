@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="36" height="36" tilewidth="16" tileheight="16" nextobjectid="65">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
-  <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
+  <image source="../tilemap_topview.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
  <imagelayer name="Background">
   <image source="backgrounds/back.bmp" width="320" height="256"/>
@@ -168,7 +168,7 @@
  </layer>
  <objectgroup color="#000080" name="Objects">
   <object id="49" name="start" x="39.3333" y="64" width="16" height="16"/>
-  <object id="50" name="alex" x="272" y="208" width="16" height="16"/>
+  <object id="50" name="alex_topview" x="272" y="176" width="16" height="16"/>
   <object id="58" name="titel" x="117" y="64" width="16" height="16"/>
   <object id="59" name="menu_item" x="150" y="161" width="32" height="16">
    <properties>

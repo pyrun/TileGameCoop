@@ -190,7 +190,13 @@ void player_handle::next_player_entity( entitylist *entitylist, player *l_player
     int l_id = -1;
     int found_first = -1;
 
-    for( int y = 0; y < (int)l_obj.size(); y++) {
+    int l_pos = 0;
+
+    for( int i = 0; i < (int)l_obj.size(); i++)
+        if( l_player->entity_id == l_obj[i] )
+            l_pos = i;
+
+    for( int y = l_pos; y < (int)l_obj.size(); y++) {
         bool l_found = true;
 
         for( int n = 0; n < (int)p_playerlist.size(); n++)
@@ -204,6 +210,12 @@ void player_handle::next_player_entity( entitylist *entitylist, player *l_player
             }
             if( found_first == -1)
                 found_first = l_obj[y];
+        }
+
+        if( l_pos != 0 && y+1 >= (int)l_obj.size()) {
+            y = -1;
+            l_pos = 0;
+            printf( "test\n");
         }
     }
 
@@ -373,7 +385,7 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                         setInactiv( l_player);
 
                 if( l_map->left && !l_map_old->left)
-                    ;//config->setQuit( true);
+                    next_player_entity( entitylist, l_player);
                 if( l_map->right && !l_map_old->right);
             }
         }
@@ -386,7 +398,7 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
         if( l_player->wantToJoin && !l_player->active) {
             // search a entity and bind
             if( l_player->entity_id == -1) {
-                // fin a nex player entity
+                // find a next player entity
                 next_player_entity( entitylist, l_player);
 
                 if( l_player->entity_id == -1 )

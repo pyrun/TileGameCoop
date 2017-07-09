@@ -358,9 +358,6 @@ static int lua_createObject( lua_State *state) {
         printf( "lua_createObject call wrong argument\n");
         return 0;
     }
-
-    printf( "lua_createObject call wrong argument\n");
-
     l_typeName = lua_tostring( state, 1);
     l_x = lua_tointeger( state, 2);
     l_y = lua_tointeger( state, 3);
@@ -1480,6 +1477,7 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     obj->setVertex( type->getVertex());
     obj->setSolid( type->getIsSolid());
     obj->setGravity( type->getGravity());
+    //obj->setDepth( obj->getPosition().tovec2().y-type->getHitbox().y+type->getHitboxOffset().y  );
 
     // player entity incress if he is one
     if( type->getIsPlayer())
@@ -2124,7 +2122,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         }
 
         // calculate depth
-        l_entity->setDepth( l_entity->getPosition().tovec2().x + ( (l_entity->getPosition().tovec2().y+l_type->getHitbox().y ) * world->getWorld().x * world->getTileSize().x) );
+        l_entity->setDepth( (l_entity->getPosition().tovec2().y+l_type->getHitbox().y+l_type->getHitboxOffset().y)*10 +  l_entity->getPosition().x );
 
         // set net position
         l_entity->setPos( l_position + l_change );
@@ -2135,8 +2133,6 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         if( l_vertexhitchange > 0) {
             l_entity->lua_vertexhit( l_entity->getId());
         }
-        /*if( p_entitys[i].getPosition().y+l_velocity.y > 250)
-            p_entitys[i].setVelocity( fvec2( 0.1f, -0.375f) );*/
     }
 }
 
