@@ -335,6 +335,7 @@ static int lua_kill( lua_State *state) {
 }
 
 static int lua_delete( lua_State *state) {
+    entity *l_obj;
     int l_id;
 
     if( !lua_isnumber( state, 1) ) {
@@ -344,7 +345,14 @@ static int lua_delete( lua_State *state) {
 
     l_id = lua_tointeger( state, 1);
 
-    lua_entitylist->deleteObj( l_id);
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_delete obj not found\n");
+        return 0;
+    }
+    l_obj->isbedelete = 1;
+
+    //lua_entitylist->deleteObj( l_id);
     return 0;
 }
 
