@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include <stdio.h>
+#include <algorithm>    // std::rotate
 
 /** LUA FUNCTION */
 
@@ -196,7 +197,9 @@ void player_handle::next_player_entity( entitylist *entitylist, player *l_player
         if( l_player->entity_id == l_obj[i] )
             l_pos = i;
 
-    for( int y = l_pos; y < (int)l_obj.size(); y++) {
+    std::rotate(l_obj.begin(),l_obj.begin()+l_pos,l_obj.end());
+
+    for( int y = 0; y < (int)l_obj.size(); y++) {
         bool l_found = true;
 
         for( int n = 0; n < (int)p_playerlist.size(); n++)
@@ -210,12 +213,6 @@ void player_handle::next_player_entity( entitylist *entitylist, player *l_player
             }
             if( found_first == -1)
                 found_first = l_obj[y];
-        }
-
-        if( l_pos != 0 && y+1 >= (int)l_obj.size()) {
-            y = -1;
-            l_pos = 0;
-            printf( "test\n");
         }
     }
 

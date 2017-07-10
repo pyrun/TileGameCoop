@@ -78,6 +78,8 @@ class world
         tile *getOverlap() { return p_tilemap_overlap; }
         tile *getForeground() { return p_tilemap_foreground; }
         tile *getBackground() { return p_tilemap_background; }
+
+        bool depthSort() { return p_depthSort; }
     protected:
 
     private:
@@ -114,6 +116,8 @@ class world
 
         std::vector<tiletype> p_tiletypes;
         std::string p_needloadworld;
+
+        bool p_depthSort;
 
 };
 

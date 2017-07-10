@@ -20,6 +20,8 @@ world::world(std::string file, std::string ordner)
     p_tilemap_background = NULL;
     p_tilemap_floorground = NULL;
 
+    p_depthSort = false;
+
     p_tileset = NULL;
 
     p_filename = file;
@@ -229,6 +231,14 @@ bool world::load( std::string file, std::string ordner) {
     }
     l_map_width = atoi(l_map->Attribute( "width" ));
     l_map_height = atoi( l_map->Attribute( "height" ));
+
+    // data
+    XMLElement* l_properties = l_map->FirstChildElement( "properties" );
+    if( !l_properties) {
+        printf( "world::load no properties found - warn\n");
+    } else {
+        p_depthSort = atoi( l_properties->Attribute( "depth_sort" ));
+    }
 
     // tile
     XMLElement* l_xml_tileset = l_map->FirstChildElement( "tileset" );
