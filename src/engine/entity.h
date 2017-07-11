@@ -328,7 +328,7 @@ class entitylist {
         void deleteObj( int id);
         std::vector<int> createFromWorldFile( std::string file, world *world);
 
-        void draw(graphic *graphic, particle_list *particle,config *config);
+        void draw(graphic *graphic, particle_list *particle,config *config, bool depth = false);
         void drawHUD( graphic *graphic);
 
         int setVertexHit( vertex *vertex, bool set);

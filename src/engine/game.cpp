@@ -112,7 +112,7 @@ int game::process_graphic( std::string levelName) {
         p_level->getWorld()->draw( p_graphic);
 
         // draw entity
-        p_level->getEntityList()->draw( p_graphic, p_particles, &p_config);
+        p_level->getEntityList()->draw( p_graphic, p_particles, &p_config, p_level->getWorld()->depthSort());
 
         // draw overground
         p_level->getWorld()->drawOverground( p_graphic);

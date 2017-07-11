@@ -1616,9 +1616,10 @@ std::vector<int> entitylist::createFromWorldFile( std::string file, world *world
     return l_ids;
 }
 
-void entitylist::draw(graphic *graphic, particle_list* particle, config *config) {
+void entitylist::draw(graphic *graphic, particle_list* particle, config *config, bool depth) {
     // depth
-    std::sort( p_entitys.begin(), p_entitys.end());
+    if( depth == true )
+        std::sort( p_entitys.begin(), p_entitys.end());
 
     for(int i = 0; i < (int)p_entitys.size(); i++) {
         entity *l_obj = &p_entitys[i];

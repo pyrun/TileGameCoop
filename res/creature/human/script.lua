@@ -91,7 +91,11 @@ function update( id)
 		setAnimation( id, "jump")
 	end
 	
-	if getColision( id, "down") then
+	if getColision( id, "down") and
+		( getAnimation( id) == "idle" or
+		  getAnimation( id) == "jump" or
+		  getAnimation( id) == "walk" or
+		  getAnimation( id) == "run" )then
 		if math.abs(l_velX) > 0.01 then
 			setAnimation( id, "walk")
 		end

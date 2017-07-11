@@ -20,8 +20,6 @@ world::world(std::string file, std::string ordner)
     p_tilemap_background = NULL;
     p_tilemap_floorground = NULL;
 
-    p_depthSort = false;
-
     p_tileset = NULL;
 
     p_filename = file;
@@ -235,9 +233,20 @@ bool world::load( std::string file, std::string ordner) {
     // data
     XMLElement* l_properties = l_map->FirstChildElement( "properties" );
     if( !l_properties) {
+        p_depthSort = false;
         printf( "world::load no properties found - warn\n");
     } else {
-        p_depthSort = atoi( l_properties->Attribute( "depth_sort" ));
+        // get all propetys
+        XMLElement* l_property = l_properties->FirstChildElement( "property" );
+        while( l_property) {
+            std::string l_name =  l_property->Attribute( "name" );
+
+            if( l_name == "depth_sort")
+                p_depthSort = atoi( l_property->Attribute( "value" ));
+
+            // next layer
+            l_property = l_property->NextSiblingElement("property");
+        }
     }
 
     // tile
@@ -265,7 +274,6 @@ bool world::load( std::string file, std::string ordner) {
         printf( "world::load no layer found - cancel load\n");
         return false;
     }
-
     // alle layer lesen
     while( l_layer) {
         l_map_temp = l_layer->FirstChildElement("data")->GetText();

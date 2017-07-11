@@ -21,11 +21,11 @@ function special( id)
 		id_y = 8
 		
 		--script.id_attack 
-		id_special_object = createObject( "solidbox", l_x + id_x, l_y + id_y)
+		id_special_object = createObject( "bomb", l_x + id_x, l_y + id_y)
 		setVelocityX( id_special_object, l_velX)
 		setVelocityY( id_special_object, l_velY)
-	elseif isAlive( id_special_object) == true and getAnimation( id_special_object) == "free" then
-		delete( id_special_object)
+	elseif isAlive( id_special_object) == true and getAnimation( id_special_object) == "idle" then
+		setAnimation( id_special_object, "explode")
 	end
 end
 

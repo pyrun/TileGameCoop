@@ -7,7 +7,7 @@ function start( id)
 end
 
 function action_open( id) 
-	setAnimation( id, "idle")
+	--setAnimation( id, "idle")
 end
 
 function collision( id, ...)
