@@ -5,6 +5,8 @@
 	<action name="jump" frame="4" speed="8">jump.bmp</action>
 	<action name="swim" frame="4" speed="8">swim.bmp</action>
 	<action name="die" frame="4" speed="12" loop="0">die.bmp</action>
+	<action name="punch" frame="4" speed="2" loop="0" endCall="punch">punch.bmp</action>
+	<action name="walk_punch" frame="4" speed="3" loop="0" endCall="punch">walk_punch.bmp</action>
 	<vertex id="9" x="12" y="32">down</vertex>
 	<vertex id="1" x="16" y="32">down</vertex>
 	<vertex id="1" x="20" y="32">down</vertex>

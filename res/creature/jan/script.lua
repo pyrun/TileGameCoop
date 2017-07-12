@@ -2,7 +2,7 @@ package.path = package.path .. ";creature/human/?.lua"
 require( "script")
 
 function special( id)
-
+-- place_portal
 end
 
 function attack( id)

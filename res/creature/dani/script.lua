@@ -3,7 +3,7 @@ require( "script")
 
 local thow_speed = 0.4
 
-function attack( id )
+function special( id )
 	if getAnimation( id) == "walk" or getAnimation( id) == "idle" then
 		setAnimation( id, "throw" )
 
@@ -34,7 +34,7 @@ function throw( id )
 end
 
 
-function special( id)
+function attack( id)
 	
 	if isAlive(getAttackId()) == false then
 		l_dir = getAnimationDirection( id)
