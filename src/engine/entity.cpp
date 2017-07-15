@@ -227,6 +227,31 @@ static int lua_setAlpha( lua_State *state) {
     return 0;
 }
 
+static int lua_sendSignal( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    int l_fromId;
+    std::string l_data;
+
+    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) || !lua_isstring( state, 3) ) {
+        printf( "lua_sendSignal call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_fromId = lua_tointeger( state, 2);
+    l_data = lua_tostring( state, 3);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_sendSignal obj not found\n");
+        return 0;
+    }
+
+    l_obj->lua_signal( l_id, l_fromId, l_data);
+    return 0;
+}
+
 static int lua_howManyPlayerEntity( lua_State *state) {
     int l_entitys;
 
@@ -815,6 +840,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_setAlpha);
     lua_setglobal( state, "setAlpha");
+
+    lua_pushcfunction( state, lua_sendSignal);
+    lua_setglobal( state, "sendSignal");
 
     lua_pushcfunction( state, lua_howManyPlayerEntity);
     lua_setglobal( state, "howManyPlayerEntity");
@@ -1426,6 +1454,25 @@ void entity::lua_timeCall( int id) {
     // call the function
     if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_timeCall %s\n", lua_tostring( p_state, -1));
+}
+void entity::lua_signal( int id, int fromId, std::string data) {
+    if( p_state == NULL)
+        return;
+
+    // search after the function
+    lua_getglobal( p_state, "signal");
+    if( !lua_isfunction( p_state, -1)) { // not found -> cancel
+        lua_pop( p_state,1);
+        return;
+    }
+    // push id
+    lua_pushnumber( p_state, id);
+    lua_pushnumber( p_state, fromId);
+    lua_pushstring( p_state, data.c_str());
+
+    // call the function
+    if( lua_pcall( p_state, 3, 0, 0))
+        printf("entity::lua_signal %s\n", lua_tostring( p_state, -1));
 }
 
 void entity::lua_printerror() {

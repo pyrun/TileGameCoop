@@ -241,6 +241,7 @@ class entity
         void lua_liquid( int id);
         int lua_timer( int id, int time);
         void lua_timeCall( int id);
+        void lua_signal( int id, int fromId, std::string data);
 
         void lua_printerror();
         bool lua_hasLoaded() { return p_state==NULL?false:true; }

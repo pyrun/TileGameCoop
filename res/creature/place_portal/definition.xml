@@ -1,6 +1,8 @@
-<object name="place_portal" width="16" height="28" gravity="0" script="script.lua" timer="300">
-	<action name="idle" frame="6" speed="6">idle.bmp</action>
-	<hitbox offsetx="2" offsety="2" width="12" hight="24"/>
+<object name="place_portal" width="16" height="28" gravity="0" script="script.lua" timer="100">
+	<action name="idle" frame="3" speed="4">green.bmp</action>
+	<action name="red" frame="3" speed="4">red.bmp</action>
+	<action name="green" frame="3" speed="4">green.bmp</action>
+	<hitbox offsetx="8" offsety="14" width="1" hight="1"/>
 </object>
 
 
