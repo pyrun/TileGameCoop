@@ -1,9 +1,18 @@
 local inLiquid = false
 local max_speed = 0.1
 local walk_speed = 0.03
+local walk_standard_speed = 0.03
 local jump_two = 0
 local jump_high = -0.32
 local jump_outwater_factor = 0.75
+
+function setSpeedFactor( factor )
+	if factor == 0 then
+		walk_speed = walk_standard_speed
+	else
+		walk_speed = walk_speed/factor
+	end
+end
 
 function vertexhit( id)
 
@@ -125,7 +134,17 @@ function jump( id)
 end
 
 function up( id) 
-	io.write("up\n")
+	--io.write("up\n")
+	l_x, l_y = getPosition( id)
+
+	ids = {findObjects( id, l_x, l_y, 32, 32)}
+
+	for object_id = 1, #ids do
+		local obj = ids[object_id]
+		if getName( obj) == "place_portal" then
+			sendSignal( obj, id, "transfer")
+		end
+	end
 end
 
 function down( id) 

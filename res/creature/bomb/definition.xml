@@ -2,8 +2,9 @@
 	<action name="idle" frame="8" speed="6" loop="1">bomb.bmp</action>
 	<action name="explode" frame="8" speed="3" loop="0" endCall="explode">bomb.bmp</action>
 	<hitbox offsetx="0" offsety="0" width="10" hight="10"/>
-	<vertex x="4" y="6" id="1">down</vertex>
-	<vertex x="1" y="6" id="1">left</vertex>
-	<vertex x="9" y="6" id="1">right</vertex>
+	<vertex x="4" y="-5" id="1">up</vertex>
+	<vertex x="4" y="6" id="2">down</vertex>
+	<vertex x="1" y="6" id="3">left</vertex>
+	<vertex x="9" y="6" id="4">right</vertex>
 </object>
 

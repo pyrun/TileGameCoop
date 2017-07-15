@@ -12,7 +12,7 @@ function special( id )
 		offset_x = 8
 		offset_y = 12
 		l_rect_x = 16
-		l_rect_y = 6
+		l_rect_y = 16
 
 		ids = {findObjects( id, l_x + offset_x, l_y + offset_y, l_rect_x, l_rect_y)}
 
@@ -20,7 +20,8 @@ function special( id )
 			local obj = ids[object_id]
 			if getName( obj) == "alex" or
 				getName( obj) == "jan" or
-				getName( obj) == "spring"
+				getName( obj) == "spring" or
+				getName( obj) == "bomb"
 				then
 				setVelocityX( obj, l_vel_x)
 				setVelocityY( obj, -thow_speed)

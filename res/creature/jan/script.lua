@@ -52,6 +52,8 @@ function special( id)
 -- place_portal
 end
 
+local speed_temp = walk_speed
+
 function attack( id)
 	if isAlive(getAttackId()) == false then
 		l_dir = getAnimationDirection( id)
@@ -71,9 +73,11 @@ function attack( id)
 		setAnimationDirection( id_attack, l_dir) -- dir
 		setAttackPosition( id_x, id_y) -- offset
 		setAttackId( id_attack) -- attach to the player
+		setSpeedFactor( 3)
 	else
 		if getAnimation( getAttackId() ) then
 			setAnimation( getAttackId(), "idle")
+			setSpeedFactor( 0) -- reset
 		end
 	end
 end

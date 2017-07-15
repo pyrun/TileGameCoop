@@ -17,7 +17,28 @@ end
 local portal = -1
 
 function signal( id, fromId, data)
+	if data == "reset" then
+		fade = 128
+	end
+
 	if data == "transfer" then
+		if fade < 255 then
+			do return end
+		end
+		if isAlive( portal) == false then
+			find_portal( id)
+		end
+		if isAlive( portal) == false then
+			do return end
+		end
+
+		l_x, l_y = getPosition( portal)
+
+		setPosition( fromId, l_x-8, l_y-1)
+		setAnimation( fromId, "idle")
+
+		sendSignal( portal, id, "reset")
+		-- cooldown
 		fade = 128
 	end
 end
@@ -56,13 +77,9 @@ function collision( id, ...)
 	
 	l_x, l_y = getPosition( portal)
 	
-	for k,v in pairs({...}) do
-		if isAlive( v) == true then
-			if isPlayer( v) == true then
-				sendSignal( portal, id, "transfer")
-				setPosition( v, l_x, l_y)
-			end
+	for k, obj in pairs({...}) do
+		if getName( obj) == "bomb" then
+			sendSignal( id, obj, "transfer")
 		end
 	end
-	fade = 128
 end
