@@ -35,7 +35,7 @@ class player_handle
         player_handle();
         virtual ~player_handle();
 
-        void next_player_entity( entitylist *entitylist, player *l_player);
+        void next_player_entity( entitylist *entitylist, player *l_player, bool rotateDir = false);
         void handle( entitylist *entity, world* world, input *input, graphic* graphic, config* config);
         void draw( entitylist *entitylist, font *font, graphic* graphic);
         void join( entitylist *entitylist);

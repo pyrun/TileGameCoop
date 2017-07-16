@@ -186,18 +186,23 @@ player_handle::~player_handle() {
     }
 }
 
-void player_handle::next_player_entity( entitylist *entitylist, player *l_player) {
+void player_handle::next_player_entity( entitylist *entitylist, player *l_player, bool rotateDir) {
     std::vector<int> l_obj = entitylist->findPlayerObject();
     int l_id = -1;
     int found_first = -1;
 
     int l_pos = 0;
 
+    if( rotateDir )
+        std::reverse(l_obj.begin(),l_obj.end());
+
     for( int i = 0; i < (int)l_obj.size(); i++)
         if( l_player->entity_id == l_obj[i] )
             l_pos = i;
 
     std::rotate(l_obj.begin(),l_obj.begin()+l_pos,l_obj.end());
+
+
 
     for( int y = 0; y < (int)l_obj.size(); y++) {
         bool l_found = true;
@@ -383,7 +388,8 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
 
                 if( l_map->left && !l_map_old->left)
                     next_player_entity( entitylist, l_player);
-                if( l_map->right && !l_map_old->right);
+                if( l_map->right && !l_map_old->right)
+                    next_player_entity( entitylist, l_player, true);
             }
         }
 
