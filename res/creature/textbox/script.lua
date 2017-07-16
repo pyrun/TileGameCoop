@@ -71,9 +71,13 @@ function timer( id)
 		end
 
 		text = text_lib.get( text_sentence+1 )
-		
+	
 		if text == "END" then
-			kill(id)
+			if global_value2 == nil then
+				setLoadLevel( global_value_2, true )
+			else
+				kill(id)
+			end
 			do return end
 		end
 

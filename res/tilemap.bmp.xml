@@ -4,6 +4,13 @@
 	<tile>420</tile>
 </animation>
 
+<animation speed="30" left="0" right="0" down="0" up="0" liquid="1" >
+	<tile>61</tile>
+	<tile>62</tile>
+	<tile>63</tile>
+	<tile>64</tile>
+</animation>
+
 <animation speed="20" left="0" right="0" down="0" up="0" liquid="1" >
 	<tile>60</tile>
 	<tile>120</tile>

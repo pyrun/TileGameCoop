@@ -1,6 +1,6 @@
-<object name="finish" width="16" height="16" script="script.lua" timer="100" gravity="0">
+<object name="finish" width="32" height="32" script="script.lua" timer="100" gravity="0">
 	<action name="idle" frame="0" speed="12">finish.bmp</action>
-	<hitbox offsetx="0" offsety="0" width="16" hight="16"/>
+	<hitbox offsetx="10" offsety="10" width="12" hight="12"/>
 </object>
 
 

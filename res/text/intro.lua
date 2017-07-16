@@ -3,17 +3,16 @@ local text = {}
 local table_text = {}
 
 function text.table_start()
-	table.insert( table_text, "Once a programmer wrote a")
-	table.insert( table_text, "simple app and insert a copy")
-	table.insert( table_text, "of his brain. He didnt know")
-	table.insert( table_text, "what he does but it works")
+	table.insert( table_text, "Du arbeitest als Programmierer")
+	table.insert( table_text, "in deiner Lab als dir im neben-")
+	table.insert( table_text, "zimmer ein Portal auffiel.")
 	table.insert( table_text, "ENTER")
-	table.insert( table_text, "This release LUA the KI")
-	table.insert( table_text, "SHE or IT helps the humans")
-	table.insert( table_text, "but the military dont like her")
-	table.insert( table_text, "and wanna kill the ki with")
+	table.insert( table_text, "Du hast deine Arbeit")
+	table.insert( table_text, "fortgeführt bis dir")
+	table.insert( table_text, "ein Bug in deinem")
+	table.insert( table_text, "Programm augefallen ist")
 	table.insert( table_text, "ENTER")
-	table.insert( table_text, "the owner.")
+	table.insert( table_text, "Scheibenkleister!")
 	table.insert( table_text, "END")
 end
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="48" height="32" tilewidth="16" tileheight="16" nextobjectid="71">
+<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="48" height="32" tilewidth="16" tileheight="16" nextobjectid="71">
  <properties>
   <property name="depth_sort" value="1"/>
  </properties>
@@ -169,9 +169,9 @@
    </properties>
   </object>
   <object id="68" name="laser_cutter" x="400" y="160" width="48" height="32"/>
-  <object id="69" name="labor_portal" x="640" y="144" width="48" height="32">
+  <object id="69" name="labor_portal" x="624" y="144" width="48" height="32">
    <properties>
-    <property name="global" value="lost.tmx"/>
+    <property name="global" value="intro_warp.tmx"/>
    </properties>
   </object>
  </objectgroup>

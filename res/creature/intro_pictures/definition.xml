@@ -1,3 +1,4 @@
 <object name="intro_pictures" width="300" height="135" solid="0" gravity="0" script="script.lua" isHUD="1">
 	<action name="idle" frame="1" speed="0" loop="0">intro.bmp</action>
+	<action name="warp" frame="1" speed="0" loop="0">warp.bmp</action>
 </object>
