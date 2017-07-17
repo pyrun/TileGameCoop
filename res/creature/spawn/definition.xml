@@ -1,0 +1,3 @@
+<object name="spawn" width="16" height="16" gravity="0">
+<action name="idle" frame="6" speed="6">idle.png</action>
+</object>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="16" tileheight="16" nextobjectid="57">
+<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="16" tileheight="16" nextobjectid="57">
  <properties>
   <property name="depth_sort" value="1"/>
  </properties>
@@ -158,7 +158,7 @@
   <object id="53" name="textbox" x="64" y="80" width="16" height="16">
    <properties>
     <property name="global" value="warp"/>
-    <property name="global2" value="lost.tmx"/>
+    <property name="global2" value="lost_alex.tmx"/>
    </properties>
   </object>
   <object id="55" name="intro_pictures" x="64" y="48" width="16" height="16">
