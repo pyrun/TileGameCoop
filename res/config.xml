@@ -12,8 +12,8 @@
         <y_axis>1</y_axis>
     </input>
     <display>
-        <width>960</width>
-        <height>540</height>
+        <width>1440</width>
+        <height>810</height>
         <isFullScreen>0</isFullScreen>
         <isMaximized>0</isMaximized>
         <resolution_file>resolution.xml</resolution_file>

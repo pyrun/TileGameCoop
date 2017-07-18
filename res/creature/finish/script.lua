@@ -1,3 +1,5 @@
+global_value_2 = "3"
+
 function timer( id, time)
 
 end
@@ -11,7 +13,7 @@ function collision( id, ...)
 		end
 	end
 
-	if player == 3 then
+	if player == tonumber(global_value_2) then
 		setLoadLevel( global_value, true )
 	end
 end

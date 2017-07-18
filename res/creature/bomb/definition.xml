@@ -1,6 +1,7 @@
 <object name="bomb" width="10" height="10" script="script.lua" gravity="1">
 	<action name="idle" frame="8" speed="6" loop="1">bomb.bmp</action>
 	<action name="explode" frame="8" speed="3" loop="0" endCall="explode">bomb.bmp</action>
+	<action name="die" frame="8" speed="3" loop="0" endCall="explode">bomb.bmp</action>
 	<hitbox offsetx="0" offsety="0" width="10" hight="10"/>
 	<vertex x="4" y="-5" id="1">up</vertex>
 	<vertex x="4" y="6" id="2">down</vertex>

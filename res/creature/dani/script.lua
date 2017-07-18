@@ -25,6 +25,7 @@ function special( id )
 				then
 				setVelocityX( obj, l_vel_x)
 				setVelocityY( obj, -thow_speed)
+				sendSignal( obj, id, "throw")
 			end
 		end
 	end
