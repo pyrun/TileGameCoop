@@ -1,0 +1,3 @@
+<object name="fire_thrower" width="32" height="32" gravity="0" script="script.lua" timer="1500">
+<action name="idle" frame="6" speed="10">idle.png</action>
+</object>

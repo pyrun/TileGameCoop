@@ -1,0 +1,8 @@
+<object name="fireball" width="9" height="9" script="script.lua" gravity="0">
+	<action name="idle" frame="8" speed="10">ball.png</action>
+	<vertex id="1" x="4" y="9">down</vertex>
+	<vertex id="2" x="4" y="0">up</vertex>
+	<vertex id="3" x="0" y="4">left</vertex>
+	<vertex id="4" x="9" y="4">right</vertex>
+	<hitbox offsetx="2" offsety="2" width="5" hight="5"/>
+</object>
