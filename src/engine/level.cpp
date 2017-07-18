@@ -292,15 +292,15 @@ void level::save( player_handle *player) {
     XMLElement *l_xmlWorld = l_savefile.NewElement( "world");
 
     // save name and extras
-    l_xmlWorld->SetAttribute( "file", p_world->getFileName().c_str());
-    l_xmlWorld->SetAttribute( "width", p_world->getWorld().x);
-    l_xmlWorld->SetAttribute( "height", p_world->getWorld().y);
+    l_xmlWorld->SetAttribute( "file", getWorld()->getFileName().c_str());
+    l_xmlWorld->SetAttribute( "width", getWorld()->getWorld().x);
+    l_xmlWorld->SetAttribute( "height", getWorld()->getWorld().y);
 
     // save every tile
     XMLElement *l_xmlOverlap = l_savefile.NewElement( "overlap");
-    tile *l_map = p_world->getOverlap();
+    tile *l_map = getWorld()->getOverlap();
     // process every tile
-    for( int i = 0; i < p_world->getWorld().x*p_world->getWorld().y; i++ ) {
+    for( int i = 0; i < getWorld()->getWorld().x*getWorld()->getWorld().y; i++ ) {
         // tile
         tile *l_tile = &l_map[ i];
         XMLElement *l_xmlTile = l_savefile.NewElement( "tile");
@@ -314,9 +314,9 @@ void level::save( player_handle *player) {
 
     // save every tile
     XMLElement *l_xmlForground = l_savefile.NewElement( "foreground");
-    l_map = p_world->getForeground();
+    l_map = getWorld()->getForeground();
     // process every tile
-    for( int i = 0; i < p_world->getWorld().x*p_world->getWorld().y; i++ ) {
+    for( int i = 0; i < getWorld()->getWorld().x*getWorld()->getWorld().y; i++ ) {
         // tile
         tile *l_tile = &l_map[ i];
         XMLElement *l_xmlTile = l_savefile.NewElement( "tile");
@@ -330,9 +330,9 @@ void level::save( player_handle *player) {
 
     // save every tile
     XMLElement *l_xmlBackground = l_savefile.NewElement( "background");
-    l_map = p_world->getBackground();
+    l_map = getWorld()->getBackground();
     // process every tile
-    for( int i = 0; i < p_world->getWorld().x*p_world->getWorld().y; i++ ) {
+    for( int i = 0; i < getWorld()->getWorld().x*getWorld()->getWorld().y; i++ ) {
         // tile
         tile *l_tile = &l_map[ i];
         XMLElement *l_xmlTile = l_savefile.NewElement( "tile");
@@ -397,6 +397,14 @@ void level::load( player_handle *player) {
         printf( "level::load world xml element not found\n");
         return;
     }
+
+    std::string l_filename2 = l_xml_world->Attribute( "file");
+
+    getWorld()->setLoadWorld( l_filename2, true);
+
+    return;
+
+    // CUTT
 
     // create new world
     delete p_world;

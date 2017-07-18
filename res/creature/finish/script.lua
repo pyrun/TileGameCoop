@@ -1,8 +1,19 @@
 global_value_2 = "3"
 
+savedone = false
+
+function action_start( )
+	if savedone == false then
+		savestate()
+		savedone = true
+	end
+end
+
 function timer( id, time)
 
 end
+
+
 
 function collision( id, ...)
 	player = 0

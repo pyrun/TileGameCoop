@@ -164,7 +164,11 @@
  </layer>
  <objectgroup color="#000080" name="Objects">
   <object id="49" name="start" x="0" y="0" width="16" height="16"/>
-  <object id="59" name="jan" x="48" y="48" width="16" height="32"/>
+  <object id="59" name="jan" x="48" y="48" width="16" height="32">
+   <properties>
+    <property name="action" value="jump"/>
+   </properties>
+  </object>
   <object id="60" name="pressure_plate" x="544" y="592" width="32" height="16">
    <properties>
     <property name="global" value="65"/>
