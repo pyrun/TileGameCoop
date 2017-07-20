@@ -749,6 +749,48 @@ static int lua_getPosition( lua_State *state) {
     return 2;
 }
 
+static int lua_getHitbox( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    if ( !lua_isnumber( state, 1) ) {
+        printf( "lua_getPosition call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_getPosition obj not found\n");
+        return 0;
+    }
+    lua_pushnumber( state, l_obj->getType()->getHitbox().x );
+    lua_pushnumber( state, l_obj->getType()->getHitbox().y );
+
+    return 2;
+}
+
+static int lua_getHitboxOffset( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    if ( !lua_isnumber( state, 1) ) {
+        printf( "lua_getPosition call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_getPosition obj not found\n");
+        return 0;
+    }
+    lua_pushnumber( state, l_obj->getType()->getHitboxOffset().x );
+    lua_pushnumber( state, l_obj->getType()->getHitboxOffset().y );
+
+    return 2;
+}
+
 static int lua_setGravity( lua_State *state) {
     entity *l_obj;
     int l_id;
@@ -909,6 +951,12 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_getName);
     lua_setglobal( state, "getName");
+
+    lua_pushcfunction( state, lua_getHitbox);
+    lua_setglobal( state, "getHitbox");
+
+    lua_pushcfunction( state, lua_getHitboxOffset);
+    lua_setglobal( state, "getHitboxOffset");
 
     lua_pushcfunction( state, lua_getGravity);
     lua_setglobal( state, "getGravity");

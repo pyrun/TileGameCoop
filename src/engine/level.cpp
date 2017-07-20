@@ -109,7 +109,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         // reset particle system
         particle->clear();
         // load world
-        load( playerlist);
+        simple_load( playerlist);
     }
     if( p_setSave == true) {
         p_setSave = false;
@@ -351,6 +351,37 @@ void level::save( player_handle *player) {
     l_savefile.SaveFile( SAVE_FILE);
 
 }
+
+void level::simple_load( player_handle *player) {
+    XMLDocument l_file;
+
+    // load the save file
+    XMLError l_result = l_file.LoadFile( SAVE_FILE);
+
+    // file exist?
+    if( file_exist( SAVE_FILE) == false) {
+        printf( "level::load file dont exist \"%s\"\n", SAVE_FILE);
+        return;
+    }
+
+    XMLElement* l_xml_root = l_file.FirstChildElement( "savefile" );
+    if( !l_xml_root) {
+        printf( "level::load root xml element not found\n");
+        return;
+    }
+
+    // load world
+    XMLElement* l_xml_world = l_xml_root->FirstChildElement( "world" );
+    if( !l_xml_world) {
+        printf( "level::load world xml element not found\n");
+        return;
+    }
+
+    std::string l_filename = l_xml_world->Attribute( "file");
+
+    getWorld()->setLoadWorld( l_filename, true);
+}
+
 void level::load( player_handle *player) {
     XMLDocument l_file;
 
@@ -397,14 +428,6 @@ void level::load( player_handle *player) {
         printf( "level::load world xml element not found\n");
         return;
     }
-
-    std::string l_filename2 = l_xml_world->Attribute( "file");
-
-    getWorld()->setLoadWorld( l_filename2, true);
-
-    return;
-
-    // CUTT
 
     // create new world
     delete p_world;
