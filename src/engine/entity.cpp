@@ -811,6 +811,7 @@ static int lua_setGravity( lua_State *state) {
     l_obj->setGravity( l_gravity);
     return 0;
 }
+
 static int lua_getName( lua_State *state) {
     entity *l_obj;
     int l_id;
@@ -834,6 +835,7 @@ static int lua_getName( lua_State *state) {
 
     return 1;
 }
+
 static int lua_getGravity( lua_State *state) {
     entity *l_obj;
     int l_id;
