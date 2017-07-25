@@ -51,12 +51,7 @@ function punch( id )
 
 	for object_id = 1, #ids do
 		local obj = ids[object_id]
-		if getName( obj) == "button"
-			then
-			if getAnimation( obj) == "idle" then
-				setAnimation( obj, "press" )
-			end
-		end
+		sendSignal( obj, id, "press")
 	end
 
 	setAnimation( id, "idle" )
