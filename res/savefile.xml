@@ -1,18 +1,18 @@
 <savefile>
     <player/>
     <entitys>
-        <entity id="56" positionX="80" positionY="0" direction="0" global1="" global2="" global3="">dani</entity>
-        <entity id="57" positionX="512" positionY="592" direction="0" global1="" global2="" global3="">sonic</entity>
-        <entity id="58" positionX="576" positionY="592" direction="0" global1="" global2="" global3="">sonic</entity>
+        <entity id="56" positionX="80" positionY="1" direction="0" global1="" global2="" global3="">dani</entity>
+        <entity id="57" positionX="512" positionY="593" direction="0" global1="" global2="" global3="">sonic</entity>
+        <entity id="58" positionX="576" positionY="593" direction="0" global1="" global2="" global3="">sonic</entity>
         <entity id="59" positionX="784" positionY="704" direction="0" global1="bomb" global2="" global3="">spawn</entity>
-        <entity id="60" positionX="816" positionY="656" direction="0" global1="" global2="" global3="">wood_chest</entity>
+        <entity id="60" positionX="816" positionY="657" direction="0" global1="" global2="" global3="">wood_chest</entity>
         <entity id="62" positionX="685" positionY="482" direction="0" global1="63" global2="" global3="">button</entity>
         <entity id="63" positionX="800" positionY="432" direction="0" global1="" global2="" global3="">door</entity>
-        <entity id="64" positionX="832" positionY="576" direction="0" global1="" global2="" global3="">sonic</entity>
-        <entity id="65" positionX="896" positionY="448" direction="0" global1="" global2="" global3="">sonic</entity>
+        <entity id="64" positionX="832" positionY="577" direction="0" global1="" global2="" global3="">sonic</entity>
+        <entity id="65" positionX="896" positionY="449" direction="0" global1="" global2="" global3="">sonic</entity>
         <entity id="66" positionX="976" positionY="416" direction="0" global1="1" global2="" global3="">finish</entity>
-        <entity id="67" positionX="848" positionY="674" direction="0" global1="63" global2="" global3="">pressure_plate</entity>
-        <entity id="68" positionX="784" positionY="704" direction="0" global1="" global2="" global3="">bomb</entity>
+        <entity id="67" positionX="848" positionY="675" direction="0" global1="63" global2="" global3="">pressure_plate</entity>
+        <entity id="68" positionX="789" positionY="710" direction="0" global1="" global2="" global3="">bomb</entity>
     </entitys>
     <world file="lost_dani.tmx" width="64" height="48">
         <overlap>

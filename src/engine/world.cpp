@@ -282,7 +282,7 @@ bool world::load( std::string file, std::string ordner) {
         // background target
         if( l_name == "Background" )
             l_background = l_map_temp;
-        if( l_name == "Foreground" )
+        if( l_name == "Foreground" || l_name == "Ground" )
             l_foreground = l_map_temp;
         if( l_name == "Overlap" )
             l_overlap = l_map_temp;
