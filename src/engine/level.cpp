@@ -109,11 +109,11 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         // reset particle system
         particle->clear();
         // load world
-        simple_load( playerlist);
+        fast_load( playerlist);
     }
     if( p_setSave == true) {
         p_setSave = false;
-        save( playerlist);
+        fast_save( playerlist);
     }
 
     // world end transition
@@ -226,6 +226,47 @@ void level::draw( graphic* graphic) {
             delete p_transition;
             p_transition = NULL;
         }
+}
+
+void level::fast_save( player_handle *player) {
+    XMLDocument l_savefile;
+
+    // create root node
+    XMLNode *l_root = l_savefile.NewElement("savefile");
+
+    // insert the root node
+    l_savefile.InsertFirstChild(l_root);
+
+    // save player
+    // creating root player element
+    XMLElement *l_xmlPlayer = l_savefile.NewElement( "player");
+    // get Entity list
+    std::vector<std::string> l_player_entity = player->getEntityList();
+    // every string
+    for( int i = 0; i < (int)l_player_entity.size();i++ ) {
+        // get entity string
+        XMLElement *l_xmlPlayerEntity = l_savefile.NewElement( "entity");
+        l_xmlPlayerEntity->SetText( l_player_entity[i].c_str());
+        l_xmlPlayer->LinkEndChild( l_xmlPlayerEntity);
+    }
+    // link to the end
+    l_root->LinkEndChild( l_xmlPlayer);
+
+    // get World data
+    XMLElement *l_xmlWorld = l_savefile.NewElement( "world");
+
+    // save name and extras
+    l_xmlWorld->SetAttribute( "file", getWorld()->getFileName().c_str());
+    l_xmlWorld->SetAttribute( "width", getWorld()->getWorld().x);
+    l_xmlWorld->SetAttribute( "height", getWorld()->getWorld().y);
+
+    // link to the end
+    l_root->LinkEndChild( l_xmlWorld);
+
+    // save
+    l_savefile.SaveFile( SAVE_FILE);
+
+    printf( "level::fast_save world \"%s\" saved\n", getWorld()->getFileName().c_str());
 }
 
 void level::save( player_handle *player) {
@@ -352,7 +393,7 @@ void level::save( player_handle *player) {
 
 }
 
-void level::simple_load( player_handle *player) {
+void level::fast_load( player_handle *player) {
     XMLDocument l_file;
 
     // load the save file

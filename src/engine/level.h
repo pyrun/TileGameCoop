@@ -45,8 +45,9 @@ class level
 
         void setSave() { p_setSave = true; }
         void setLoad() { p_setLoad = true; }
+        void fast_save( player_handle *player);
         void save( player_handle *player);
-        void simple_load( player_handle *player);
+        void fast_load( player_handle *player);
         void load( player_handle *player);
     protected:
 
