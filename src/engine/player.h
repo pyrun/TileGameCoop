@@ -62,17 +62,6 @@ class player_handle
                 return l_player->champ;
             return "";
         }
-        void resetEntitys() { p_entityNames.clear(); }
-        void addEntity( std::string names) { p_entityNames.push_back( names); }
-        void delEntity( std::string name ) {
-            for( int i = 0; i < (int)p_entityNames.size(); i++ ) {
-                if( name == p_entityNames[i]) {
-                        p_entityNames.erase (p_entityNames.begin()+i);
-                        return;
-                }
-            }
-        }
-        std::vector<std::string> getEntityList() { return p_entityNames; }
         void setInactiv( player *player) {
             player->entity_id = -1;
             player->active = false;
@@ -127,7 +116,6 @@ class player_handle
         void player_remove( int id);
         player *p_playercamerafocus;
 
-        std::vector<std::string> p_entityNames;
         int p_count;
 };
 

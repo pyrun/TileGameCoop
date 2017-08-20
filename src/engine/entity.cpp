@@ -122,9 +122,8 @@ static int lua_setLoadLevel( lua_State *state) {
     }
 
     l_level = lua_tostring( state, 1);
-    l_asPlayer = lua_toboolean( state, 2);
 
-    lua_worldlist->setLoadWorld( l_level, l_asPlayer);
+    lua_worldlist->setLoadWorld( l_level);
     return 0;
 }
 

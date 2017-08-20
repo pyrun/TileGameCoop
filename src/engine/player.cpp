@@ -7,21 +7,6 @@
 
 player_handle *lua_player = NULL;
 
-static int lua_addPlayerEntity( lua_State *state) {
-    std::string l_name;
-
-    if( !lua_isstring( state, 1) ) {
-        printf( "lua_addPlayerEntity call wrong argument\n");
-        return 0;
-    }
-
-    l_name = lua_tostring( state, 1);
-
-    lua_player->addEntity( l_name);
-
-    return 0;
-}
-
 static int lua_setPlayerChamp( lua_State *state) {
     std::string l_name;
     int l_id;
@@ -100,47 +85,7 @@ static int lua_getPlayer( lua_State *state) {
     return 1;
 }
 
-static int lua_getPlayerEntityAmount( lua_State *state) {
-    std::string l_name;
-
-    if( !lua_isstring( state, 1) ) {
-        printf( "lua_getPlayerEntityAmount call wrong argument\n");
-        return 0;
-    }
-
-    l_name = lua_tostring( state, 1);
-    std::vector<std::string> l_list= lua_player->getEntityList();
-
-    int amount = 0;
-    for( int i = 0; i < (int)l_list.size(); i++)
-        if( l_list[i] == l_name)
-            amount++;
-
-    lua_pushnumber( state, amount);
-
-    return 1;
-}
-
-static int lua_removePlayerEntity( lua_State *state) {
-    std::string l_name;
-
-    if( !lua_isstring( state, 1) ) {
-        printf( "lua_removePlayerEntity call wrong argument\n");
-        return 0;
-    }
-
-    l_name = lua_tostring( state, 1);
-    lua_player->delEntity( l_name);
-
-    return 0;
-}
-
-
 void lua_player_install( lua_State *state) {
-    // add all entity function ..
-    lua_pushcfunction( state, lua_addPlayerEntity);
-    lua_setglobal( state, "addPlayerEntity");
-
     lua_pushcfunction( state, lua_setPlayerChamp);
     lua_setglobal( state, "setPlayerChamp");
 
@@ -155,12 +100,6 @@ void lua_player_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_getPlayer);
     lua_setglobal( state, "getPlayer");
-
-    lua_pushcfunction( state, lua_getPlayerEntityAmount);
-    lua_setglobal( state, "getPlayerEntityAmount");
-
-    lua_pushcfunction( state, lua_removePlayerEntity);
-    lua_setglobal( state, "removePlayerEntity");
 }
 
 void lua_player_setLink( player_handle* player) {
@@ -352,7 +291,7 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                     l_entity->lua_run( l_entity->getId(), false);
                 if( l_map->select && !l_map_old->select)
                     if( world->getFileName() == "worlds/overworld.tmx")
-                        world->setLoadWorld( "menu.tmx", false);
+                        world->setLoadWorld( "menu.tmx");
                     else
                         printf( "%s\n",world->getFileName().c_str());
 

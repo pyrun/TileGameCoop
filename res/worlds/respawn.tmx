@@ -4,7 +4,7 @@
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
  <imagelayer name="Background">
-  <image source="backgrounds/sky.bmp" width="320" height="256"/>
+  <image source="backgrounds/back.bmp" width="320" height="256"/>
  </imagelayer>
  <layer name="Background" width="16" height="16">
   <data encoding="csv">

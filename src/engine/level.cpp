@@ -127,19 +127,6 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
     if( p_level != NULL && p_level->getWorldOnce()->isLevelEnd() == true && p_transition == NULL) {
             p_loadworld = false;
 
-            // alle player daten aufnhemen auf die neue liste
-            if( p_level->getWorldOnce()->leaveLevelasPlayer()) {
-                std::vector<int> l_obj = p_level->getEntityList()->findPlayerObject();
-                for( int n = 0; n < (int)l_obj.size(); n++) {
-                    entity *l_entity = p_level->getEntityList()->getEntity( l_obj[n]);
-
-                    // ist es am leben
-                    if( l_entity->isAlive()) {
-                        playerlist->addEntity(l_entity->getType()->getName() );
-                        printf( "level::process add %s\n",  l_entity->getType()->getName().c_str());
-                    }
-                }
-            }
             // create a transition
             p_transition = new transition( graphic, transition_time, true);
 
@@ -198,14 +185,9 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         p_entity->clearEntitys();
 
         std::string l_level = p_world->needLoadWorld();
-        bool l_loadAsPlayer = p_world->loadAsPlayer();
-        p_world->setLoadWorld( "", false); // NULL
         p_level = new level( l_level, "worlds/", graphic, playerlist, config, p_entity);
 
-        //p_transition = new transition( graphic, transition_time, true);
-
-        if( l_loadAsPlayer )
-            playerlist->createChamps( getEntityList(), getWorld()->getStartPoint());
+        //p_transition = new transition( graphic, transition_time, true)
 
         // transition
         getWorld()->process( graphic);
@@ -240,15 +222,6 @@ void level::fast_save( player_handle *player) {
     // save player
     // creating root player element
     XMLElement *l_xmlPlayer = l_savefile.NewElement( "player");
-    // get Entity list
-    std::vector<std::string> l_player_entity = player->getEntityList();
-    // every string
-    for( int i = 0; i < (int)l_player_entity.size();i++ ) {
-        // get entity string
-        XMLElement *l_xmlPlayerEntity = l_savefile.NewElement( "entity");
-        l_xmlPlayerEntity->SetText( l_player_entity[i].c_str());
-        l_xmlPlayer->LinkEndChild( l_xmlPlayerEntity);
-    }
     // link to the end
     l_root->LinkEndChild( l_xmlPlayer);
 
@@ -281,15 +254,6 @@ void level::save( player_handle *player) {
     // save player
     // creating root player element
     XMLElement *l_xmlPlayer = l_savefile.NewElement( "player");
-    // get Entity list
-    std::vector<std::string> l_player_entity = player->getEntityList();
-    // every string
-    for( int i = 0; i < (int)l_player_entity.size();i++ ) {
-        // get entity string
-        XMLElement *l_xmlPlayerEntity = l_savefile.NewElement( "entity");
-        l_xmlPlayerEntity->SetText( l_player_entity[i].c_str());
-        l_xmlPlayer->LinkEndChild( l_xmlPlayerEntity);
-    }
     // link to the end
     l_root->LinkEndChild( l_xmlPlayer);
 
@@ -420,7 +384,7 @@ void level::fast_load( player_handle *player) {
 
     std::string l_filename = l_xml_world->Attribute( "file");
 
-    getWorld()->setLoadWorld( l_filename, true);
+    getWorld()->setLoadWorld( l_filename);
 }
 
 void level::load( player_handle *player) {
@@ -447,21 +411,7 @@ void level::load( player_handle *player) {
         printf( "level::load player xml element not found\n");
         return;
     }
-    // reset the list
-    player->resetEntitys();
-    // add all entity
-    XMLElement* l_xml_playerentity = l_xml_player->FirstChildElement( "entity" );
-    while( l_xml_playerentity) {
-        std::string l_name;
-        // get id
-        l_name = l_xml_playerentity->GetText();
 
-        // set entity
-        player->addEntity( l_name);
-
-        // next entity
-        l_xml_playerentity = l_xml_playerentity->NextSiblingElement( "entity");
-    }
 
     // load world
     XMLElement* l_xml_world = l_xml_root->FirstChildElement( "world" );

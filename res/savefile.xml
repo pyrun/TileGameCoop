@@ -1,4 +1,4 @@
 <savefile>
     <player/>
-    <world file="greenland.tmx" width="64" height="22"/>
+    <world file="test.tmx" width="32" height="16"/>
 </savefile>
