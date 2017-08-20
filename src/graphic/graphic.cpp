@@ -407,8 +407,9 @@ image *graphic::loadImage( std::string file) {
     }
 
     // ausgeben falls detei geladen werde konnte
-    if( l_textureclass != NULL)
-        printf("graphic::loadImage Datei \"%s\" wurde geladen\n", file.c_str());
+    //if( l_textureclass != NULL)
+    //    printf("graphic::loadImage Datei \"%s\" wurde geladen\n", file.c_str());
+    // nope
     return l_textureclass;
 }
 
