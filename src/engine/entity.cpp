@@ -68,7 +68,7 @@ static int lua_play_sound(lua_State* state) {
     }
 
     if( l_sound->sound)
-        l_sound->sound->play( l_sound->volume);
+        l_sound->play( l_obj->getPosition().tovec2());
 
     // finish
     return 0;

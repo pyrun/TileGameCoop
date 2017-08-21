@@ -1,10 +1,15 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
+#include "types.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
 #include <string>
+
+
+
 
 class sound
 {
@@ -14,15 +19,15 @@ class sound
         void loadSound( std::string file);
         void setChunk( Mix_Chunk *chunk) { p_sound = chunk; }
         void setFile( std::string file) { p_file = file; }
-        void play( int volume) {
-            float l_volume = (float)MIX_MAX_VOLUME/100.f*volume;
-            int l_channel = Mix_PlayChannel( -1, p_sound, 0);
-            Mix_Volume( l_channel, l_volume);
+        void play( int volume, vec2 position);
+        void setCameraPosition( vec2 pos) {
+            p_camera = pos;
         }
     protected:
 
     private:
         std::string p_file;
+        vec2 p_camera;
         Mix_Chunk *p_sound;
 };
 

@@ -78,6 +78,9 @@ class entity_sound {
         }
         virtual ~entity_sound() {
         }
+        void play( vec2 entity_position) {
+            sound->play( this->volume, entity_position);
+        }
         sound *sound;
         int volume;
         std::string name;

@@ -2,9 +2,18 @@
 
 #include <stdio.h>
 
+float calculate_distance(vec2 p1, vec2 p2) {
+    float diffY = p1.y - p2.y;
+    float diffX = p1.x - p2.x;
+    return sqrt((diffY * diffY) + (diffX * diffX));
+}
+
 sound::sound()
 {
     p_sound = NULL;
+
+    // todo
+    setCameraPosition( vec2( 0, 0) );
 }
 
 sound::~sound()
@@ -28,6 +37,26 @@ void sound::loadSound( std::string file) {
         setChunk( l_chunk);
         setFile( file);
     }
+}
+
+void sound::play( int volume, vec2 position) {
+    float l_volume = (float)MIX_MAX_VOLUME/100.f*volume;
+    int l_channel = Mix_PlayChannel( -1, p_sound, 0);
+    Mix_Volume( l_channel, l_volume);
+
+    float t_distance = calculate_distance( position, p_camera);
+    int t_volume = 0; // 255 muted -> over 255 random stuff
+
+    if( t_distance > 470.f)
+        t_volume = t_distance-470.f;
+
+    printf( "%d %.2f\n", t_volume, t_distance);
+
+    // max
+    if( t_volume > 240)
+        t_volume = 240;
+
+    Mix_SetDistance( l_channel, t_volume);
 }
 
 music::music()
