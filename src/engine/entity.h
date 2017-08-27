@@ -376,7 +376,7 @@ class entitylist {
         std::string p_folder;
 };
 
-void lua_setLink( entitylist *entity, world *world);
+void lua_setLink( entitylist *entity, world *world, graphic *graphic);
 
 
 #endif // ENTITY_H

@@ -12,6 +12,7 @@ using namespace tinyxml2;
 
 entitylist *lua_entitylist = NULL;
 world *lua_worldlist = NULL;
+graphic *lua_graphic = NULL;
 
 #include <iostream>
 
@@ -67,6 +68,17 @@ static int lua_play_sound(lua_State* state) {
         return 0;
     }
 
+    vec2 l_camera_size = lua_graphic->getCameraSize();
+
+    if( l_camera_size.x != 0) {
+        l_camera_size.x = l_camera_size.x/2;
+        l_camera_size.y = l_camera_size.y/2;
+    }
+
+    // set camera position
+    l_sound->sound->setCameraPosition( lua_graphic->getCamera().tovec2() + l_camera_size);
+
+    // play the sound
     if( l_sound->sound)
         l_sound->play( l_obj->getPosition().tovec2());
 
@@ -966,10 +978,11 @@ void lua_install( lua_State *state) {
     lua_setglobal( state, "setGravity");
 }
 
-void lua_setLink( entitylist *entity, world *world) {
+void lua_setLink( entitylist *entity, world *world, graphic *graphic) {
     // set list
     lua_entitylist = entity;
     lua_worldlist = world;
+    lua_graphic = graphic;
 }
 
 entitytype::entitytype() {

@@ -61,7 +61,7 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     p_world = new world( file, folder);
 
     // set link
-    lua_setLink( p_entity, p_world);
+    lua_setLink( p_entity, p_world, graphic);
     lua_config_setLink( config);
     lua_player_setLink( player);
 
@@ -142,7 +142,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
             playerlist->setAllInavtive();
 
             // set old link
-            lua_setLink( p_entity, p_world);
+            lua_setLink( p_entity, p_world, graphic);
 
             // set old camera pos
             graphic->setCamera( p_camere_pos.tovec2());
@@ -387,7 +387,7 @@ void level::fast_load( player_handle *player) {
     getWorld()->setLoadWorld( l_filename);
 }
 
-void level::load( player_handle *player) {
+void level::load( player_handle *player, graphic *graphic) {
     XMLDocument l_file;
 
     // load the save file
@@ -425,7 +425,7 @@ void level::load( player_handle *player) {
 
     std::string l_filename = l_xml_world->Attribute( "file");
     p_world = new world( l_filename);
-    lua_setLink( p_entity, p_world);
+    lua_setLink( p_entity, p_world, graphic);
     // clear the entitys
     p_entity->clearEntitys();
 

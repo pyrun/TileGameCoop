@@ -103,7 +103,7 @@
     <property name="global2" value="active"/>
    </properties>
   </object>
-  <object id="93" name="button" x="191" y="167.5" width="32" height="16">
+  <object id="93" name="button" x="340.5" y="169.5" width="32" height="16">
    <properties>
     <property name="global" value="87"/>
    </properties>

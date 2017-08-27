@@ -39,22 +39,25 @@ void sound::loadSound( std::string file) {
     }
 }
 
+#define SOUND_NEAR_LEVEL 200.f
+#define SOUND_MAX_VOLUME 240 // 255 is max! WARNIG
+#define SOUND_DISTANCE_FACTOR 1.5f
+
 void sound::play( int volume, vec2 position) {
     float l_volume = (float)MIX_MAX_VOLUME/100.f*volume;
     int l_channel = Mix_PlayChannel( -1, p_sound, 0);
     Mix_Volume( l_channel, l_volume);
 
-    float t_distance = calculate_distance( position, p_camera);
+    float t_distance = calculate_distance( position, p_camera) * SOUND_DISTANCE_FACTOR;
     int t_volume = 0; // 255 muted -> over 255 random stuff
 
-    if( t_distance > 470.f)
-        t_volume = t_distance-470.f;
+    // if the
+    if( t_distance > SOUND_NEAR_LEVEL)
+        t_volume = t_distance-SOUND_NEAR_LEVEL;
 
-    printf( "%d %.2f\n", t_volume, t_distance);
-
-    // max
-    if( t_volume > 240)
-        t_volume = 240;
+    // distance when sound volume go down
+    if( t_volume > SOUND_MAX_VOLUME)
+        t_volume = SOUND_MAX_VOLUME;
 
     Mix_SetDistance( l_channel, t_volume);
 }
