@@ -2,4 +2,5 @@
 	<action name="idle" frame="5" speed="5" loop="0">explode.bmp</action>
 	<action name="die" frame="5" speed="5" loop="0">explode.bmp</action>
 	<hitbox offsetx="2" offsety="2" width="12" hight="12"/>
+	<sound name="explode" volume="20">fire explosion.wav</sound>
 </object>

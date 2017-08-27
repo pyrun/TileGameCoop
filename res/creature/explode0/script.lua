@@ -3,6 +3,7 @@ local vel_x_speed = 0.1
 local vel_y_speed = 0.35
 
 function start( id)
+	play_sound( id, "explode")
 	kill(id)
 end
 

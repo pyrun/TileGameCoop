@@ -39,7 +39,7 @@ void sound::loadSound( std::string file) {
     }
 }
 
-#define SOUND_NEAR_LEVEL 200.f
+#define SOUND_NEAR_LEVEL 470.f
 #define SOUND_MAX_VOLUME 240 // 255 is max! WARNIG
 #define SOUND_DISTANCE_FACTOR 1.5f
 
