@@ -7,6 +7,50 @@
 
 player_handle *lua_player = NULL;
 
+
+static int lua_setPlayerData( lua_State *state) {
+    std::string l_index;
+    std::string l_data;
+    player_data *l_playerdata = NULL;
+
+    if( !lua_isstring( state, 1) || !lua_isstring( state, 2) ) {
+        printf( "lua_setPlayerData call wrong argument\n");
+        return 0;
+    }
+
+    l_index = lua_tostring( state, 1);
+    l_data = lua_tostring( state, 2);
+
+    // look if exist
+    l_playerdata = lua_player->getData( l_index);
+    if( l_playerdata == NULL)
+        lua_player->addData( l_index, l_data);
+    return 0;
+}
+
+static int lua_getPlayerData( lua_State *state) {
+    std::string l_index;
+    player_data *l_playerdata = NULL;
+
+    if( !lua_isstring( state, 1) ) {
+        printf( "lua_getPlayerData call wrong argument\n");
+        return 0;
+    }
+
+    // get index
+    l_index = lua_tostring( state, 1);
+
+    // look if exist
+    l_playerdata = lua_player->getData( l_index);
+    if( l_playerdata == NULL) {
+        printf( "lua_getPlayerData index \"%s\" not found\n", l_index.c_str());
+        return 0;
+    }
+
+    lua_pushstring( state, l_playerdata->data.c_str());
+    return 0;
+}
+
 static int lua_setPlayerChamp( lua_State *state) {
     std::string l_name;
     int l_id;
@@ -86,6 +130,12 @@ static int lua_getPlayer( lua_State *state) {
 }
 
 void lua_player_install( lua_State *state) {
+    lua_pushcfunction( state, lua_setPlayerData);
+    lua_setglobal( state, "setPlayerData");
+
+    lua_pushcfunction( state, lua_getPlayerData);
+    lua_setglobal( state, "getPlayerData");
+
     lua_pushcfunction( state, lua_setPlayerChamp);
     lua_setglobal( state, "setPlayerChamp");
 
@@ -289,11 +339,12 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                     l_entity->lua_run( l_entity->getId(), true);
                 if( !l_map->run && l_map_old->run)
                     l_entity->lua_run( l_entity->getId(), false);
-                if( l_map->select && !l_map_old->select)
+                if( l_map->select && !l_map_old->select) {
                     if( world->getFileName() == "worlds/overworld.tmx")
                         world->setLoadWorld( "menu.tmx");
                     else
                         printf( "%s\n",world->getFileName().c_str());
+                }
 
                 if( l_map->attack && !l_map_old->attack)
                     l_entity->lua_attack( l_entity->getId());
@@ -409,6 +460,96 @@ int player_handle::getAmountPlayerChamps() {
             amount++;
     }
     return amount;
+}
+
+void player_handle::setAllInavtive() {
+    for( int i = 0; i < (int)p_playerlist.size(); i++) {
+        player *p_player = p_playerlist[i];
+        p_player->entity_id = -1;
+        if( p_player->active == true )
+            p_player->wantToJoin = true;
+        p_player->active = false;
+    }
+}
+
+void player_handle::setPlayerChamp( int id, std::string name) {
+    player* l_player = getPlayer( id);
+    if( l_player)
+        l_player->champ = name;
+}
+
+std::string player_handle::getPlayerChamp( int id) {
+    player* l_player = getPlayer( id);
+    if( l_player)
+        return l_player->champ;
+    return "";
+}
+
+void player_handle::setInactiv( player *player) {
+    player->entity_id = -1;
+    player->active = false;
+    if( player == p_playercamerafocus)
+        p_playercamerafocus = findActivePlayer();
+}
+
+player *player_handle::getPlayer( int id) {
+    for( int i = 0; i < (int)p_playerlist.size(); i++) {
+        player *p_player = p_playerlist[i];
+        if( p_player->id == id)
+            return p_player;
+    }
+    return NULL;
+}
+
+player *player_handle::findActivePlayer() {
+    for( int i = 0; i < (int)p_playerlist.size(); i++) {
+        player *p_player = p_playerlist[i];
+        if( p_player->active == true)
+            return p_player;
+    }
+    return NULL;
+}
+
+player *player_handle::getPlayerByEntity( int id) {
+    for( int i = 0; i < (int)p_playerlist.size(); i++) {
+        player *p_player = p_playerlist[i];
+        if( p_player->entity_id == id)
+            return p_player;
+    }
+    return NULL;
+}
+
+void player_handle::createChamps( entitylist *entitylist, vec2 start) {
+    for( int i = 0; i < (int)p_playerlist.size(); i++) {
+        player *p_player = p_playerlist[i];
+        if( p_player->champ.size() > 0) {
+            entitytype *l_type = entitylist->getType( p_player->champ);
+            if( l_type) {
+                int l_id = entitylist->create( l_type, start);
+                p_player->entity_id = l_id;
+                p_player->active = true;
+            }
+            p_player->champ = "";
+        }
+    }
+}
+
+
+void player_handle::addData( std::string index, std::string data) {
+    player_data l_data;
+
+    // set data
+    l_data.index = index;
+    l_data.data = data;
+
+    p_data.push_back( l_data);
+}
+
+player_data *player_handle::getData( std::string index) {
+    for( int i = 0; i < (int)p_data.size(); i++)
+        if( p_data[i].index == index)
+            return &p_data[i];
+    return NULL;
 }
 
 void player_handle::player_add( SDL_GameController *controller) {

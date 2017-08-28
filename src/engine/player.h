@@ -10,6 +10,12 @@
 
 #include "../graphic/graphic.h"
 
+class player_data {
+    public:
+        std::string index;
+        std::string data;
+};
+
 class player {
     public:
         player() { map = new input_map; map_old = new input_map; entity_id = -1; champ = ""; }
@@ -42,75 +48,24 @@ class player_handle
         int getPlayerAmount() { return (int)p_playerlist.size(); }
         int getPlayerActive();
         int getAmountPlayerChamps();
-        void setAllInavtive() {
-            for( int i = 0; i < (int)p_playerlist.size(); i++) {
-                player *p_player = p_playerlist[i];
-                p_player->entity_id = -1;
-                if( p_player->active == true )
-                    p_player->wantToJoin = true;
-                p_player->active = false;
-            }
-        }
-        void setPlayerChamp( int id, std::string name) {
-            player* l_player = getPlayer( id);
-            if( l_player)
-                l_player->champ = name;
-        }
-        std::string getPlayerChamp( int id) {
-            player* l_player = getPlayer( id);
-            if( l_player)
-                return l_player->champ;
-            return "";
-        }
-        void setInactiv( player *player) {
-            player->entity_id = -1;
-            player->active = false;
-            if( player == p_playercamerafocus)
-                p_playercamerafocus = findActivePlayer();
-        }
+        void setAllInavtive();
+        void setPlayerChamp( int id, std::string name);
 
-        player *getPlayer( int id) {
-            for( int i = 0; i < (int)p_playerlist.size(); i++) {
-                player *p_player = p_playerlist[i];
-                if( p_player->id == id)
-                    return p_player;
-            }
-            return NULL;
-        }
-        player *findActivePlayer() {
-            for( int i = 0; i < (int)p_playerlist.size(); i++) {
-                player *p_player = p_playerlist[i];
-                if( p_player->active == true)
-                    return p_player;
-            }
-            return NULL;
-        }
-        player *getPlayerByEntity( int id) {
-            for( int i = 0; i < (int)p_playerlist.size(); i++) {
-                player *p_player = p_playerlist[i];
-                if( p_player->entity_id == id)
-                    return p_player;
-            }
-            return NULL;
-        }
-        void createChamps( entitylist *entitylist, vec2 start) {
-            for( int i = 0; i < (int)p_playerlist.size(); i++) {
-                player *p_player = p_playerlist[i];
-                if( p_player->champ.size() > 0) {
-                    entitytype *l_type = entitylist->getType( p_player->champ);
-                    if( l_type) {
-                        int l_id = entitylist->create( l_type, start);
-                        p_player->entity_id = l_id;
-                        p_player->active = true;
-                    }
-                    p_player->champ = "";
-                }
-            }
-        }
+        std::string getPlayerChamp( int id);
+        void setInactiv( player *player);
 
+        player *getPlayer( int id);
+        player *findActivePlayer();
+        player *getPlayerByEntity( int id);
+
+        void createChamps( entitylist *entitylist, vec2 start);
+
+        void addData( std::string index, std::string data);
+        player_data *getData( std::string index);
     protected:
     private:
         std::vector<player*> p_playerlist;
+        std::vector<player_data> p_data;
 
         void player_add( SDL_GameController *controller);
         void player_remove( int id);

@@ -1,0 +1,5 @@
+<object name="hud" width="120" height="40" gravity="0" isHUD="1" script="script.lua">
+<action name="idle" frame="1">wood.png</action>
+</object>
+
+
