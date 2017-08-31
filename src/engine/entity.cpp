@@ -126,7 +126,6 @@ static int lua_message(lua_State* state) {
 
 static int lua_setLoadLevel( lua_State *state) {
     std::string l_level;
-    bool l_asPlayer;
 
     if( !lua_isstring( state, 1) || !lua_isboolean( state, 2) ) {
         printf( "lua_setLoadLevel call wrong argument\n");
@@ -273,7 +272,6 @@ static int lua_howManyPlayerEntity( lua_State *state) {
 }
 
 static int lua_findObjects( lua_State *state) {
-    entity *l_obj;
     int l_id;
     fvec2 l_pos;
     fvec2 l_rect;
@@ -1641,7 +1639,8 @@ std::vector<int> entitylist::createFromWorldFile( std::string file, world *world
     vec2 l_pos;
 
     // load form world file
-    XMLError l_result = l_file.LoadFile( file.c_str());
+    //XMLError l_result =
+    l_file.LoadFile( file.c_str());
     // check the file
     //XMLCheckResult(l_result);
 
