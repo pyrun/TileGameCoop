@@ -1,5 +1,5 @@
 <object name="finish" width="32" height="32" script="script.lua" timer="100" gravity="0">
-	<action name="idle" frame="1" speed="1" loop="0" endCall="action_start">finish.bmp</action>
+	<action name="idle" frame="6" speed="6" loop="1" endCall="action_start">black_hole.png</action>
 	<hitbox offsetx="10" offsety="10" width="12" hight="12"/>
 </object>
 

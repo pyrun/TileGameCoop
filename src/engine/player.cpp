@@ -52,35 +52,35 @@ static int lua_getPlayerData( lua_State *state) {
 }
 
 static int lua_setPlayerChamp( lua_State *state) {
-    std::string l_name;
+    int l_entity;
     int l_id;
 
-    if( !lua_isstring( state, 1) || !lua_isnumber( state, 2) ) {
+    if( !lua_isnumber( state, 1) || !lua_isnumber( state, 2) ) {
         printf( "lua_setPlayerChamp call wrong argument\n");
         return 0;
     }
 
-    l_name = lua_tostring( state, 1);
+    l_entity = lua_tonumber( state, 1);
     l_id = lua_tonumber( state, 2);
 
-    lua_player->setPlayerChamp( l_id, l_name);
+    lua_player->setPlayerChamp( l_id, l_entity);
     return 0;
 }
 
 static int lua_getPlayerChamp( lua_State *state) {
-    std::string l_name;
-    int l_id;
+    int l_entity;
+    int l_player_id;
 
     if( !lua_isnumber( state, 1) ) {
         printf( "lua_getPlayerChamp call wrong argument\n");
         return 0;
     }
 
-    l_id = lua_tonumber( state, 1);
+    l_player_id = lua_tonumber( state, 1);
 
-    l_name = lua_player->getPlayerChamp( l_id);
+    l_entity = lua_player->getPlayerChamp( l_player_id);
 
-    lua_pushstring( state, l_name.c_str());
+    lua_pushnumber( state, l_entity);
 
     return 1;
 }
@@ -472,17 +472,17 @@ void player_handle::setAllInavtive() {
     }
 }
 
-void player_handle::setPlayerChamp( int id, std::string name) {
+void player_handle::setPlayerChamp( int id, int entity) {
     player* l_player = getPlayer( id);
     if( l_player)
-        l_player->champ = name;
+        l_player->entity_id = entity;
 }
 
-std::string player_handle::getPlayerChamp( int id) {
+int player_handle::getPlayerChamp( int id) {
     player* l_player = getPlayer( id);
     if( l_player)
-        return l_player->champ;
-    return "";
+        return l_player->entity_id;
+    return -1;
 }
 
 void player_handle::setInactiv( player *player) {
@@ -559,7 +559,7 @@ void player_handle::player_add( SDL_GameController *controller) {
     l_player->device_number = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
     l_player->controller = controller;
     l_player->active = false;
-    l_player->wantToJoin = false;
+    l_player->wantToJoin = true;
     l_player->id = p_count;
 
     p_count++;

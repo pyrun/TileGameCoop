@@ -49,9 +49,9 @@ class player_handle
         int getPlayerActive();
         int getAmountPlayerChamps();
         void setAllInavtive();
-        void setPlayerChamp( int id, std::string name);
+        void setPlayerChamp( int id, int entity);
 
-        std::string getPlayerChamp( int id);
+        int getPlayerChamp( int id);
         void setInactiv( player *player);
 
         player *getPlayer( int id);
