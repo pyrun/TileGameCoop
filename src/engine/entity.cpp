@@ -347,6 +347,16 @@ static int lua_isPlayer( lua_State *state) {
     return 1;
 }
 
+static int lua_getAmountPlayerChamps( lua_State *state) {
+    int l_id;
+
+    l_id = lua_entitylist->getAmountPlayerObject();
+
+    lua_pushnumber( state, l_id);
+
+    return 1;
+}
+
 static int lua_kill( lua_State *state) {
     entity *l_obj;
     int l_id;
@@ -908,6 +918,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_isPlayer);
     lua_setglobal( state, "isPlayer");
+
+    lua_pushcfunction( state, lua_getAmountPlayerChamps);
+    lua_setglobal( state, "getAmountPlayerChamps");
 
     lua_pushcfunction( state, lua_kill);
     lua_setglobal( state, "kill");
@@ -1560,7 +1573,7 @@ entitylist::entitylist()
 {
     // start at 0
     p_id = 1;
-    p_playerentity = 0;
+//    p_playerentity = 0; later use
 }
 
 entitylist::~entitylist()
@@ -1595,8 +1608,8 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     //obj->setDepth( obj->getPosition().tovec2().y-type->getHitbox().y+type->getHitboxOffset().y  );
 
     // player entity incress if he is one
-    if( type->getIsPlayer())
-        p_playerentity++;
+ //   if( type->getIsPlayer())
+//        p_playerentity++;
 
     // load if script are set
     if( type->getScriptName().size() > 0)
@@ -1623,8 +1636,8 @@ void entitylist::deleteObj( int id) {
             entity *l_entity = &p_entitys[i];
             entitytype *l_type = l_entity->getType();
             // decreasing if type is a player file
-            if( l_type && l_type->getIsPlayer())
-                p_playerentity--;
+//            if( l_type && l_type->getIsPlayer())
+//                p_playerentity--;
 
             p_entitys.erase( p_entitys.begin()+i);
         }

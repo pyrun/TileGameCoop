@@ -2,17 +2,16 @@ global_value_2 = "3"
 
 savedone = false
 
-function action_start( )
+function timer( id, time)
 	if savedone == false then
-		savestate()
+		--savestate()
 		savedone = true
 	end
+	-- check if enough player still life
+	if getAmountPlayerChamps() < tonumber(global_value_2) then
+		setLoadLevel( "gameover.tmx", true)
+	end
 end
-
-function timer( id, time)
-
-end
-
 
 
 function collision( id, ...)

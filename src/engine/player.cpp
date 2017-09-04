@@ -95,16 +95,6 @@ static int lua_getAmountPlayerActive( lua_State *state) {
     return 1;
 }
 
-static int lua_getAmountPlayerChamps( lua_State *state) {
-    int l_id;
-
-    l_id = lua_player->getAmountPlayerChamps();
-
-    lua_pushnumber( state, l_id);
-
-    return 1;
-}
-
 static int lua_getPlayer( lua_State *state) {
     std::string l_name;
     int l_id;
@@ -144,9 +134,6 @@ void lua_player_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_getAmountPlayerActive);
     lua_setglobal( state, "getAmountPlayerActive");
-
-    lua_pushcfunction( state, lua_getAmountPlayerChamps);
-    lua_setglobal( state, "getAmountPlayerChamps");
 
     lua_pushcfunction( state, lua_getPlayer);
     lua_setglobal( state, "getPlayer");
@@ -456,7 +443,7 @@ int player_handle::getAmountPlayerChamps() {
     int amount = 0;
     for( int i = 0; i < (int)p_playerlist.size(); i++) {
         player *p_player = p_playerlist[i];
-        if( p_player->champ.size() > 0)
+        if( p_player != NULL && p_player->champ.size() > 0)
             amount++;
     }
     return amount;
