@@ -1,15 +1,21 @@
 global_value_2 = "1"
 
 savedone = false
+one_skip = false
 
 function timer( id, time)
-	if savedone == false and global_value_3 == nil then
-		--savestate()
-		savedone = true
-	end
-	-- check if enough player still life
-	if getAmountPlayerChamps() < tonumber(global_value_2) then
-		setLoadLevel( "gameover.tmx", true)
+	if one_skip == false then
+		one_skip = true
+	else
+
+		if savedone == false and not global_value_3 then
+			savestate()
+			savedone = true
+		end
+		-- check if enough player still life
+		if getAmountPlayerChamps() < tonumber(global_value_2) then
+			setLoadLevel( "gameover.tmx", true)
+		end
 	end
 end
 

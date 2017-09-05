@@ -1,4 +1,4 @@
 <savefile>
     <player/>
-    <world file="test.tmx" width="32" height="16"/>
+    <world file="lost_dani.tmx" width="64" height="48"/>
 </savefile>

@@ -1409,6 +1409,7 @@ void entity::lua_run( int id, bool press) {
     if( lua_pcall( p_state, 2, 0, 0))
         printf("entity::lua_run %s\n", lua_tostring( p_state, -1));
 }
+
 void entity::lua_attack( int id) {
     if( p_state == NULL)
         return;
@@ -1423,6 +1424,7 @@ void entity::lua_attack( int id) {
     if( lua_pcall( p_state, 1, 0, 0))
         printf("entity::lua_attack %s\n", lua_tostring( p_state, -1));
 }
+
 void entity::lua_special( int id) {
     if( p_state == NULL)
         return;
