@@ -2234,7 +2234,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
 
         // calc gravity
-        if( l_type->getIsTopView()) {
+        if( l_type->getIsTopView()) { // top view
             if(l_entity->isInLiquid() == true) {
                 l_velocity.x = l_velocity.x*0.5f;
                 l_velocity.y = l_velocity.y*0.5f;
@@ -2242,7 +2242,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 l_velocity.x = l_velocity.x*0.8f;
                 l_velocity.y = l_velocity.y*0.8f;
             }
-        } else if( l_entity->getGravity() == true) {
+        } else if( l_entity->getGravity() == true) { // check if grafity
             if( l_entity->getColisionDown() && !l_entity->isInLiquid())
                 l_velocity.x = l_velocity.x*0.8f;
             else if(l_entity->isInLiquid() == true)

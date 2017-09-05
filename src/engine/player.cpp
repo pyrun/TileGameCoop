@@ -176,10 +176,10 @@ void player_handle::next_player_entity( entitylist *entitylist, player *l_player
         if( l_player->entity_id == l_obj[i] )
             l_pos = i;
 
+    // rotate the index
     std::rotate(l_obj.begin(),l_obj.begin()+l_pos,l_obj.end());
 
-
-
+    // find next logic obj
     for( int y = 0; y < (int)l_obj.size(); y++) {
         bool l_found = true;
 
@@ -231,7 +231,7 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                 continue;
 
             // add controler
-            player_add( l_controller);
+            player_add( l_controller, config->getForceJoin()==1?true:false);
         }
     }
     // delete old one
@@ -539,14 +539,14 @@ player_data *player_handle::getData( std::string index) {
     return NULL;
 }
 
-void player_handle::player_add( SDL_GameController *controller) {
+void player_handle::player_add( SDL_GameController *controller, bool join) {
     player *l_player =  new player();
 
     // setze die Eigenschaften
     l_player->device_number = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
     l_player->controller = controller;
     l_player->active = false;
-    l_player->wantToJoin = true;
+    l_player->wantToJoin = join;
     l_player->id = p_count;
 
     p_count++;

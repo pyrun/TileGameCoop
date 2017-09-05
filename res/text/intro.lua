@@ -14,6 +14,9 @@ function text.table_start()
 	table.insert( table_text, "ENTER")
 	table.insert( table_text, "Scheibenkleister!")
 	table.insert( table_text, "END")
+
+	-- set config player
+	setPlayerData( "death", tostring(0));
 end
 
 function text.get( id)

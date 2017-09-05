@@ -1,9 +1,9 @@
-global_value_2 = "3"
+global_value_2 = "1"
 
 savedone = false
 
 function timer( id, time)
-	if savedone == false then
+	if savedone == false and global_value_3 == nil then
 		--savestate()
 		savedone = true
 	end

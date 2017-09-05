@@ -103,6 +103,10 @@ class config
         // game start file
         std::string getStartfile() { return p_startfile; }
         void setStartfile( std::string file) { p_startfile = file; }
+
+        // force join ( if controller found -> he join the game)
+        void setForceJoin( bool set) { p_forceJoin = set; }
+        bool getForceJoin() { return p_forceJoin; }
     protected:
 
     private:
@@ -129,6 +133,8 @@ class config
         bool p_quit;
 
         bool p_debug;
+
+        bool p_forceJoin;
 
 
         std::string p_resolution_file;

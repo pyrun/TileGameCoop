@@ -158,6 +158,7 @@ int config::load() {
         // load the rest
         setDebug( loadParameter( l_xml_game, "debug"));
         setStartfile( loadParameterString( l_xml_game, "start_file"));
+        setForceJoin( loadParameter( l_xml_game, "force_join"));
     }
 
     // return a success of loading
@@ -217,6 +218,7 @@ void config::save() {
         // save parameter
         saveParameter( &l_config, l_xmlGame, "debug", getDebug());
         saveParameter( &l_config, l_xmlGame, "start_file", getStartfile());
+        saveParameter( &l_config, l_xmlGame, "force_join", getForceJoin());
         // game pad driver file
         saveParameter( &l_config, l_xmlGame, "controllerMappingsFile", getControllerMappingsFile());
 

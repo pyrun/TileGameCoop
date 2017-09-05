@@ -67,7 +67,7 @@ class player_handle
         std::vector<player*> p_playerlist;
         std::vector<player_data> p_data;
 
-        void player_add( SDL_GameController *controller);
+        void player_add( SDL_GameController *controller, bool join);
         void player_remove( int id);
         player *p_playercamerafocus;
 
