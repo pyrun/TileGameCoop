@@ -99,13 +99,13 @@
     <property name="global" value="57"/>
    </properties>
   </object>
-  <object id="61" name="turtle" x="816" y="208" width="16" height="32">
+  <object id="61" name="turtle" x="800" y="192" width="16" height="32">
    <properties>
     <property name="action" value="fly"/>
     <property name="global" value="48"/>
    </properties>
   </object>
-  <object id="62" name="turtle" x="896" y="224" width="16" height="32">
+  <object id="62" name="turtle" x="816" y="224" width="16" height="32">
    <properties>
     <property name="action" value="fly"/>
     <property name="global" value="60"/>
@@ -113,7 +113,7 @@
   </object>
   <object id="64" name="finish" x="992" y="224" width="32" height="32">
    <properties>
-    <property name="global" value="greenland.tmx"/>
+    <property name="global" value="lake.tmx"/>
    </properties>
   </object>
  </objectgroup>

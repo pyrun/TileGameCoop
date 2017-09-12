@@ -1157,8 +1157,13 @@ void entity::draw( graphic *graphic) {
         }
     }
 
-    if( l_flagEnd && l_action->endcall.size() > 0)
+    // look if we have a end call
+    if( l_flagEnd && l_action->endcall.size() > 0 && p_flagEndCall == false) {
+        // call the lua call
         lua_action( l_action->endcall);
+        // once
+        p_flagEndCall = true;
+    }
 
     // keine Negative werte
     if( l_frame < 0)
@@ -1192,6 +1197,7 @@ void entity::setAction( std::string name, bool withStartCall) {
         p_action = name;
         p_timestartaction = -1;
         p_frame = 0;
+        p_flagEndCall = false;
 
 /*        if( p_type != NULL && withStartCall == true) {
             // get action
@@ -2162,7 +2168,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
             if( l_vertex->left && l_velocity.x - 0.001f < 0 && l_collision_pos.y > 0) {
                 tile *l_tile = NULL;
                 l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
-                if( l_tile) {
+
+                if( l_tile ) {
 
                     // zwischen rechnung
                     float l_pos_change_y = l_collision_pos.x + l_change.x;

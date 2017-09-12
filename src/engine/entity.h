@@ -321,6 +321,8 @@ class entity
         std::string p_global_1;
         std::string p_global_2;
         std::string p_global_3;
+
+        bool p_flagEndCall;
 };
 
 class entitylist {

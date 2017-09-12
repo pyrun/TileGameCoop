@@ -40,6 +40,10 @@ local fly_right
 
 function timer( id, time)
 	if isAlive( id) == false then
+		-- if dead and you fly -> gravity on! dont fly away :)
+		if getGravity( id) == false then
+			setGravity( id, true)
+		end
 		do return end
 	end
 

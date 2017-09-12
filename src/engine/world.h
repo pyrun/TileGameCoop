@@ -20,6 +20,8 @@ class tiletype {
 
 class tile {
     public:
+        tile() { type = NULL; }
+
         int id;
         int speed;
         vec2 pos;

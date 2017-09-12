@@ -21,7 +21,7 @@
     <game>
         <debug>0</debug>
         <start_file>intro.tmx</start_file>
-        <force_join>1</force_join>
+        <force_join>0</force_join>
         <controllerMappingsFile>gamecontrollerdb.txt</controllerMappingsFile>
     </game>
 </config>

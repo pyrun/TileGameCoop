@@ -1,0 +1,10 @@
+<object name="bluefish" width="16" height="16" gravity="0" script="script.lua" timer="100" isenemy="1">
+	<action name="idle" frame="1">swim.png</action>
+	<action name="swim" frame="4" speed="10">swim.png</action>
+	<action name="die" frame="1" speed="10" loop="0">die.png</action>
+	<action name="turn" frame="9" speed="2" loop="0" endCall="turn_end">turn.png</action>
+	<vertex id="3" x="8" y="16">down</vertex>
+	<vertex x="0" y="8" id="1">left</vertex>
+	<vertex x="16" y="8" id="2">right</vertex>
+	<hitbox offsetx="4" offsety="4" width="8" hight="8"/>
+</object>

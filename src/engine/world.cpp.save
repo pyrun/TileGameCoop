@@ -66,12 +66,6 @@ tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bo
         if( l_tile == NULL)
             continue;
 
-        // skip water
-        if( l_tile->type != NULL && l_tile->type->liquid == true ) {
-            l_tile = NULL;
-            continue;
-        }
-
         // if air contiinue
         if( l_tile != NULL && l_tile->id == 0) {
             l_tile = NULL;
@@ -114,12 +108,9 @@ tile *world::getCollisionTileX( fvec2 position, fvec2 change, fvec2 velocity) {
         l_tile = getTile( p_tilemap_foreground, vec2( l_tempx, l_y) );
         if( l_tile == NULL)
             continue;
-
-        // skip water
-        if( l_tile->type != NULL && l_tile->type->liquid == true ) {
-            l_tile = NULL;
-            continue;
-        }
+            
+        if( l_tile != NULL && l_tile->type != NULL && l_tile->type->liquid == true )
+            
 
         // if air contiinue
         if( l_tile != NULL && l_tile->id == 0) {
@@ -138,6 +129,10 @@ tile *world::getCollisionTileX( fvec2 position, fvec2 change, fvec2 velocity) {
             }
         break;
     }
+
+    // no water
+    if( l_tile != NULL && l_tile->type != NULL && l_tile->type->liquid == true )
+        return NULL;
 
     return l_tile;
 }

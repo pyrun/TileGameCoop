@@ -1,4 +1,4 @@
-<object name="turtle" width="32" height="16" script="script.lua" timer="40" gravity="0">
+<object name="turtle" width="32" height="16" script="script.lua" timer="40" gravity="0" isenemy="1">
 	<action name="idle" frame="3">idle.bmp</action>
 	<action name="walk" frame="3" speed="6">walk.bmp</action>
 	<action name="fly" frame="3" speed="12">fly.bmp</action>

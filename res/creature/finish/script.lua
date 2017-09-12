@@ -1,4 +1,4 @@
-global_value_2 = "1"
+global_value_2 = "3"
 
 savedone = false
 one_skip = false
