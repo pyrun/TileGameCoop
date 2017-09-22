@@ -38,7 +38,6 @@ world::~world()
         delete p_tilemap_foreground;
     if( p_tilemap_background)
         delete p_tilemap_background;
-    //dtor
 }
 
 tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bool up) {

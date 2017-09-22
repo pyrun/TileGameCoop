@@ -1,6 +1,6 @@
 function start( id)
 	global_value = "1"
-	setPosition( id, 175, 50)
+	setPosition( id, 10, 10)
 end
 
 function timer( id, time)
