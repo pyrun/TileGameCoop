@@ -1,14 +1,14 @@
 local jump_speed = 0.5
 
 function start( id) 
-	setAnimation( id, "close")
+	setAnimation( id, "open")
 end
 
 function EndCallOpen( id) 
 	setAnimation( id, "close")
 end
 
-function EndCall( id) 
+function EndCallClose( id) 
 	setAnimation( id, "closed")
 end
 

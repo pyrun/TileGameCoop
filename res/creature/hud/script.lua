@@ -6,7 +6,7 @@ end
 function timer( id, time)
 	if getAmountPlayerActive() > 0 then
 
-		player_number = tonumber(global_value)
+		player_number = getActivePlayer()
 	
 		entity = getPlayerChamp( player_number )
 		name = getName( entity)

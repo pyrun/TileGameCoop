@@ -7,7 +7,7 @@ function timer( id, time)
 	end
 	l_x, l_y = getPosition( id)
 	if isAlive( object) == false then
-		object = createObject( "fireball", l_x + 10, l_y + 10)
-		setVelocityX( object, -0.2)
+		object = createObject( "stalactite", l_x + 8, l_y + 10)
+		setVelocityY( object, 0.1)
 	end
 end

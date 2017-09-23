@@ -63,7 +63,7 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     // set link
     lua_setLink( p_entity, p_world, graphic);
     lua_config_setLink( config);
-    lua_player_setLink( player);
+    lua_player_setLink( player, p_entity);
 
     p_transition = new transition( graphic, transition_time, true);
 

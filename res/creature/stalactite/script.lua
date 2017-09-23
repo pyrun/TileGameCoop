@@ -1,5 +1,5 @@
 function vertexhit( id)
-	delete( id)
+	delete( id);
 end
 
 function collision( id, ...)

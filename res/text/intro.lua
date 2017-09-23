@@ -8,11 +8,11 @@ function text.table_start()
 	table.insert( table_text, "zimmer ein Portal auffiel.")
 	table.insert( table_text, "ENTER")
 	table.insert( table_text, "Du hast deine Arbeit")
-	table.insert( table_text, "fortgeführt bis dir")
+	table.insert( table_text, "fortgefuehrt bis dir")
 	table.insert( table_text, "ein Bug in deinem")
 	table.insert( table_text, "Programm augefallen ist")
 	table.insert( table_text, "ENTER")
-	table.insert( table_text, "Scheibenkleister!")
+	table.insert( table_text, "\"Scheibenkleister!\"")
 	table.insert( table_text, "END")
 
 	-- set config player

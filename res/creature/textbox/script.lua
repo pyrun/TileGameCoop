@@ -7,10 +7,6 @@ function start( id)
 	setPosition( id, 40, 170)
 end
 
-function up( id)
-	play_sound( id, "test")
-end
-
 local fade_finish = false
 local next_text = false
 
@@ -23,7 +19,7 @@ function mysplit(inputstr, sep)
                 t[i] = str
                 i = i + 1
         end
-        return t
+        return
 end
 
 local text_lifetime = 10

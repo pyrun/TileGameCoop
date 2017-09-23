@@ -96,7 +96,7 @@
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="92" name="pressure_plate" x="96.424" y="178.303" width="32" height="16">
+  <object id="92" name="spring" x="64" y="176" width="16" height="16">
    <properties>
     <property name="global" value="87"/>
     <property name="global2" value="active"/>
@@ -114,6 +114,5 @@
    </properties>
   </object>
   <object id="96" name="alex" x="32" y="160" width="16" height="16"/>
-  <object id="98" name="bluefish" x="208" y="112" width="32" height="16"/>
  </objectgroup>
 </map>

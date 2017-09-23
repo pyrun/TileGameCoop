@@ -38,9 +38,6 @@ function timer( id)
 end
 
 function collision( id, ...)
-	if isAlive( id) == false then
-		do return end
-	end
 	for k,v in pairs({...}) do
 		if isAlive( v) == true then
 			if isPlayer( v) == true then		

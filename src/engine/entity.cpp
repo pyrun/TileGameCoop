@@ -1159,10 +1159,10 @@ void entity::draw( graphic *graphic) {
 
     // look if we have a end call
     if( l_flagEnd && l_action->endcall.size() > 0 && p_flagEndCall == false) {
-        // call the lua call
-        lua_action( l_action->endcall);
         // once
         p_flagEndCall = true;
+        // call the lua call
+        lua_action( l_action->endcall);
     }
 
     // keine Negative werte
@@ -1192,6 +1192,7 @@ void entity::draw( graphic *graphic) {
 }
 
 void entity::setAction( std::string name, bool withStartCall) {
+
     // check if name is void
     if( p_action != name) {
         p_action = name;

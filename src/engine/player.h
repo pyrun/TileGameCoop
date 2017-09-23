@@ -74,7 +74,7 @@ class player_handle
         int p_count;
 };
 
-void lua_player_setLink( player_handle *player);
+void lua_player_setLink( player_handle *player, entitylist *list);
 void lua_player_install( lua_State *state);
 extern player_handle *lua_player;
 

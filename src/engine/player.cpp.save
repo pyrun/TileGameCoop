@@ -54,11 +54,12 @@ static int lua_getPlayerData( lua_State *state) {
 
 static int lua_getActivePlayer( lua_State *state) {
     std::vector<int> l_playerId;
+
     std::vector<int> l_obj = lua_entitylist_player->findPlayerObject();
 
     for( int i = 0; i < (int)l_obj.size(); i++) {
         if( lua_player->getPlayerByEntity( l_obj[i]) != NULL) {
-            lua_pushnumber( state, lua_player->getPlayerByEntity( l_obj[i])->id);
+            lua_pushnumber( state, l_obj[i]);
             return 1;
         }
     }
@@ -139,10 +140,10 @@ void lua_player_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_getPlayerData);
     lua_setglobal( state, "getPlayerData");
-
+    
     lua_pushcfunction( state, lua_getActivePlayer);
     lua_setglobal( state, "getActivePlayer");
-
+    
     lua_pushcfunction( state, lua_setPlayerChamp);
     lua_setglobal( state, "setPlayerChamp");
 
