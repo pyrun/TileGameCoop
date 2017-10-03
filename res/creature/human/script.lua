@@ -126,6 +126,7 @@ function jump( id)
 	end
 	if getColision( id, "down") then
 		addVelocity( id, 0, jump_high)
+		play_sound( id, "jump")
 		jump_two = 1
     	elseif jump_two == 1 then
 		jump_two = 0
@@ -134,17 +135,7 @@ function jump( id)
 end
 
 function up( id) 
-	--io.write("up\n")
-	l_x, l_y = getPosition( id)
 
-	ids = {findObjects( id, l_x, l_y, 32, 32)}
-
-	for object_id = 1, #ids do
-		local obj = ids[object_id]
-		if getName( obj) == "place_portal" then
-			sendSignal( obj, id, "transfer")
-		end
-	end
 end
 
 function down( id) 

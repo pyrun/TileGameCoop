@@ -19,6 +19,7 @@
 	<vertex id="8" x="21" y="16">right</vertex>
 	<vertex id="9" x="21" y="31">right</vertex>
 	<hitbox offsetx="8" offsety="6" width="16" hight="28"/>
+	<sound name="jump" volume="10">jump.ogg</sound>
 </object>
 
 

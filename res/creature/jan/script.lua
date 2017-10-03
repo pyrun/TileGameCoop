@@ -5,6 +5,19 @@ local portal_red = -1
 local portal_green = -1
 local portal_set = 0
 
+function up( id) 
+	l_x, l_y = getPosition( id)
+
+	ids = {findObjects( id, l_x, l_y, 32, 32)}
+
+	for object_id = 1, #ids do
+		local obj = ids[object_id]
+		if getName( obj) == "place_portal" then
+			sendSignal( obj, id, "transfer")
+		end
+	end
+end
+
 function special( id)
 	if isAlive( portal_green) == true and portal_set == 1 then
 		delete( portal_green)
