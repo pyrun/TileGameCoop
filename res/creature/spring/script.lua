@@ -28,6 +28,7 @@ function collision( id, ...)
 		end
 		if found == true then
 			setAnimation( id, "open")
+			play_sound( id, "open")
 		end
 	end
 end
