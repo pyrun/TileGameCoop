@@ -1,0 +1,8 @@
+<object name="switch" width="15" height="16" script="script.lua" solid="0" gravity="0">
+	<action name="idle" frame="1" speed="0" loop="0">idle.png</action>
+	<action name="turn" frame="5" speed="1" loop="0" endCall="turn_end">turn.png</action>
+	<action name="turn2" frame="5" speed="1" loop="0" endCall="turn2_end">turn2.png</action>
+	<action name="press" frame="1" speed="0" loop="0">press.png</action>
+	<hitbox offsetx="0" offsety="0" width="9" hight="9"/>
+</object>
+

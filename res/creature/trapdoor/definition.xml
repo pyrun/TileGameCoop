@@ -1,6 +1,6 @@
-<object name="trapdoor" width="17" height="16" script="script.lua" solid="1" gravity="0">
-	<action name="close" frame="5" speed="6" loop="0">close.bmp</action>
-	<action name="idle" frame="5" speed="6" loop="0">idle.bmp</action>
-	<action name="die" frame="1" speed="6" loop="0">close.bmp</action>
+<object name="trapdoor" width="17" height="16" script="script.lua" solid="0" gravity="0">
+	<action name="open" frame="5" speed="6" loop="0" endCall="start">open.bmp</action>
+	<action name="idle" frame="5" speed="6" loop="0">close.bmp</action>
+	<action name="die" frame="1" speed="6" loop="0">open.bmp</action>
 	<hitbox offsetx="0" offsety="0" width="16" hight="5"/>
 </object>

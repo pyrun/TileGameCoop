@@ -91,18 +91,19 @@
    <property name="global" value="alex"/>
   </properties>
   <object id="57" name="start" x="0" y="160" width="16" height="32"/>
-  <object id="87" name="door" x="144" y="160" width="16" height="16">
+  <object id="87" name="trapdoor" x="144" y="160" width="16" height="16">
    <properties>
+    <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="92" name="spring" x="64" y="176" width="16" height="16">
+  <object id="92" name="spring" x="224" y="176" width="16" height="16">
    <properties>
     <property name="global" value="87"/>
     <property name="global2" value="active"/>
    </properties>
   </object>
-  <object id="93" name="button" x="340.5" y="169.5" width="32" height="16">
+  <object id="93" name="switch" x="96" y="176" width="16" height="16">
    <properties>
     <property name="global" value="87"/>
    </properties>
@@ -113,7 +114,7 @@
     <property name="global31" value="used"/>
    </properties>
   </object>
-  <object id="96" name="alex" x="32" y="160" width="16" height="16"/>
+  <object id="96" name="dani" x="32" y="160" width="16" height="16"/>
   <object id="99" name="fire_thrower" x="160" y="80" width="16" height="32"/>
  </objectgroup>
 </map>

@@ -11,6 +11,7 @@ function whip_end( id)
 		if isEnemy(obj) == true then
 			kill( obj)
 		end
+		sendSignal( obj, id, "blow")
 	end
 	delete( id)
 end
