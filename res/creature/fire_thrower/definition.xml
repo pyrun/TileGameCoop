@@ -1,4 +1,4 @@
-<object name="fire_thrower" width="32" height="32" gravity="0" script="script.lua" timer="500" isenemy="1">
+<object name="fire_thrower" width="32" height="32" gravity="0" script="script.lua" timer="1200" isenemy="1">
 	<action name="idle" frame="6" speed="10">idle.png</action>
 	<action name="die" frame="6" speed="10">idle.png</action>
 	<hitbox offsetx="4" offsety="8" width="28" hight="20"/>

@@ -1,0 +1,10 @@
+<object name="scary_bird" width="20" height="20" gravity="0" script="script.lua" timer="100" isenemy="1">
+	<action name="idle" frame="1">fly.png</action>
+	<action name="fly" frame="4" speed="7">fly.png</action>
+	<action name="die" frame="4" speed="7" loop="0">die.png</action>
+	<action name="turn" frame="9" speed="3" loop="0" endCall="turn_end">dirchange.png</action>
+	<vertex id="3" x="10" y="16">down</vertex>
+	<vertex x="0" y="8" id="1">left</vertex>
+	<vertex x="20" y="8" id="2">right</vertex>
+	<hitbox offsetx="6" offsety="6" width="14" hight="14"/>
+</object>

@@ -2,15 +2,20 @@ function vertexhit( id)
 end
 
 function start( id) 
-	setSolid( id, false)
+	setSolid( id, true)
 	setAnimation( id, "close")
 end
 
-function timer( id) 
-	if getAnimation( id) == "idle" then
-		setSolid( id, false)
-	elseif getAnimation( id) == "close" then
+function signal( id, fromId, data)
+	if data == "close" then
 		setSolid( id, true)
+		setAnimation( id, "close")
+		play_sound( id, "close")
+	end
+	if data == "open" then
+		setSolid( id, false)
+		setAnimation( id, "idle")
+		play_sound( id, "open")
 	end
 end
 

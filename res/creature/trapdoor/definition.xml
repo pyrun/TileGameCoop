@@ -1,4 +1,4 @@
-<object name="trapdoor" width="17" height="16" script="script.lua" timer="250" solid="1" gravity="0">
+<object name="trapdoor" width="17" height="16" script="script.lua" solid="1" gravity="0">
 	<action name="close" frame="5" speed="6" loop="0">close.bmp</action>
 	<action name="idle" frame="5" speed="6" loop="0">idle.bmp</action>
 	<action name="die" frame="1" speed="6" loop="0">close.bmp</action>
