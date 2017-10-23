@@ -6,8 +6,11 @@ function timer( id, time)
 		do return end
 	end
 	l_x, l_y = getPosition( id)
+
+	l_x = l_x + (math.random(14));
+
 	if isAlive( object) == false then
-		object = createObject( "stalactite", l_x + 8, l_y + 10)
+		object = createObject( "stalactite", l_x, l_y + 6)
 		setVelocityY( object, 0.1)
 	end
 end
