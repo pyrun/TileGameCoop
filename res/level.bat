@@ -1,2 +1,2 @@
-"..\bin\WinDebug32\TileGameCoop.exe" beehouse.tmx
+"..\bin\WinDebug32\TileGameCoop.exe" waterfall.tmx
 PAUSE

@@ -1,7 +1,7 @@
 l_offset_x = 10
-l_offset_y = 13
+l_offset_y = 3
 l_rect_x = 16
-l_rect_y = 3
+l_rect_y = 8
 
 function whip_end( id)
 	l_x, l_y = getPosition( id)

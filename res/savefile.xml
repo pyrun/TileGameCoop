@@ -1,4 +1,4 @@
 <savefile>
     <player/>
-    <world file="beehouse.tmx" width="64" height="50"/>
+    <world file="waterfall.tmx" width="156" height="32"/>
 </savefile>
