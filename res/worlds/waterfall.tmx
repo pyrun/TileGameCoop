@@ -242,7 +242,7 @@
   <object id="79" name="stone_trap" x="108.666" y="362.167" width="16" height="32"/>
   <object id="80" name="finish" x="2448" y="608" width="32" height="32">
    <properties>
-    <property name="global" value="desert.tmx"/>
+    <property name="global" value="intro_ending.tmx"/>
    </properties>
   </object>
   <object id="81" name="spring" x="1232" y="576" width="16" height="16"/>

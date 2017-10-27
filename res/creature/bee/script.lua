@@ -10,6 +10,19 @@ function start( id)
 	setAnimation( id, "fly")
 end
 
+
+local position_x, position_y
+
+function compare(a,b)
+	l_compare_x, l_compare_y = getPosition( a)
+	l_obj_compare_x, l_obj_compare_y = getPosition( b)
+	return distance( position_x, position_y, l_compare_x, l_compare_y) < distance( position_x, position_y, l_obj_compare_x, l_obj_compare_y)
+end
+
+function distance( x1, y1, x2, y2 )
+	return math.sqrt( (x2-x1)^2 + (y2-y1)^2 )
+end
+
 function timer( id)
 	if isAlive( id) == false then
 		setGravity( id, true) 
@@ -22,18 +35,23 @@ function timer( id)
 	l_rect_x = 200
 	l_rect_y = 200
 	ids = {findObjects( id, l_x-100, l_y-100, l_rect_x, l_rect_y)}
+
+	position_x = l_x
+	position_y = l_y
+	table.sort( ids, compare)
+
 	for object_id = 1, #ids do
 		local obj = ids[object_id]
 		l_obj_x, l_obj_y = getPosition( obj)
 
 		local dir = getAnimationDirection( id)
 
-		if isPlayer( obj) then
-			if dir == false and l_obj_x > l_x and getAnimation( id) == "fly" then
+		if isPlayer( obj) and isAlive( obj) then
+			if dir == false and l_obj_x > l_x and getAnimation( id) == "fly" and isAlive( object) == false then
 				setAnimationDirection( id, true)
 				setAnimation( id, "turn")
 			end
-			if dir == true and l_obj_x < l_x and getAnimation( id) == "fly" then
+			if dir == true and l_obj_x < l_x and getAnimation( id) == "fly" and isAlive( object) == false then
 				setAnimationDirection( id, false)
 				setAnimation( id, "turn")
 			end
