@@ -490,7 +490,7 @@ void world::draw( graphic *graphic) {
     if( p_tilemap_foreground == NULL)
         return;
 
-    if( (int)p_backgrounds.size() > 0) {
+    /*if( (int)p_backgrounds.size() > 0) {
         if(p_backgrounds[0].picture == NULL)
             p_backgrounds[0].picture = graphic->loadImage( p_backgrounds[0].picture_file);
         else {
@@ -512,7 +512,7 @@ void world::draw( graphic *graphic) {
             graphic->drawImage( l_background->picture, l_position + l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
             graphic->drawImage( l_background->picture, l_position + l_xvel + l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
         }
-    }
+    }*/
 
     // draw Back and Foreground
     drawBackAndForeground( graphic);

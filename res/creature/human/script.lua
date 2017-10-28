@@ -1,6 +1,7 @@
 local inLiquid = false
-local max_speed = 0.1
-local walk_speed = 0.03
+local max_speed = 0.05
+
+local walk_speed = 0.02
 local walk_standard_speed = 0.03
 local jump_two = 0
 local jump_high = -0.32

@@ -11,6 +11,6 @@ function timer( id, time)
 
 	if isAlive( object) == false then
 		object = createObject( "stalactite", l_x, l_y + 6)
-		setVelocityY( object, 0.1)
+		setVelocityY( object, 0.05)
 	end
 end
