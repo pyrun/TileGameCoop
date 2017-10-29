@@ -69,7 +69,6 @@ class player_handle
 
         void player_add( SDL_GameController *controller, bool join);
         void player_remove( int id);
-        player *p_playercamerafocus;
 
         int p_count;
 };

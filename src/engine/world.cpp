@@ -474,8 +474,10 @@ void world::process( graphic *graphic) {
     // down
     if( l_cam.y > p_tilehight*p_map_hight - l_camSize.y)
         l_cam.y = p_tilehight*p_map_hight - l_camSize.y;
+    else if( l_cam.y < 0)
+        l_cam.y = 0;
 
-    // down
+    // right border
     if( l_cam.x > p_tilewidth*p_map_width - l_camSize.x)
         l_cam.x = p_tilewidth*p_map_width - l_camSize.x;
 
@@ -490,29 +492,29 @@ void world::draw( graphic *graphic) {
     if( p_tilemap_foreground == NULL)
         return;
 
-    /*if( (int)p_backgrounds.size() > 0) {
+    if( (int)p_backgrounds.size() > 0) {
         if(p_backgrounds[0].picture == NULL)
             p_backgrounds[0].picture = graphic->loadImage( p_backgrounds[0].picture_file);
         else {
             world_background *l_background = &p_backgrounds[0];
-            float l_factor = (float)l_background->picture->surface->h/ ((float)p_map_hight * (float)p_tilehight+p_tilehight);
 
-            vec2 l_position = { graphic->getCamera().x*0.5, graphic->getCamera().y};
+            vec2 l_position = { 0, graphic->getCamera().y};
 
-            while(l_position.x-graphic->getCamera().x+ l_background->picture->surface->w/l_factor< 0)
-                l_position.x+=l_background->picture->surface->w/l_factor;
+            int factor = graphic->getCamera().tovec2().x/l_background->picture->surface->w;
+            int l_length = (graphic->getCameraSize().x + l_background->picture->surface->w/2)/l_background->picture->surface->w+1;
 
-            // calc the new postion
-            vec2 l_xvel = vec2( l_background->picture->surface->w/l_factor, 0);
-            vec2 l_size = vec2( p_map_width * p_tilewidth+0.5, p_map_hight * p_tilehight+p_tilehight);
+
+            vec2 l_size = vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight);
+            vec2 l_offset = vec2( l_background->picture->surface->w, l_background->picture->surface->h);
+
+            l_position = l_position + vec2( l_offset.x * factor, 0);
 
             // draw one left middle and right
-            graphic->drawImage( l_background->picture, l_position, l_size, vec2( 0, 0), 0.0, 0, l_factor);
-            graphic->drawImage( l_background->picture, l_position - l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
-            graphic->drawImage( l_background->picture, l_position + l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
-            graphic->drawImage( l_background->picture, l_position + l_xvel + l_xvel, l_size, vec2( 0, 0), 0.0, 0, l_factor);
+            for( int i = 0; i < l_length; i++)
+                graphic->drawImage( l_background->picture, l_position + vec2( l_offset.x * i, 0), l_size, vec2( 0, 0), 0.0, 0, 1);
+
         }
-    }*/
+    }
 
     // draw Back and Foreground
     drawBackAndForeground( graphic);

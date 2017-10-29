@@ -1143,6 +1143,8 @@ void entity::draw( graphic *graphic) {
     int l_action_frame_time = graphic->getFrame()-p_timestartaction;
 
     l_frame = (int)(l_action_frame_time/l_action->speed);
+    if( l_action->speed == 0)
+        l_frame = 100; // speed up
 
     // ende der frames
     bool l_flagEnd = false;

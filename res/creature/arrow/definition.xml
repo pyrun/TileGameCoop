@@ -1,0 +1,12 @@
+<object name="arrow" width="8" height="8" script="script.lua" gravity="0">
+	<action name="idle" frame="0" speed="0" loop="0">green1.png</action>
+	<action name="leftdown" frame="0" speed="0" loop="0">green1.png</action>
+	<action name="left" frame="0" speed="0" loop="0">green2.png</action>
+	<action name="leftup" frame="0" speed="0" loop="0">green3.png</action>
+	<action name="up" frame="0" speed="0" loop="0">green4.png</action>
+	<action name="rightup" frame="0" speed="0" loop="0">green5.png</action>
+	<action name="right" frame="0" speed="0" loop="0">green6.png</action>
+	<action name="rightdown" frame="0" speed="0" loop="0">green7.png</action>
+	<action name="die" frame="0" speed="0" loop="0">green7.png</action>
+</object>
+

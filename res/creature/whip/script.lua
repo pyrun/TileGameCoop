@@ -1,5 +1,5 @@
-l_offset_x = 10
-l_offset_y = 0
+l_offset_x = 5
+l_offset_y = -3
 l_rect_x = 22
 l_rect_y = 20
 

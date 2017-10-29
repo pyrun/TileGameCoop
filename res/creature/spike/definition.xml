@@ -1,6 +1,6 @@
 <object name="spike" width="15" height="16" script="script.lua" timer="100" isenemy="1">
 	<action name="idle" frame="1" loop="0">idle.png</action>
-	<action name="used" frame="4" loop="0" speed="1" endCall="used">idle.png</action>
+	<action name="used" frame="4" loop="0" speed="2" endCall="used">idle.png</action>
 	<action name="die" frame="4" loop="0" speed="1" endCall="used">idle.png</action>
 	<vertex x="8" y="16" id="1">down</vertex>
 	<hitbox offsetx="2" offsety="2" width="11" hight="12"/>

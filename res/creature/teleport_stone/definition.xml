@@ -1,0 +1,13 @@
+<object name="teleport_stone" width="16" height="28" script="script.lua" timer="10" gravity="1">
+	<action name="idle" frame="3" speed="4" loop="0">green.bmp</action>
+	<action name="die" frame="3" speed="0" loop="0">green.bmp</action>
+	<vertex id="9" x="4" y="28">down</vertex>
+	<vertex id="1" x="10" y="28">down</vertex>
+	<vertex id="2" x="4" y="0">up</vertex>
+	<vertex id="3" x="10" y="0">up</vertex>
+	<vertex id="4" x="-2" y="12">left</vertex>
+	<vertex id="5" x="-2" y="26">left</vertex>
+	<vertex id="7" x="22" y="12">right</vertex>
+	<vertex id="9" x="22" y="26">right</vertex>
+</object>
+

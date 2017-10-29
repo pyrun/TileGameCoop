@@ -4,6 +4,10 @@ turn_flag = true
 function vertexhit( id)
 	local dir = getAnimationDirection( id)
 
+	if isAlive( id) == false then
+		do return end
+	end
+
 	if turn_flag == true then
 		if getVertexHit( id, 1) and dir == false then
 			setAnimationDirection( id, true)

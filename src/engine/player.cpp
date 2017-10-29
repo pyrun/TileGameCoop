@@ -167,8 +167,6 @@ player_handle::player_handle()
 {
     //p_config = config;
 
-    p_playercamerafocus = NULL;
-
     p_count = 1;
 }
 
@@ -332,7 +330,7 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
 
             if( l_entity == NULL || l_entity->isAlive() == false || l_entity->getAction() == "die") {
                 l_player->entity_id = -1;
-                l_player->active = 0;
+                //l_player->active = 0;
                 continue;
             }
 
@@ -403,25 +401,29 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                     break;
                 l_player->active = true;
                 l_player->wantToJoin = false;
-                if( p_playercamerafocus == NULL)
-                    p_playercamerafocus = l_player;
             }
         }
     }
 
-    // calc focus
-    if( p_playercamerafocus != NULL) {
-        entity *l_entity = entitylist->getEntity( p_playercamerafocus->entity_id);
-        if( l_entity != NULL) {
-            vec2 l_pos = l_entity->getPosition().tovec2();
+    // calculate the camera focus
+    int l_amount = 0;
+    fvec2 l_pos_camera;
+    for( int i = 0; i < (int)p_playerlist.size(); i++) {
+        player* l_player = p_playerlist[i];
+        if( l_player->active && l_player->entity_id ) {
+            entity *obj = entitylist->getEntity( l_player->entity_id);
+            if( obj == NULL)
+                continue;
+            fvec2 l_pos = obj->getPosition();
             vec2 l_cam = graphic->getCameraSize();
-
-            vec2 l_newpos = l_pos - (l_cam/vec2( 2.f, 2.f ));
-
-            graphic->flyTo( l_newpos);
+            l_pos_camera = l_pos_camera + l_pos - (l_cam/vec2( 2.f, 2.f ));
+            l_amount++;
         }
     }
-
+    if( l_amount > 0) {
+        l_pos_camera = fvec2( l_pos_camera.x/l_amount, l_pos_camera.y/l_amount );
+        graphic->flyTo( l_pos_camera.tovec2());
+    }
 }
 
 void player_handle::draw( entitylist *entitylist, font *font, graphic* graphic) {
@@ -434,7 +436,8 @@ void player_handle::draw( entitylist *entitylist, font *font, graphic* graphic) 
                 continue;
             char l_text[255];
             sprintf( l_text, "P%d", l_player->id);
-            font->drawMessage( graphic, l_text, l_entity->getPosition().tovec2(), 0.5f, 255, false, true)  ;
+            vec2 l_offset = { l_entity->getType()->getWidth()/2.f - 3, l_entity->getType()->getHeight()+8};
+            font->drawMessage( graphic, l_text, l_entity->getPosition().tovec2() + l_offset, 0.5f, 255, false, true)  ;
         }
     }
 }
@@ -493,8 +496,6 @@ int player_handle::getPlayerChamp( int id) {
 void player_handle::setInactiv( player *player) {
     player->entity_id = -1;
     player->active = false;
-    if( player == p_playercamerafocus)
-        p_playercamerafocus = findActivePlayer();
 }
 
 player *player_handle::getPlayer( int id) {
@@ -585,10 +586,6 @@ void player_handle::player_remove( int id) {
     }
     if( l_player == NULL)
         return;
-
-    // delete focus
-    if( p_playercamerafocus == l_player)
-        p_playercamerafocus = NULL;
 
     // close the gamepad connection
     SDL_GameControllerClose( l_player->controller );

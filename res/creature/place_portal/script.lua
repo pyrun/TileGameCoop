@@ -49,11 +49,11 @@ function find_portal( id)
 	if getAnimation( id) == "green" then
 		animation = "red"
 	end
-	ids = {findObjects( id, 0, 0, 100000000, 100000000)}
+	ids = {findObjects( id, 0, 0, 10000000, 10000000)}
 
 	for object_id = 1, #ids do
 		local obj = ids[object_id]
-		if getName( obj) == getName( id) and getAnimation( obj) == animation then
+		if getName( obj) == getName( id) and isAlive( obj) and getAnimation( obj) == animation then
 			portal = obj
 		end
 	end

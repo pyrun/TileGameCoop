@@ -1,22 +1,16 @@
 local inLiquid = false
-local max_speed = 0.05
+local max_default_speed = 0.06
+local max_speed = max_default_speed
 
-local walk_speed = 0.02
-local walk_standard_speed = 0.03
+local walk_speed = 0.03
 local jump_two = 0
 local jump_high = -0.32
 local jump_outwater_factor = 0.75
 
-function setSpeedFactor( factor )
-	if factor == 0 then
-		walk_speed = walk_standard_speed
-	else
-		walk_speed = walk_speed/factor
-	end
-end
-
 function vertexhit( id)
-
+	if getColision( id, "down") then
+		jump_two = 1
+	end
 end
 
 -- Attack
@@ -38,10 +32,10 @@ local id_special = -1
 local id_special_x = 0
 local id_special_y = 0
 function getSpecialId()
-	return id_attack
+	return id_special
 end
 function setSpecialId( id)
-	id_attack = id
+	id_special = id
 end
 function setSpecialPosition( posx, posy) 
 	id_special_x = posx
@@ -78,7 +72,12 @@ function update( id)
 	
 	if isAlive( id_attack) then
 		l_x, l_y = getPosition( id)
-		setPosition( id_attack, l_x + id_x, l_y + id_y)
+		setPosition( id_attack, l_x + id_attack_x, l_y + id_attack_y)
+	end
+
+	if isAlive( id_special) then
+		l_x, l_y = getPosition( id)
+		setPosition( id_special, l_x + id_special_x, l_y + id_special_y)
 	end
 
   	-- get velocity
@@ -129,7 +128,7 @@ function jump( id)
 		addVelocity( id, 0, jump_high)
 		play_sound( id, "jump")
 		jump_two = 1
-    	elseif jump_two == 1 then
+    elseif jump_two == 1 then
 		jump_two = 0
 		setVelocityY( id, jump_high/2)
 	end
@@ -172,9 +171,9 @@ function run( id, press)
 		do return end
 	end
 	if press and getColision( id, "down") then
-		max_speed = 0.1*1.5
+		max_speed = max_default_speed*1.5
 	else
-		max_speed = 0.1
+		max_speed = max_default_speed
 	end
 end
 
