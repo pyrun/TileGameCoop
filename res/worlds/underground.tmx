@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="64" height="50" tilewidth="16" tileheight="16" nextobjectid="103">
+<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="64" height="50" tilewidth="16" tileheight="16" nextobjectid="112">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
@@ -103,8 +103,8 @@
 423,423,425,363,363,363,426,365,483,483,483,483,484,0,0,0,422,432,433,434,0,0,0,0,0,422,423,423,423,424,0,0,0,0,422,423,423,423,423,424,0,0,0,436,317,482,366,424,301,422,423,423,423,423,365,484,0,0,0,422,423,423,423,423,
 423,423,423,423,423,423,423,424,0,0,0,0,0,0,0,0,482,483,484,0,0,0,0,0,0,422,423,423,423,424,0,0,0,0,482,483,366,423,423,425,364,0,0,0,0,0,422,424,301,422,423,423,423,423,424,0,0,0,0,422,423,423,423,423,
 423,423,423,423,423,423,365,484,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,377,482,483,483,483,484,377,0,0,0,0,0,422,423,423,423,424,0,0,0,0,0,422,424,301,422,423,423,423,423,424,0,0,0,0,422,423,423,423,423,
-423,423,423,423,423,423,424,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,318,0,497,0,318,0,318,0,0,362,363,363,426,423,423,423,424,0,0,0,0,0,422,424,301,422,423,423,423,365,484,0,0,0,0,422,423,423,423,423,
-423,423,423,423,423,423,424,0,0,0,0,0,0,0,0,362,363,363,363,363,363,364,0,0,497,0,0,0,497,0,497,0,0,422,423,423,423,423,423,423,424,317,438,0,0,0,482,484,301,422,423,423,423,424,0,0,0,0,362,426,423,423,423,423,
+423,423,423,423,423,423,424,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,318,0,0,0,0,0,318,0,0,362,363,363,426,423,423,423,424,0,0,0,0,0,422,424,301,422,423,423,423,365,484,0,0,0,0,422,423,423,423,423,
+423,423,423,423,423,423,424,0,0,0,0,0,0,0,0,362,363,363,363,363,363,364,0,0,497,0,0,0,0,0,497,0,0,422,423,423,423,423,423,423,424,317,438,0,0,0,482,484,301,422,423,423,423,424,0,0,0,0,362,426,423,423,423,423,
 423,423,423,423,423,423,425,364,0,0,0,0,0,0,0,422,423,423,423,423,423,424,0,0,0,0,0,0,0,0,0,0,0,422,423,423,423,423,423,423,425,364,0,0,0,0,0,0,301,422,423,423,365,484,0,0,0,0,422,423,423,423,423,423,
 423,423,423,423,423,423,423,425,363,363,363,363,363,363,363,426,423,423,423,423,423,424,0,0,0,0,0,0,0,0,0,0,362,426,423,423,423,423,423,423,423,424,0,0,0,0,0,0,301,482,483,483,484,0,0,0,0,0,422,423,423,423,423,423,
 423,423,423,423,423,423,423,423,423,423,423,423,423,423,423,423,423,423,423,423,423,425,364,0,0,0,0,0,0,0,0,362,426,423,423,423,423,423,423,423,423,424,0,0,0,0,0,0,301,0,0,0,0,0,0,0,0,0,422,423,423,423,423,423,
@@ -224,9 +224,6 @@
  </layer>
  <objectgroup color="#000080" name="Objects">
   <object id="49" name="start" x="0" y="384" width="16" height="16"/>
-  <object id="59" name="dani" x="32" y="464" width="16" height="32"/>
-  <object id="60" name="jan" x="16" y="464" width="16" height="32"/>
-  <object id="61" name="alex" x="0" y="464" width="16" height="32"/>
   <object id="62" name="finish" x="976" y="496" width="32" height="32">
    <properties>
     <property name="global" value="beehouse.tmx"/>
@@ -235,7 +232,7 @@
   <object id="63" name="stone_trap" x="103.167" y="426" width="16" height="16"/>
   <object id="64" name="stone_trap" x="268.667" y="428" width="16" height="16"/>
   <object id="65" name="stone_trap" x="400" y="651" width="16" height="16"/>
-  <object id="66" name="stone_trap" x="463.334" y="652.167" width="16" height="16"/>
+  <object id="66" name="stone_trap" x="464.334" y="650.917" width="16" height="16"/>
   <object id="67" name="stone_trap" x="431.667" y="411" width="16" height="16"/>
   <object id="68" name="stone_trap" x="512.167" y="490.75" width="16" height="16"/>
   <object id="69" name="stone_trap" x="543.167" y="314" width="16" height="16"/>
@@ -247,7 +244,7 @@
   <object id="75" name="button" x="128" y="678.667" width="16" height="16">
    <properties>
     <property name="action" value="press"/>
-    <property name="global" value="80"/>
+    <property name="global" value="80 111"/>
    </properties>
   </object>
   <object id="76" name="sonic" x="208" y="672" width="32" height="32"/>
@@ -266,7 +263,7 @@
     <property name="action" value="open"/>
    </properties>
   </object>
-  <object id="87" name="trapdoor" x="464.667" y="678.667" width="16" height="16">
+  <object id="87" name="trapdoor" x="464.667" y="676.917" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
    </properties>
@@ -288,10 +285,10 @@
     <property name="global" value="87"/>
    </properties>
   </object>
-  <object id="92" name="button" x="206" y="679.333" width="16" height="16">
+  <object id="92" name="button" x="204.25" y="678.833" width="16" height="16">
    <properties>
     <property name="action" value="press"/>
-    <property name="global" value="88"/>
+    <property name="global" value="88 109 110"/>
    </properties>
   </object>
   <object id="93" name="switch" x="560" y="640" width="16" height="16">
@@ -312,5 +309,26 @@
   <object id="100" name="spring" x="928" y="656" width="16" height="16"/>
   <object id="101" name="spring" x="944" y="576" width="16" height="16"/>
   <object id="102" name="stone_trap" x="696.917" y="619.25" width="16" height="16"/>
+  <object id="103" name="alex" x="0" y="464" width="16" height="32"/>
+  <object id="104" name="dani" x="32" y="464" width="16" height="32"/>
+  <object id="105" name="jan" x="16" y="464" width="16" height="32"/>
+  <object id="106" name="stone_trap" x="416" y="651" width="16" height="16"/>
+  <object id="107" name="stone_trap" x="432" y="651" width="16" height="16"/>
+  <object id="108" name="stone_trap" x="448" y="651" width="16" height="16"/>
+  <object id="109" name="trapdoor" x="416.667" y="676.667" width="16" height="16">
+   <properties>
+    <property name="action" value="open"/>
+   </properties>
+  </object>
+  <object id="110" name="trapdoor" x="432.667" y="676.667" width="16" height="16">
+   <properties>
+    <property name="action" value="open"/>
+   </properties>
+  </object>
+  <object id="111" name="trapdoor" x="448.667" y="676.667" width="16" height="16">
+   <properties>
+    <property name="action" value="open"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

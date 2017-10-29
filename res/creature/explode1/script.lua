@@ -2,6 +2,7 @@ local dead_timer = 13
 
 function start( id)
 	kill(id)
+	play_sound( id, "explode")
 end
 
 function timer( id, time)

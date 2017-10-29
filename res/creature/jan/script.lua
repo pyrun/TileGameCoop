@@ -5,7 +5,7 @@ local portal_red = -1
 local portal_green = -1
 local portal_set = 0
 
-local arrow = -1
+local arrow = 90
 
 local angle_deg = 0
 local angle_steps = 5
@@ -79,7 +79,8 @@ function special( id)
 		id_attack = createObject( "arrow", l_x + id_x, l_y + id_y)
 		setSpecialPosition( id_x, id_y) -- offset
 		setSpecialId( id_attack) -- attach to the player
-		angle_deg = -20
+		angle_deg = 90
+		update( id) -- once update graphic
 	else
 		delete( getSpecialId() )
 		l_x, l_y = getPosition( id)

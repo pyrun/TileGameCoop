@@ -33,6 +33,7 @@ end
 
 function throw( id )
 	setAnimation( id, "idle" )
+	play_sound( id, "throw")
 end
 
 

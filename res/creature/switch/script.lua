@@ -11,12 +11,18 @@ end
 
 function turn_end( id)
 	setAnimation( id, "press")
-	sendSignal( tonumber(global_value), id, "open")
+	play_sound( id, "press")
+	for i in string.gmatch(global_value, "%S+") do
+		sendSignal( tonumber(i), id, "open")
+	end
 end
 
 function turn2_end( id)
 	setAnimation( id, "idle")
-	sendSignal( tonumber(global_value), id, "close")
+	play_sound( id, "unpress")
+	for i in string.gmatch(global_value, "%S+") do
+		sendSignal( tonumber(i), id, "close")
+	end
 end
 
 function signal( id, fromId, data)

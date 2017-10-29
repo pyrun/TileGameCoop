@@ -13,10 +13,14 @@ function signal( id, fromId, data)
 	if data == "press" then
 		if getAnimation( id ) == "idle" then
 			setAnimation( id, "press")
-			sendSignal( tonumber(global_value), id, "open")
+			for i in string.gmatch(global_value, "%S+") do
+				sendSignal( tonumber(i), id, "open")
+			end
 		else
 			setAnimation( id, "idle")
-			sendSignal( tonumber(global_value), id, "close")
+			for i in string.gmatch(global_value, "%S+") do
+				sendSignal( tonumber(i), id, "close")
+			end
 		end
 	end
 end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="64" height="76" tilewidth="16" tileheight="16" nextobjectid="106">
+<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="64" height="76" tilewidth="16" tileheight="16" nextobjectid="109">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
@@ -384,9 +384,6 @@
   </object>
   <object id="84" name="trapdoor" x="912" y="464" width="16" height="16"/>
   <object id="85" name="spring" x="912" y="528" width="16" height="16"/>
-  <object id="88" name="alex" x="0" y="432" width="16" height="32"/>
-  <object id="89" name="dani" x="32" y="432" width="16" height="32"/>
-  <object id="90" name="jan" x="16" y="432" width="16" height="32"/>
   <object id="91" name="bee" x="640" y="960" width="16" height="16"/>
   <object id="92" name="bee" x="237" y="1049" width="16" height="16"/>
   <object id="93" name="bee" x="448" y="1136" width="16" height="16"/>
@@ -402,5 +399,8 @@
   <object id="103" name="snail" x="80" y="672" width="32" height="32"/>
   <object id="104" name="snail" x="128" y="672" width="32" height="32"/>
   <object id="105" name="bee" x="720" y="992" width="16" height="16"/>
+  <object id="106" name="alex" x="0" y="432" width="16" height="32"/>
+  <object id="107" name="dani" x="32" y="432" width="16" height="32"/>
+  <object id="108" name="jan" x="16" y="432" width="16" height="32"/>
  </objectgroup>
 </map>
