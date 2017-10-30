@@ -504,7 +504,7 @@ void world::draw( graphic *graphic) {
             int l_length = (graphic->getCameraSize().x + l_background->picture->surface->w/2)/l_background->picture->surface->w+1;
 
 
-            vec2 l_size = vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight);
+            vec2 l_size = { l_background->picture->surface->w, l_background->picture->surface->h}; // = vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight * 0.5);
             vec2 l_offset = vec2( l_background->picture->surface->w, l_background->picture->surface->h);
 
             l_position = l_position + vec2( l_offset.x * factor, 0);

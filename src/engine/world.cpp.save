@@ -498,11 +498,13 @@ void world::draw( graphic *graphic) {
         else {
             world_background *l_background = &p_backgrounds[0];
 
-            vec2 l_position = { 0, 0};
+            vec2 l_position = { 0, graphic->getCamera().y};
+            
+            float l_size
 
             int factor = graphic->getCamera().tovec2().x/l_background->picture->surface->w;
-            int l_length = graphic->getCameraSize().x/l_background->picture->surface->w;
-            
+            int l_length = (graphic->getCameraSize().x + l_background->picture->surface->w/2)/l_background->picture->surface->w+1;
+
 
             vec2 l_size = vec2( p_map_width * p_tilewidth, p_map_hight * p_tilehight);
             vec2 l_offset = vec2( l_background->picture->surface->w, l_background->picture->surface->h);
@@ -510,8 +512,8 @@ void world::draw( graphic *graphic) {
             l_position = l_position + vec2( l_offset.x * factor, 0);
 
             // draw one left middle and right
-            
-            graphic->drawImage( l_background->picture, l_position, l_size, vec2( 0, 0), 0.0, 0, 1);
+            for( int i = 0; i < l_length; i++)
+                graphic->drawImage( l_background->picture, l_position + vec2( l_offset.x * i, 0), l_size, vec2( 0, 0), 0.0, 0, 1);
 
         }
     }
