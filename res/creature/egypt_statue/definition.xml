@@ -1,0 +1,7 @@
+<object name="egypt_statue" width="16" height="35" gravity="1" script="script.lua" timer="1200" isenemy="1">
+	<action name="idle" frame="0" speed="1">idle.png</action>
+	<action name="die" frame="0" speed="1">die.png</action>
+	<hitbox offsetx="4" offsety="8" width="8" hight="27"/>
+	<sound name="throw" volume="5">throw.wav</sound>
+	<vertex x="8" y="35">down</vertex>
+</object>
