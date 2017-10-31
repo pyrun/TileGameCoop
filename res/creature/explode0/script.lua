@@ -38,8 +38,7 @@ function collision( id, ...)
 
 				setVelocityX( v, l_velX)
 				setVelocityY( v, l_velY)
-			end
-			if isEnemy(v) == true then
+			elseif isEnemy(v) == true or getName( v) == "up_stone" then
 				kill( v)
 			end
 		end

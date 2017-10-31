@@ -2,6 +2,6 @@
 	<action name="idle" frame="1" speed="0" loop="0">idle.png</action>
 	<action name="press" frame="2" speed="1" loop="0" endCall="press">idle.png</action>
 	<vertex x="16" y="6" id="1">down</vertex>
-	<hitbox offsetx="0" offsety="0" width="16" hight="6"/>
+	<hitbox offsetx="0" offsety="0" width="32" hight="6"/>
 </object>
 
