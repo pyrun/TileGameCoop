@@ -1,4 +1,6 @@
 <savefile>
-    <player/>
-    <world file="sahara.tmx" width="140" height="64"/>
+    <player>
+        <entity index="death">7</entity>
+    </player>
+    <world file="test.tmx" width="64" height="32"/>
 </savefile>

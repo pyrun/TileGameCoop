@@ -33,6 +33,7 @@ function timer( id )
 		elseif angle_deg > 220 then
 			angle_steps = -angle_steps
 		end
+
 		angle_deg = angle_deg + angle_steps
 		local l_angle = (angle_deg)* math.pi / 180 + math.pi
 		vel_x = math.cos( l_angle ) * 13

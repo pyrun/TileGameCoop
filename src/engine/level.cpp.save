@@ -103,18 +103,17 @@ level::~level()
 }
 
 void level::process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list *particle) {
-    // handle save
-    if( p_setSave == true) {
-        p_setSave = false;
-        fast_save( playerlist);
-    }
-    // after save now load state
+    // handle save and load state
     if( p_setLoad == true) {
         p_setLoad = false;
         // reset particle system
         particle->clear();
         // load world
         fast_load( playerlist);
+    }
+    if( p_setSave == true) {
+        p_setSave = false;
+        fast_save( playerlist);
     }
 
     // world end transition
@@ -220,25 +219,9 @@ void level::fast_save( player_handle *player) {
     // insert the root node
     l_savefile.InsertFirstChild(l_root);
 
-     // save player
+    // save player
     // creating root player element
     XMLElement *l_xmlPlayer = l_savefile.NewElement( "player");
-    std::vector<player_data> l_playerdata = player->getPlayerData();
-
-    // save every data string
-    for( int i = 0; i < (int)l_playerdata.size();i++ ) {
-        std::string l_player_index = l_playerdata[i].index;
-        std::string l_player_data = l_playerdata[i].data;
-
-        XMLElement *l_xmlPlayerData = l_savefile.NewElement( "entity");
-
-        // index
-        l_xmlPlayerData->SetAttribute( "index", l_player_index.c_str());
-        l_xmlPlayerData->SetText( l_player_data.c_str());
-
-        // save entity
-        l_xmlPlayer->LinkEndChild( l_xmlPlayerData);
-    }
     // link to the end
     l_root->LinkEndChild( l_xmlPlayer);
 
@@ -271,21 +254,20 @@ void level::save( player_handle *player) {
     // save player
     // creating root player element
     XMLElement *l_xmlPlayer = l_savefile.NewElement( "player");
-    std::vector<player_data> l_playerdata = player->getPlayerData();
+    std::vector<player_data> l_playerdata = getPlayerData();
 
     // save every data string
     for( int i = 0; i < (int)l_playerdata.size();i++ ) {
         std::string l_player_index = l_playerdata[i].index;
         std::string l_player_data = l_playerdata[i].data;
 
-        XMLElement *l_xmlPlayerData = l_savefile.NewElement( "entity");
+        XMLElement *l_xmlEntity = l_savefile.NewElement( "entity");
 
-        // index
-        l_xmlPlayerData->SetText( l_player_index.c_str());
-        l_xmlPlayerData->SetAttribute( "data", l_player_data.c_str());
-
+        l_xmlEntity->SetAttribute( "index", l_player_index);
+        l_xmlEntity->SetAttribute( "data", l_player_data);
+        
         // save entity
-        l_xmlPlayer->LinkEndChild( l_xmlPlayerData);
+        l_xmlEntitys->LinkEndChild( l_xmlEntity);
     }
     // link to the end
     l_root->LinkEndChild( l_xmlPlayer);
@@ -406,24 +388,6 @@ void level::fast_load( player_handle *player) {
     if( !l_xml_root) {
         printf( "level::load root xml element not found\n");
         return;
-    }
-
-    XMLElement* l_xml_player = l_xml_root->FirstChildElement( "player" );
-    XMLElement* l_xml_player_entity = l_xml_player->FirstChildElement( "entity" );
-    while( l_xml_player_entity) {
-        std::string l_index;
-        std::string l_data;
-
-        // position
-        l_index = l_xml_player_entity->Attribute( "index");
-        l_data = l_xml_player_entity->GetText();
-
-        // save to player
-        player->setData( l_index, l_data);
-        printf( "level::fast_load %s %s\n", l_index.c_str(), l_data.c_str());
-
-        // next tile
-        l_xml_player_entity = l_xml_player_entity->NextSiblingElement( "tile");
     }
 
     // load world

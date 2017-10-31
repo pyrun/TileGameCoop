@@ -29,13 +29,15 @@ function timer( id)
 	position_y = l_y
 	table.sort( ids, compare)
 
+	object = -1
+
 	for object_id = 1, #ids do
 		local obj = ids[object_id]
 		l_obj_x, l_obj_y = getPosition( obj)
 
 		local dir = getAnimationDirection( id)
 
-		if isPlayer( obj) and isAlive( obj) then
+		if isPlayer( obj) and isAlive( obj) and isAlive( object) == false then
 			
 			target_angle = math.atan2  ( (l_obj_y+16) - l_y, l_obj_x - l_x)
 

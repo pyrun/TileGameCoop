@@ -4,6 +4,7 @@ savedone = false
 one_skip = false
 
 function timer( id, time)
+
 	if one_skip == false then
 		one_skip = true
 	else
@@ -14,6 +15,13 @@ function timer( id, time)
 		end
 		-- check if enough player still life
 		if getAmountPlayerChamps() < tonumber(global_value_2) then
+			-- count death +1
+			local count_death = tonumber(getPlayerData( "death"))
+			setPlayerData( "death", tostring(count_death + 1))
+
+			-- save
+			savestate()
+			-- load gameover screen
 			setLoadLevel( "gameover.tmx", true)
 		end
 	end

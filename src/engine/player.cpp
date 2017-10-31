@@ -21,11 +21,9 @@ static int lua_setPlayerData( lua_State *state) {
     l_index = lua_tostring( state, 1);
     l_data = lua_tostring( state, 2);
 
-    // look if exist
-    l_playerdata = lua_player->getData( l_index);
-    if( l_playerdata == NULL)
-        lua_player->addData( l_index, l_data);
+    printf( "lua_setPlayerData: %s %s\n", l_index.c_str(), l_data.c_str());
 
+    lua_player->setData( l_index, l_data);
     return 0;
 }
 
@@ -45,11 +43,12 @@ static int lua_getPlayerData( lua_State *state) {
     l_playerdata = lua_player->getData( l_index);
     if( l_playerdata == NULL) {
         printf( "lua_getPlayerData index \"%s\" not found\n", l_index.c_str());
-        return 0;
+        lua_pushstring( state, "0");
+        return 1;
     }
 
     lua_pushstring( state, l_playerdata->data.c_str());
-    return 0;
+    return 1;
 }
 
 static int lua_getActivePlayer( lua_State *state) {
@@ -548,6 +547,8 @@ void player_handle::addData( std::string index, std::string data) {
     l_data.index = index;
     l_data.data = data;
 
+    printf( "player_handle::addData no data found\n");
+
     p_data.push_back( l_data);
 }
 
@@ -556,6 +557,18 @@ player_data *player_handle::getData( std::string index) {
         if( p_data[i].index == index)
             return &p_data[i];
     return NULL;
+}
+
+void player_handle::setData( std::string index, std::string data) {
+    for( int i = 0; i < (int)p_data.size(); i++) {
+        if( p_data[i].index == index) {
+            printf( "player_handle::setData found\n");
+            p_data[i].data = data;
+            return;
+        }
+    }
+    // nothing found add Data
+    addData( index, data);
 }
 
 void player_handle::player_add( SDL_GameController *controller, bool join) {

@@ -62,6 +62,8 @@ class player_handle
 
         void addData( std::string index, std::string data);
         player_data *getData( std::string index);
+        void setData( std::string index, std::string data);
+        std::vector<player_data> getPlayerData() { return p_data; }
     protected:
     private:
         std::vector<player*> p_playerlist;
