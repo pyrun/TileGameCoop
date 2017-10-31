@@ -25,6 +25,7 @@ function collision( id, ...)
 	for k,v in pairs({...}) do
 		if isEnemy( v) == true or isPlayer( v) == true then
 			setAnimation( id, "used")
+			kill( v)
 		end
 	end
 end
