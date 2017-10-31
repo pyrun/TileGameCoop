@@ -1,2 +1,2 @@
-"..\bin\WinDebug32\TileGameCoop.exe" sahara.tmx
+"..\bin\WinDebug32\TileGameCoop.exe" intro_warp.tmx
 PAUSE

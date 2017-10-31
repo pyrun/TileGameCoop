@@ -1,6 +1,6 @@
 <savefile>
     <player>
-        <entity index="death">1</entity>
+        <entity index="death">23</entity>
     </player>
     <world file="sahara.tmx" width="140" height="64"/>
 </savefile>

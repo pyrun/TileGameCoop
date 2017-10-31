@@ -3,16 +3,20 @@ local text = {}
 local table_text = {}
 
 function text.table_start()
-	table.insert( table_text, "Du arbeitest als Programmierer")
-	table.insert( table_text, "in deiner Lab als dir im neben-")
-	table.insert( table_text, "zimmer ein Portal auffiel.")
+	table.insert( table_text, "Guten Morgen Neuling")
+	table.insert( table_text, "Du bist Programmierer in einer")
+	table.insert( table_text, "der bedeutsamsten Institutionen")
+	table.insert( table_text, "der Welt, wenn es um die")
+	table.insert( table_text, "Technologie mit Portalen geht.")
 	table.insert( table_text, "ENTER")
-	table.insert( table_text, "Du hast deine Arbeit")
-	table.insert( table_text, "fortgefuehrt bis dir")
-	table.insert( table_text, "ein Bug in deinem")
-	table.insert( table_text, "Programm augefallen ist")
+
+	table.insert( table_text, "Das Projekt weisst jedoch ")
+	table.insert( table_text, "erhebliche Bugs auf. Der")
+	table.insert( table_text, "Druck von den Vorgesetzten ist")
+	table.insert( table_text, "gross und erleichtert keines")
+	table.insert( table_text, "Wegs die Arbeit, sondern")
 	table.insert( table_text, "ENTER")
-	table.insert( table_text, "\"Scheibenkleister!\"")
+	table.insert( table_text, "provoziert nur weitere Fehler.")
 	table.insert( table_text, "END")
 
 	-- set config player
