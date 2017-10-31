@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="36" height="36" tilewidth="16" tileheight="16" nextobjectid="66">
+<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="36" height="36" tilewidth="16" tileheight="16" nextobjectid="68">
  <properties>
   <property name="depth_sort" value="1"/>
  </properties>
@@ -173,7 +173,7 @@
   <object id="49" name="start" x="23.3333" y="64" width="16" height="16"/>
   <object id="50" name="alex_topview" x="256" y="176" width="16" height="16"/>
   <object id="58" name="titel" x="101" y="64" width="16" height="16"/>
-  <object id="59" name="menu_item" x="134" y="161" width="32" height="16">
+  <object id="59" name="menu_item" x="135" y="160" width="32" height="16">
    <properties>
     <property name="global" value="load"/>
     <property name="global2" value="Continue"/>
@@ -185,7 +185,7 @@
     <property name="global2" value="Quit"/>
    </properties>
   </object>
-  <object id="63" name="menu_item" x="345.5" y="161" width="32" height="16">
+  <object id="63" name="menu_item" x="346.5" y="159" width="32" height="16">
    <properties>
     <property name="global" value="intro_text.tmx"/>
     <property name="global2" value="Reset"/>
@@ -193,7 +193,7 @@
   </object>
   <object id="65" name="menu_item" x="316.5" y="256" width="32" height="16">
    <properties>
-    <property name="global" value=""/>
+    <property name="global" value="credits.tmx"/>
     <property name="global2" value="Credits"/>
    </properties>
   </object>
