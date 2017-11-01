@@ -321,7 +321,7 @@ void graphic::clear( float dt) {
 
         float l_angle = atan2f( l_change.y, l_change.x);
 
-        l_speed = sdp( l_change.x, l_change.y)/100.f;
+        l_speed = sdp( l_change.x, l_change.y)/1000.f;
         l_speed *= dt;
         l_velocity.x += cos( l_angle) * l_speed;
         l_velocity.y += sin( l_angle) * l_speed;

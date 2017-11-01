@@ -1,0 +1,25 @@
+Hier mal einiges, was mir persönlich aufgefallen ist.
+Ich weiß nicht, wie viel du noch an der Engine schrauben möchtest, hier aber mal einige Punkte, an denen du noch etwas ändern könntest:
+
+Kollisionsboxen:
+1.    Die Kollisionsboxen beim Spieler und bei den Gegnern sind noch etwas unpassend gewählt. Manchmal sterbe ich, obwohl es noch ein paar Pixel bis zum Gegner sind.
+
+Kamera:
+-1.    Wenn die Spielerposition auf dem Screen sich nicht mehr ändert, dann ensteht ein Zittereffekt, der nicht so schön ist.
+-2.    Beim Springen würde ich die Kamera nicht direkt bewegen.
+-3.    Allgemein fände ich es schöner, wenn sich die Kamera "smoother" bewegen würde.
+
+Portal:
+-1.     Das Portal sollte man nur in die Richtung schießen können, in die man gerade schaut, da man in dem Moment nicht in die andere Richtung möchte. Oder zumindest sollte sich die Zielrichtung IMMER zuerst von oben in Laufrichtung bewegen, bevor es sich in die entgegengesetzte Richtung bewegt.
+
+Gegnerdesign:
+-1.    Der Gegner, der Feuerbälle schießt, der macht es meiner Meinung nach in zu kurzen Abständen.
+2.    Beim Steingegner denke ich als Spieler direkt an den aus Mario. Dieser verhält sich aber anders. Ich wusste leider nicht, wie ich an dieser Stelle weiter kann.
+
+Respawnsystem:
+1.    Ich weiß nicht, ob es so gut ist jedes mal diesen Screen anzuzeigen, wenn ein Spieler stirbt. 
+
+Steuerung:
+1.    Die Steuerung fühlt sich noch nicht perfekt an. Es ist schwer zu beschreiben, aber als ich an einem 2D Jump'n Run gearbeitet habe, da ging es mir genau so. Ich habe einige Zeit verbracht Variablen anzupassen, aber irgendwann hat es einfach gestimmt.
+Wenn du wieder eine neue Version haben solltest, dann lass es mich wissen. Werde gerne für dich testen.
+Wie lange programmierst du eigentlich schon?

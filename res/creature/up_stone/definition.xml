@@ -9,6 +9,6 @@
 	<vertex x="0" y="25">left</vertex>
 	<vertex x="30" y="12">right</vertex>
 	<vertex x="30" y="25">right</vertex>
-	<hitbox offsetx="3" offsety="0" width="31" hight="24"/>
+	<hitbox offsetx="3" offsety="4" width="24" hight="22"/>
 	<sound name="up" volume="20">up.wav</sound>
 </object>

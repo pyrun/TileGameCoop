@@ -66,21 +66,26 @@ function special( id)
 	if isAlive(getSpecialId()) == false then
 		l_dir = getAnimationDirection( id)
 		l_x, l_y = getPosition( id)
-		l_factor = 0
-
 		-- dir offset calc
 		if l_dir == true then
-			l_factor = -25
+			if angle_steps < 0 then
+				angle_steps = -angle_steps
+			end
+			angle_deg = -25
+		else
+			if angle_steps > 0 then
+				angle_steps = -angle_steps
+			end
+			angle_deg = 210
 		end
 		-- calc offset
-		id_x = 10 + l_factor
-		id_y = 0
+		id_x = 16
+		id_y = 16
 		
 		--script.id_attack 
 		id_attack = createObject( "arrow", l_x + id_x, l_y + id_y)
 		setSpecialPosition( id_x, id_y) -- offset
 		setSpecialId( id_attack) -- attach to the player
-		angle_deg = 90
 		update( id) -- once update graphic
 	else
 		delete( getSpecialId() )

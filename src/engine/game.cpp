@@ -64,6 +64,9 @@ void game::drawHUD() {
         p_font->drawMessage( p_graphic, "No gamepad found!", vec2( p_graphic->getCamera().tovec2().x, (int)p_graphic->getCameraSize().y/2+30+30 ), 1.2f, 255);
         p_font->drawMessage( p_graphic, "Please connect one", vec2( p_graphic->getCamera().tovec2().x, (int)p_graphic->getCameraSize().y/2+40+30 ), 1.2f, 255);
         p_font->drawMessage( p_graphic, "gamepad for playing", vec2( p_graphic->getCamera().tovec2().x, (int)p_graphic->getCameraSize().y/2+50+30 ), 1.2f, 255);
+    } else if( p_player->getPlayerActive() == 0 ) {
+        p_font->drawMessage( p_graphic, "No Player Active!", vec2( p_graphic->getCamera().tovec2().x, (int)p_graphic->getCameraSize().y/2+30+30 ), 1.2f, 255);
+        p_font->drawMessage( p_graphic, "Press Start", vec2( p_graphic->getCamera().tovec2().x, (int)p_graphic->getCameraSize().y/2+40+30 ), 1.2f, 255);
     }
 
     // debug

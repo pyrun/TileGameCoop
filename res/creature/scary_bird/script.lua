@@ -2,6 +2,10 @@ speed = 0.03
 turn_flag = true
 
 function vertexhit( id)
+	if isAlive( id) == false then
+		do return end
+	end
+
 	local dir = getAnimationDirection( id)
 
 	if turn_flag == true then
@@ -31,8 +35,8 @@ function start( id)
 end
 
 function timer( id)
-
 	if isAlive( id) == false then
+		setGravity( id, true) 
 		do return end
 	end
 
