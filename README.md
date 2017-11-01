@@ -1,31 +1,25 @@
 ## Synopsis
-![Overworld](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_2.jpg)
-![Grasland](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_3.jpg)
-![Clouds world](https://github.com/pyrun/TileGameCoop/blob/master/ideen/ingame_1.jpg)
+![intro](https://github.com/pyrun/TileGameCoop/blob/master/ideen/intro.JPG)
+![greenland](https://github.com/pyrun/TileGameCoop/blob/master/ideen/greenland.JPG)
+![underground](https://github.com/pyrun/TileGameCoop/blob/master/ideen/underground.JPG)
+![sahara](https://github.com/pyrun/TileGameCoop/blob/master/ideen/sahara.JPG)
 <br>
-Platform + Jump n Run + endless player support :)
 
-## Motivation
+## Geschichte
 
-How do I improve logic building skills in a Programming language? <br> That is my motivation - to improve myself.
+Du bist Programmierer in einer der bedeutsamsten Institutionen der Welt, wenn es um die Technologie mit Portalen geht. 
+
+Das Projekt weißt jedoch erhebliche Bugs auf. Der Druck von den Vorgesetzten ist groß und erleichtert keines Wegs die Arbeit , sondern provoziert nur weitere Fehler. 
+
+
+"Explosion!" 
+
+
+Ein starker Sog zieht deine Kollegen plötzlich in ein nicht kontrollierbares Portal und ehe du dich dagegen wehren kannst bist du auch mittendrin....
 
 ## Installation
 
-You can simple download and build(copy*) it yourself:
-
-Win32
-1. Download the pack
-2. Go in /build/ and start the batch file "creating_win.bat"
-3. Choose "1" create a game folder and exit the script
-4. In /build/"current day"/ you find the game
-5. Run the File "TileGameCoop.exe"
-
-Linux
-1. Download the pack
-2. Go in /build/ and start the script file "creating_lin.sh"
-3. Choose "build" to create a game folder and exit the script
-4. In /build/"current day"/ you find the game
-5. run the file "TileGameCoop" as programm
+In Arbeit.
 
 ## API Reference
 

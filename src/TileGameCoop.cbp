@@ -24,7 +24,6 @@
 					<Add option="-lmingw32" />
 					<Add option="-lSDL2main -lSDL2" />
 					<Add option="-lSDL2_image" />
-					<Add option="-lSDL2_net" />
 					<Add option="-lSDL2_mixer" />
 					<Add option="-llua53" />
 					<Add directory="../../SDL2_64/lib" />
@@ -45,7 +44,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lmingw32 -lSDL2main -lSDL2  -lSDL2_image -lSDL2_net" />
+					<Add option="-lmingw32 -lSDL2main -lSDL2  -lSDL2_image" />
 					<Add option="-llua53" />
 					<Add directory="../../SDL2_64/lib" />
 					<Add directory="../../lua/lib" />
