@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="31" height="20" tilewidth="16" tileheight="16" nextobjectid="87">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="31" height="20" tilewidth="16" tileheight="16" nextobjectid="87">
  <properties>
   <property name="depth_sort" value="1"/>
+  <property name="music" value="ObservingTheStar.ogg"/>
  </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap_topview.bmp" trans="c8bfe7" width="1020" height="1020"/>

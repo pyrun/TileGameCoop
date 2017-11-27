@@ -81,6 +81,7 @@ class world
         tile *getBackground() { return p_tilemap_background; }
 
         bool depthSort() { return p_depthSort; }
+        std::string getMusicFile() { return p_music; }
     protected:
 
     private:
@@ -117,6 +118,7 @@ class world
 
         std::vector<tiletype> p_tiletypes;
         std::string p_needloadworld;
+        std::string p_music;
 
         bool p_depthSort;
 

@@ -1,2 +1,2 @@
-"..\bin\WinDebug32\TileGameCoop.exe" intro_warp.tmx
+"..\bin\WinDebug32\TileGameCoop.exe" greenland.tmx
 PAUSE

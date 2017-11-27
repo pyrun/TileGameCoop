@@ -24,10 +24,13 @@ game::game()
 
     // audio
     p_audio = new audio();
+    p_audio->loadMusic( p_config.getMusicFolder(), p_config.getMusicVolume());
 
     // game running
     p_game_running = true;
     p_config.setQuit( false);
+
+    //p_audio->playMusic( "ObservingTheStar.ogg");
 }
 
 game::~game()
@@ -91,7 +94,7 @@ int game::process_graphic( std::string levelName) {
     int l_error;
 
     // load level
-    p_level = new level( levelName.size()==0?p_config.getStartfile():levelName.c_str(), "worlds/", p_graphic, p_player, &p_config);
+    p_level = new level( levelName.size()==0?p_config.getStartfile():levelName.c_str(), "worlds/", p_graphic, p_player, &p_config, p_audio);
 
     // set lua link
     lua_level_setLink( p_level);
@@ -120,7 +123,7 @@ int game::process_graphic( std::string levelName) {
         p_player->handle( p_level->getEntityList(), p_level->getWorld(), p_input, p_graphic, &p_config);
 
         // p_level process
-        p_level->process( l_delta, &p_config, p_graphic, p_player, p_particles);
+        p_level->process( l_delta, &p_config, p_graphic, p_player, p_particles, p_audio);
 
         // DRAW:
         // draw world

@@ -107,6 +107,14 @@ class config
         // force join ( if controller found -> he join the game)
         void setForceJoin( bool set) { p_forceJoin = set; }
         bool getForceJoin() { return p_forceJoin; }
+
+        // music folder
+        void setMusicFolder( std::string folder) { p_nusic_folder = folder; }
+        std::string getMusicFolder() { return p_nusic_folder; }
+
+        // music volume
+        void setMusicVolume( int volume) { p_music_volume = volume; }
+        int getMusicVolume() { return p_music_volume; }
     protected:
 
     private:
@@ -140,6 +148,9 @@ class config
         std::string p_resolution_file;
         std::string p_controllermappingsfile;
         std::string p_startfile;
+
+        std::string p_nusic_folder;
+        int p_music_volume;
 };
 
 void lua_config_setLink( config *config);

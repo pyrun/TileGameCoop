@@ -33,7 +33,7 @@ void lua_level_setLink( level* level) {
 }
 
 
-level::level(std::string file, std::string folder, graphic *graphic, player_handle *player, config *config, entitylist *t_entitylist)
+level::level(std::string file, std::string folder, graphic *graphic, player_handle *player, config *config, audio* audio, entitylist *t_entitylist)
 {
     p_entity = NULL;
     p_world = NULL;
@@ -88,8 +88,11 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     // camera set at start point
     vec2 l_start = p_world->getStartPoint();
 
-    //
+    // set camera position to start
     graphic->setCamera(l_start);
+
+    // play music
+    audio->playMusic( p_world->getMusicFile());
 }
 
 level::~level()
@@ -102,7 +105,7 @@ level::~level()
         delete p_world;
 }
 
-void level::process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list *particle) {
+void level::process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list *particle, audio *audio) {
     // handle save
     if( p_setSave == true) {
         p_setSave = false;
@@ -151,7 +154,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
     }
 
     if( p_transition == NULL && p_level != NULL) {
-        p_level->process( l_delta, config, graphic, playerlist, particle);
+        p_level->process( l_delta, config, graphic, playerlist, particle, audio);
         return;
     }
     // transition
@@ -186,7 +189,7 @@ void level::process( float l_delta, config *config, graphic *graphic, player_han
         p_entity->clearEntitys();
 
         std::string l_level = p_world->needLoadWorld();
-        p_level = new level( l_level, "worlds/", graphic, playerlist, config, p_entity);
+        p_level = new level( l_level, "worlds/", graphic, playerlist, config, audio, p_entity);
 
         //p_transition = new transition( graphic, transition_time, true)
 

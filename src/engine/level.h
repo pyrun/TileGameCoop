@@ -19,10 +19,10 @@
 class level
 {
     public:
-        level(std::string file, std::string folder, graphic *graphic, player_handle *player, config *config, entitylist *t_entitylist = NULL);
+        level(std::string file, std::string folder, graphic *graphic, player_handle *player, config *config, audio* audio, entitylist *t_entitylist = NULL);
         virtual ~level();
 
-        void process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list* particle);
+        void process( float l_delta, config *config, graphic *graphic, player_handle *playerlist, particle_list* particle, audio *audio);
         void draw( graphic* graphic);
 
         entitylist *getEntityList() {

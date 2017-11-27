@@ -254,6 +254,8 @@ bool world::load( std::string file, std::string ordner) {
 
             if( l_name == "depth_sort")
                 p_depthSort = atoi( l_property->Attribute( "value" ));
+            if( l_name == "music")
+                p_music = l_property->Attribute( "value" );
 
             // next layer
             l_property = l_property->NextSiblingElement("property");

@@ -161,6 +161,13 @@ int config::load() {
         setForceJoin( loadParameter( l_xml_game, "force_join"));
     }
 
+    // get audio node
+    XMLElement* l_xml_audio = l_root->FirstChildElement( "audio" );
+    if( l_xml_audio) {
+        setMusicFolder( loadParameterString( l_xml_audio, "folder"));
+        setMusicVolume( loadParameter( l_xml_audio, "volume"));
+    }
+
     // return a success of loading
     return XML_SUCCESS;
 }
@@ -226,9 +233,19 @@ void config::save() {
         l_root->LinkEndChild( l_xmlGame);
     }
 
+    // creating audio node
+    XMLElement *l_xmlAudio = l_config.NewElement( "audio");
+    // look if node corrupt
+    if( l_xmlAudio) {
+        // save parameter
+        saveParameter( &l_config, l_xmlAudio, "folder", getMusicFolder());
+        saveParameter( &l_config, l_xmlAudio, "volume", getMusicVolume());
+        // link to the root node
+        l_root->LinkEndChild( l_xmlAudio);
+    }
+
     // save
     l_config.SaveFile( CONFIG_FILE);
-
 }
 
 void config::saveParameter( XMLDocument *config, XMLNode *root, std::string name, int data) {
