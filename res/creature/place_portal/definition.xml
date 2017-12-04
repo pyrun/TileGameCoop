@@ -1,8 +1,18 @@
-<object name="place_portal" width="16" height="28" gravity="0" script="script.lua" timer="100">
-	<action name="idle" frame="3" speed="4">green.bmp</action>
-	<action name="red" frame="3" speed="4">red.bmp</action>
-	<action name="green" frame="3" speed="4">green.bmp</action>
-	<hitbox offsetx="8" offsety="14" width="1" hight="1"/>
+<object name="place_portal" width="32" height="32" gravity="0" script="script.lua" timer="100">
+	<action name="idle" frame="3" speed="4">green.png</action>
+	<action name="red" frame="3" speed="4">red.png</action>
+	<action name="green" frame="3" speed="4">green.png</action>
+	<vertex id="9" x="12" y="32">down</vertex>
+	<vertex id="1" x="16" y="32">down</vertex>
+	<vertex id="1" x="20" y="32">down</vertex>
+	<vertex id="2" x="12" y="6">up</vertex>
+	<vertex id="3" x="20" y="6">up</vertex>
+	<vertex id="4" x="11" y="10">left</vertex>
+	<vertex id="5" x="11" y="16">left</vertex>
+	<vertex id="6" x="11" y="31">left</vertex>
+	<vertex id="7" x="21" y="10">right</vertex>
+	<vertex id="8" x="21" y="16">right</vertex>
+	<vertex id="9" x="21" y="31">right</vertex>
 </object>
 
 
