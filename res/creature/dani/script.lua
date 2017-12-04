@@ -18,13 +18,15 @@ function special( id )
 
 		for object_id = 1, #ids do
 			local obj = ids[object_id]
+			l_obj_x, l_obj_y = getPosition( obj)
 			if getName( obj) == "alex" or
 				getName( obj) == "jan" or
 				getName( obj) == "spring" or
 				getName( obj) == "bomb"
 				then
-				setVelocityX( obj, l_vel_x)
+				setPosition( obj, l_obj_x, l_obj_y-1)
 				setVelocityY( obj, -thow_speed)
+				setVelocityX( obj, l_vel_x)
 				sendSignal( obj, id, "throw")
 			end
 		end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="16" tileheight="16" nextobjectid="133">
+<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="16" tileheight="16" nextobjectid="138">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
@@ -154,10 +154,16 @@
   <properties>
    <property name="global" value="alex"/>
   </properties>
-  <object id="57" name="start" x="0" y="48" width="16" height="16"/>
-  <object id="103" name="jan" x="148" y="204" width="16" height="32"/>
-  <object id="130" name="wood_chest" x="192" y="208" width="32" height="32"/>
+  <object id="57" name="start" x="532" y="56" width="16" height="16"/>
   <object id="131" name="wood_chest" x="128" y="144" width="32" height="32"/>
-  <object id="132" name="wood_chest" x="160" y="144" width="32" height="32"/>
+  <object id="132" name="place_portal" x="552" y="152" width="32" height="32"/>
+  <object id="134" name="dani" x="680" y="208" width="16" height="32"/>
+  <object id="135" name="spawn" x="720" y="220" width="16" height="16">
+   <properties>
+    <property name="global" value="bomb"/>
+   </properties>
+  </object>
+  <object id="136" name="wood_chest" x="620" y="204" width="32" height="32"/>
+  <object id="137" name="wood_chest" x="756" y="204" width="32" height="32"/>
  </objectgroup>
 </map>

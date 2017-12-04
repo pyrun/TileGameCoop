@@ -36,6 +36,8 @@
 #define COLLISION_X_OFFSET 6.0f
 #define COLLISION_Y_OFFSET 6.0f
 
+#define COLLISION_TOLERANZ 15.f
+
 class action {
     public:
         std::string name;
@@ -343,6 +345,7 @@ class entitylist {
 
         void vertexHit( entity *entity, int vertexid);
         std::vector <int> collision_boundingBox( entity* checkentity);
+        std::vector <int> collision_boundingBoxVertex( entity* checkentity);
         std::vector <int> collision_boundingBoxRect( fvec2 l_postion, fvec2 l_size, int id);
         bool loadType( std::string folder, graphic *graphic);
         void removeTypes();
