@@ -40,7 +40,7 @@ world::~world()
         delete p_tilemap_background;
 }
 
-tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bool up) {
+tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity) {
     int l_tempy;
     int l_x = ( position.x )/p_tilewidth;
     int l_y = ( position.y )/p_tilehight;
@@ -52,13 +52,14 @@ tile *world::getCollisionTileY( fvec2 position, fvec2 change, fvec2 velocity, bo
 
     // change in steps annähern
     for( float i = 0; i < fabs(change.y); i+= 0.1f) {
-        l_x = ( position.x )/p_tilewidth;
-        l_y = ( position.y + i)/p_tilehight;
 
-        if( up)
-            l_tempy = l_y - 1;
+        l_x = ( position.x )/p_tilewidth;
+        // direction
+        if( change.y < 0)
+            l_y = ( position.y - i)/p_tilewidth;
         else
-            l_tempy = l_y;
+            l_y = ( position.y + i)/p_tilewidth;
+        l_tempy = l_y;
 
         // collision tile
         l_tile = getTile( p_tilemap_foreground, vec2( l_x, l_tempy) );
@@ -103,10 +104,14 @@ tile *world::getCollisionTileX( fvec2 position, fvec2 change, fvec2 velocity) {
         return NULL;
 
     // change in steps annähern
-    for( float i = -2; i < fabs(change.x); i+= 0.5f) {
-        l_x = ( position.x + i)/p_tilewidth;
-        l_y = ( position.y )/p_tilehight;
+    for( float i = 0; i < fabs(change.x); i+= 0.1f) {
 
+        // direction
+        if( change.x < 0)
+            l_x = ( position.x - i)/p_tilewidth;
+        else
+            l_x = ( position.x + i)/p_tilewidth;
+        l_y = ( position.y )/p_tilehight;
         l_tempx = l_x;
 
         // collision tile
@@ -125,12 +130,12 @@ tile *world::getCollisionTileX( fvec2 position, fvec2 change, fvec2 velocity) {
             l_tile = NULL;
             continue;
         }
-        if( l_tile->type != NULL && change.y > 0 )
+        if( l_tile->type != NULL && change.x > 0 )
             if( l_tile->type->top == 0) {
                 l_tile = NULL;
                 continue;
             }
-        if( l_tile->type != NULL && change.y < 0 )
+        if( l_tile->type != NULL && change.x < 0 )
             if( l_tile->type->down == 0) {
                 l_tile = NULL;
                 continue;
