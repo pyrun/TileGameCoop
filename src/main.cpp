@@ -11,5 +11,8 @@ int main(int argc, char *argv[]) {
         l_level = argv[1];
     }
 
+
+    l_level = "test.tmx";
+
     return p_game.process_graphic( l_level);
 }
