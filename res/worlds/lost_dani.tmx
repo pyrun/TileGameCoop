@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="64" height="48" tilewidth="16" tileheight="16" nextobjectid="69">
+<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="64" height="48" tilewidth="16" tileheight="16" nextobjectid="69">
  <properties>
   <property name="music" value="one_0.mp3"/>
  </properties>
@@ -166,8 +166,8 @@
 </data>
  </layer>
  <objectgroup color="#000080" name="Objects">
-  <object id="49" name="start" x="0" y="0" width="16" height="16"/>
-  <object id="56" name="dani" x="80" y="0" width="16" height="32">
+  <object id="49" name="start" x="0" y="504" width="16" height="16"/>
+  <object id="56" name="dani" x="64" y="504" width="16" height="32">
    <properties>
     <property name="action" value="jump"/>
    </properties>
@@ -194,6 +194,6 @@
     <property name="global" value="63"/>
    </properties>
   </object>
-  <object id="68" name="hud" x="96" y="32" width="32" height="16"/>
+  <object id="68" name="hud" x="80" y="536" width="32" height="16"/>
  </objectgroup>
 </map>
