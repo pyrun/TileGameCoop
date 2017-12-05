@@ -3,7 +3,7 @@
 	<action name="turn" frame="5" speed="1" loop="0" endCall="turn_end">turn.png</action>
 	<action name="turn2" frame="5" speed="1" loop="0" endCall="turn2_end">turn2.png</action>
 	<action name="press" frame="1" speed="0" loop="0">press.png</action>
-	<hitbox offsetx="0" offsety="0" width="9" hight="9"/>
+	<hitbox offsetx="0" offsety="0" width="16" hight="9"/>
 	<sound name="press" volume="20">press.wav</sound>
 	<sound name="unpress" volume="20">unpress.wav</sound>
 </object>

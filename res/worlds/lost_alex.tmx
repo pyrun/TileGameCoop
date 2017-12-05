@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" nextobjectid="67">
+<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" nextobjectid="68">
  <properties>
   <property name="music" value="one_0.mp3"/>
  </properties>
@@ -304,12 +304,12 @@
     <property name="global2" value="1"/>
    </properties>
   </object>
-  <object id="62" name="alex" x="44" y="816" width="16" height="32">
+  <object id="63" name="wood_chest" x="704" y="832" width="32" height="32"/>
+  <object id="66" name="hud" x="28" y="768" width="32" height="16"/>
+  <object id="67" name="alex" x="48" y="816" width="16" height="32">
    <properties>
     <property name="action" value="jump"/>
    </properties>
   </object>
-  <object id="63" name="wood_chest" x="704" y="832" width="32" height="32"/>
-  <object id="66" name="hud" x="28" y="768" width="32" height="16"/>
  </objectgroup>
 </map>

@@ -1,8 +1,8 @@
 <object name="stalactite" width="4" height="8" script="script.lua" gravity="0">
 	<action name="idle" frame="1">idle.png</action>
-	<vertex id="1" x="2" y="0">down</vertex>
+	<vertex id="1" x="2" y="4">down</vertex>
 	<vertex id="2" x="2" y="0">up</vertex>
 	<vertex id="3" x="0" y="4">left</vertex>
-	<vertex id="4" x="8" y="4">right</vertex>
+	<vertex id="4" x="4" y="4">right</vertex>
 	<hitbox offsetx="1" offsety="1" width="2" hight="6"/>
 </object>

@@ -1,6 +1,7 @@
 local inLiquid = false
 local max_default_speed = 0.06
 local max_speed = max_default_speed
+local run_speed = max_default_speed * 1.7
 
 local walk_speed = 0.03
 local jump_two = 0
@@ -135,11 +136,25 @@ function jump( id)
 end
 
 function up( id) 
+	l_x, l_y = getPosition( id)
 
+	offset_x = 10
+	offset_y = 0
+
+	l_rect_x = 14
+	l_rect_y = 32
+
+
+	ids = {findObjects( id, l_x + offset_x, l_y + offset_y, l_rect_x, l_rect_y)}
+
+	for object_id = 1, #ids do
+		local obj = ids[object_id]
+		sendSignal( obj, id, "enter")
+	end
 end
 
 function down( id) 
-	io.write("down\n")
+
 end
 
 function right( id)
@@ -171,7 +186,7 @@ function run( id, press)
 		do return end
 	end
 	if press and getColision( id, "down") then
-		max_speed = max_default_speed*1.5
+		max_speed = run_speed
 	else
 		max_speed = max_default_speed
 	end

@@ -1,0 +1,10 @@
+<object name="labor_door" width="16" height="32" script="script.lua" timer="1000" solid="1">
+	<action name="close" frame="6" speed="2" loop="0">close.png</action>
+	<action name="idle" frame="6" speed="2" loop="0">open.png</action>
+	<action name="die" frame="1" speed="3" loop="0">die.png</action>
+	<vertex x="8" y="32" id="1">down</vertex>
+	<hitbox offsetx="4" offsety="0" width="8" hight="32"/>
+</object>
+
+
+
