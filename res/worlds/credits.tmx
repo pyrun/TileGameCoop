@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="31" height="30" tilewidth="16" tileheight="16" nextobjectid="92">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="31" height="30" tilewidth="16" tileheight="16" nextobjectid="94">
  <properties>
   <property name="depth_sort" value="1"/>
   <property name="music" value="ObservingTheStar.ogg"/>
@@ -235,6 +235,11 @@
   <object id="91" name="message" x="60" y="362" width="400" height="8">
    <properties>
     <property name="global" value="Independent.nu(Submitted by qubodup)-atmoseerie01.mp3"/>
+   </properties>
+  </object>
+  <object id="93" name="message" x="60" y="375" width="400" height="8">
+   <properties>
+    <property name="global" value="DoKashiteru(opengameart.org)-rain_thunder_loop.mp3"/>
    </properties>
   </object>
  </objectgroup>
