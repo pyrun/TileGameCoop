@@ -1,4 +1,4 @@
-<object name="labor_portal" width="32" height="32" script="script.lua" timer="1000" solid="0" gravity="0">
+<object name="labor_portal" width="32" height="32" script="script.lua" timer="1" solid="0" gravity="0">
 	<action name="idle" frame="5" speed="5" loop="1">portal.bmp</action>
 	<hitbox offsetx="8" offsety="8" width="16" hight="16"/>
 </object>

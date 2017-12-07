@@ -1,0 +1,5 @@
+<object name="wc" width="22" height="32" script="script.lua" gravity="1">
+	<action name="idle">idle.png</action>
+	<vertex x="11" y="32">down</vertex>
+</object>
+

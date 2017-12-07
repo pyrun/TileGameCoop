@@ -1,6 +1,7 @@
-<object name="laser_cutter" width="60" height="28" script="script.lua" solid="1" isTopView="1">
+<object name="laser_cutter" width="60" height="28" script="script.lua" gravity="1">
 	<action name="idle" frame="4" speed="10">lazor.bmp</action>
-	<hitbox offsetx="0" offsety="8" width="60" hight="20"/>
+	<vertex x="10" y="26">down</vertex>
+	<vertex x="50" y="26">down</vertex>
 </object>
 
 

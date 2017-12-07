@@ -1,0 +1,7 @@
+<object name="water_cooler" width="20" height="30" script="script.lua" gravity="1">
+	<action name="idle" frame="5" speed="10">idle.png</action>
+	<vertex x="10" y="30">down</vertex>
+</object>
+
+
+

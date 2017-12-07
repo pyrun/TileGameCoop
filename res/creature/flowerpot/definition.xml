@@ -1,0 +1,7 @@
+<object name="flowerpot" width="14" height="14" script="script.lua" gravity="0">
+	<action name="idle">idle.png</action>
+	<action name="yellow">flower1.png</action>
+	<action name="red">flower2.png</action>
+	<action name="white">flower3.png</action>
+</object>
+

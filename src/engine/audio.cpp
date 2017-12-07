@@ -134,13 +134,13 @@ void audio::loadMusic( std::string folder, int volume) {
             }
 
             // print we found one
-            printf("audio::loadMusic: music \"%s\" ", l_file.c_str());
+            //printf("audio::loadMusic: music \"%s\" ", l_file.c_str());
 
             // save link
             l_musicEntity = new music( l_music, l_entry->d_name);
 
             // print we found one
-            printf("loaded\n", l_file.c_str());
+            //printf("loaded\n", l_file.c_str());
 
             // push back entity
             p_musics.push_back( l_musicEntity);

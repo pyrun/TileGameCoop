@@ -1,0 +1,4 @@
+<object name="computer" width="18" height="13" script="script.lua" gravity="0">
+	<action name="idle" frame="5" speed="10">idle.png</action>
+</object>
+

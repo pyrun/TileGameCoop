@@ -1,0 +1,6 @@
+<object name="chair" width="12" height="18" script="script.lua" gravity="1">
+	<action name="idle">idle.png</action>
+	<action name="right">idle2.png</action>
+	<vertex x="6" y="18">down</vertex>
+</object>
+

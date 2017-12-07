@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" nextobjectid="126">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" nextobjectid="360">
  <properties>
+  <property name="depth_sort" value="0"/>
   <property name="music" value="rain_thunder_loop.mp3"/>
  </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
@@ -282,7 +283,7 @@
 </data>
  </layer>
  <objectgroup color="#000080" name="Objects">
-  <object id="49" name="start" x="16" y="104" width="16" height="16"/>
+  <object id="49" name="start" x="-62" y="104" width="16" height="16"/>
   <object id="62" name="labor_door" x="216" y="64" width="16" height="32"/>
   <object id="63" name="labor_door" x="328" y="64" width="16" height="32"/>
   <object id="64" name="labor_door" x="632" y="64" width="16" height="32"/>
@@ -326,7 +327,7 @@
     <property name="global" value="67"/>
    </properties>
   </object>
-  <object id="81" name="labor_portal" x="192" y="592" width="48" height="32">
+  <object id="81" name="labor_portal" x="176" y="576" width="48" height="32">
    <properties>
     <property name="global" value="intro_warp.tmx"/>
    </properties>
@@ -369,7 +370,7 @@
     <property name="global" value="110"/>
    </properties>
   </object>
-  <object id="110" name="elevator" x="545" y="209" width="32" height="32">
+  <object id="110" name="elevator" x="540" y="209" width="32" height="32">
    <properties>
     <property name="global" value="113"/>
    </properties>
@@ -380,12 +381,12 @@
     <property name="global" value="111"/>
    </properties>
   </object>
-  <object id="113" name="elevator" x="545" y="337" width="32" height="32">
+  <object id="113" name="elevator" x="540" y="337" width="32" height="32">
    <properties>
     <property name="global" value="114"/>
    </properties>
   </object>
-  <object id="114" name="elevator" x="545" y="465" width="32" height="32">
+  <object id="114" name="elevator" x="540" y="465" width="32" height="32">
    <properties>
     <property name="global" value="119"/>
    </properties>
@@ -400,7 +401,7 @@
     <property name="global" value="112"/>
    </properties>
   </object>
-  <object id="117" name="elevator" x="545" y="722" width="32" height="32">
+  <object id="117" name="elevator" x="540" y="722" width="32" height="32">
    <properties>
     <property name="action" value="die"/>
    </properties>
@@ -410,7 +411,7 @@
     <property name="global" value="115"/>
    </properties>
   </object>
-  <object id="119" name="elevator" x="545" y="594" width="32" height="32">
+  <object id="119" name="elevator" x="540" y="594" width="32" height="32">
    <properties>
     <property name="global" value="117"/>
    </properties>
@@ -420,26 +421,472 @@
     <property name="global" value="118"/>
    </properties>
   </object>
-  <object id="121" name="elevator" x="538" y="976" width="32" height="32">
+  <object id="121" name="elevator" x="540" y="976" width="32" height="32">
    <properties>
     <property name="global" value="109"/>
    </properties>
   </object>
-  <object id="122" name="elevator" x="582" y="848" width="32" height="32">
+  <object id="122" name="elevator" x="580" y="848" width="32" height="32">
    <properties>
     <property name="global" value="120"/>
    </properties>
   </object>
-  <object id="123" name="elevator" x="547" y="848" width="32" height="32">
+  <object id="123" name="elevator" x="540" y="848" width="32" height="32">
    <properties>
     <property name="global" value="110"/>
    </properties>
   </object>
-  <object id="124" name="elevator" x="582" y="976" width="32" height="32">
+  <object id="124" name="elevator" x="580" y="976" width="32" height="32">
    <properties>
     <property name="global" value="122"/>
    </properties>
   </object>
-  <object id="125" name="alex" x="212" y="208" width="16" height="32"/>
+  <object id="126" name="table" x="242" y="227.333" width="26" height="14"/>
+  <object id="127" name="flowerpot" x="242.667" y="216" width="14" height="14">
+   <properties>
+    <property name="action" value="red"/>
+   </properties>
+  </object>
+  <object id="128" name="computer" x="291.591" y="216.455" width="18" height="13"/>
+  <object id="129" name="table" x="290" y="227.333" width="26" height="14"/>
+  <object id="132" name="chair" x="320" y="224" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="133" name="chair" x="272" y="224" width="12" height="18"/>
+  <object id="134" name="table" x="274" y="354" width="26" height="14"/>
+  <object id="135" name="flowerpot" x="274.667" y="343.667" width="14" height="14">
+   <properties>
+    <property name="action" value="yellow"/>
+   </properties>
+  </object>
+  <object id="136" name="chair" x="256" y="352" width="12" height="18"/>
+  <object id="137" name="chair" x="240" y="352" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="138" name="table" x="210" y="355.333" width="26" height="14"/>
+  <object id="140" name="chair" x="192" y="352" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="141" name="table" x="162" y="355.333" width="26" height="14"/>
+  <object id="143" name="chair" x="144" y="352" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="144" name="table" x="114" y="355.333" width="26" height="14"/>
+  <object id="145" name="computer" x="115.591" y="344.455" width="18" height="13"/>
+  <object id="146" name="chair" x="418.667" y="480.333" width="12" height="18"/>
+  <object id="147" name="table" x="324.667" y="483.666" width="26" height="14"/>
+  <object id="149" name="computer" x="326.258" y="472.788" width="18" height="13"/>
+  <object id="150" name="chair" x="402.667" y="480.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="151" name="table" x="372.667" y="483.666" width="26" height="14"/>
+  <object id="152" name="table" x="276.667" y="483.666" width="26" height="14"/>
+  <object id="153" name="chair" x="354.667" y="480.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="154" name="flowerpot" x="437.334" y="472" width="14" height="14">
+   <properties>
+    <property name="action" value="yellow"/>
+   </properties>
+  </object>
+  <object id="155" name="chair" x="306.667" y="480.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="156" name="table" x="436.667" y="482.333" width="26" height="14"/>
+  <object id="158" name="chair" x="226.667" y="480.333" width="12" height="18"/>
+  <object id="159" name="table" x="132.667" y="483.666" width="26" height="14"/>
+  <object id="161" name="computer" x="134.258" y="472.788" width="18" height="13"/>
+  <object id="162" name="chair" x="210.667" y="480.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="163" name="table" x="180.667" y="483.666" width="26" height="14"/>
+  <object id="165" name="chair" x="162.667" y="480.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="166" name="flowerpot" x="245.334" y="471" width="14" height="14">
+   <properties>
+    <property name="action" value="white"/>
+   </properties>
+  </object>
+  <object id="168" name="table" x="244.667" y="482.333" width="26" height="14"/>
+  <object id="170" name="water_cooler" x="333.667" y="211.667" width="20" height="30"/>
+  <object id="171" name="water_cooler" x="833.5" y="469" width="20" height="30"/>
+  <object id="172" name="table" x="835" y="353.5" width="26" height="14"/>
+  <object id="173" name="table" x="723" y="354.833" width="26" height="14"/>
+  <object id="174" name="chair" x="705" y="351.5" width="12" height="18">
+   <properties>
+    <property name="action" value="idle"/>
+   </properties>
+  </object>
+  <object id="175" name="table" x="771" y="354.833" width="26" height="14"/>
+  <object id="176" name="chair" x="753" y="351.5" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="177" name="computer" x="676.591" y="343.955" width="18" height="13"/>
+  <object id="178" name="flowerpot" x="835.667" y="343.167" width="14" height="14">
+   <properties>
+    <property name="action" value="yellow"/>
+   </properties>
+  </object>
+  <object id="179" name="table" x="675" y="354.833" width="26" height="14"/>
+  <object id="180" name="chair" x="801" y="351.5" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="181" name="chair" x="817" y="351.5" width="12" height="18"/>
+  <object id="183" name="table" x="913.5" y="354.833" width="26" height="14"/>
+  <object id="184" name="chair" x="895.5" y="351.5" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="185" name="table" x="961.5" y="354.833" width="26" height="14"/>
+  <object id="186" name="chair" x="943.5" y="351.5" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="187" name="computer" x="867.091" y="343.955" width="18" height="13"/>
+  <object id="189" name="table" x="865.5" y="354.833" width="26" height="14"/>
+  <object id="193" name="table" x="911.333" y="484" width="26" height="14"/>
+  <object id="194" name="chair" x="893.333" y="480.667" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="195" name="table" x="959.333" y="484" width="26" height="14"/>
+  <object id="196" name="chair" x="941.333" y="480.667" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="197" name="computer" x="864.924" y="473.122" width="18" height="13"/>
+  <object id="199" name="table" x="863.333" y="484" width="26" height="14"/>
+  <object id="200" name="chair" x="989.333" y="480.667" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="201" name="chair" x="1005.33" y="480.667" width="12" height="18"/>
+  <object id="202" name="table" x="835" y="612" width="26" height="14"/>
+  <object id="203" name="table" x="723" y="613.333" width="26" height="14"/>
+  <object id="204" name="chair" x="705" y="610" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="205" name="table" x="771" y="613.333" width="26" height="14"/>
+  <object id="206" name="chair" x="753" y="610" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="207" name="computer" x="676.591" y="602.455" width="18" height="13"/>
+  <object id="209" name="table" x="675" y="613.333" width="26" height="14"/>
+  <object id="210" name="chair" x="801" y="610" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="211" name="chair" x="817" y="610" width="12" height="18"/>
+  <object id="212" name="table" x="267.667" y="738.666" width="26" height="14"/>
+  <object id="213" name="table" x="171.667" y="738.666" width="26" height="14"/>
+  <object id="214" name="flowerpot" x="236.334" y="726" width="14" height="14">
+   <properties>
+    <property name="action" value="white"/>
+   </properties>
+  </object>
+  <object id="215" name="computer" x="125.258" y="727.788" width="18" height="13"/>
+  <object id="216" name="table" x="123.667" y="738.666" width="26" height="14"/>
+  <object id="217" name="flowerpot" x="428.334" y="727" width="14" height="14">
+   <properties>
+    <property name="action" value="yellow"/>
+   </properties>
+  </object>
+  <object id="218" name="table" x="363.667" y="738.666" width="26" height="14"/>
+  <object id="219" name="chair" x="201.667" y="735.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="220" name="chair" x="217.667" y="735.333" width="12" height="18"/>
+  <object id="221" name="computer" x="317.258" y="727.788" width="18" height="13"/>
+  <object id="222" name="chair" x="297.667" y="735.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="223" name="chair" x="345.667" y="735.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="224" name="chair" x="153.667" y="735.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="225" name="table" x="427.667" y="737.333" width="26" height="14"/>
+  <object id="226" name="table" x="235.667" y="737.333" width="26" height="14"/>
+  <object id="227" name="table" x="315.667" y="738.666" width="26" height="14"/>
+  <object id="228" name="chair" x="393.667" y="735.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="229" name="chair" x="409.667" y="735.333" width="12" height="18"/>
+  <object id="230" name="table" x="265.667" y="994.666" width="26" height="14"/>
+  <object id="231" name="table" x="169.667" y="994.666" width="26" height="14"/>
+  <object id="232" name="flowerpot" x="234.334" y="982" width="14" height="14">
+   <properties>
+    <property name="action" value="white"/>
+   </properties>
+  </object>
+  <object id="233" name="computer" x="123.258" y="983.788" width="18" height="13"/>
+  <object id="234" name="table" x="121.667" y="994.666" width="26" height="14"/>
+  <object id="235" name="flowerpot" x="426.334" y="982" width="14" height="14">
+   <properties>
+    <property name="action" value="yellow"/>
+   </properties>
+  </object>
+  <object id="236" name="table" x="361.667" y="994.666" width="26" height="14"/>
+  <object id="237" name="chair" x="199.667" y="991.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="238" name="chair" x="215.667" y="991.333" width="12" height="18"/>
+  <object id="239" name="computer" x="315.258" y="983.788" width="18" height="13"/>
+  <object id="240" name="chair" x="295.667" y="991.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="241" name="chair" x="343.667" y="991.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="242" name="chair" x="151.667" y="991.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="243" name="table" x="425.667" y="993.333" width="26" height="14"/>
+  <object id="244" name="table" x="233.667" y="993.333" width="26" height="14"/>
+  <object id="245" name="table" x="313.667" y="994.666" width="26" height="14"/>
+  <object id="246" name="chair" x="391.667" y="991.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="247" name="chair" x="407.667" y="991.333" width="12" height="18"/>
+  <object id="248" name="table" x="824.667" y="868.666" width="26" height="14"/>
+  <object id="249" name="table" x="728.667" y="868.666" width="26" height="14"/>
+  <object id="250" name="flowerpot" x="793.334" y="856" width="14" height="14">
+   <properties>
+    <property name="action" value="white"/>
+   </properties>
+  </object>
+  <object id="251" name="computer" x="682.258" y="857.788" width="18" height="13"/>
+  <object id="252" name="table" x="680.667" y="868.666" width="26" height="14"/>
+  <object id="253" name="flowerpot" x="985.334" y="856" width="14" height="14">
+   <properties>
+    <property name="action" value="yellow"/>
+   </properties>
+  </object>
+  <object id="254" name="table" x="920.667" y="868.666" width="26" height="14"/>
+  <object id="255" name="chair" x="758.667" y="865.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="256" name="chair" x="774.667" y="865.333" width="12" height="18"/>
+  <object id="257" name="computer" x="874.258" y="857.788" width="18" height="13"/>
+  <object id="258" name="chair" x="854.667" y="865.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="259" name="chair" x="902.667" y="865.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="260" name="chair" x="710.667" y="865.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="261" name="table" x="984.667" y="867.333" width="26" height="14"/>
+  <object id="262" name="table" x="792.667" y="867.333" width="26" height="14"/>
+  <object id="263" name="table" x="872.667" y="868.666" width="26" height="14"/>
+  <object id="264" name="chair" x="950.667" y="865.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="265" name="chair" x="966.667" y="865.333" width="12" height="18"/>
+  <object id="268" name="chair" x="977" y="736.5" width="12" height="18"/>
+  <object id="269" name="table" x="835" y="739.833" width="26" height="14"/>
+  <object id="271" name="chair" x="913" y="736.5" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="272" name="table" x="931" y="739.833" width="26" height="14"/>
+  <object id="273" name="table" x="883" y="739.833" width="26" height="14"/>
+  <object id="274" name="table" x="995" y="738.5" width="26" height="14"/>
+  <object id="275" name="chair" x="865" y="736.5" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="276" name="flowerpot" x="995.667" y="727.167" width="14" height="14">
+   <properties>
+    <property name="action" value="yellow"/>
+   </properties>
+  </object>
+  <object id="278" name="computer" x="836.591" y="728.955" width="18" height="13"/>
+  <object id="280" name="chair" x="961" y="736.5" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="282" name="water_cooler" x="276.5" y="851" width="20" height="30"/>
+  <object id="283" name="water_cooler" x="248.5" y="851" width="20" height="30"/>
+  <object id="293" name="table" x="130.333" y="865" width="26" height="14"/>
+  <object id="296" name="chair" x="160.333" y="861.667" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="298" name="chair" x="208.333" y="861.667" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="299" name="table" x="178.333" y="865" width="26" height="14"/>
+  <object id="301" name="chair" x="224.33" y="861.667" width="12" height="18"/>
+  <object id="302" name="table" x="997" y="993" width="26" height="14"/>
+  <object id="303" name="table" x="885" y="994.333" width="26" height="14"/>
+  <object id="304" name="chair" x="867" y="991" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="305" name="table" x="933" y="994.333" width="26" height="14"/>
+  <object id="306" name="chair" x="915" y="991" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="307" name="computer" x="838.591" y="983.455" width="18" height="13"/>
+  <object id="308" name="flowerpot" x="997.667" y="981.667" width="14" height="14">
+   <properties>
+    <property name="action" value="yellow"/>
+   </properties>
+  </object>
+  <object id="309" name="table" x="837" y="994.333" width="26" height="14"/>
+  <object id="310" name="chair" x="963" y="991" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="311" name="chair" x="979" y="991" width="12" height="18"/>
+  <object id="314" name="table" x="883" y="612.333" width="26" height="14"/>
+  <object id="315" name="chair" x="913" y="609" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="316" name="computer" x="836.591" y="601.455" width="18" height="13"/>
+  <object id="317" name="table" x="931" y="612.333" width="26" height="14"/>
+  <object id="318" name="chair" x="961" y="609" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="319" name="chair" x="865" y="609" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="320" name="chair" x="977" y="609" width="12" height="18"/>
+  <object id="321" name="table" x="995" y="611" width="26" height="14"/>
+  <object id="322" name="flowerpot" x="995.667" y="600.667" width="14" height="14">
+   <properties>
+    <property name="action" value="yellow"/>
+   </properties>
+  </object>
+  <object id="323" name="laser_cutter" x="114" y="212" width="60" height="28"/>
+  <object id="324" name="labor_object" x="192.75" y="203.25" width="32" height="32"/>
+  <object id="325" name="table" x="216" y="227.333" width="26" height="14"/>
+  <object id="326" name="table" x="190" y="227.333" width="26" height="14"/>
+  <object id="327" name="computer" x="132.591" y="72.455" width="18" height="13"/>
+  <object id="328" name="chair" x="113" y="80" width="12" height="18"/>
+  <object id="329" name="chair" x="161" y="80" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="330" name="water_cooler" x="174.667" y="67.667" width="20" height="30"/>
+  <object id="331" name="table" x="131" y="83.333" width="26" height="14"/>
+  <object id="332" name="chair" x="115.667" y="480.333" width="12" height="18">
+   <properties>
+    <property name="action" value="right"/>
+   </properties>
+  </object>
+  <object id="335" name="explode1" x="416" y="192" width="32" height="32"/>
+  <object id="336" name="table" x="254" y="83.333" width="26" height="14"/>
+  <object id="337" name="table" x="280" y="83.333" width="26" height="14"/>
+  <object id="338" name="water_cooler" x="803.667" y="65.667" width="20" height="30"/>
+  <object id="340" name="chair" x="857" y="79.5" width="12" height="18">
+   <properties>
+    <property name="action" value="idle"/>
+   </properties>
+  </object>
+  <object id="341" name="computer" x="828.591" y="71.955" width="18" height="13"/>
+  <object id="342" name="table" x="827" y="82.833" width="26" height="14"/>
+  <object id="343" name="table" x="683" y="82.833" width="26" height="14"/>
+  <object id="344" name="computer" x="684.591" y="71.955" width="18" height="13"/>
+  <object id="345" name="chair" x="713" y="79.5" width="12" height="18">
+   <properties>
+    <property name="action" value="idle"/>
+   </properties>
+  </object>
+  <object id="346" name="table" x="875" y="82.833" width="26" height="14"/>
+  <object id="347" name="computer" x="876.591" y="71.955" width="18" height="13"/>
+  <object id="348" name="chair" x="905" y="79.5" width="12" height="18">
+   <properties>
+    <property name="action" value="idle"/>
+   </properties>
+  </object>
+  <object id="349" name="wc" x="834.5" y="208" width="22" height="32"/>
+  <object id="352" name="wc" x="857" y="208" width="22" height="32"/>
+  <object id="353" name="wc" x="902" y="208" width="22" height="32"/>
+  <object id="354" name="wc" x="879.5" y="208" width="22" height="32"/>
+  <object id="359" name="alex" x="226" y="207.5" width="16" height="32"/>
  </objectgroup>
 </map>

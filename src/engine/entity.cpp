@@ -1604,8 +1604,7 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     if( l_id == -1)
         l_id = p_id;
 
-    printf( "creating \"%s\" with id %d\n", type->getName().c_str(), l_id);
-
+    //printf( "creating \"%s\" with id %d\n", type->getName().c_str(), l_id);
 
     // create object
     obj = new entity( l_id);
@@ -1903,7 +1902,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         }
 
         // check about the hitting box
-        std::vector<int> l_ids = collision_boundingBox( l_entity);
+        std::vector<int> l_ids;
+        l_ids = collision_boundingBox( l_entity);
         if( l_ids.size() > 0)
             l_entity->lua_collision( l_entity->getId(), l_ids);
         std::vector<int> l_ids_vertex = collision_boundingBoxVertex( l_entity);
@@ -2267,13 +2267,15 @@ std::vector <int> entitylist::collision_boundingBox( entity* checkentity) {
     fvec2 l_rect1 = fvec2(l_type->getHitboxOffset()) + checkentity->getPosition();
     fvec2 l_rect1_size = l_type->getHitbox();
 
+    int l_entity_id = checkentity->getId();
+
     //
     for( int i = 0; i < (int)p_entitys.size(); i++)  {
         entity* l_obj = &p_entitys[i];
         entitytype *l_typeobj = l_obj->getType();
 
         // self dont regist
-        if( l_obj->getId() == checkentity->getId())
+        if( l_obj->getId() == l_entity_id)
             continue;
 
         // calc rect 2
