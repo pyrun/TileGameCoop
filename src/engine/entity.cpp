@@ -1772,18 +1772,23 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
                 rect.y -= graphic->getCamera().y;
 
                 SDL_SetRenderDrawColor( graphic->getRenderer(), 255, 0, 0, 255);
-                SDL_RenderDrawRect( graphic->getRenderer(), &rect );
+                // only with hitbox show
+                if( l_obj->getType()->getHitbox().x != 0)
+                    SDL_RenderDrawRect( graphic->getRenderer(), &rect );
 
+                // draw all vertex
                 for( int n = 0; n < (int)l_obj->getVertex()->size(); n++) {
                     int l_blue = 0;
                     vertex *l_vertex = &l_obj->getVertex()->at(n);
                     fvec2 l_position = l_obj->getPosition();
                     vec2 l_collision_pos = l_position.tovec2() + l_vertex->pos - graphic->getCamera().tovec2();
 
+                    // if hit other color
                     if( l_vertex->hit == true)
                         l_blue = 255;
-                    SDL_SetRenderDrawColor( graphic->getRenderer(), l_blue, 255, l_blue, 255);
 
+                    // draw the point
+                    SDL_SetRenderDrawColor( graphic->getRenderer(), l_blue, 255, l_blue, 255);
                     SDL_RenderDrawPoint( graphic->getRenderer(), l_collision_pos.x, l_collision_pos.y);
                 }
             }

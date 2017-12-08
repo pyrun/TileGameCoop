@@ -19,7 +19,7 @@
         <resolution_file>resolution.xml</resolution_file>
     </display>
     <game>
-        <debug>1</debug>
+        <debug>0</debug>
         <start_file>intro.tmx</start_file>
         <force_join>0</force_join>
         <controllerMappingsFile>gamecontrollerdb.txt</controllerMappingsFile>

@@ -1,7 +1,0 @@
-<object name="table_topview" width="45" height="16" script="script.lua" solid="1" isTopView="1">
-	<action name="idle">wood.bmp</action>
-	<hitbox offsetx="0" offsety="6" width="45" hight="10"/>
-</object>
-
-
-
