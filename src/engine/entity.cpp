@@ -1890,7 +1890,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         // liquid
         if( l_entity->getGravity() == true && l_type->getHitboxOffset().x != 0) {
             // umrechnen
-            l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset()+l_type->getHitbox()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 )-(world->getTileSize()/vec2( 2, 2) ) )/world->getTileSize();
+            l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset().tovec2()+l_type->getHitbox().tovec2()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 )-(world->getTileSize()/vec2( 2, 2) ) )/world->getTileSize();
             tile *l_tile = world->getTile( world->getCollsionMap(), l_iposition);
 
             if( l_tile != NULL && l_tile->type != NULL && l_tile->type->liquid == true ) {
@@ -2279,7 +2279,7 @@ std::vector <int> entitylist::collision_boundingBox( entity* checkentity) {
             continue;
 
         // calc rect 2
-        fvec2 l_rect2 = l_typeobj->getHitboxOffset() + l_obj->getPosition().tovec2();
+        fvec2 l_rect2 = fvec2( l_typeobj->getHitboxOffset().x, l_typeobj->getHitboxOffset().y) + l_obj->getPosition();
         fvec2 l_rect2_size = l_typeobj->getHitbox();
 
         // look if the obj hit the hitbox
@@ -2313,7 +2313,7 @@ std::vector <int> entitylist::collision_boundingBoxVertex( entity* checkentity) 
                 continue;
 
             // calc rect 2
-            fvec2 l_rect2 = l_typeobj->getHitboxOffset() + l_obj->getPosition().tovec2();
+            fvec2 l_rect2 = l_typeobj->getHitboxOffset() + l_obj->getPosition();
             fvec2 l_rect2_size = l_typeobj->getHitbox();
 
             // look if the obj hit the hitbox

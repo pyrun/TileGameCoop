@@ -109,7 +109,7 @@ class entitytype
         void setScriptName( std::string file) { p_script = file; }
         void setSolid( bool set) { p_solid = set; }
         void setTimer( int time) { p_time = time;}
-        void setHitbox( vec2 offset, vec2 size) { p_hitbox_offset = offset; p_hitbox_size = size; }
+        void setHitbox( fvec2 offset, fvec2 size) { p_hitbox_offset = offset; p_hitbox_size = size; }
         void setIsEnemy( bool set) { p_isEnemy = set; }
         void setIsTopView( bool set) { p_isTopView = set; }
         void setIsHUD( bool set) { p_isHUD = set; }
@@ -123,8 +123,8 @@ class entitytype
         std::vector<vertex> getVertex() { return p_vertex; }
         bool getIsPlayer() { return p_isplayer; }
         int getTimerTime() { return p_time; }
-        vec2 getHitbox() { return p_hitbox_size; }
-        vec2 getHitboxOffset() { return p_hitbox_offset; }
+        fvec2 getHitbox() { return p_hitbox_size; }
+        fvec2 getHitboxOffset() { return p_hitbox_offset; }
         bool getIsSolid() { return p_solid; }
         bool getIsEnemy() { return p_isEnemy; }
         bool getIsTopView() { return p_isTopView; }
@@ -151,8 +151,8 @@ class entitytype
         std::vector<action> p_actions;
         std::vector<vertex> p_vertex;
         std::vector<entity_sound> p_sound;
-        vec2 p_hitbox_offset;
-        vec2 p_hitbox_size;
+        fvec2 p_hitbox_offset;
+        fvec2 p_hitbox_size;
         bool p_solid;
         bool p_isEnemy;
         bool p_isTopView;
