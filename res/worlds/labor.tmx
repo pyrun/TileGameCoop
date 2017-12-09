@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" nextobjectid="361">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" nextobjectid="363">
  <properties>
   <property name="depth_sort" value="0"/>
   <property name="music" value="rain_thunder_loop.mp3"/>
@@ -889,5 +889,6 @@
   <object id="354" name="wc" x="879.5" y="208" width="22" height="32"/>
   <object id="359" name="alex" x="226" y="207.5" width="16" height="32"/>
   <object id="360" name="hud" x="-35" y="105" width="32" height="16"/>
+  <object id="362" name="christmas_tree" x="740" y="703" width="34" height="50"/>
  </objectgroup>
 </map>

@@ -1,0 +1,9 @@
+<object name="gift" width="16" height="16" script="script.lua" gravity="0">
+	<action name="idle" loop="0">idle.png</action>
+	<action name="present0" frame="1" speed="1" loop="0">idle.png</action>
+	<action name="present1" frame="2" speed="1" loop="0">idle.png</action>
+	<action name="present2" frame="3" speed="1" loop="0">idle.png</action>
+	<action name="present3" frame="4" speed="1" loop="0">idle.png</action>
+	<action name="present4" frame="5" speed="1" loop="0">idle.png</action>
+</object>
+

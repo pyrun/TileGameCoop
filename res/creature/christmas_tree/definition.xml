@@ -1,0 +1,4 @@
+<object name="christmas_tree" width="34" height="50" script="script.lua" gravity="0">
+	<action name="idle" frame="3" speed="10">idle.png</action>
+</object>
+
