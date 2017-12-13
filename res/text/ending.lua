@@ -3,7 +3,8 @@ local text = {}
 local table_text = {}
 
 function text.table_start()
-	table.insert( table_text, "Alpha - Thanks for Playing!")
+	table.insert( table_text, "Continue...")
+	table.insert( table_text, "Thanks for Playing!")
 	table.insert( table_text, "You died " .. getPlayerData( "death") .. " times")
 	table.insert( table_text, "END")
 end

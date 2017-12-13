@@ -1,0 +1,13 @@
+<object name="side_stone" width="31" height="33" script="script.lua" timer="100" gravity="0">
+	<action name="idle" frame="0" speed="10">idle.png</action>
+	<action name="die" frame="0" speed="10">dead.png</action>
+	<vertex x="10" y="29">down</vertex>
+	<vertex x="28" y="29">down</vertex>
+	<vertex x="10" y="4">up</vertex>
+	<vertex x="28" y="4">up</vertex>
+	<vertex x="0" y="12">left</vertex>
+	<vertex x="0" y="25">left</vertex>
+	<vertex x="30" y="12">right</vertex>
+	<vertex x="30" y="25">right</vertex>
+	<hitbox offsetx="3" offsety="4" width="24" hight="22"/>
+</object>

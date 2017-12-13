@@ -2,12 +2,13 @@
 <map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="16" tileheight="16" nextobjectid="57">
  <properties>
   <property name="depth_sort" value="1"/>
+  <property name="music" value="ObservingTheStar.ogg"/>
  </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap_topview.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
  <imagelayer name="Background">
-  <image source="backgrounds/back.bmp" width="320" height="256"/>
+  <image source="backgrounds/back.bmp" width="320" height="320"/>
  </imagelayer>
  <layer name="Background" width="32" height="32" opacity="0.45">
   <data encoding="csv">
@@ -158,7 +159,7 @@
   <object id="53" name="textbox" x="64" y="80" width="16" height="16">
    <properties>
     <property name="global" value="ending"/>
-    <property name="global2" value="intro_ending.tmx"/>
+    <property name="global2" value="credits.tmx"/>
    </properties>
   </object>
   <object id="55" name="intro_pictures" x="64" y="48" width="16" height="16">

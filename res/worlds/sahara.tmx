@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="140" height="64" tilewidth="16" tileheight="16" nextobjectid="99">
+ <properties>
+  <property name="global" value="sahara.tmx"/>
+ </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="3600" columns="60">
   <image source="../tilemap.bmp" trans="c8bfe7" width="1020" height="1020"/>
  </tileset>
