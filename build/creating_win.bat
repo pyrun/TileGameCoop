@@ -16,6 +16,7 @@ set asw=0
 set /p asw="Bitte Auswahl eingeben: "
 
 SET folder="win\%DATE%\"
+SET folder_release="win\game\"
 SET folderTiled="win\tiled\"
 
 if %asw%==1 goto WIND
@@ -28,14 +29,17 @@ goto THEEND
 
 :WIND
 del %folder% /s /q
-xcopy "..\bin\WinDebug32" %folder% /I
+xcopy "..\bin\windebug32" %folder% /I
 xcopy "..\res" %folder% /E /C /Q /I /Y
 goto END
 
 :WINR
-del %folder% /s /q
-xcopy "..\bin\win\WinRelease32" %folder% /I
-xcopy "..\res" %folder% /E /C /Q /I /Y
+del %folder_release% /s /q
+xcopy "..\bin\winrelease32" %folder_release% /I
+xcopy "..\res" %folder_release% /E /C /Q /I /Y
+del %folder_release%\start.bat
+del %folder_release%\test.bat
+del %folder_release%\level.bat
 goto END
 
 :MAKEFILE
@@ -44,7 +48,7 @@ goto END
 
 :TILED_BUILD
 del %folderTiled% /s /q
-xcopy "..\bin\WinDebug32" %folderTiled% /I
+xcopy "..\bin\windebug32" %folderTiled% /I
 xcopy "..\res" %folderTiled% /E /C /Q /I /Y
 goto END
 
