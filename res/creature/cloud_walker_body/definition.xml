@@ -1,0 +1,4 @@
+<object name="cloud_walker_body" width="16" height="16" script="script.lua" timer="100" gravity="0">
+	<action name="idle" frame="3" speed="6">idle.png</action>
+	<hitbox offsetx="1" offsety="1" width="14" hight="14"/>
+</object>
