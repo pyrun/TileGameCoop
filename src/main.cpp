@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "engine/game.h"
+//#include "resource.rc"  //Icon Resource File
 
 int main(int argc, char *argv[]) {
     game p_game;
