@@ -249,7 +249,7 @@ bool world::load( std::string file, std::string ordner) {
     // data
     XMLElement* l_properties = l_map->FirstChildElement( "properties" );
     if( !l_properties) {
-        p_depthSort = false;
+        p_depthSort = true; // standard
         printf( "world::load no properties found - warn\n");
     } else {
         // get all propetys

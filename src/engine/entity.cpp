@@ -878,6 +878,28 @@ static int lua_getGravity( lua_State *state) {
     return 1;
 }
 
+static int lua_setDepth( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    int l_depth;
+    if ( !lua_isnumber( state, 1) || !lua_isnumber( state, 2)) {
+        printf( "lua_setDepth call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_depth = lua_tointeger( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_setDepth obj not found\n");
+        return 0;
+    }
+    l_obj->setDepth( l_depth);
+    return 0;
+}
+
+
 void lua_install( lua_State *state) {
     // add all entity function ..
     lua_pushcfunction( state, lua_print);
@@ -987,6 +1009,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_setGravity);
     lua_setglobal( state, "setGravity");
+
+    lua_pushcfunction( state, lua_setDepth);
+    lua_setglobal( state, "setDepth");
 }
 
 void lua_setLink( entitylist *entity, world *world, graphic *graphic) {
@@ -1086,7 +1111,7 @@ entity::entity( int id)
 
     // frame 0
     p_frame = 0;
-    p_depth = 0;
+    p_depth = p_id;
 
     // standard alpha
     setAlpha( 255);
@@ -2251,7 +2276,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         }
 
         // calculate depth
-        l_entity->setDepth( (l_entity->getPosition().tovec2().y+l_type->getHitbox().y+l_type->getHitboxOffset().y)*10 +  l_entity->getPosition().x );
+        //l_entity->setDepth( (l_entity->getPosition().tovec2().y+l_type->getHitbox().y+l_type->getHitboxOffset().y)*10 +  l_entity->getPosition().x );
 
         // set net position
         l_entity->setPos( l_position + l_change );

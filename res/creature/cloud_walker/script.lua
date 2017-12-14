@@ -2,10 +2,8 @@ local object1 = -1
 local object2 = -1
 local object3 = -1
 
-local int_x1, int_y1
-local int_x2, int_y2
-local int_x3, int_y3
-local int_x4, int_y4
+int_xpos = {}
+int_ypos = {}
 
 local counter = 0
 
@@ -33,6 +31,9 @@ end
 
 function start( id) 
 	setAnimation( id, "walk")
+
+	-- get all right !
+	setDepth( id, 1000+id)
 end
 
 function timer( id, time)
@@ -41,40 +42,48 @@ function timer( id, time)
 	end
 
 	pos_x, pos_y = getPosition( id)
+
+	table.insert( int_xpos, pos_x)
+	table.insert( int_ypos, pos_y)
+
 	velx, vely = getVelocity( id)
-
-	counter = 1 + counter
-	if counter > 2 then
-		counter = 0
-	end
-
-	if counter == 2 then
-		int_x4 = int_x3
-		int_y4 = int_y3
-		int_x3 = int_x2
-		int_y3 = int_y2
-		int_x2 = int_x1
-		int_y2 = int_y1
-		int_x1, int_y1 = getPosition( id)
-	end
 
 	-- create body objects
 	if isAlive( object1) == false then
-		int_x2, int_y2 = getPosition( id)
 		object1 = createObject( "cloud_walker_body", pos_x, pos_y)
 	end
 	if isAlive( object2) == false then
-		int_x3, int_y3 = getPosition( id)
 		object2 = createObject( "cloud_walker_body", pos_x, pos_y)
 	end
 	if isAlive( object3) == false then
-		int_x4, int_y4 = getPosition( id)
 		object3 = createObject( "cloud_walker_body", pos_x, pos_y)
 	end
 
-	setPosition( object1, int_x2, int_y2)
-	setPosition( object2, int_x3, int_y3)
-	setPosition( object3, int_x4, int_y4)
+	local offset = 3
+	local factor = 4
+
+	if #int_xpos > factor*3+offset then
+		table.remove( int_xpos, 1)
+		table.remove( int_ypos, 1)
+	end
+
+	if #int_xpos < factor then
+		setPosition( object1, int_xpos[#int_xpos], int_ypos[#int_xpos])
+		setPosition( object2, int_xpos[#int_xpos], int_ypos[#int_xpos])
+		setPosition( object3, int_xpos[#int_xpos], int_ypos[#int_xpos])
+	elseif #int_xpos < factor*2 then
+		setPosition( object1, int_xpos[factor], int_ypos[factor])
+		setPosition( object2, int_xpos[#int_xpos], int_ypos[#int_xpos])
+		setPosition( object3, int_xpos[#int_xpos], int_ypos[#int_xpos])
+	elseif #int_xpos < factor*3 then
+		setPosition( object1, int_xpos[factor], int_ypos[factor])
+		setPosition( object2, int_xpos[factor*2], int_ypos[factor*2])
+		setPosition( object3, int_xpos[#int_xpos], int_ypos[#int_xpos])
+	else
+		setPosition( object1, int_xpos[factor], int_ypos[factor])
+		setPosition( object2, int_xpos[factor*2], int_ypos[factor*2])
+		setPosition( object3, int_xpos[factor*3], int_ypos[factor*3])
+	end
 
 	-- walk
 	if getAnimation( id) == "walk" or getAnimation( id) == "idle" then
@@ -91,6 +100,10 @@ function timer( id, time)
 				addVelocity( id, -speed, 0)
 			end
 		end
+	end
+
+	if math.random( 100) == 1 then
+		addVelocity( id, 0, -0.2)
 	end
 
 	-- richtung anzeigen
