@@ -28,6 +28,7 @@ function timer( id )
 
 	if found == true then
 		setVelocityX( id, 0.03)
+		setVelocityY( id, -0.3)
 	end
 
 	l_x, l_y = getPosition( id)
@@ -46,6 +47,7 @@ function timer( id )
 
 	if found == true then
 		setVelocityX( id, -0.03)
+		setVelocityY( id, -0.3)
 	end
 end
 
