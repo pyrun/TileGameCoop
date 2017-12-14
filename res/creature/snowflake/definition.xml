@@ -1,0 +1,8 @@
+<object name="snowflake" width="7" height="7" script="script.lua" gravity="1">
+	<action name="idle" frame="2" speed="10">idle.png</action>
+	<vertex x="2" y="6">down</vertex>
+	<vertex x="2" y="1">up</vertex>
+	<vertex x="0" y="4">left</vertex>
+	<vertex x="7" y="4">right</vertex>
+	<hitbox offsetx="1" offsety="1" width="5" hight="5"/>
+</object>

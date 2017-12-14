@@ -1,0 +1,8 @@
+<object name="vase_spitter" width="32" height="32" script="script.lua" isenemy="1">
+	<action name="idle" frame="3" speed="20" loop="0" endCall="pup">idle.png</action>
+	<action name="idle2" frame="3" speed="20" loop="0" endCall="pup">idle.png</action>
+	<action name="die" frame="3" speed="10" loop="0">idle.png</action>
+	<vertex x="5" y="32">down</vertex>
+	<vertex x="27" y="32">down</vertex>
+	<hitbox offsetx="4" offsety="4" width="24" hight="24"/>
+</object>
