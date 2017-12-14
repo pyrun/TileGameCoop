@@ -177,16 +177,23 @@ player_handle::~player_handle() {
     }
 }
 
-void player_handle::next_player_entity( entitylist *entitylist, player *l_player, bool rotateDir) {
+bool player_handle::next_player_entity( entitylist *entitylist, player *l_player, bool rotateDir) {
     std::vector<int> l_obj = entitylist->findPlayerObject();
-    int l_id = -1;
-    int found_first = -1;
+    int l_id_serach = -1;
+    int l_pos = 0; // obj position at array
 
-    int l_pos = 0;
+    // sorting by x axis
+    std::vector<sort_player_struct> l_obj_sort;
+    for( int i = 0; i < (int)l_obj.size(); i++)
+        l_obj_sort.push_back( sort_player_struct{ l_obj[i], (int)(entitylist->getEntity( l_obj[i])->getPosition().x) } );
+    std::sort (l_obj_sort.begin(), l_obj_sort.end());
 
-    if( rotateDir )
-        std::reverse(l_obj.begin(),l_obj.end());
+    // now replace
+    l_obj.clear();
+    for( int i = 0; i < (int)l_obj_sort.size(); i++)
+        l_obj.push_back( l_obj_sort[i].id);
 
+    // position
     for( int i = 0; i < (int)l_obj.size(); i++)
         if( l_player->entity_id == l_obj[i] )
             l_pos = i;
@@ -194,30 +201,29 @@ void player_handle::next_player_entity( entitylist *entitylist, player *l_player
     // rotate the index
     std::rotate(l_obj.begin(),l_obj.begin()+l_pos,l_obj.end());
 
-    // find next logic obj
-    for( int y = 0; y < (int)l_obj.size(); y++) {
-        bool l_found = true;
+    // left or right swap
+    if( rotateDir == true)
+        std::reverse(l_obj.begin(),l_obj.end());
 
+    // find next logic obj
+    for( int y = 0; y < (int)l_obj.size(); y++)
+    {
+        bool l_found = true;
+        // check if same as the start one
         for( int n = 0; n < (int)p_playerlist.size(); n++)
             if( p_playerlist[n]->entity_id == l_obj[y])
                 l_found = false;
-
-        if( l_found ) {
-            if( l_obj[y] > l_player->entity_id) {
-                l_id = l_obj[y];
-                break;
-            }
-            if( found_first == -1)
-                found_first = l_obj[y];
-        }
+        // save this found
+        if( l_found )
+            l_id_serach = l_obj[y];
     }
+    // not found
+    if( l_id_serach == -1)
+        return false;
 
-    if( l_id == -1 && found_first != -1)
-        l_id = found_first;
-    if( l_id == -1)
-        return;
-
-    l_player->entity_id = l_id;
+    // found -> set
+    l_player->entity_id = l_id_serach;
+    return true;
 }
 
 void player_handle::handle( entitylist *entitylist, world* world, input *input, graphic* graphic, config* config) {

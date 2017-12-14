@@ -21,11 +21,9 @@ static int lua_setPlayerData( lua_State *state) {
     l_index = lua_tostring( state, 1);
     l_data = lua_tostring( state, 2);
 
-    // look if exist
-    l_playerdata = lua_player->getData( l_index);
-    if( l_playerdata == NULL)
-        lua_player->addData( l_index, l_data);
+    printf( "lua_setPlayerData: %s %s\n", l_index.c_str(), l_data.c_str());
 
+    lua_player->setData( l_index, l_data);
     return 0;
 }
 
@@ -45,11 +43,12 @@ static int lua_getPlayerData( lua_State *state) {
     l_playerdata = lua_player->getData( l_index);
     if( l_playerdata == NULL) {
         printf( "lua_getPlayerData index \"%s\" not found\n", l_index.c_str());
-        return 0;
+        lua_pushstring( state, "0");
+        return 1;
     }
 
     lua_pushstring( state, l_playerdata->data.c_str());
-    return 0;
+    return 1;
 }
 
 static int lua_getActivePlayer( lua_State *state) {
@@ -167,8 +166,6 @@ player_handle::player_handle()
 {
     //p_config = config;
 
-    p_playercamerafocus = NULL;
-
     p_count = 1;
 }
 
@@ -182,14 +179,21 @@ player_handle::~player_handle() {
 
 void player_handle::next_player_entity( entitylist *entitylist, player *l_player, bool rotateDir) {
     std::vector<int> l_obj = entitylist->findPlayerObject();
-    int l_id = -1;
-    int found_first = -1;
+    int l_id_serach = -1;
+    int l_pos = 0; // obj position at array
 
-    int l_pos = 0;
+    // sorting by x axis
+    std::vector<sort_player_struct> l_obj_sort;
+    for( int i = 0; i < (int)l_obj.size(); i++)
+        l_obj_sort.push_back( sort_player_struct{ l_obj[i], (int)(entitylist->getEntity( l_obj[i])->getPosition().x) } );
+    std::sort (l_obj_sort.begin(), l_obj_sort.end());
 
-    if( rotateDir )
-        std::reverse(l_obj.begin(),l_obj.end());
+    // now replace
+    l_obj.clear();
+    for( int i = 0; i < (int)l_obj_sort.size(); i++)
+        l_obj.push_back( l_obj_sort[i].id);
 
+    // position
     for( int i = 0; i < (int)l_obj.size(); i++)
         if( l_player->entity_id == l_obj[i] )
             l_pos = i;
@@ -197,30 +201,30 @@ void player_handle::next_player_entity( entitylist *entitylist, player *l_player
     // rotate the index
     std::rotate(l_obj.begin(),l_obj.begin()+l_pos,l_obj.end());
 
+    // left or right swap
+    if( rotateDir == true)
+        std::reverse(l_obj.begin(),l_obj.end());
+
     // find next logic obj
-    for( int y = 0; y < (int)l_obj.size(); y++) {
+    for( int y = 0; y < (int)l_obj.size(); y++)
+    //for( int y = (int)l_obj.size(); y > 0; y--)
+    {
         bool l_found = true;
 
+        // check if same as the start one
         for( int n = 0; n < (int)p_playerlist.size(); n++)
             if( p_playerlist[n]->entity_id == l_obj[y])
                 l_found = false;
 
-        if( l_found ) {
-            if( l_obj[y] > l_player->entity_id) {
-                l_id = l_obj[y];
-                break;
-            }
-            if( found_first == -1)
-                found_first = l_obj[y];
-        }
+        // save this found
+        if( l_found )
+            l_id_serach = l_obj[y];
     }
 
-    if( l_id == -1 && found_first != -1)
-        l_id = found_first;
-    if( l_id == -1)
+    if( l_id_serach == -1)
         return;
 
-    l_player->entity_id = l_id;
+    l_player->entity_id = l_id_serach;
 }
 
 void player_handle::handle( entitylist *entitylist, world* world, input *input, graphic* graphic, config* config) {
@@ -403,38 +407,28 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                     break;
                 l_player->active = true;
                 l_player->wantToJoin = false;
-                if( p_playercamerafocus == NULL)
-                    p_playercamerafocus = l_player;
             }
         }
     }
 
-    // calc focus
-    /*if( p_playercamerafocus != NULL) {
-        entity *l_entity = entitylist->getEntity( p_playercamerafocus->entity_id);
-        if( l_entity != NULL) {
-            vec2 l_pos = l_entity->getPosition().tovec2();
-            vec2 l_cam = graphic->getCameraSize();
-
-            vec2 l_newpos = l_pos - (l_cam/vec2( 2.f, 2.f ));
-
-            graphic->flyTo( l_newpos);
-        }
-    }*/
-    // calc the camera focus
+    // calculate the camera focus
     int l_amount = 0;
     fvec2 l_pos_camera;
     for( int i = 0; i < (int)p_playerlist.size(); i++) {
         player* l_player = p_playerlist[i];
         if( l_player->active && l_player->entity_id ) {
             entity *obj = entitylist->getEntity( l_player->entity_id);
+            if( obj == NULL)
+                continue;
             fvec2 l_pos = obj->getPosition();
-            l_pos_camera = l_pos_camera + l_pos;
+            vec2 l_cam = graphic->getCameraSize();
+            l_pos_camera = l_pos_camera + l_pos - (l_cam/vec2( 2.f, 2.f ));
             l_amount++;
         }
     }
     if( l_amount > 0) {
-        
+        l_pos_camera = fvec2( l_pos_camera.x/l_amount, l_pos_camera.y/l_amount );
+        graphic->flyTo( l_pos_camera.tovec2());
     }
 }
 
@@ -508,8 +502,6 @@ int player_handle::getPlayerChamp( int id) {
 void player_handle::setInactiv( player *player) {
     player->entity_id = -1;
     player->active = false;
-    if( player == p_playercamerafocus)
-        p_playercamerafocus = findActivePlayer();
 }
 
 player *player_handle::getPlayer( int id) {
@@ -562,6 +554,8 @@ void player_handle::addData( std::string index, std::string data) {
     l_data.index = index;
     l_data.data = data;
 
+    printf( "player_handle::addData no data found\n");
+
     p_data.push_back( l_data);
 }
 
@@ -570,6 +564,18 @@ player_data *player_handle::getData( std::string index) {
         if( p_data[i].index == index)
             return &p_data[i];
     return NULL;
+}
+
+void player_handle::setData( std::string index, std::string data) {
+    for( int i = 0; i < (int)p_data.size(); i++) {
+        if( p_data[i].index == index) {
+            printf( "player_handle::setData found\n");
+            p_data[i].data = data;
+            return;
+        }
+    }
+    // nothing found add Data
+    addData( index, data);
 }
 
 void player_handle::player_add( SDL_GameController *controller, bool join) {
@@ -600,10 +606,6 @@ void player_handle::player_remove( int id) {
     }
     if( l_player == NULL)
         return;
-
-    // delete focus
-    if( p_playercamerafocus == l_player)
-        p_playercamerafocus = NULL;
 
     // close the gamepad connection
     SDL_GameControllerClose( l_player->controller );

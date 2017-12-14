@@ -41,7 +41,7 @@ class player_handle
         player_handle();
         virtual ~player_handle();
 
-        void next_player_entity( entitylist *entitylist, player *l_player, bool rotateDir = false);
+        bool next_player_entity( entitylist *entitylist, player *l_player, bool rotateDir = false);
         void handle( entitylist *entity, world* world, input *input, graphic* graphic, config* config);
         void draw( entitylist *entitylist, font *font, graphic* graphic);
         void join( entitylist *entitylist);
@@ -73,6 +73,13 @@ class player_handle
         void player_remove( int id);
 
         int p_count;
+};
+
+class sort_player_struct {
+    public:
+        int id;
+        int x;
+        bool operator < (const sort_player_struct& obj) const { return ( x < obj.x); }
 };
 
 void lua_player_setLink( player_handle *player, entitylist *list);
