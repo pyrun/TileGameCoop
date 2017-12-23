@@ -4,8 +4,8 @@
 	<action name="die" frame="4" speed="3" loop="0">die.bmp</action>
 	<vertex x="4" y="32" id="1">down</vertex>
 	<hitbox offsetx="0" offsety="0" width="8" hight="32"/>
-	<sound name="close" volume="20">qubodup-DoorClose06.wav</sound>
-	<sound name="open" volume="20">qubodup-DoorOpen06.wav</sound>
+	<sound name="close" volume="20">close.wav</sound>
+	<sound name="open" volume="20">open.wav</sound>
 </object>
 
 
