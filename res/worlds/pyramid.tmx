@@ -368,7 +368,7 @@
   <object id="127" name="scorpion" x="192" y="656" width="32" height="32"/>
   <object id="128" name="finish" x="64" y="720" width="32" height="32">
    <properties>
-    <property name="global" value="intro_ending.tmx"/>
+    <property name="global" value="pyramid_underground.tmx"/>
    </properties>
   </object>
   <object id="129" name="bigdoor" x="736" y="496" width="16" height="48"/>
