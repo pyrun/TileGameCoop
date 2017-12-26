@@ -4,6 +4,9 @@ require( "script")
 local id_special_object = -1
 local id_offset = 14
 
+function start( id )
+end
+
 function attack( id)
 	if isAlive( id_special_object) == false then
 		l_dir = getAnimationDirection( id)

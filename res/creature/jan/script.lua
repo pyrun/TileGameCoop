@@ -13,6 +13,9 @@ local angle_steps = 5
 local offset_arrow_x = 12
 local offset_arrow_y = 10
 
+function start( id )
+end
+
 function up( id) 
 	l_x, l_y = getPosition( id)
 

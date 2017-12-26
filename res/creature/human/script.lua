@@ -115,6 +115,10 @@ function update( id)
 	end
 end
 
+function start( id )
+	setVelocityX( id, -0.0001)
+end
+
 
 
 function jump( id)

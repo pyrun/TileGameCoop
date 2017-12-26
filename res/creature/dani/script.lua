@@ -3,6 +3,9 @@ require( "script")
 
 local thow_speed = 0.4
 
+function start( id )
+end
+
 function special( id )
 	if getAnimation( id) == "walk" or getAnimation( id) == "idle" then
 		setAnimation( id, "throw" )

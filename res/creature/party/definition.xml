@@ -1,0 +1,5 @@
+<object name="party" width="8" height="8" script="script.lua" timer="1000" gravity="0">
+	<action name="idle" frame="6" speed="6" loop="1">idle.png</action>
+</object>
+
+

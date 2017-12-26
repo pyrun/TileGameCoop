@@ -158,13 +158,13 @@
   <object id="49" name="start" x="27" y="38" width="16" height="16"/>
   <object id="53" name="textbox" x="64" y="80" width="16" height="16">
    <properties>
-    <property name="global" value="warp_end"/>
-    <property name="global2" value="party.tmx"/>
+    <property name="global" value="ending"/>
+    <property name="global2" value="credits.tmx"/>
    </properties>
   </object>
   <object id="55" name="intro_pictures" x="64" y="48" width="16" height="16">
    <properties>
-    <property name="action" value="spawn"/>
+    <property name="action" value="warp"/>
    </properties>
   </object>
  </objectgroup>
