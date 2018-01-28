@@ -252,7 +252,8 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
                 continue;
 
             // add controler
-            player_add( l_controller, config->getForceJoin()==1?true:false);
+            //player_add( l_controller, config->getForceJoin()==1?true:false);
+            player_add( l_controller, false);
         }
     }
     // delete old one
@@ -279,8 +280,8 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
         l_map = l_player->map;
 
         // get controller axis
-        l_map->x = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisX());
-        l_map->y = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)config->getInputPadAxisY());
+        l_map->x = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)atoi( config->get( "x_axis", "input", "0").c_str()) );
+        l_map->y = SDL_GameControllerGetAxis( l_pad, (SDL_GameControllerAxis)atoi( config->get( "y_axis", "input", "1").c_str()) );
         if( l_map->x > 32767/2)
             l_map->dir.right = true;
         else
@@ -315,18 +316,18 @@ void player_handle::handle( entitylist *entitylist, world* world, input *input, 
             l_map->dir.down = true;
 
         // react
-        l_map->jump = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_run() );
-        l_map->run = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_jump() );
-        l_map->attack = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_attack() );
-        l_map->special = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_special() );
+        l_map->jump = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)atoi( config->get( "run", "input", "0").c_str()) );
+        l_map->run = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)atoi( config->get( "jump", "input", "2").c_str()) );
+        l_map->attack = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)atoi( config->get( "attack", "input", "3").c_str()) );
+        l_map->special = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)atoi( config->get( "special", "input", "1").c_str()) );
 
         // menu
-        l_map->start = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_start());
-        l_map->select = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_select() );
+        l_map->start = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)atoi( config->get( "start", "input", "6").c_str()) );
+        l_map->select = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)atoi( config->get( "select", "input", "4").c_str()) );
 
         // right/left
-        l_map->left = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_left());
-        l_map->right = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)config->getInputPadButton_right());
+        l_map->left = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)atoi( config->get( "left", "input", "9").c_str()) );
+        l_map->right = SDL_GameControllerGetButton( l_pad, (SDL_GameControllerButton)atoi( config->get( "right", "input", "10").c_str()) );
 
         // handle active player
         if( l_player->active) {

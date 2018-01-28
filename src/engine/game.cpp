@@ -5,8 +5,11 @@ game::game()
     // inertization
     initSDL();
 
+    // config
+    p_config = new config();
+
     // init graphic
-    p_graphic = new graphic( &p_config);
+    p_graphic = new graphic( p_config);
 
     // load font
     p_font = new font( p_graphic);
@@ -15,7 +18,7 @@ game::game()
     p_framerate = new framenrate( );
 
     // input
-    p_input = new input( &p_config);
+    p_input = new input( p_config);
 
     // create player_list
     p_player = new player_handle();
@@ -24,11 +27,11 @@ game::game()
 
     // audio
     p_audio = new audio();
-    p_audio->loadMusic( p_config.getMusicFolder(), p_config.getMusicVolume());
+    p_audio->loadMusic( p_config->get( "folder", "audio", "music/"), atoi( p_config->get( "volume", "audio", "20").c_str()) );
 
     // game running
     p_game_running = true;
-    p_config.setQuit( false);
+    p_config->set( "quit", "false", "game");
 
     //p_audio->playMusic( "ObservingTheStar.ogg");
 }
@@ -59,6 +62,9 @@ game::~game()
     // free audio
     if( p_audio)
         delete p_audio;
+
+    if( p_config)
+        delete p_config;
 }
 
 void game::drawHUD() {
@@ -73,7 +79,7 @@ void game::drawHUD() {
     }
 
     // debug
-    if( p_config.getDebug() == true) {
+    if( p_config->get( "debug", "game", "false") == "true") {
         // display info graphic
         char l_test[255];
 
@@ -82,9 +88,9 @@ void game::drawHUD() {
         sprintf( l_test, "%s%d %4.0f %dx%d", (p_framerate->getDelay() < 10)? "0":"", p_framerate->getDelay(), l_wert, (int)p_graphic->getCameraSize().x, (int)p_graphic->getCameraSize().y );
         p_font->drawMessage( p_graphic, l_test, p_graphic->getCamera().tovec2() + vec2( (int)p_graphic->getCameraSize().x, 10), 1.0f, 255,true);
 
-        sprintf( l_test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
+        /*sprintf( l_test, "Nativ %dx%d", p_config.getDisplay().x, p_config.getDisplay().y);
         p_font->drawMessage( p_graphic, l_test, p_graphic->getCamera().tovec2() +vec2( (int)p_graphic->getCameraSize().x, 0), 1.0f, 255, true);
-
+*/
         sprintf( l_test, "Gemepads: %d Player Champs: %d Figures: %d Player active: %d", p_player->getPlayerAmount(), p_level->getEntityList()->getAmountPlayerObject(), p_player->getAmountPlayerChamps(), p_player->getPlayerActive());
         p_font->drawMessage( p_graphic, l_test, p_graphic->getCamera().tovec2() +vec2( 0, (int)p_graphic->getCameraSize().y), 1.0f, 255, false, true);
     }
@@ -94,7 +100,7 @@ int game::process_graphic( std::string levelName) {
     int l_error;
 
     // load level
-    p_level = new level( levelName.size()==0?p_config.getStartfile():levelName.c_str(), "worlds/", p_graphic, p_player, &p_config, p_audio);
+    p_level = new level( levelName.size()==0?p_config->get( "start_file", "game", "intro.tmx"):levelName.c_str(), "worlds/", p_graphic, p_player, p_config, p_audio);
 
     // set lua link
     lua_level_setLink( p_level);
@@ -120,17 +126,17 @@ int game::process_graphic( std::string levelName) {
         p_graphic->flipCamera();
 
         // react of player input
-        p_player->handle( p_level->getEntityList(), p_level->getWorld(), p_input, p_graphic, &p_config);
+        p_player->handle( p_level->getEntityList(), p_level->getWorld(), p_input, p_graphic, p_config);
 
         // p_level process
-        p_level->process( l_delta, &p_config, p_graphic, p_player, p_particles, p_audio);
+        p_level->process( l_delta, p_config, p_graphic, p_player, p_particles, p_audio);
 
         // DRAW:
         // draw world
         p_level->getWorld()->draw( p_graphic);
 
         // draw entity
-        p_level->getEntityList()->draw( p_graphic, p_particles, &p_config, p_level->getWorld()->depthSort());
+        p_level->getEntityList()->draw( p_graphic, p_particles, p_config, p_level->getWorld()->depthSort());
 
         // draw overground
         p_level->getWorld()->drawOverground( p_graphic);
@@ -155,7 +161,7 @@ int game::process_graphic( std::string levelName) {
         p_framerate->calc();
 
         // if someone will quit the program
-        p_game_running = !(p_config.getQuit());
+        p_game_running = p_config->get( "quit", "game") == "false";
 
     }
 

@@ -1788,7 +1788,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
             // draw the entity
             l_obj->draw( graphic);
             // debug
-            if( config->getDebug() ) {
+            if( config->get( "debug", "game") == "true" ) {
                 SDL_Rect rect = {   l_obj->getPosition().tovec2().x + l_obj->getType()->getHitboxOffset().x,
                                     l_obj->getPosition().tovec2().y + l_obj->getType()->getHitboxOffset().y,
                                     l_obj->getType()->getHitbox().x,

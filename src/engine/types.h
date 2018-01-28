@@ -4,6 +4,18 @@
 #include <math.h>
 #include <unistd.h>
 #include <string>
+#include <sstream>
+
+// mingw32 under windows has no std::tostring
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
 
 struct vec2 {
     vec2( int x = 0, int y = 0) {

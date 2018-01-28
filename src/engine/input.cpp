@@ -18,7 +18,7 @@ input_map::input_map() {
 input::input( config *config)
 {
     // add more mapping for gamecontroller
-    SDL_GameControllerAddMappingsFromFile( config->getControllerMappingsFile().c_str());
+    SDL_GameControllerAddMappingsFromFile( config->get( "controllerMappingsFile", "input", "gamecontrollerdb.txt").c_str() );
 
     // add all exist gamepads
     for (int i = 0; i < SDL_NumJoysticks(); i++) {
@@ -59,8 +59,10 @@ bool input::handle( SDL_Window* window) {
                     p_display_height = p_event.window.data2;
 
                     // set display
-                    p_config->setDisplay( p_display_width, p_display_height);
-                    p_config->setDisplayChangeMode();
+                    p_config->set( "width",  patch::to_string( p_display_width), "display");
+                    p_config->set( "height", patch::to_string( p_display_height), "display");
+                    p_config->set( "display_change", "true", "game");
+                    p_config->set( "display_change_mode", "true", "game");
                 break;
             }
         }

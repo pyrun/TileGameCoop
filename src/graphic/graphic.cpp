@@ -144,10 +144,12 @@ graphic::graphic( config *config)
 
     Uint32 l_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
 
-    if( p_config->isDisplayFullscreen())
+    if( p_config->get( "fullscreen", "display", "true") == "true") {
         l_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+    }
 
-    l_displayResolution = p_config->getDisplay();
+    l_displayResolution.x = atoi( p_config->get( "width", "display", "960").c_str() );
+    l_displayResolution.y = atoi( p_config->get( "height", "display", "540").c_str() );
 
     // create window
     p_windows = SDL_CreateWindow( "Jump'n'Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, l_displayResolution.x, l_displayResolution.y, l_flags);
@@ -158,8 +160,9 @@ graphic::graphic( config *config)
         return;
     }
 
+    // get display res and set
     SDL_GetWindowSize( p_windows, &l_displayResolution.x, &l_displayResolution.y);
-    p_config->setDisplay( l_displayResolution.x, l_displayResolution.y);
+    setDisplay( l_displayResolution);
 
     // creating the renderer
     p_renderer = SDL_CreateRenderer( p_windows, -1, SDL_RENDERER_ACCELERATED );
@@ -186,19 +189,19 @@ graphic::graphic( config *config)
     p_frame.start();
     p_framecount = 1;
 
-    loadResolution( p_config->getDisplayResolutionFile());
+    loadResolution( p_config->get( "resolution_file", "display", "resolution.xml"));
 
     // windows maxed in config?
     clear();
 
     // scale set
-    if( p_config->isDisplayFullscreen())
-        setFullscreen( );
+    if( p_config->get( "fullscreen", "display") == "true")
+        setFullscreen( true);
     else
         changeWindowSize(); //p_config->setDisplayChangeMode();
 
     // set change flag
-    p_config->setDisplayChange();
+    p_config->set( "display_change", "true", "game");
 
 }
 
@@ -246,7 +249,9 @@ int graphic::loadResolution( std::string file) {
 void graphic::changeWindowSize() {
     int l_width, l_height;
     // get new resolution
-    vec2 l_newres = p_config->getDisplay();
+    vec2 l_newres;
+    l_newres.x = atoi( p_config->get( "width", "display").c_str() );
+    l_newres.y = atoi( p_config->get( "height", "display").c_str() );
     // window's client area set
     SDL_SetWindowSize( p_windows, l_newres.x, l_newres.y);
 
@@ -276,10 +281,10 @@ void graphic::changeWindowSize() {
     SDL_SetWindowSize( p_windows, NATIV_W*l_factor, NATIV_H*l_factor);
 
     // set config display
-    p_config->setDisplay( NATIV_W*l_factor, NATIV_H*l_factor);
+    setDisplay( vec2( NATIV_W*l_factor, NATIV_H*l_factor));
 
     // get new resolution
-    l_newres = p_config->getDisplay();
+    l_newres = vec2( NATIV_W*l_factor, NATIV_H*l_factor);
 
     // print changed
     printf( "graphic::changeWindowSize changed %dx%d zoom factor x%d\n", l_newres.x, l_newres.y, l_factor);
@@ -298,17 +303,36 @@ void graphic::setFullscreen( bool fromWindow) {
 
     // get new resolution
     SDL_GetWindowSize( p_windows, &l_newr.x, &l_newr.y);
-    p_config->setDisplay( l_newr.x, l_newr.y);
+    setDisplay( l_newr);
 
     // calc zoom
-    l_zoom = getZoom( p_config->getDisplay() );
+    l_zoom = getZoom( vec2( l_newr.x, l_newr.y) );
 
     // set camera zoom
-    p_camera_size.x = p_config->getDisplay().x/l_zoom;
-    p_camera_size.y = p_config->getDisplay().y/l_zoom;
+    p_camera_size.x = l_newr.x/l_zoom;
+    p_camera_size.y = l_newr.y/l_zoom;
 
     // set scale
     SDL_RenderSetScale( p_renderer, (int)l_zoom, (int)l_zoom);
+}
+
+void graphic::setDisplay( vec2 resolution) {
+    // set display
+    p_config->set( "width",  patch::to_string( resolution.x), "display");
+    p_config->set( "height",  patch::to_string( resolution.y), "display");
+    p_config->set( "display_change", "true", "game");
+}
+
+bool graphic::isDisplayChanged( config *config) {
+    bool l_chaged = config->get( "display_change", "game", "true") == "true";
+    config->set( "display_change", "false", "game");
+    return l_chaged;
+}
+
+bool graphic::isDisplayChangedMode( config *config) {
+    bool l_chaged = config->get( "display_change_mode", "game", "true") == "true";
+    config->set( "display_change_mode", "false", "game");
+    return l_chaged;
 }
 
 #define sdp( a, b) ( sqrt( (a*a) + (b*b) ))
@@ -342,26 +366,31 @@ void graphic::clear( float dt) {
     }
 
     // react of change
-    if( p_config->isDisplayChanged()) {
-        SDL_Rect l_viewport = { 0, 0, p_config->getDisplay().x, p_config->getDisplay().y};
+    if( isDisplayChanged( p_config)) {
+        SDL_Rect l_viewport;
+
+        l_viewport.x = 0;
+        l_viewport.y = 0;
+        l_viewport.w = atoi( p_config->get( "width", "display").c_str() );
+        l_viewport.h = atoi( p_config->get( "height", "display").c_str() );
 
         // set render view port
         SDL_RenderSetViewport( p_renderer, &l_viewport);
 
         // Zoom or change window
-        if( p_config->isChangeDisplayMode()) {
-            if( !p_config->isDisplayFullscreen())
+        if( isDisplayChangedMode( p_config)) {
+            if( p_config->get( "fullscreen", "display") == "false")
                 changeWindowSize();
             else
                 setFullscreen( true);
         }
 
         // set config if windows maxmazed
-        Uint32 l_flags = SDL_GetWindowFlags( p_windows);
+        /*Uint32 l_flags = SDL_GetWindowFlags( p_windows);
         if( l_flags & SDL_WINDOW_MAXIMIZED)
             p_config->setDisplayMaximized( true);
         else
-            p_config->setDisplayMaximized( false);
+            p_config->setDisplayMaximized( false);*/
     }
 
     // set background draw color
@@ -469,7 +498,12 @@ void graphic::cutImageFrom( SDL_Surface *srcImage, SDL_Surface *cutImage, vec2 p
 
 int graphic::getZoom( vec2 display) {
     for( int i = 0; i < (int)p_resolution.size(); i++) {
-        if( p_config->getDisplay() == p_resolution[i].resolution)
+        vec2 l_resolution;
+        // get resolution
+        l_resolution.x = atoi( p_config->get( "width", "display").c_str() );
+        l_resolution.y = atoi( p_config->get( "height", "display").c_str() );
+
+        if( l_resolution == p_resolution[i].resolution)
             return p_resolution[i].zoom;
     }
     return 1;

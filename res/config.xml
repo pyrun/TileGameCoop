@@ -1,31 +1,23 @@
 <config>
-    <input>
-        <run>0</run>
-        <jump>2</jump>
-        <attack>3</attack>
-        <special>1</special>
-        <select>4</select>
-        <start>6</start>
-        <left>9</left>
-        <right>10</right>
-        <x_axis>0</x_axis>
-        <y_axis>1</y_axis>
-    </input>
-    <display>
-        <width>1920</width>
-        <height>1080</height>
-        <isFullScreen>1</isFullScreen>
-        <isMaximized>0</isMaximized>
-        <resolution_file>resolution.xml</resolution_file>
-    </display>
-    <game>
-        <debug>0</debug>
-        <start_file>intro.tmx</start_file>
-        <force_join>0</force_join>
-        <controllerMappingsFile>gamecontrollerdb.txt</controllerMappingsFile>
-    </game>
     <audio>
         <folder>music/</folder>
-        <volume>15</volume>
+        <volume>20</volume>
     </audio>
+    <display>
+        <fullscreen>false</fullscreen>
+        <resolution_file>resolution.xml</resolution_file>
+        <width>960</width>
+        <height>540</height>
+    </display>
+    <game>
+        <display_change>false</display_change>
+        <display_change_mode>false</display_change_mode>
+        <quit>false</quit>
+        <start_file>intro.tmx</start_file>
+        <displayResize>true</displayResize>
+        <debug>false</debug>
+    </game>
+    <input>
+        <controllerMappingsFile>gamecontrollerdb.txt</controllerMappingsFile>
+    </input>
 </config>

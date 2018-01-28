@@ -62,7 +62,7 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
 
     // set link
     lua_setLink( p_entity, p_world, graphic);
-    lua_config_setLink( config);
+    //lua_config_setLink( config);
     lua_player_setLink( player, p_entity);
 
     p_transition = new transition( graphic, transition_time, true);
@@ -74,7 +74,7 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
 
         if( l_entity && l_entity->getType()->getScriptName().size() > 0) {
             lua_player_install( l_entity->getState());
-            lua_config_install( l_entity->getState());
+            //lua_config_install( l_entity->getState());
             lua_level_install( l_entity->getState());
 
             // call once the timer script
@@ -605,7 +605,7 @@ void level::load( player_handle *player, graphic *graphic) {
 
         // set link
         lua_player_install( l_obj->getState());
-        lua_config_install( l_obj->getState());
+        //lua_config_install( l_obj->getState());
         lua_level_install( l_obj->getState());
 
         // next tile

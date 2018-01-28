@@ -30,7 +30,7 @@ class game {
     private:
         graphic *p_graphic;
         font *p_font;
-        config p_config;
+        config *p_config;
         framenrate *p_framerate;
         input *p_input;
         player_handle *p_player;

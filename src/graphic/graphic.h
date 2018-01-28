@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "../engine/types.h"
 #include "../engine/config.h"
 #include "../engine/timer.h"
 
@@ -45,6 +46,9 @@ class graphic
         int loadResolution( std::string file);
         void changeWindowSize();
         void setFullscreen( bool fromWindow = false);
+        void setDisplay( vec2 resolution);
+        bool isDisplayChanged( config *config);
+        bool isDisplayChangedMode( config *config);
         void clear( float dt = 1.0f);
 
         image *loadImage( std::string file);
