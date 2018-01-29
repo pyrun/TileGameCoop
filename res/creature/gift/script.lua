@@ -1,3 +1,3 @@
 function start( id)
-	setAnimation( id, "present" .. tostring(math.random ( 0, 5)))
+	setAnimation( id, "present" .. tostring(math.random ( 0, 4)))
 end

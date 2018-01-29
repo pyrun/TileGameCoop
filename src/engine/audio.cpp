@@ -10,16 +10,14 @@ float calculate_distance(vec2 p1, vec2 p2) {
     return sqrt((diffY * diffY) + (diffX * diffX));
 }
 
-sound::sound()
-{
+sound::sound() {
     p_sound = NULL;
 
     // todo
     setCameraPosition( vec2( 0, 0) );
 }
 
-sound::~sound()
-{
+sound::~sound() {
     // free the sample
     if( p_sound != NULL) {
         printf( "sound::~sound free \"%s\" sound\n", p_file.c_str());
@@ -64,18 +62,15 @@ void sound::play( int volume, vec2 position) {
     Mix_SetDistance( l_channel, t_volume);
 }
 
-music::music( Mix_Music *mix, std::string file)
-{
+music::music( Mix_Music *mix, std::string file) {
     p_music = mix;
     p_file = file;
 }
 
-music::~music()
-{
+music::~music() {
 }
 
-audio::audio( int frequency, Uint16 format, int channels, int chunksize)
-{
+audio::audio( int frequency, Uint16 format, int channels, int chunksize) {
     int l_flags = MIX_INIT_OGG|MIX_INIT_MP3;
 
     // load support for the sample/music formats
@@ -92,8 +87,7 @@ audio::audio( int frequency, Uint16 format, int channels, int chunksize)
 	}
 }
 
-audio::~audio()
-{
+audio::~audio() {
     // clear
     for( int i = 0; i < (int)p_musics.size(); i++) {
         Mix_FreeMusic( p_musics[i]->getPointer());

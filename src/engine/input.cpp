@@ -15,8 +15,7 @@ input_map::input_map() {
     right = false;
 }
 
-input::input( config *config)
-{
+input::input( config *config) {
     // add more mapping for gamecontroller
     SDL_GameControllerAddMappingsFromFile( config->get( "controllerMappingsFile", "input", "gamecontrollerdb.txt").c_str() );
 
@@ -30,8 +29,7 @@ input::input( config *config)
     p_config = config;
 }
 
-input::~input()
-{
+input::~input() {
     //dtor
 }
 

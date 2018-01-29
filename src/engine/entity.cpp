@@ -1227,7 +1227,7 @@ void entity::setAction( std::string name, bool withStartCall) {
         p_frame = 0;
         p_flagEndCall = false;
 
-/*        if( p_type != NULL && withStartCall == true) {
+        if( p_type != NULL && withStartCall == true) {
             // get action
             action *l_action = p_type->getAction( this->p_action);
             if( l_action != NULL) {
@@ -1235,7 +1235,7 @@ void entity::setAction( std::string name, bool withStartCall) {
                 if( l_action->startcall.size() > 0)
                     lua_action( l_action->startcall);
             }
-        }*/
+        }
     }
 }
 
