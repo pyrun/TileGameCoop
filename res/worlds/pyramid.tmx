@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.0" orientation="orthogonal" renderorder="right-down" width="70" height="48" tilewidth="16" tileheight="16" nextobjectid="145">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="70" height="48" tilewidth="16" tileheight="16" nextobjectid="145">
  <properties>
   <property name="music" value="pyramid2.mp3"/>
  </properties>
@@ -252,73 +252,73 @@
   <object id="92" name="egypt_statue" x="832" y="400" width="16" height="48"/>
   <object id="93" name="egypt_statue" x="880" y="400" width="16" height="48"/>
   <object id="94" name="egypt_statue" x="928" y="400" width="16" height="48"/>
-  <object id="95" name="trapdoor" x="832" y="368" width="16" height="16">
+  <object id="95" name="trapdoor" x="832" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="96" name="trapdoor" x="816" y="368" width="16" height="16">
+  <object id="96" name="trapdoor" x="816" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="97" name="trapdoor" x="784" y="368" width="16" height="16">
+  <object id="97" name="trapdoor" x="784" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="98" name="trapdoor" x="848" y="368" width="16" height="16">
+  <object id="98" name="trapdoor" x="848" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="99" name="trapdoor" x="768" y="368" width="16" height="16">
+  <object id="99" name="trapdoor" x="768" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="100" name="trapdoor" x="800" y="368" width="16" height="16">
+  <object id="100" name="trapdoor" x="800" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="101" name="trapdoor" x="928" y="368" width="16" height="16">
+  <object id="101" name="trapdoor" x="928" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="102" name="trapdoor" x="912" y="368" width="16" height="16">
+  <object id="102" name="trapdoor" x="912" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="103" name="trapdoor" x="880" y="368" width="16" height="16">
+  <object id="103" name="trapdoor" x="880" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="104" name="trapdoor" x="944" y="368" width="16" height="16">
+  <object id="104" name="trapdoor" x="944" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="105" name="trapdoor" x="864" y="368" width="16" height="16">
+  <object id="105" name="trapdoor" x="864" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
    </properties>
   </object>
-  <object id="106" name="trapdoor" x="896" y="368" width="16" height="16">
+  <object id="106" name="trapdoor" x="896" y="369" width="16" height="16">
    <properties>
     <property name="action" value="open"/>
     <property name="global" value="bomb"/>
@@ -336,7 +336,6 @@
    </properties>
   </object>
   <object id="110" name="up_stone" x="945" y="592" width="30" height="31"/>
-  <object id="111" name="snake" x="896" y="528" width="23" height="16"/>
   <object id="112" name="snake" x="772" y="608" width="23" height="16"/>
   <object id="113" name="snake" x="816" y="608" width="23" height="16"/>
   <object id="114" name="snake" x="864" y="608" width="23" height="16"/>
