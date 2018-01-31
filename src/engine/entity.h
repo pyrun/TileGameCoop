@@ -356,12 +356,12 @@ class entitylist {
 
         entity *getEntity( int id);
         int getAmountPlayerObject() { return findPlayerObject().size(); }
-        std::vector<entity> getEntitys() { return p_entitys; }
+        std::vector<entity*> getEntitys() { return p_entitys; }
         void clearEntitys( ) { p_entitys.clear(); }
-        void setEntitys( std::vector<entity> entitys) {
+        void setEntitys( std::vector<entity*> entitys) {
             p_entitys = entitys;
             for(int i = 0; i < (int)p_entitys.size(); i++) {
-                entity *l_entity = &p_entitys[i];
+                entity *l_entity = p_entitys[i];
                 entitytype *l_type = l_entity->getType();
                 // increasing if type is a player file
 //                if( l_type && l_type->getIsPlayer())
@@ -371,9 +371,9 @@ class entitylist {
     protected:
 
     private:
-        std::vector<entitytype> p_entity_types;
-        std::vector<entity> p_entitys;
-        std::vector<entity_text> p_text;
+        std::vector<entitytype*> p_entity_types;
+        std::vector<entity*> p_entitys;
+        std::vector<entity_text*> p_text;
         int p_id;
 
         //int p_playerentity;

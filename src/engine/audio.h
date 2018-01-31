@@ -17,7 +17,7 @@ class sound
      public:
         sound();
         ~sound();
-        void loadSound( std::string file);
+        bool loadSound( std::string file);
         void setChunk( Mix_Chunk *chunk) { p_sound = chunk; }
         void setFile( std::string file) { p_file = file; }
         void play( int volume, vec2 position);

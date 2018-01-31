@@ -98,8 +98,9 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
 level::~level()
 {
     // delete entity
-    if( p_entity && !p_notMyEntityList)
+    if( p_entity && !p_notMyEntityList) {
         delete p_entity;
+    }
     // delete world if a there
     if( p_world)
         delete p_world;
@@ -294,14 +295,14 @@ void level::save( player_handle *player) {
     l_root->LinkEndChild( l_xmlPlayer);
 
     // get entity's
-    std::vector<entity> l_entitys = p_entity->getEntitys();
+    std::vector<entity*> l_entitys = p_entity->getEntitys();
 
     // creating root entity element
     XMLElement *l_xmlEntitys = l_savefile.NewElement( "entitys");
 
     // get every data from the entity
     for( int i = 0; i < (int)l_entitys.size();i++ ) {
-        entity *l_obj = &l_entitys[i];
+        entity *l_obj = l_entitys[i];
         XMLElement *l_xmlEntity = l_savefile.NewElement( "entity");
 
         // set name

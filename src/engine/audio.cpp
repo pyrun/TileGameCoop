@@ -25,18 +25,19 @@ sound::~sound() {
     }
 }
 
-void sound::loadSound( std::string file) {
+bool sound::loadSound( std::string file) {
     Mix_Chunk *l_chunk;
 
     // load chunk
     l_chunk = Mix_LoadWAV( file.c_str());
     if(!l_chunk) {
-        printf("sound::loadSound Mix_LoadWAV: %s\n", Mix_GetError());
+        return false;
     } else {
         // creating sound object
         setChunk( l_chunk);
         setFile( file);
     }
+    return true;
 }
 
 #define SOUND_NEAR_LEVEL 570.f

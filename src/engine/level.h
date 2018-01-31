@@ -55,7 +55,7 @@ class level
         world *p_world;
         entitylist *p_entity;
         level *p_level = NULL;
-        std::vector<entity> p_entityListSave;
+        std::vector<entity*> p_entityListSave;
 
         transition *p_transition;
 

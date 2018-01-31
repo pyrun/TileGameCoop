@@ -1032,9 +1032,11 @@ entitytype::~entitytype() {
         p_vertex.clear();
 
         // free all sounds
-        /*for( int i = 0; i < (int)p_sound.size(); i++)
-            if( p_sound[i].sound != NULL)
-                delete p_sound[i].sound;*/
+        for( int i = 0; i < (int)p_sound.size(); i++)
+            if( p_sound[i].sound != NULL) {
+                delete p_sound[i].sound;
+                p_sound[i].sound = NULL;
+            }
 
         // finally clear the vector
         p_sound.clear();
@@ -1084,7 +1086,12 @@ void entitytype::addSound( std::string name, std::string file, int volume) {
     l_sound.sound = new sound();
 
      // load file
-    l_sound.sound->loadSound( file);
+    if( l_sound.sound->loadSound( file) == false) {
+        // delete sound obj and dont save
+        printf( "entitytype::addSound type:\"%s\" load soundfile \"%s\" error: %s\n", p_name.c_str(), file.c_str(), Mix_GetError());
+        delete l_sound.sound;
+        return;
+    }
 
     // set values
     l_sound.name = name;
@@ -1605,16 +1612,21 @@ bool entity::getVertexHit( int id) {
 }
 
 
-entitylist::entitylist()
-{
+entitylist::entitylist() {
     // start at 0
     p_id = 1;
-//    p_playerentity = 0; later use
 }
 
-entitylist::~entitylist()
-{
-    //dtor
+entitylist::~entitylist() {
+    // free first entity
+    for(auto const& l_entity: p_entitys)
+        delete l_entity;
+    p_entitys.clear();
+
+    // now the types!
+    for(auto const& l_entity_type: p_entity_types)
+        delete l_entity_type;
+    p_entity_types.clear();
 }
 
 int entitylist::create( entitytype *type, vec2 pos, int id) {
@@ -1640,18 +1652,13 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     obj->setVertex( type->getVertex());
     obj->setSolid( type->getIsSolid());
     obj->setGravity( type->getGravity());
-    //obj->setDepth( obj->getPosition().tovec2().y-type->getHitbox().y+type->getHitboxOffset().y  );
-
-    // player entity incress if he is one
- //   if( type->getIsPlayer())
-//        p_playerentity++;
 
     // load if script are set
     if( type->getScriptName().size() > 0)
         obj->loadScript( type->getScriptName());
 
     // add to vector
-    p_entitys.push_back( *obj);
+    p_entitys.push_back( obj);
 
     // start script if write
     getEntity( l_id)->lua_start( l_id);
@@ -1667,15 +1674,8 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
 
 void entitylist::deleteObj( int id) {
     for( int i = 0; i < (int)p_entitys.size(); i++)
-        if( p_entitys[i].getId() == id) {
-            entity *l_entity = &p_entitys[i];
-            entitytype *l_type = l_entity->getType();
-            // decreasing if type is a player file
-//            if( l_type && l_type->getIsPlayer())
-//                p_playerentity--;
-
+        if( p_entitys[i]->getId() == id)
             p_entitys.erase( p_entitys.begin()+i);
-        }
 }
 
 std::vector<int> entitylist::createFromWorldFile( std::string file, world *world) {
@@ -1778,7 +1778,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
         std::sort( p_entitys.begin(), p_entitys.end());
 
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        entity *l_obj = &p_entitys[i];
+        entity *l_obj = p_entitys[i];
         // if not NULL
         if( l_obj != NULL)
             // HUD element skip
@@ -1821,7 +1821,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
 
     // draw text
     for( int i = 0; i < (int)p_text.size(); i++) {
-        entity_text *l_text = &p_text[i];
+        entity_text *l_text = p_text[i];
         entity *l_obj = getEntity( l_text->id);
         // if object found add particle
         if( l_obj) {
@@ -1836,7 +1836,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
 
 void entitylist::drawHUD( graphic *graphic) {
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        entity *l_obj = &p_entitys[i];
+        entity *l_obj = p_entitys[i];
         // if not NULL
         if( l_obj != NULL)
             // only HUD elements
@@ -1870,7 +1870,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
     // again and again if we found o+ne more to delete we search again
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        if( p_entitys[i].isbedelete == true ) {
+        if( p_entitys[i]->isbedelete == true ) {
             p_entitys.erase( p_entitys.begin() + i);
             i--;
         }
@@ -1878,7 +1878,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
     // go through
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        entity *l_entity = &p_entitys[i];
+        entity *l_entity = p_entitys[i];
 
         // skip if entity null -> it cant be happen but
         if( l_entity == NULL) {
@@ -2297,7 +2297,7 @@ std::vector <int> entitylist::collision_boundingBox( entity* checkentity) {
 
     //
     for( int i = 0; i < (int)p_entitys.size(); i++)  {
-        entity* l_obj = &p_entitys[i];
+        entity* l_obj = p_entitys[i];
         entitytype *l_typeobj = l_obj->getType();
 
         // self dont regist
@@ -2331,7 +2331,7 @@ std::vector <int> entitylist::collision_boundingBoxVertex( entity* checkentity) 
 
         //
         for( int i = 0; i < (int)p_entitys.size(); i++)  {
-            entity* l_obj = &p_entitys[i];
+            entity* l_obj = p_entitys[i];
             entitytype *l_typeobj = l_obj->getType();
 
             // self dont regist
@@ -2361,7 +2361,7 @@ std::vector <int> entitylist::collision_boundingBoxRect( fvec2 l_postion, fvec2 
     fvec2 l_rect1_size = l_size;
     //
     for( int i = 0; i < (int)p_entitys.size(); i++)  {
-        entity* l_obj = &p_entitys[i];
+        entity* l_obj = p_entitys[i];
         entitytype *l_typeobj = l_obj->getType();
 
         // self dont regist
@@ -2454,6 +2454,20 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     int l_action_loop;
     std::string l_startCall;
     std::string l_endCall;
+
+    // set values
+    l_type->setWidth(l_width);
+    l_type->setHeight(l_height);
+    l_type->setName( l_name);
+    l_type->setGravity( l_gravity);
+    l_type->setIsPlayer( l_isplayer);
+    l_type->setScriptName( l_script);
+    l_type->setSolid( l_solid);
+    l_type->setTimer( l_timer);
+    l_type->setIsEnemy( l_isEnemy);
+    l_type->setIsTopView( l_isTopView);
+    l_type->setIsHUD( l_isHUD);
+    l_type->setHasTimeCall( l_hasTimeCall);
 
     // read all actions
     XMLElement* l_xml_action = l_object->FirstChildElement( "action" );
@@ -2583,7 +2597,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         if( l_xml_sound->Attribute( "name"))
             l_name = l_xml_sound->Attribute( "name");
 
-        //printf( "sound %s\n", (folder + l_file).c_str() );
+        // load type
         l_type->addSound( l_name, folder + l_file, l_volume);
 
         // next vertex
@@ -2596,20 +2610,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         return false;
     }
 
-    l_type->setWidth(l_width);
-    l_type->setHeight(l_height);
-    l_type->setName( l_name);
-    l_type->setGravity( l_gravity);
-    l_type->setIsPlayer( l_isplayer);
-    l_type->setScriptName( l_script);
-    l_type->setSolid( l_solid);
-    l_type->setTimer( l_timer);
-    l_type->setIsEnemy( l_isEnemy);
-    l_type->setIsTopView( l_isTopView);
-    l_type->setIsHUD( l_isHUD);
-    l_type->setHasTimeCall( l_hasTimeCall);
-
-    p_entity_types.push_back( *l_type);
+    p_entity_types.push_back( l_type);
 
     return true;
 }
@@ -2638,8 +2639,8 @@ void entitylist::loadTypes( std::string folder, graphic *graphic) {
 
 entitytype* entitylist::getType( std::string name) {
     for( int i = 0; i < (int)p_entity_types.size(); i++)
-        if( p_entity_types[i].getName() == name)
-            return &p_entity_types[i];
+        if( p_entity_types[i]->getName() == name)
+            return p_entity_types[i];
     return NULL;
 }
 
@@ -2647,7 +2648,7 @@ std::vector<int> entitylist::findPlayerObject() {
     std::vector<int> l_obj;
 
     for( int i = 0; i < (int)p_entitys.size(); i++) {
-        entity *l_entity = &p_entitys[i];
+        entity *l_entity = p_entitys[i];
         if( l_entity->getType()->getIsPlayer() && l_entity->getAction() != "die")
             l_obj.push_back( l_entity->getId());
     }
@@ -2655,22 +2656,22 @@ std::vector<int> entitylist::findPlayerObject() {
 }
 
 void entitylist::message( int id, std::string text, float size, vec2 offset, bool asHUD, int lifetime) {
-    entity_text l_text;
+    entity_text *l_text = new entity_text;
 
-    l_text.id = id;
-    l_text.text = text;
-    l_text.size = size;
-    l_text.offset = offset;
-    l_text.asHUD = asHUD,
-    l_text.lifetime = lifetime;
+    l_text->id = id;
+    l_text->text = text;
+    l_text->size = size;
+    l_text->offset = offset;
+    l_text->asHUD = asHUD,
+    l_text->lifetime = lifetime;
 
     p_text.push_back( l_text);
 }
 
 entity* entitylist::getEntity( int id) {
     for( int i = 0; i < (int)p_entitys.size(); i++)
-        if( p_entitys[i].getId() == id)
-            return &p_entitys[i];
+        if( p_entitys[i]->getId() == id)
+            return p_entitys[i];
     return NULL;
 }
 
