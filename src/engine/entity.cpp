@@ -2383,13 +2383,15 @@ std::vector <int> entitylist::collision_boundingBoxRect( fvec2 l_postion, fvec2 
     return l_id;
 }
 
-bool entitylist::loadType( std::string folder, graphic *graphic) {
+
+
+bool entitylist::loadType( config *config, std::string l_path, std::string l_name, graphic *graphic) {
     XMLDocument l_file;
     bool l_idle = false;
 
-    p_folder = folder;
+    l_path = l_path + l_name + "/";
 
-    std::string l_pathfile = folder + (char*)ENTITY_FILE;
+    std::string l_pathfile = l_path + (char*)ENTITY_FILE;
 
     int l_width = 0;
     int l_height = 0;
@@ -2403,7 +2405,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     bool l_hasTimeCall = false;
     std::string l_script;
 
-    std::string l_name;
+    std::string l_object_name;
 
     // if file dont exist - dont load
     if( file_exist( l_pathfile) == false) {
@@ -2422,7 +2424,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         return false;;
 
     if( l_object->Attribute( "name"))
-        l_name = l_object->Attribute( "name");
+        l_object_name = l_object->Attribute( "name");
     if( l_object->Attribute( "width"))
         l_width = atoi(l_object->Attribute( "width" ));
     if( l_object->Attribute( "height"))
@@ -2434,7 +2436,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     if( l_object->Attribute( "timer"))
         l_timer = atoi( l_object->Attribute( "timer" ));
     if( l_object->Attribute( "script"))
-        l_script = folder + l_object->Attribute( "script");
+        l_script = l_path + l_object->Attribute( "script");
     if( l_object->Attribute( "solid"))
         l_solid = atoi(l_object->Attribute( "solid" ));
     if( l_object->Attribute( "isenemy"))
@@ -2458,7 +2460,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     // set values
     l_type->setWidth(l_width);
     l_type->setHeight(l_height);
-    l_type->setName( l_name);
+    l_type->setName( l_object_name);
     l_type->setGravity( l_gravity);
     l_type->setIsPlayer( l_isplayer);
     l_type->setScriptName( l_script);
@@ -2507,7 +2509,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
             l_idle = true;
 
         // push back
-        l_type->addAction( l_action_name, l_action_file, l_action_frames, l_action_speed, l_action_loop,graphic->loadImage( folder + l_action_file), l_startCall, l_endCall);
+        l_type->addAction( l_action_name, l_action_file, l_action_frames, l_action_speed, l_action_loop,graphic->loadImage( l_path + l_action_file), l_startCall, l_endCall);
 
         l_xml_action = l_xml_action->NextSiblingElement("action");
     }
@@ -2598,7 +2600,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
             l_name = l_xml_sound->Attribute( "name");
 
         // load type
-        l_type->addSound( l_name, folder + l_file, l_volume);
+        l_type->addSound( l_name, l_path + l_file, l_volume);
 
         // next vertex
         l_xml_sound = l_xml_sound->NextSiblingElement("sound");
@@ -2615,26 +2617,39 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     return true;
 }
 
-void entitylist::loadTypes( std::string folder, graphic *graphic) {
+bool entitylist::load( config *config, graphic *graphic) {
+    std::string l_path = config->get( "folder", "objects", "creature/");
+
+    loadFolder( l_path, config, graphic);
+
+    return true;
+}
+
+bool entitylist::loadFolder( std::string folder, config *config, graphic *graphic) {
     DIR *l_dir;
 
     struct dirent *l_entry;
 
-    std::string l_path = folder; //"creature/";
+    // open dir
+    l_dir = opendir(folder.c_str());
+    if ( l_dir == NULL)  // error opening the directory?
+        return false;
 
-    l_dir = opendir(l_path.c_str());
-    if ( l_dir == NULL) {  /* error opening the directory? */
-        printf("game::loadTypes cant load types, dir not found\n");
-    }
-
+    // open ech folder
     while ((l_entry = readdir(l_dir)) != NULL) {
-        std::string l_file = l_path + l_entry->d_name + "/";
+        std::string l_file = folder + l_entry->d_name + "/";
 
-        // load folder
-        loadType( l_file, graphic);
+        // dont go back folder
+        if( l_entry->d_name[0] == '.')
+            continue;
 
+        // load type
+        if( loadType( config, folder, l_entry->d_name, graphic) == false)
+            loadFolder( l_file, config, graphic);
     }
     closedir(l_dir);
+
+    return true;
 }
 
 entitytype* entitylist::getType( std::string name) {

@@ -48,7 +48,7 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
     if( t_entitylist == NULL) {
         p_entity = new entitylist();
 
-        p_entity->loadTypes( "creature/", graphic);
+        p_entity->load( config, graphic);
 
         p_notMyEntityList = false;
     } else {

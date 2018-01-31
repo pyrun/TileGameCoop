@@ -13,21 +13,24 @@
         <debug>false</debug>
         <displayResize>true</displayResize>
         <start_file>intro.tmx</start_file>
+        <display_change>false</display_change>
         <quit>false</quit>
         <display_change_mode>false</display_change_mode>
-        <display_change>false</display_change>
     </game>
     <input>
         <controllerMappingsFile>gamecontrollerdb.txt</controllerMappingsFile>
-        <x_axis>0</x_axis>
-        <y_axis>1</y_axis>
-        <run>0</run>
-        <jump>2</jump>
-        <attack>3</attack>
-        <special>1</special>
-        <start>6</start>
-        <select>4</select>
-        <left>9</left>
         <right>10</right>
+        <left>9</left>
+        <select>4</select>
+        <start>6</start>
+        <special>1</special>
+        <attack>3</attack>
+        <jump>2</jump>
+        <run>0</run>
+        <y_axis>1</y_axis>
+        <x_axis>0</x_axis>
     </input>
+    <objects>
+        <folder>objects/</folder>
+    </objects>
 </config>

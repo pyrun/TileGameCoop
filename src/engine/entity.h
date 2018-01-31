@@ -347,9 +347,11 @@ class entitylist {
         std::vector <int> collision_boundingBox( entity* checkentity);
         std::vector <int> collision_boundingBoxVertex( entity* checkentity);
         std::vector <int> collision_boundingBoxRect( fvec2 l_postion, fvec2 l_size, int id);
-        bool loadType( std::string folder, graphic *graphic);
+
+        bool loadType( config *config, std::string l_path, std::string l_name, graphic *graphic);
         void removeTypes();
-        void loadTypes( std::string folder, graphic *graphic);
+        bool load( config *config, graphic *graphic);
+        bool loadFolder( std::string folder, config *config, graphic *graphic);
         entitytype *getType( std::string name);
         std::vector<int> findPlayerObject();
         void message( int id, std::string text, float size, vec2 offset , bool asHUD, int lifetime);
@@ -377,8 +379,6 @@ class entitylist {
         int p_id;
 
         //int p_playerentity;
-
-        std::string p_folder;
 };
 
 void lua_setLink( entitylist *entity, world *world, graphic *graphic);
