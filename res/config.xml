@@ -1,7 +1,7 @@
 <config>
     <audio>
-        <folder>music/</folder>
         <volume>20</volume>
+        <folder>music/</folder>
     </audio>
     <display>
         <fullscreen>false</fullscreen>
@@ -10,12 +10,12 @@
         <height>540</height>
     </display>
     <game>
-        <display_change>false</display_change>
-        <display_change_mode>false</display_change_mode>
-        <quit>false</quit>
-        <start_file>intro.tmx</start_file>
-        <displayResize>true</displayResize>
         <debug>false</debug>
+        <displayResize>true</displayResize>
+        <start_file>intro.tmx</start_file>
+        <quit>false</quit>
+        <display_change_mode>false</display_change_mode>
+        <display_change>false</display_change>
     </game>
     <input>
         <controllerMappingsFile>gamecontrollerdb.txt</controllerMappingsFile>

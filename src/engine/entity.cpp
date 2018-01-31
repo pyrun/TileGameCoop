@@ -1025,18 +1025,18 @@ entitytype::entitytype() {
 }
 
 entitytype::~entitytype() {
-        // free action
-        p_actions.clear();
-
         // free vector
         p_vertex.clear();
 
         // free all sounds
-        for( int i = 0; i < (int)p_sound.size(); i++)
-            if( p_sound[i].sound != NULL) {
-                delete p_sound[i].sound;
-                p_sound[i].sound = NULL;
-            }
+        for( auto const &l_sound:p_sound) {
+            delete l_sound.sound;
+        }
+
+        // free image
+        for( auto const &l_action:p_actions) {
+            delete l_action.imagefile;
+        }
 
         // finally clear the vector
         p_sound.clear();

@@ -20,21 +20,23 @@ bool initSDL() {
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0 )
 	{
-		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+		print( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 		success_initSDL = false;
 		SDL_Quit();
 	}
 
 	// Start sdl image
 	if( success_initSDL && IMG_Init( l_flags) < 0) {
-        printf( " SDL_Image could not initialize! SDL_IMG_Error: %s\n", IMG_GetError());
+        print( " SDL_Image could not initialize! SDL_IMG_Error: %s\n", IMG_GetError());
         IMG_Quit();
         SDL_Quit();
         success_initSDL = false;
 	}
 
-	// This line is only needed, if you want debug the program
-    //SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
+    #ifdef DEBUG
+    // This line is only needed, if you want debug the program
+    SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
+    #endif // DEBUG
 
 	return success_initSDL;
 }
@@ -107,6 +109,9 @@ image::~image() {
     // free vram
     if( texture != NULL)
         SDL_DestroyTexture( texture);
+
+    // say free image
+    //print( "image::~image free file \"%s\"\n", this->file.c_str());
 }
 
 void image::resizeSurface( vec2 size) {
@@ -155,7 +160,7 @@ graphic::graphic( config *config)
     p_windows = SDL_CreateWindow( "Jump'n'Run", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, l_displayResolution.x, l_displayResolution.y, l_flags);
     if( p_windows == NULL )
     {
-        printf( "graphic::graphic Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+        print( "graphic::graphic Window could not be created! SDL_Error: %s\n", SDL_GetError() );
         success_initSDL = false;
         return;
     }
@@ -167,7 +172,7 @@ graphic::graphic( config *config)
     // creating the renderer
     p_renderer = SDL_CreateRenderer( p_windows, -1, SDL_RENDERER_ACCELERATED );
     if( p_renderer == NULL ) {
-        printf( "graphic::graphic Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
+        print( "graphic::graphic Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
         success_initSDL = false;
         return;
     }
@@ -222,7 +227,7 @@ int graphic::loadResolution( std::string file) {
 
     // file exist?
     if( file_exist( file) == false) {
-        printf( "graphic::loadResolution file dont exist \"%s\"\n", file.c_str());
+        print( "graphic::loadResolution file dont exist \"%s\"\n", file.c_str());
         return 1;
     }
 
@@ -287,14 +292,14 @@ void graphic::changeWindowSize() {
     l_newres = vec2( NATIV_W*l_factor, NATIV_H*l_factor);
 
     // print changed
-    printf( "graphic::changeWindowSize changed %dx%d zoom factor x%d\n", l_newres.x, l_newres.y, l_factor);
+    print( "graphic::changeWindowSize changed %dx%d zoom factor x%d\n", l_newres.x, l_newres.y, l_factor);
 }
 
 void graphic::setFullscreen( bool fromWindow) {
     float l_zoom;
     vec2 l_newr;
 
-    printf( "graphic::setFullscreen change\n");
+    print( "graphic::setFullscreen change\n");
     // window to fullscreen -> set
     if( fromWindow = true) {
         SDL_SetWindowFullscreen( p_windows, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -423,21 +428,21 @@ image *graphic::loadImage( std::string file) {
             l_textureclass->surface = l_surface;
             l_textureclass->texture = l_texture;
         } else {
-            printf( "graphic::loadImage Datei \"%s\" konnte nicht zur Textur gemacht werden\n", file.c_str());
-            printf( "graphic::loadImage SDL_Error: %s\n", SDL_GetError());
+            print( "graphic::loadImage Datei \"%s\" konnte nicht zur Textur gemacht werden\n", file.c_str());
+            print( "graphic::loadImage SDL_Error: %s\n", SDL_GetError());
             // free the ram data
             SDL_FreeSurface( l_surface);
             l_textureclass = NULL;
         }
     } else {
-        printf( "graphic::loadImage Datei \"%s\" konnte nicht geladen werden\n", file.c_str());
-        printf( "graphic::loadImage SDL_Error: %s\n", IMG_GetError());
+        print( "graphic::loadImage Datei \"%s\" konnte nicht geladen werden\n", file.c_str());
+        print( "graphic::loadImage SDL_Error: %s\n", IMG_GetError());
         l_textureclass = NULL;
     }
 
     // ausgeben falls detei geladen werde konnte
     //if( l_textureclass != NULL)
-    //    printf("graphic::loadImage Datei \"%s\" wurde geladen\n", file.c_str());
+    //    print("graphic::loadImage Datei \"%s\" wurde geladen\n", file.c_str());
     // nope
     return l_textureclass;
 }

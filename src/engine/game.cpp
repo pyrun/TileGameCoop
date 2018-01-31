@@ -32,8 +32,6 @@ game::game()
     // game running
     p_game_running = true;
     p_config->set( "quit", "false", "game");
-
-    //p_audio->playMusic( "ObservingTheStar.ogg");
 }
 
 game::~game()

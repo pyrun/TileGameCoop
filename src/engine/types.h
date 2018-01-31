@@ -17,6 +17,15 @@ namespace patch
     }
 }
 
+#define DEBUG
+
+#ifdef DEBUG
+# define print printf
+#else
+# define print(...)
+#endif
+
+
 struct vec2 {
     vec2( int x = 0, int y = 0) {
         this->x = x;
