@@ -109,9 +109,13 @@ int game::process_graphic( std::string levelName) {
     timer l_time;
     float l_delta = 0.0f;
 
+    timer l_measure;
+
     // main loop
     while( p_game_running == true && p_input->handle( p_graphic->getWindow())) {
         l_delta = l_time.getTicks();
+
+        l_measure.start();
 
         // PROCESS:
         // calc delta
@@ -148,6 +152,8 @@ int game::process_graphic( std::string levelName) {
 
         // level draw
         p_level->draw( p_graphic);
+
+        SDL_SetWindowTitle( p_graphic->getWindow(), patch::to_string( l_measure.getTicks()).c_str() );
 
         // draw particle
         p_particles->draw( p_graphic, p_font);

@@ -1,4 +1,4 @@
-package.path = package.path .. ";creature/human/?.lua"
+package.path = package.path .. ";objects/player/human/?.lua"
 require( "script")
 
 local thow_speed = 0.4

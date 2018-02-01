@@ -19,6 +19,7 @@
 					<Add directory="../../SDL2_64/include" />
 					<Add directory="../../tinyxml2/inc" />
 					<Add directory="../../lua/include" />
+					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lmingw32" />
@@ -42,6 +43,7 @@
 					<Add directory="../../SDL2_64/include" />
 					<Add directory="../../tinyxml2/inc" />
 					<Add directory="../../lua/include" />
+					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -62,6 +64,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-std=c++0x" />
+					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -79,6 +82,7 @@
 				<Compiler>
 					<Add option="-std=c++0x" />
 					<Add option="-DIMADEBIAN" />
+					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -105,6 +109,8 @@
 		<Unit filename="engine/input.h" />
 		<Unit filename="engine/level.cpp" />
 		<Unit filename="engine/level.h" />
+		<Unit filename="engine/lua_loader.cpp" />
+		<Unit filename="engine/lua_loader.h" />
 		<Unit filename="engine/particle.cpp" />
 		<Unit filename="engine/particle.h" />
 		<Unit filename="engine/player.cpp" />

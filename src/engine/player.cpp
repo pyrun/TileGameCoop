@@ -167,6 +167,9 @@ player_handle::player_handle()
     //p_config = config;
 
     p_count = 1;
+
+        // try to add lua lib
+    lua_loader_add( "player_handle", &lua_player_install);
 }
 
 player_handle::~player_handle() {

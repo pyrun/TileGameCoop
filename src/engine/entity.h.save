@@ -19,7 +19,6 @@
 #include "world.h"
 #include "particle.h"
 #include "audio.h"
-#include "lua_loader.h"
 
 #define ENTITY_FILE "definition.xml"
 
@@ -345,6 +344,7 @@ class entitylist {
         void process( world *world, config *config, int dt);
 
         void vertexHit( entity *entity, int vertexid);
+        bool doBoxesIntersect(vec2 a, vec2 sa, vec2 b, vec2 sb);
         std::vector <int> collision_boundingBox( entity* checkentity);
         std::vector <int> collision_boundingBoxVertex( entity* checkentity);
         std::vector <int> collision_boundingBoxRect( fvec2 l_postion, fvec2 l_size, int id);

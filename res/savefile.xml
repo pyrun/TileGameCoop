@@ -1,6 +1,6 @@
 <savefile>
     <player>
-        <entity index="death">3</entity>
+        <entity index="death">4</entity>
     </player>
-    <world file="lake.tmx" width="38" height="33"/>
+    <world file="underground.tmx" width="64" height="50"/>
 </savefile>

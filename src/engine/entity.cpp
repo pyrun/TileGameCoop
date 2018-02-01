@@ -1274,7 +1274,9 @@ void entity::loadScript( std::string file) {
     }
 
     // install lua entity function
-    lua_install( p_state);
+    //lua_install( p_state);
+    for( auto const& l_loader:p_lua_loader)
+        l_loader->func( p_state);
 }
 
 void entity::lua_start( int id) {
@@ -1615,6 +1617,9 @@ bool entity::getVertexHit( int id) {
 entitylist::entitylist() {
     // start at 0
     p_id = 1;
+
+    // try to add lua lib
+    lua_loader_add( "entitylist", &lua_install);
 }
 
 entitylist::~entitylist() {
@@ -2290,30 +2295,28 @@ std::vector <int> entitylist::collision_boundingBox( entity* checkentity) {
     entitytype *l_type = checkentity->getType();
     std::vector <int> l_id;
 
-    fvec2 l_rect1 = fvec2(l_type->getHitboxOffset()) + checkentity->getPosition();
+    fvec2 l_rect1 = l_type->getHitboxOffset() + checkentity->getPosition();
     fvec2 l_rect1_size = l_type->getHitbox();
 
     int l_entity_id = checkentity->getId();
 
-    //
-    for( int i = 0; i < (int)p_entitys.size(); i++)  {
-        entity* l_obj = p_entitys[i];
-        entitytype *l_typeobj = l_obj->getType();
+    for( auto const &l_entity:p_entitys) {
+        entitytype *l_typeobj = l_entity->getType();
 
         // self dont regist
-        if( l_obj->getId() == l_entity_id)
+        if( l_entity->getId() == l_entity_id)
             continue;
 
         // calc rect 2
-        fvec2 l_rect2 = fvec2( l_typeobj->getHitboxOffset().x, l_typeobj->getHitboxOffset().y) + l_obj->getPosition();
+        fvec2 l_rect2 = l_typeobj->getHitboxOffset() + l_entity->getPosition();
         fvec2 l_rect2_size = l_typeobj->getHitbox();
 
-        // look if the obj hit the hitbox
+        // check collsion
         if ( l_rect1.x < l_rect2.x + l_rect2_size.x &&
             l_rect1.x + l_rect1_size.x > l_rect2.x &&
             l_rect1.y < l_rect2.y + l_rect2_size.y &&
             l_rect1_size.y + l_rect1.y > l_rect2.y) {
-                l_id.push_back( l_obj->getId());
+                l_id.push_back( l_entity->getId());
             }
     }
     return l_id;

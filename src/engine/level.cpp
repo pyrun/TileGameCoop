@@ -44,6 +44,9 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
 
     p_loadworld = false;
 
+    // add load lib
+    lua_loader_add( "level", &lua_level_install);
+
     // create entity list if we have no
     if( t_entitylist == NULL) {
         p_entity = new entitylist();
@@ -73,9 +76,9 @@ level::level(std::string file, std::string folder, graphic *graphic, player_hand
         entity *l_entity = p_entity->getEntity( l_ids[i]);
 
         if( l_entity && l_entity->getType()->getScriptName().size() > 0) {
-            lua_player_install( l_entity->getState());
+            //lua_player_install( l_entity->getState());
             //lua_config_install( l_entity->getState());
-            lua_level_install( l_entity->getState());
+            //lua_level_install( l_entity->getState());
 
             // call once the timer script
             l_entity->lua_timer( l_entity->getId(), 1);

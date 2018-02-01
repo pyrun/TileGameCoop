@@ -1,0 +1,12 @@
+#ifndef LUA_LOADER_H
+#define LUA_LOADER_H
+
+class lua_loader {
+    public:
+        lua_loader();
+        virtual ~lua_loader();
+        lua_loader *next;
+        v
+};
+
+#endif // LUA_LOADER_H
