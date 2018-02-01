@@ -7,6 +7,7 @@
 #define CONFIG_FILE "config.xml"
 
 #include "../xml/tinyxml2.h"
+#include "lua_loader.h"
 
 class config_entity {
     public:

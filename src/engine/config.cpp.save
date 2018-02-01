@@ -8,60 +8,41 @@ config* lua_config = NULL;
 
 static int lua_setConfig( lua_State *state) {
     std::string l_name;
-    std::string l_category;
     std::string l_data;
 
-    if( !lua_isstring( state, 1) || !lua_isstring( state, 2) || !lua_isstring( state, 3) ) {
+    if( !lua_isstring( state, 1) || !lua_isstring( state, 2) ) {
         printf( "lua_setConfig call wrong argument\n");
         return 0;
     }
 
     l_name = lua_tostring( state, 1);
-    l_category = lua_tostring( state, 2);
-    l_data = lua_tostring( state, 3);
+    l_data = lua_tostring( state, 2);
 
-    lua_config->set( l_name, l_data, l_category);
+    lua_config->set( l_name, l_data);
     return 0;
 }
 
 static int lua_getConfig( lua_State *state) {
     std::string l_data;
-    std::string l_name;
-    std::string l_category;
+    player_data *l_playerdata = NULL;
 
-    if( !lua_isstring( state, 1) || !lua_isstring( state, 2)) {
+    if( !lua_isstring( state, 1) ) {
         printf( "lua_getConfig call wrong argument\n");
         return 0;
     }
 
     // get index
-    l_name = lua_tostring( state, 1);
-    l_category = lua_tostring( state, 2);
-
-    l_data = lua_config->get( l_name, l_category);
-
-    lua_pushstring( state, l_data.c_str());
+    l_data = lua_tostring( state, 1);
+    
+    lua_pushstring( state, l_playerdata->data.c_str());
     return 1;
-}
-
-void lua_config_install( lua_State *state) {
-    lua_pushcfunction( state, lua_setConfig);
-    lua_setglobal( state, "setConfig");
-
-    lua_pushcfunction( state, lua_getConfig);
-    lua_setglobal( state, "getConfig");
 }
 
 
 config::config() {
-    // load config
     load();
 
-    // only one config exist
     lua_config = this;
-
-    // try to add lua lib
-    lua_loader_add( "config", &lua_config_install);
 }
 
 config::~config() {

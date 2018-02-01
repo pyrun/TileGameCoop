@@ -18,7 +18,7 @@ function collision( id, ...)
 	if global_value == "load" then
 		loadstate()
 	elseif global_value == "quit" then
-		setconfig( "quit", true)
+		setConfig( "quit", "game", "true")
 	else
 		setLoadLevel( global_value, true )
 	end
