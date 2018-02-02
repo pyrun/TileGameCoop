@@ -19,6 +19,12 @@ function collision( id, ...)
 		loadstate()
 	elseif global_value == "quit" then
 		setConfig( "quit", "game", "true")
+	elseif global_value == "fullscreen" then
+		if getConfig( "fullscreen", "display") == "false" then
+			setConfig( "fullscreen", "display", "true")
+			setConfig( "display_change", "game", "true")
+			setConfig( "display_change_mode", "game", "true")
+		end
 	else
 		setLoadLevel( global_value, true )
 	end
