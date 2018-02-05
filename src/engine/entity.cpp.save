@@ -1918,7 +1918,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         if( l_type->getHasTimeCall() == true && l_entity->getTimeCall()->getTicks() > 1000) {
             // reset counter
             l_entity->resetCallTime();
-
+            
             l_entity->lua_timeCall( l_entity->getId());
         }
 
@@ -1952,9 +1952,6 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         // positon ermiteln
         l_position = l_entity->getPosition();
         l_velocity = l_entity->getVelocity();
-
-        // calc gravity
-        bool l_iscalc_y = false;
 
         // add gravity
         if( l_entity->getGravity() == true && l_type->getIsTopView() == false) {
@@ -2035,7 +2032,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if( l_result > l_velocity.y && (l_change.y+0.1f)/l_velocity.y > l_result) {
+                            if( l_result > l_velocity.y  && l_result+1.f < l_change.y*2 + 1.0f) {
                                 if( l_changed == false ) {
                                     l_changed = true; // we change
                                     // result set
@@ -2044,7 +2041,6 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                                     // x achse
                                     l_result_change.x += l_obj->getVelocity().x*(deltaTime);
-                                    l_iscalc_y = true;
                                 }
 
                                 l_vertexhitchange += setVertexHit( l_vertex, true);
@@ -2085,22 +2081,19 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     for( int i = 0; i < (int)l_ids.size(); i++) {
                         entity *l_obj = getEntity( l_ids[i]);
                         if( l_obj->isSolid()) {
-
                           // zwischen rechnung
                             float l_pos_change_y = l_collision_pos.y + l_change.y;
                             float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y+l_obj->getType()->getHitbox().y;
 
                             float l_result = l_pos_change_y-l_bottom;
 
-                            if( l_result < l_velocity.y && l_result+1.f > l_change.y*2) {
+                            if( l_result < l_velocity.y  && l_result+1.f > l_change.y*2) {
                                 if( l_changed == false ) {
                                     l_changed = true; // we changed
                                     l_result_change = l_change - fvec2( 0, l_result);
 
                                     //l_change.y = 0;//l_entity->( fvec2());
                                     l_result_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-
-                                    l_iscalc_y = true;
                                 }
 
                                 l_vertexhitchange += setVertexHit( l_vertex, true);
@@ -2162,7 +2155,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 if( l_ids.size() > 0 && l_change.x < 0) {
                     for( int i = 0; i < (int)l_ids.size(); i++) {
                         entity *l_obj = getEntity( l_ids[i]);
-                        if( l_obj->isSolid()) {
+                        if( l_obj->isSolid() && l_obj->getPosition().y+l_obj->getType()->getHitboxOffset().y < l_collision_pos.y) {
                             // zwischen rechnung
                             float l_pos_change_x = l_collision_pos.x + l_change.x;
                             float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x + l_obj->getType()->getHitbox().x;
@@ -2170,9 +2163,10 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             // ausrechnung der änderung
                             float l_result = l_pos_change_x-l_bottom;
 
-                            if( l_result < l_velocity.x && l_result+1.f > l_change.x*2 && l_iscalc_y == false) {
+                            if( l_result < l_velocity.x  && l_result+1.f > l_change.x*2) {
                                 if( l_changed == false ) {
                                     l_changed = true;// we changed
+
                                     // result
                                     l_result_change = l_change - fvec2( l_result, 0);
                                     l_result_velocity.x = 0;
@@ -2227,7 +2221,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 if(  l_ids.size() > 0 && l_change.x > 0) {
                     for( int i = 0; i < (int)l_ids.size(); i++) {
                         entity *l_obj = getEntity( l_ids[i]);
-                        if( l_obj->isSolid()) {
+                        if( l_obj->isSolid() && l_obj->getPosition().y+l_obj->getType()->getHitboxOffset().y < l_collision_pos.y) {
                           // zwischen rechnung
                             float l_pos_change_x = l_collision_pos.x + l_change.x;
                             float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x;
@@ -2235,7 +2229,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             // ausrechnung der änderung
                             float l_result = l_pos_change_x-l_bottom;
 
-                            if( l_result > l_velocity.x && l_result-1.f < l_change.x*2 && l_iscalc_y == false) {
+                            if( l_result > l_velocity.x && l_result-1.f < l_change.x*2) {
                                 if( l_changed == false ) {
                                     l_changed = true; // we changed
                                     // result

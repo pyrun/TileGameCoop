@@ -2,5 +2,5 @@
     <player>
         <entity index="death">5</entity>
     </player>
-    <world file="underground.tmx" width="64" height="50"/>
+    <world file="beehouse.tmx" width="64" height="76"/>
 </savefile>

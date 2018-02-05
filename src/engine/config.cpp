@@ -155,7 +155,7 @@ bool config::load() {
     XMLError l_result = l_config.LoadFile(CONFIG_FILE);
 
     // check the file
-    //XMLCheckResult(l_result);
+    XMLCheckResult(l_result);
 
     // load the root node
     XMLNode * l_root = l_config.FirstChild();

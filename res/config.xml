@@ -10,12 +10,12 @@
         <height>540</height>
     </display>
     <game>
-        <start_file>intro.tmx</start_file>
-        <debug>true</debug>
+        <debug>false</debug>
         <displayResize>true</displayResize>
+        <start_file>intro.tmx</start_file>
+        <display_change>false</display_change>
         <quit>false</quit>
         <display_change_mode>false</display_change_mode>
-        <display_change>false</display_change>
     </game>
     <input>
         <controllerMappingsFile>gamecontrollerdb.txt</controllerMappingsFile>

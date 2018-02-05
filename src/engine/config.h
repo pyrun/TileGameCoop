@@ -8,6 +8,7 @@
 
 #include "../xml/tinyxml2.h"
 #include "lua_loader.h"
+#include "types.h"
 
 class config_entity {
     public:
