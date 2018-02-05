@@ -6,7 +6,7 @@
 int main(int argc, char *argv[]) {
     game p_game;
 
-    std::string l_level;
+    std::string l_level = "test.tmx";
 
     if( argc > 1) {
         l_level = argv[1];

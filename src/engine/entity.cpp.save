@@ -878,6 +878,28 @@ static int lua_getGravity( lua_State *state) {
     return 1;
 }
 
+static int lua_setDepth( lua_State *state) {
+    entity *l_obj;
+    int l_id;
+    int l_depth;
+    if ( !lua_isnumber( state, 1) || !lua_isnumber( state, 2)) {
+        printf( "lua_setDepth call wrong argument\n");
+        return 0;
+    }
+
+    l_id = lua_tointeger( state, 1);
+    l_depth = lua_tointeger( state, 2);
+
+    l_obj = lua_entitylist->getEntity( l_id);
+    if( l_obj == NULL) {
+        printf( "lua_setDepth obj not found\n");
+        return 0;
+    }
+    l_obj->setDepth( l_depth);
+    return 0;
+}
+
+
 void lua_install( lua_State *state) {
     // add all entity function ..
     lua_pushcfunction( state, lua_print);
@@ -987,6 +1009,9 @@ void lua_install( lua_State *state) {
 
     lua_pushcfunction( state, lua_setGravity);
     lua_setglobal( state, "setGravity");
+
+    lua_pushcfunction( state, lua_setDepth);
+    lua_setglobal( state, "setDepth");
 }
 
 void lua_setLink( entitylist *entity, world *world, graphic *graphic) {
@@ -1000,16 +1025,18 @@ entitytype::entitytype() {
 }
 
 entitytype::~entitytype() {
-        // free action
-        p_actions.clear();
-
         // free vector
         p_vertex.clear();
 
         // free all sounds
-        /*for( int i = 0; i < (int)p_sound.size(); i++)
-            if( p_sound[i].sound != NULL)
-                delete p_sound[i].sound;*/
+        for( auto const &l_sound:p_sound) {
+            delete l_sound.sound;
+        }
+
+        // free image
+        for( auto const &l_action:p_actions) {
+            delete l_action.imagefile;
+        }
 
         // finally clear the vector
         p_sound.clear();
@@ -1059,7 +1086,12 @@ void entitytype::addSound( std::string name, std::string file, int volume) {
     l_sound.sound = new sound();
 
      // load file
-    l_sound.sound->loadSound( file);
+    if( l_sound.sound->loadSound( file) == false) {
+        // delete sound obj and dont save
+        printf( "entitytype::addSound type:\"%s\" load soundfile \"%s\" error: %s\n", p_name.c_str(), file.c_str(), Mix_GetError());
+        delete l_sound.sound;
+        return;
+    }
 
     // set values
     l_sound.name = name;
@@ -1086,7 +1118,7 @@ entity::entity( int id)
 
     // frame 0
     p_frame = 0;
-    p_depth = 0;
+    p_depth = p_id;
 
     // standard alpha
     setAlpha( 255);
@@ -1202,7 +1234,7 @@ void entity::setAction( std::string name, bool withStartCall) {
         p_frame = 0;
         p_flagEndCall = false;
 
-/*        if( p_type != NULL && withStartCall == true) {
+        if( p_type != NULL && withStartCall == true) {
             // get action
             action *l_action = p_type->getAction( this->p_action);
             if( l_action != NULL) {
@@ -1210,7 +1242,7 @@ void entity::setAction( std::string name, bool withStartCall) {
                 if( l_action->startcall.size() > 0)
                     lua_action( l_action->startcall);
             }
-        }*/
+        }
     }
 }
 
@@ -1242,7 +1274,9 @@ void entity::loadScript( std::string file) {
     }
 
     // install lua entity function
-    lua_install( p_state);
+    //lua_install( p_state);
+    for( auto const& l_loader:p_lua_loader)
+        l_loader->func( p_state);
 }
 
 void entity::lua_start( int id) {
@@ -1580,16 +1614,24 @@ bool entity::getVertexHit( int id) {
 }
 
 
-entitylist::entitylist()
-{
+entitylist::entitylist() {
     // start at 0
     p_id = 1;
-//    p_playerentity = 0; later use
+
+    // try to add lua lib
+    lua_loader_add( "entitylist", &lua_install);
 }
 
-entitylist::~entitylist()
-{
-    //dtor
+entitylist::~entitylist() {
+    // free first entity
+    for(auto const& l_entity: p_entitys)
+        delete l_entity;
+    p_entitys.clear();
+
+    // now the types!
+    for(auto const& l_entity_type: p_entity_types)
+        delete l_entity_type;
+    p_entity_types.clear();
 }
 
 int entitylist::create( entitytype *type, vec2 pos, int id) {
@@ -1604,8 +1646,7 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     if( l_id == -1)
         l_id = p_id;
 
-    printf( "creating \"%s\" with id %d\n", type->getName().c_str(), l_id);
-
+    //printf( "creating \"%s\" with id %d\n", type->getName().c_str(), l_id);
 
     // create object
     obj = new entity( l_id);
@@ -1616,18 +1657,13 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
     obj->setVertex( type->getVertex());
     obj->setSolid( type->getIsSolid());
     obj->setGravity( type->getGravity());
-    //obj->setDepth( obj->getPosition().tovec2().y-type->getHitbox().y+type->getHitboxOffset().y  );
-
-    // player entity incress if he is one
- //   if( type->getIsPlayer())
-//        p_playerentity++;
 
     // load if script are set
     if( type->getScriptName().size() > 0)
         obj->loadScript( type->getScriptName());
 
     // add to vector
-    p_entitys.push_back( *obj);
+    p_entitys.push_back( obj);
 
     // start script if write
     getEntity( l_id)->lua_start( l_id);
@@ -1643,15 +1679,8 @@ int entitylist::create( entitytype *type, vec2 pos, int id) {
 
 void entitylist::deleteObj( int id) {
     for( int i = 0; i < (int)p_entitys.size(); i++)
-        if( p_entitys[i].getId() == id) {
-            entity *l_entity = &p_entitys[i];
-            entitytype *l_type = l_entity->getType();
-            // decreasing if type is a player file
-//            if( l_type && l_type->getIsPlayer())
-//                p_playerentity--;
-
+        if( p_entitys[i]->getId() == id)
             p_entitys.erase( p_entitys.begin()+i);
-        }
 }
 
 std::vector<int> entitylist::createFromWorldFile( std::string file, world *world) {
@@ -1754,7 +1783,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
         std::sort( p_entitys.begin(), p_entitys.end());
 
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        entity *l_obj = &p_entitys[i];
+        entity *l_obj = p_entitys[i];
         // if not NULL
         if( l_obj != NULL)
             // HUD element skip
@@ -1764,7 +1793,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
             // draw the entity
             l_obj->draw( graphic);
             // debug
-            if( config->getDebug() ) {
+            if( config->get( "debug", "game") == "true" ) {
                 SDL_Rect rect = {   l_obj->getPosition().tovec2().x + l_obj->getType()->getHitboxOffset().x,
                                     l_obj->getPosition().tovec2().y + l_obj->getType()->getHitboxOffset().y,
                                     l_obj->getType()->getHitbox().x,
@@ -1773,18 +1802,23 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
                 rect.y -= graphic->getCamera().y;
 
                 SDL_SetRenderDrawColor( graphic->getRenderer(), 255, 0, 0, 255);
-                SDL_RenderDrawRect( graphic->getRenderer(), &rect );
+                // only with hitbox show
+                if( l_obj->getType()->getHitbox().x != 0)
+                    SDL_RenderDrawRect( graphic->getRenderer(), &rect );
 
+                // draw all vertex
                 for( int n = 0; n < (int)l_obj->getVertex()->size(); n++) {
                     int l_blue = 0;
                     vertex *l_vertex = &l_obj->getVertex()->at(n);
                     fvec2 l_position = l_obj->getPosition();
                     vec2 l_collision_pos = l_position.tovec2() + l_vertex->pos - graphic->getCamera().tovec2();
 
+                    // if hit other color
                     if( l_vertex->hit == true)
                         l_blue = 255;
-                    SDL_SetRenderDrawColor( graphic->getRenderer(), l_blue, 255, l_blue, 255);
 
+                    // draw the point
+                    SDL_SetRenderDrawColor( graphic->getRenderer(), l_blue, 255, l_blue, 255);
                     SDL_RenderDrawPoint( graphic->getRenderer(), l_collision_pos.x, l_collision_pos.y);
                 }
             }
@@ -1792,7 +1826,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
 
     // draw text
     for( int i = 0; i < (int)p_text.size(); i++) {
-        entity_text *l_text = &p_text[i];
+        entity_text *l_text = p_text[i];
         entity *l_obj = getEntity( l_text->id);
         // if object found add particle
         if( l_obj) {
@@ -1807,7 +1841,7 @@ void entitylist::draw(graphic *graphic, particle_list* particle, config *config,
 
 void entitylist::drawHUD( graphic *graphic) {
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        entity *l_obj = &p_entitys[i];
+        entity *l_obj = p_entitys[i];
         // if not NULL
         if( l_obj != NULL)
             // only HUD elements
@@ -1841,7 +1875,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
     // again and again if we found o+ne more to delete we search again
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        if( p_entitys[i].isbedelete == true ) {
+        if( p_entitys[i]->isbedelete == true ) {
             p_entitys.erase( p_entitys.begin() + i);
             i--;
         }
@@ -1849,7 +1883,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
     // go through
     for(int i = 0; i < (int)p_entitys.size(); i++) {
-        entity *l_entity = &p_entitys[i];
+        entity *l_entity = p_entitys[i];
 
         // skip if entity null -> it cant be happen but
         if( l_entity == NULL) {
@@ -1891,7 +1925,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         // liquid
         if( l_entity->getGravity() == true && l_type->getHitboxOffset().x != 0) {
             // umrechnen
-            l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset()+l_type->getHitbox()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 )-(world->getTileSize()/vec2( 2, 2) ) )/world->getTileSize();
+            l_iposition = (l_entity->getPosition().tovec2()+l_type->getHitboxOffset().tovec2()+l_type->getHitbox().tovec2()/vec2( 2, 2 ) + world->getTileSize()/vec2( 2, 2 )-(world->getTileSize()/vec2( 2, 2) ) )/world->getTileSize();
             tile *l_tile = world->getTile( world->getCollsionMap(), l_iposition);
 
             if( l_tile != NULL && l_tile->type != NULL && l_tile->type->liquid == true ) {
@@ -1903,11 +1937,14 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         }
 
         // check about the hitting box
-        std::vector<int> l_ids = collision_boundingBox( l_entity);
+        std::vector<int> l_ids;
+        l_ids = collision_boundingBox( l_entity);
         if( l_ids.size() > 0)
             l_entity->lua_collision( l_entity->getId(), l_ids);
-        std::vector<int> l_ids2 = collision_boundingBoxVertex( l_entity);
-        
+        std::vector<int> l_ids_vertex = collision_boundingBoxVertex( l_entity);
+        // id add vertex id
+        l_ids.insert( l_ids.end(), l_ids_vertex.begin(), l_ids_vertex.end() );
+
         fvec2 l_velocity;
         fvec2 l_position;
         fvec2 l_change;
@@ -1972,8 +2009,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     // ausrechnung der änderung
                     float l_result = l_pos_change_y-l_bottom;
 
-                    if( l_result > l_velocity.y) {
-
+                    if( l_result > l_velocity.y && (l_change.y+0.1f)/l_velocity.y > l_result) {
                         if( l_changed == false ) {
                             l_changed = true; // we changed
                             // result
@@ -2000,19 +2036,16 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             float l_result = l_pos_change_y-l_bottom;
 
                             if( l_result > l_velocity.y && (l_change.y+0.1f)/l_velocity.y > l_result) {
-                            //if( fabs(l_result) > l_velocity.y && l_result < l_change.y+5.f) {
                                 if( l_changed == false ) {
                                     l_changed = true; // we change
-
                                     // result set
                                     l_result_change = l_change - fvec2( 0, l_result);
                                     l_result_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
 
                                     // x achse
                                     l_result_change.x += l_obj->getVelocity().x*(deltaTime);
+                                    l_iscalc_y = true;
                                 }
-
-                                l_iscalc_y = true;
 
                                 l_vertexhitchange += setVertexHit( l_vertex, true);
                                 l_entity->setColisionDown( true);
@@ -2035,7 +2068,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     // ausrechnung der änderung
                     float l_result = l_pos_change_y-l_bottom;
 
-                    if( l_result < l_velocity.y ) {
+                    if( l_result < l_velocity.y && l_result+1.f > l_change.y*2) {
                         if( l_changed == false ) {
                             l_changed = true; // we changed
                             // result
@@ -2061,15 +2094,14 @@ void entitylist::process( world *world, config *config, int deltaTime) {
 
                             if( l_result < l_velocity.y && l_result+1.f > l_change.y*2) {
                                 if( l_changed == false ) {
-                                    printf( "%.2f %.2f %.2f\n", l_result, l_velocity.y, l_change.y);
                                     l_changed = true; // we changed
                                     l_result_change = l_change - fvec2( 0, l_result);
 
                                     //l_change.y = 0;//l_entity->( fvec2());
                                     l_result_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-                                }
 
-                                l_iscalc_y = true;
+                                    l_iscalc_y = true;
+                                }
 
                                 l_vertexhitchange += setVertexHit( l_vertex, true);
                                 l_entity->setColisionUp( true);
@@ -2103,7 +2135,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     // ausrechnung der änderung
                     float l_result = l_pos_change_x-l_bottom;
 
-                    if( l_result < l_velocity.x ) {
+                    if( l_result < l_velocity.x && l_result+1.f > l_change.x*2) {
                         if( l_changed == false ) {
                             l_changed = true; // we changed
                             // result
@@ -2138,9 +2170,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             // ausrechnung der änderung
                             float l_result = l_pos_change_x-l_bottom;
 
-                            if( l_result < l_velocity.x && l_result+2.f > l_change.x*2 && l_iscalc_y == false) {
+                            if( l_result < l_velocity.x && l_result+1.f > l_change.x*2 && l_iscalc_y == false) {
                                 if( l_changed == false ) {
-                                    printf( "%.2f %.2f %.2f\n", l_result, l_velocity.x, l_change.x);
                                     l_changed = true;// we changed
                                     // result
                                     l_result_change = l_change - fvec2( l_result, 0);
@@ -2168,7 +2199,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                     // ausrechnung der änderung
                     float l_result = l_pos_change_x-l_bottom;
 
-                    if( l_result > l_velocity.x ) {
+                    if( l_result > l_velocity.x && l_result-1.f < l_change.x*2) {
                         if( l_changed == false ) {
                             l_changed = true; // we changed
                             // result
@@ -2204,9 +2235,8 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                             // ausrechnung der änderung
                             float l_result = l_pos_change_x-l_bottom;
 
-                            if( l_result > l_velocity.x && l_result-2.f < l_change.x*2 && l_iscalc_y == false) {
+                            if( l_result > l_velocity.x && l_result-1.f < l_change.x*2 && l_iscalc_y == false) {
                                 if( l_changed == false ) {
-                                    printf( "%.2f %.2f %.2f\n", l_result, l_velocity.x, l_change.x);
                                     l_changed = true; // we changed
                                     // result
                                     l_result_change = l_change - fvec2( l_result, 0);
@@ -2222,295 +2252,6 @@ void entitylist::process( world *world, config *config, int deltaTime) {
                 } // object collision
             } // vertex right
         } // end vertex 2
-        /*for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
-            vertex *l_vertex = &l_entity->getVertex()->at(n);
-            fvec2 l_collision_pos = l_position + l_vertex->pos;
-
-            l_vertex->hit = false;
-
-            bool l_changed = false;
-
-            // collison
-            if( l_vertex->down && l_velocity.y+0.001f > 0 ) {
-                tile *l_tile = NULL;
-                l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
-
-                if( l_tile != NULL ) {
-                    // zwischen rechnung
-                    float l_pos_change_y = l_collision_pos.y + l_change.y;
-                    float l_bottom = (l_tile->pos.y)*world->getTileSize().y;
-
-                    // ausrechnung der änderung
-                    float l_result = l_pos_change_y-l_bottom;
-
-                    if(fabs(l_result) > l_velocity.y) {
-
-                        if( l_changed == false ) {
-                            l_changed = true; // we changed
-                            // result
-                            l_result_change = l_change - fvec2( 0, l_result);
-
-                            //l_change.y = 0;//l_entity->( fvec2());
-                            l_result_velocity.y = 0;
-                        }
-
-
-                        l_vertexhitchange += setVertexHit( l_vertex, true);
-                        l_entity->setColisionDown( true);
-                    }
-                }
-
-                // object collision
-                if( l_ids.size() > 0 && l_change.y > 0 ) {
-                    for( int i = 0; i < (int)l_ids.size(); i++) {
-                        entity *l_obj = getEntity( l_ids[i]);
-                        // if is solid
-                        if( l_obj->isSolid()) {
-                          // zwischen rechnung
-                            float l_pos_change_y = l_collision_pos.y + l_change.y;
-                            float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y;
-
-                            float l_result = l_pos_change_y-l_bottom;
-
-                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < COLLISION_Y_OFFSET + fabs(l_change.y) + fabs(l_velocity.y)) {
-                            //if( fabs(l_result) > l_velocity.y && l_result < l_change.y+5.f) {
-                                if( l_changed == false ) {
-                                    l_changed = true; // we change
-
-                                    l_result_change = l_change - fvec2( 0, l_result);
-
-                                    //l_change.y = 0;//l_entity->( fvec2());
-                                    l_result_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-
-                                    // x achse
-                                    l_result_change.x += l_obj->getVelocity().x*(deltaTime);
-                                }
-
-                                l_iscalc_y = true;
-
-                                l_vertexhitchange += setVertexHit( l_vertex, true);
-                                l_entity->setColisionDown( true);
-                            }
-                        }
-                    }
-                }
-            }
-
-
-
-            // collison
-            if( l_vertex->up && l_velocity.y < 0) {
-                tile *l_tile = NULL;
-                l_tile = world->getCollisionTileY( l_collision_pos, l_change, l_velocity);
-
-                if( l_tile ) {
-                    // zwischen rechnung
-                    float l_pos_change_y = l_collision_pos.y + l_change.y;
-                    l_pos_change_y -= world->getTileSize().y;
-                    float l_bottom = (l_tile->pos.y)*world->getTileSize().y;
-
-                    // ausrechnung der änderung
-                    float l_result = l_pos_change_y-l_bottom;
-
-                    if( fabs(l_result) > l_velocity.y ) {
-                        if( l_changed == false ) {
-                            l_changed = true; // we changed
-
-                            l_result_change = l_change - fvec2( 0, l_result);
-
-                            //l_change.y = 0;//l_entity->( fvec2());
-                            l_result_velocity.y = 0;
-                        }
-
-                        l_vertexhitchange += setVertexHit( l_vertex, true);
-                        l_entity->setColisionUp( true);
-                    }
-                }
-
-                // object collision
-                if( l_ids.size() > 0 && l_change.y < 0) {
-                    for( int i = 0; i < (int)l_ids.size(); i++) {
-                        entity *l_obj = getEntity( l_ids[i]);
-                        if( l_obj->isSolid()) {
-
-                          // zwischen rechnung
-                            float l_pos_change_y = l_collision_pos.y + l_change.y;
-                            float l_bottom = l_obj->getPosition().y + l_obj->getType()->getHitboxOffset().y+l_obj->getType()->getHitbox().y;
-
-                            float l_result = l_pos_change_y-l_bottom;
-
-                            //if(fabs(l_result) > l_velocity.y && fabs(l_result) < world->getTileSize().y ) {
-                            if(fabs(l_result) > l_velocity.y && fabs(l_result) < COLLISION_Y_OFFSET + fabs(l_change.y) + fabs(l_velocity.y)) {
-                                if( l_changed == false ) {
-                                    l_changed = true; // we changed
-                                    l_result_change = l_change - fvec2( 0, l_result);
-
-                                    //l_change.y = 0;//l_entity->( fvec2());
-                                    l_result_velocity.y = l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-                                }
-
-                                l_iscalc_y = true;
-
-                                l_vertexhitchange += setVertexHit( l_vertex, true);
-                                l_entity->setColisionUp( true);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // set new wert
-        l_change = l_result_change;
-        l_velocity = l_result_velocity;
-
-        for( int n = 0; n < (int)l_entity->getVertex()->size(); n++) {
-            vertex *l_vertex = &l_entity->getVertex()->at(n);
-            fvec2 l_collision_pos = l_position + l_vertex->pos;
-
-            bool l_changed = false;
-
-            if( l_vertex->right && l_velocity.x + 0.001f > 0 && l_collision_pos.y > 0) {
-                tile *l_tile = NULL;
-                l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
-                if( l_tile ) {
-                    // zwischen rechnung
-                    float l_pos_change_y = l_collision_pos.x + l_change.x;
-                    float l_bottom = (l_tile->pos.x)*world->getTileSize().x;
-
-                    // ausrechnung der änderung
-                    float l_result = l_pos_change_y-l_bottom;
-
-                    if(fabs(l_result) > 0.0 && l_result < l_change.x + 1.f ) {
-
-                        if( l_changed == false ) {
-                            l_changed = true;
-                            l_result_change = l_change - fvec2( l_result, 0);
-
-                            //l_change.y = 0;//l_entity->( fvec2());
-                            l_result_velocity.x = 0;
-                        }
-
-
-                        l_vertexhitchange += setVertexHit( l_vertex, true);
-                        l_entity->setColisionRight( true);
-                    }
-                }
-
-                // map border
-                if( l_collision_pos.x > world->getWorld().x*world->getTileSize().x) {
-                    l_result_change = l_change - fvec2( l_change.x, 0);
-
-                    //l_change.y = 0;//l_entity->( fvec2());
-                    l_result_velocity.x = 0;
-
-                    l_vertexhitchange += setVertexHit( l_vertex, true);
-                    l_entity->setColisionRight( true);
-                }
-
-                // object collision
-                if(  l_ids.size() > 0 && l_change.x > 0) {
-                    for( int i = 0; i < (int)l_ids.size(); i++) {
-                        entity *l_obj = getEntity( l_ids[i]);
-                        if( l_obj->isSolid()) {
-
-                          // zwischen rechnung
-                            float l_pos_change_x = l_collision_pos.x + l_change.x+2.0f;
-                            float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x;
-
-                            float l_result = l_pos_change_x-l_bottom;
-
-                            if(fabs(l_result) > 0.0 && l_result < fabs(l_change.x) + 10.f && l_iscalc_y == false &&
-                               fabs(l_result) < COLLISION_X_OFFSET + fabs(l_change.x) + fabs(l_velocity.x))
-                            {
-                                if( l_changed == false ) {
-                                    l_changed = true;
-                                    l_result_change = l_change - fvec2( l_result,0 );
-
-                                    //l_change.y = 0;//l_entity->( fvec2());
-                                    l_result_velocity.x = 0; //l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-                                }
-
-                                l_vertexhitchange += setVertexHit( l_vertex, true);
-                                l_entity->setColisionRight( true);
-
-                            }
-                        }
-                    }
-                }
-            }
-            if( l_vertex->left && l_velocity.x - 0.001f < 0 && l_collision_pos.y > 0) {
-                tile *l_tile = NULL;
-                l_tile = world->getCollisionTileX( l_collision_pos, l_change, l_velocity);
-
-                if( l_tile ) {
-
-                    // zwischen rechnung
-                    float l_pos_change_y = l_collision_pos.x + l_change.x;
-                    l_pos_change_y -= world->getTileSize().x;
-                    float l_bottom = (l_tile->pos.x)*world->getTileSize().x;
-
-                    // ausrechnung der änderung
-                    float l_result = l_pos_change_y-l_bottom;
-
-                    if( fabs(l_result) > 0.0 && l_tile->pos.y*world->getTileSize().y+world->getTileSize().y > l_collision_pos.y
-                       && fabs( l_result) < fabs(l_change.x)+1.f ) {
-                        if( l_changed == false ) {
-                            l_changed = true;
-                            l_result_change = l_change - fvec2( l_result, 0);
-
-                            //l_change.y = 0;//l_entity->( fvec2());
-                            l_result_velocity.x = 0;
-                        }
-
-                        l_vertexhitchange += setVertexHit( l_vertex, true);
-                        l_entity->setColisionLeft( true);
-                    }
-                }
-
-                if( l_collision_pos.x < 0) {
-                    l_result_change = l_change - fvec2( l_change.x, 0);
-
-                    //l_change.y = 0;//l_entity->( fvec2());
-                    l_result_velocity.x = 0;
-
-                    l_vertexhitchange += setVertexHit( l_vertex, true);
-                    l_entity->setColisionLeft( true);
-                }
-
-
-                // object collision
-                if( l_ids.size() > 0 && l_change.x < 0) {
-                    for( int i = 0; i < (int)l_ids.size(); i++) {
-                        entity *l_obj = getEntity( l_ids[i]);
-                        if( l_obj->isSolid()) {
-
-                          // zwischen rechnung
-                            float l_pos_change_x = l_collision_pos.x + l_change.x - (l_velocity.x*deltaTime)-2.0f;
-                            float l_bottom = l_obj->getPosition().x + l_obj->getType()->getHitboxOffset().x + l_obj->getType()->getHitbox().x;
-
-                            float l_result = l_pos_change_x-l_bottom;
-
-                            if(fabs(l_result) > 0.0 && l_result < fabs(l_change.x) + 10.f && l_iscalc_y == false &&
-                               fabs(l_result) < COLLISION_X_OFFSET + fabs(l_change.x) + fabs(l_velocity.x)) {
-                                if( l_changed == false ) {
-                                    l_changed = true;
-                                    l_result_change = l_change - fvec2( l_result,0 );
-
-                                    //l_change.y = 0;//l_entity->( fvec2());
-                                    l_result_velocity.x = 0; //l_obj->getVelocity().y>0.0f?l_obj->getVelocity().y:0;
-                                }
-
-                                l_vertexhitchange += setVertexHit( l_vertex, true);
-                                l_entity->setColisionLeft( true);
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        */
 
         // set new wert
         l_change = l_result_change;
@@ -2536,7 +2277,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         }
 
         // calculate depth
-        l_entity->setDepth( (l_entity->getPosition().tovec2().y+l_type->getHitbox().y+l_type->getHitboxOffset().y)*10 +  l_entity->getPosition().x );
+        //l_entity->setDepth( (l_entity->getPosition().tovec2().y+l_type->getHitbox().y+l_type->getHitboxOffset().y)*10 +  l_entity->getPosition().x );
 
         // set net position
         l_entity->setPos( l_position + l_change );
@@ -2554,29 +2295,64 @@ std::vector <int> entitylist::collision_boundingBox( entity* checkentity) {
     entitytype *l_type = checkentity->getType();
     std::vector <int> l_id;
 
-    fvec2 l_rect1 = fvec2(l_type->getHitboxOffset()) + checkentity->getPosition();
+    fvec2 l_rect1 = l_type->getHitboxOffset() + checkentity->getPosition();
     fvec2 l_rect1_size = l_type->getHitbox();
 
-    //
-    for( int i = 0; i < (int)p_entitys.size(); i++)  {
-        entity* l_obj = &p_entitys[i];
-        entitytype *l_typeobj = l_obj->getType();
+    int l_entity_id = checkentity->getId();
+
+    for( auto const &l_entity:p_entitys) {
+        entitytype *l_typeobj = l_entity->getType();
 
         // self dont regist
-        if( l_obj->getId() == checkentity->getId())
+        if( l_entity->getId() == l_entity_id)
             continue;
 
         // calc rect 2
-        fvec2 l_rect2 = l_typeobj->getHitboxOffset() + l_obj->getPosition().tovec2();
+        fvec2 l_rect2 = l_typeobj->getHitboxOffset() + l_entity->getPosition();
         fvec2 l_rect2_size = l_typeobj->getHitbox();
 
-        // look if the obj hit the hitbox
+        // check collsion
         if ( l_rect1.x < l_rect2.x + l_rect2_size.x &&
             l_rect1.x + l_rect1_size.x > l_rect2.x &&
             l_rect1.y < l_rect2.y + l_rect2_size.y &&
             l_rect1_size.y + l_rect1.y > l_rect2.y) {
-                l_id.push_back( l_obj->getId());
+                l_id.push_back( l_entity->getId());
             }
+    }
+    return l_id;
+}
+
+std::vector <int> entitylist::collision_boundingBoxVertex( entity* checkentity) {
+    entitytype *l_type = checkentity->getType();
+    std::vector <int> l_id;
+
+    for( int n = 0; n < (int)checkentity->getVertex()->size(); n++) {
+        vertex *l_vertex = &checkentity->getVertex()->at(n);
+
+        fvec2 l_rect1 = checkentity->getPosition() + l_vertex->pos;
+        fvec2 l_rect1_size = fvec2( 1, 1);
+
+        //
+        for( int i = 0; i < (int)p_entitys.size(); i++)  {
+            entity* l_obj = p_entitys[i];
+            entitytype *l_typeobj = l_obj->getType();
+
+            // self dont regist
+            if( l_obj->getId() == checkentity->getId())
+                continue;
+
+            // calc rect 2
+            fvec2 l_rect2 = l_typeobj->getHitboxOffset() + l_obj->getPosition();
+            fvec2 l_rect2_size = l_typeobj->getHitbox();
+
+            // look if the obj hit the hitbox
+            if ( l_rect1.x < l_rect2.x + l_rect2_size.x &&
+                l_rect1.x + l_rect1_size.x > l_rect2.x &&
+                l_rect1.y < l_rect2.y + l_rect2_size.y &&
+                l_rect1_size.y + l_rect1.y > l_rect2.y) {
+                    l_id.push_back( l_obj->getId());
+                }
+        }
     }
     return l_id;
 }
@@ -2588,7 +2364,7 @@ std::vector <int> entitylist::collision_boundingBoxRect( fvec2 l_postion, fvec2 
     fvec2 l_rect1_size = l_size;
     //
     for( int i = 0; i < (int)p_entitys.size(); i++)  {
-        entity* l_obj = &p_entitys[i];
+        entity* l_obj = p_entitys[i];
         entitytype *l_typeobj = l_obj->getType();
 
         // self dont regist
@@ -2610,13 +2386,15 @@ std::vector <int> entitylist::collision_boundingBoxRect( fvec2 l_postion, fvec2 
     return l_id;
 }
 
-bool entitylist::loadType( std::string folder, graphic *graphic) {
+
+
+bool entitylist::loadType( config *config, std::string l_path, std::string l_name, graphic *graphic) {
     XMLDocument l_file;
     bool l_idle = false;
 
-    p_folder = folder;
+    l_path = l_path + l_name + "/";
 
-    std::string l_pathfile = folder + (char*)ENTITY_FILE;
+    std::string l_pathfile = l_path + (char*)ENTITY_FILE;
 
     int l_width = 0;
     int l_height = 0;
@@ -2630,7 +2408,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     bool l_hasTimeCall = false;
     std::string l_script;
 
-    std::string l_name;
+    std::string l_object_name;
 
     // if file dont exist - dont load
     if( file_exist( l_pathfile) == false) {
@@ -2649,7 +2427,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         return false;;
 
     if( l_object->Attribute( "name"))
-        l_name = l_object->Attribute( "name");
+        l_object_name = l_object->Attribute( "name");
     if( l_object->Attribute( "width"))
         l_width = atoi(l_object->Attribute( "width" ));
     if( l_object->Attribute( "height"))
@@ -2661,7 +2439,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     if( l_object->Attribute( "timer"))
         l_timer = atoi( l_object->Attribute( "timer" ));
     if( l_object->Attribute( "script"))
-        l_script = folder + l_object->Attribute( "script");
+        l_script = l_path + l_object->Attribute( "script");
     if( l_object->Attribute( "solid"))
         l_solid = atoi(l_object->Attribute( "solid" ));
     if( l_object->Attribute( "isenemy"))
@@ -2681,6 +2459,20 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
     int l_action_loop;
     std::string l_startCall;
     std::string l_endCall;
+
+    // set values
+    l_type->setWidth(l_width);
+    l_type->setHeight(l_height);
+    l_type->setName( l_object_name);
+    l_type->setGravity( l_gravity);
+    l_type->setIsPlayer( l_isplayer);
+    l_type->setScriptName( l_script);
+    l_type->setSolid( l_solid);
+    l_type->setTimer( l_timer);
+    l_type->setIsEnemy( l_isEnemy);
+    l_type->setIsTopView( l_isTopView);
+    l_type->setIsHUD( l_isHUD);
+    l_type->setHasTimeCall( l_hasTimeCall);
 
     // read all actions
     XMLElement* l_xml_action = l_object->FirstChildElement( "action" );
@@ -2720,7 +2512,7 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
             l_idle = true;
 
         // push back
-        l_type->addAction( l_action_name, l_action_file, l_action_frames, l_action_speed, l_action_loop,graphic->loadImage( folder + l_action_file), l_startCall, l_endCall);
+        l_type->addAction( l_action_name, l_action_file, l_action_frames, l_action_speed, l_action_loop,graphic->loadImage( l_path + l_action_file), l_startCall, l_endCall);
 
         l_xml_action = l_xml_action->NextSiblingElement("action");
     }
@@ -2810,8 +2602,8 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         if( l_xml_sound->Attribute( "name"))
             l_name = l_xml_sound->Attribute( "name");
 
-        //printf( "sound %s\n", (folder + l_file).c_str() );
-        l_type->addSound( l_name, folder + l_file, l_volume);
+        // load type
+        l_type->addSound( l_name, l_path + l_file, l_volume);
 
         // next vertex
         l_xml_sound = l_xml_sound->NextSiblingElement("sound");
@@ -2823,50 +2615,50 @@ bool entitylist::loadType( std::string folder, graphic *graphic) {
         return false;
     }
 
-    l_type->setWidth(l_width);
-    l_type->setHeight(l_height);
-    l_type->setName( l_name);
-    l_type->setGravity( l_gravity);
-    l_type->setIsPlayer( l_isplayer);
-    l_type->setScriptName( l_script);
-    l_type->setSolid( l_solid);
-    l_type->setTimer( l_timer);
-    l_type->setIsEnemy( l_isEnemy);
-    l_type->setIsTopView( l_isTopView);
-    l_type->setIsHUD( l_isHUD);
-    l_type->setHasTimeCall( l_hasTimeCall);
-
-    p_entity_types.push_back( *l_type);
+    p_entity_types.push_back( l_type);
 
     return true;
 }
 
-void entitylist::loadTypes( std::string folder, graphic *graphic) {
+bool entitylist::load( config *config, graphic *graphic) {
+    std::string l_path = config->get( "folder", "objects", "creature/");
+
+    loadFolder( l_path, config, graphic);
+
+    return true;
+}
+
+bool entitylist::loadFolder( std::string folder, config *config, graphic *graphic) {
     DIR *l_dir;
 
     struct dirent *l_entry;
 
-    std::string l_path = folder; //"creature/";
+    // open dir
+    l_dir = opendir(folder.c_str());
+    if ( l_dir == NULL)  // error opening the directory?
+        return false;
 
-    l_dir = opendir(l_path.c_str());
-    if ( l_dir == NULL) {  /* error opening the directory? */
-        printf("game::loadTypes cant load types, dir not found\n");
-    }
-
+    // open ech folder
     while ((l_entry = readdir(l_dir)) != NULL) {
-        std::string l_file = l_path + l_entry->d_name + "/";
+        std::string l_file = folder + l_entry->d_name + "/";
 
-        // load folder
-        loadType( l_file, graphic);
+        // dont go back folder
+        if( l_entry->d_name[0] == '.')
+            continue;
 
+        // load type
+        if( loadType( config, folder, l_entry->d_name, graphic) == false)
+            loadFolder( l_file, config, graphic);
     }
     closedir(l_dir);
+
+    return true;
 }
 
 entitytype* entitylist::getType( std::string name) {
     for( int i = 0; i < (int)p_entity_types.size(); i++)
-        if( p_entity_types[i].getName() == name)
-            return &p_entity_types[i];
+        if( p_entity_types[i]->getName() == name)
+            return p_entity_types[i];
     return NULL;
 }
 
@@ -2874,7 +2666,7 @@ std::vector<int> entitylist::findPlayerObject() {
     std::vector<int> l_obj;
 
     for( int i = 0; i < (int)p_entitys.size(); i++) {
-        entity *l_entity = &p_entitys[i];
+        entity *l_entity = p_entitys[i];
         if( l_entity->getType()->getIsPlayer() && l_entity->getAction() != "die")
             l_obj.push_back( l_entity->getId());
     }
@@ -2882,22 +2674,22 @@ std::vector<int> entitylist::findPlayerObject() {
 }
 
 void entitylist::message( int id, std::string text, float size, vec2 offset, bool asHUD, int lifetime) {
-    entity_text l_text;
+    entity_text *l_text = new entity_text;
 
-    l_text.id = id;
-    l_text.text = text;
-    l_text.size = size;
-    l_text.offset = offset;
-    l_text.asHUD = asHUD,
-    l_text.lifetime = lifetime;
+    l_text->id = id;
+    l_text->text = text;
+    l_text->size = size;
+    l_text->offset = offset;
+    l_text->asHUD = asHUD,
+    l_text->lifetime = lifetime;
 
     p_text.push_back( l_text);
 }
 
 entity* entitylist::getEntity( int id) {
     for( int i = 0; i < (int)p_entitys.size(); i++)
-        if( p_entitys[i].getId() == id)
-            return &p_entitys[i];
+        if( p_entitys[i]->getId() == id)
+            return p_entitys[i];
     return NULL;
 }
 

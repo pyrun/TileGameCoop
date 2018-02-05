@@ -12,10 +12,10 @@
 	<vertex id="3" x="20" y="8">up</vertex>
 	<vertex id="4" x="11" y="10">left</vertex>
 	<vertex id="5" x="11" y="16">left</vertex>
-	<vertex id="6" x="11" y="31">left</vertex>
+	<vertex id="6" x="11" y="30">left</vertex>
 	<vertex id="7" x="21" y="10">right</vertex>
 	<vertex id="8" x="21" y="16">right</vertex>
-	<vertex id="9" x="21" y="31">right</vertex>
+	<vertex id="9" x="21" y="30">right</vertex>
 	<hitbox offsetx="8" offsety="6" width="16" hight="28"/>
 	<sound name="jump" volume="10">jump.wav</sound>
 	<sound name="throw" volume="5">throw.wav</sound>
