@@ -1620,6 +1620,8 @@ entitylist::entitylist() {
 
     // try to add lua lib
     lua_loader_add( "entitylist", &lua_install);
+
+    p_sync = false;
 }
 
 entitylist::~entitylist() {
@@ -1634,9 +1636,13 @@ entitylist::~entitylist() {
     p_entity_types.clear();
 }
 
-int entitylist::create( entitytype *type, vec2 pos, int id) {
+int entitylist::create( entitytype *type, fvec2 pos, int id, bool force) {
     entity* obj;
     int l_id = id;
+
+    // if sync mode no creating
+    if( p_sync && force == false)
+        return -1;
 
     // check data
     if( type == NULL)

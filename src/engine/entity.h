@@ -21,6 +21,9 @@
 #include "audio.h"
 #include "lua_loader.h"
 
+#include "RakPeerInterface.h"
+#include "NetworkIDObject.h"
+
 #define ENTITY_FILE "definition.xml"
 
 // grund action
@@ -161,7 +164,7 @@ class entitytype
         bool p_hasTimeCall;
 };
 
-class entity
+class entity : public RakNet::NetworkIDObject
 {
     public:
         entity( int id);
@@ -280,6 +283,7 @@ class entity
                 return false;
             return true;
         }
+        void setFrame( int frame) { p_frame = frame; }
         int getFrame() { return p_frame; }
         lua_State *getState() { return p_state; }
         void setAlpha( int alpha) { p_alpha = alpha; }
@@ -293,6 +297,9 @@ class entity
             return ( p_depth < obj.p_depth);
         }
         void resetCallTime() { p_timeCall.start(); }
+
+        bool hasNetworkInit() { return p_network_init; }
+        void setNetworkInitFlag() { p_network_init = true; }
     protected:
 
     private:
@@ -326,6 +333,8 @@ class entity
         std::string p_global_3;
 
         bool p_flagEndCall;
+
+        bool p_network_init;
 };
 
 class entitylist {
@@ -333,7 +342,7 @@ class entitylist {
         entitylist();
         virtual ~entitylist();
 
-        int create( entitytype *type, vec2 pos, int id = -1);
+        int create( entitytype *type, fvec2 pos, int id = -1, bool force = false);
         void deleteObj( int id);
         std::vector<int> createFromWorldFile( std::string file, world *world);
 
@@ -363,14 +372,9 @@ class entitylist {
         void clearEntitys( ) { p_entitys.clear(); }
         void setEntitys( std::vector<entity*> entitys) {
             p_entitys = entitys;
-            for(int i = 0; i < (int)p_entitys.size(); i++) {
-                entity *l_entity = p_entitys[i];
-                entitytype *l_type = l_entity->getType();
-                // increasing if type is a player file
-//                if( l_type && l_type->getIsPlayer())
-//                    p_playerentity++;
-            }
         }
+        void setSync( bool set) { p_sync = set; }
+        bool getSync() { return p_sync; }
     protected:
 
     private:
@@ -378,6 +382,7 @@ class entitylist {
         std::vector<entity*> p_entitys;
         std::vector<entity_text*> p_text;
         int p_id;
+        bool p_sync;
 
         //int p_playerentity;
 };

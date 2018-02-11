@@ -13,13 +13,14 @@
 				<Option object_output="../obj/windebug32/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="-level test.tmx -server " />
 				<Compiler>
 					<Add option="-std=c++0x" />
 					<Add option="-g" />
 					<Add directory="../../SDL2_64/include" />
 					<Add directory="../../tinyxml2/inc" />
 					<Add directory="../../lua/include" />
-					<Add directory="engine/" />
+					<Add directory="../../RakNet/Source" />
 				</Compiler>
 				<Linker>
 					<Add option="-lmingw32" />
@@ -27,8 +28,10 @@
 					<Add option="-lSDL2_image" />
 					<Add option="-lSDL2_mixer" />
 					<Add option="-llua53" />
+					<Add option="-lRakNet" />
 					<Add directory="../../SDL2_64/lib" />
 					<Add directory="../../lua/lib" />
+					<Add directory="../../RakNet/Lib" />
 				</Linker>
 			</Target>
 			<Target title="winrelease32">
@@ -43,7 +46,6 @@
 					<Add directory="../../SDL2_64/include" />
 					<Add directory="../../tinyxml2/inc" />
 					<Add directory="../../lua/include" />
-					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -64,7 +66,6 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-std=c++0x" />
-					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -82,7 +83,6 @@
 				<Compiler>
 					<Add option="-std=c++0x" />
 					<Add option="-DIMADEBIAN" />
-					<Add directory="engine/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -111,6 +111,8 @@
 		<Unit filename="engine/level.h" />
 		<Unit filename="engine/lua_loader.cpp" />
 		<Unit filename="engine/lua_loader.h" />
+		<Unit filename="engine/network.cpp" />
+		<Unit filename="engine/network.h" />
 		<Unit filename="engine/particle.cpp" />
 		<Unit filename="engine/particle.h" />
 		<Unit filename="engine/player.cpp" />
@@ -129,6 +131,9 @@
 		<Unit filename="graphic/graphic.cpp" />
 		<Unit filename="graphic/graphic.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="resource.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="xml/tinyxml2.cpp" />
 		<Unit filename="xml/tinyxml2.h" />
 		<Extensions>

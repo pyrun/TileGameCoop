@@ -12,6 +12,7 @@
 #include "level.h"
 #include "particle.h"
 #include "audio.h"
+#include "network.h"
 
 #include <dirent.h>
 
@@ -25,6 +26,7 @@ class game {
 
         int process_graphic( std::string levelName);
 
+        network *getNetwork() { return p_network; }
         graphic *getGraphic() { return p_graphic; }
     protected:
 
@@ -37,6 +39,7 @@ class game {
         player_handle *p_player;
         particle_list *p_particles;
         audio *p_audio;
+        network *p_network;
 
         level *p_level;
 

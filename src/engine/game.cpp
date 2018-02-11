@@ -25,6 +25,11 @@ game::game()
 
     p_particles = new particle_list();
 
+    // setup network
+    p_network = new network( p_config);
+    p_network->init();
+    //p_network->startServer();
+
     // audio
     p_audio = new audio();
     p_audio->loadMusic( p_config->get( "folder", "audio", "music/"), atoi( p_config->get( "volume", "audio", "20").c_str()) );
@@ -36,6 +41,9 @@ game::game()
 
 game::~game()
 {
+    // close network
+    if( p_network)
+        delete p_network;
     // delte font
     if( p_font)
         delete p_font;
@@ -126,6 +134,11 @@ int game::process_graphic( std::string levelName) {
 
         // flip camera
         p_graphic->flipCamera();
+
+        // network
+        p_network->process( p_level->getEntityList());
+        if( p_network->isClient() && p_network->isStarted() && p_level->getEntityList()->getSync() == false)
+            p_level->getEntityList()->setSync( true);
 
         // react of player input
         p_player->handle( p_level->getEntityList(), p_level->getWorld(), p_input, p_graphic, p_config);

@@ -1,0 +1,57 @@
+#ifndef NETWORK_H
+#define NETWORK_H
+
+#include "StringTable.h"
+#include "RakPeerInterface.h"
+
+#include "Kbhit.h"
+#include "BitStream.h"
+#include "MessageIdentifiers.h"
+#include "NetworkIDManager.h"
+#include "entity.h"
+
+#include "config.h"
+
+#define MAX_CLIENTS 10
+
+enum {
+ID_SET_TIMED_MINE = ID_USER_PACKET_ENUM,
+ID_ENTITY,
+};
+
+#pragma pack(push, 1)
+struct structName {
+    unsigned char useTimeStamp; // Assign ID_TIMESTAMP to this
+    RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime() or some other method that returns a similar value
+    unsigned char typeId;
+    // Your data here
+    float x,y; // position
+    RakNet::NetworkID networkId; // NetworkID of the mine, used as a common method to refer to the mine on different computers
+    RakNet::SystemAddress systemAddress; // The SystenAddress of the player that owns the mine
+};
+#pragma pack(pop)
+
+class network
+{
+    public:
+        network( config *config);
+        virtual ~network();
+
+        void init();
+        void startServer();
+        void startClient( std::string ip_address = "127.0.0.1");
+
+        void process( entitylist *entity);
+    protected:
+
+    private:
+        int p_server_port;
+        RakNet::RakPeerInterface *p_peerInterface;
+        RakNet::SocketDescriptor *p_socket_descriptor;
+        RakNet::NetworkIDManager *p_networkIdManager;
+
+        bool p_is_server;
+        bool p_started;
+};
+
+#endif // NETWORK_H
