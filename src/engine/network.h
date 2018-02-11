@@ -11,7 +11,7 @@
 #include "RakNetTypes.h"
 #include "GetTime.h"
 #include "StringCompressor.h"
-#include "entity.h"
+#include "level.h"
 
 #include "config.h"
 
@@ -20,6 +20,7 @@
 enum {
 ID_SET_TIMED_MINE = ID_USER_PACKET_ENUM,
 ID_ENTITY,
+ID_CHANGE_LEVEL
 };
 
 class network
@@ -32,7 +33,7 @@ class network
         void startServer();
         void startClient( std::string ip_address = "127.0.0.1");
 
-        void process( entitylist *entity);
+        void process( level *level);
 
         unsigned char getPacketIdentifier( RakNet::Packet *p);
         void writeString( std::string cstring, RakNet::BitStream *output);
@@ -52,6 +53,8 @@ class network
 
         bool p_is_server;
         bool p_started;
+
+        std::string p_world_file;
 };
 
 #endif // NETWORK_H

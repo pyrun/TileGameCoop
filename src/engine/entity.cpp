@@ -1738,7 +1738,7 @@ std::vector<int> entitylist::createFromWorldFile( std::string file, world *world
         entitytype *l_entity_type = getType( l_type);
 
         if( l_entity_type != NULL) {
-            l_id = create( l_entity_type, l_pos, l_id);
+            l_id = create( l_entity_type, l_pos, l_id, true);
             entity *l_entity = getEntity( l_id);
 
             // sammel alle ids

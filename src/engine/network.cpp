@@ -49,8 +49,18 @@ void network::startClient( std::string ip_address) {
     printf( "network::startClient() start as server\n");
 }
 
-void network::process( entitylist *entity) {
+void network::process( level *level) {
     RakNet::Packet *l_packet;
+
+    if( level->getWorld()->getFileName() != p_world_file) {
+        p_world_file = level->getWorld()->getFileName();
+        RakNet::MessageID typeId;
+        typeId=ID_CHANGE_LEVEL;
+        RakNet::BitStream myBitStream;
+        myBitStream.Write((RakNet::MessageID)typeId);
+        writeString( p_world_file, &myBitStream);
+        p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+    }
 
     for (l_packet=p_peerInterface->Receive(); l_packet; p_peerInterface->DeallocatePacket(l_packet), l_packet=p_peerInterface->Receive())
     {
@@ -62,15 +72,23 @@ void network::process( entitylist *entity) {
             case ID_REMOTE_CONNECTION_LOST:
                 printf("Another client has lost the connection.\n");
                 break;
-            case ID_REMOTE_NEW_INCOMING_CONNECTION:
+            case ID_REMOTE_NEW_INCOMING_CONNECTION: {
                 printf("Another client has connected.\n");
                 break;
+            }
             case ID_CONNECTION_REQUEST_ACCEPTED:
                 printf("Our connection request has been accepted.\n");
                 break;
-            case ID_NEW_INCOMING_CONNECTION:
+            case ID_NEW_INCOMING_CONNECTION: {
                 printf("A connection is incoming.\n");
+                RakNet::MessageID typeId;
+                typeId=ID_CHANGE_LEVEL;
+                RakNet::BitStream myBitStream;
+                myBitStream.Write((RakNet::MessageID)typeId);
+                writeString( p_world_file, &myBitStream);
+                p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, l_packet->guid, false);
                 break;
+            }
             case ID_NO_FREE_INCOMING_CONNECTIONS:
                 printf("The server is full.\n");
                 break;
@@ -89,7 +107,19 @@ void network::process( entitylist *entity) {
                 }
                 break;
             case ID_ENTITY:
-                processPacket( l_packet, entity);
+                processPacket( l_packet, level->getEntityList());
+            break;
+            case ID_CHANGE_LEVEL: {
+                if( p_is_server)
+                    break;
+                RakNet::MessageID typeId;
+                RakNet::RakString l_file;
+
+                RakNet::BitStream myBitStream(l_packet->data, l_packet->length, false);
+                myBitStream.Read(typeId);
+                readString( &l_file, &myBitStream );
+                level->getWorld()->setLoadWorld( l_file.C_String());
+            }
             break;
             default:
                 printf("Message with identifier %i has arrived.\n", l_packet->data[0]);
@@ -98,7 +128,7 @@ void network::process( entitylist *entity) {
     }
 
     if( p_is_server)
-    for( auto l_entity:entity->getEntitys()) {
+    for( auto l_entity:level->getEntityList()->getEntitys()) {
 
         bool l_createClientSide = false;
 

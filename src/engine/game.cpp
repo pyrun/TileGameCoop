@@ -136,9 +136,11 @@ int game::process_graphic( std::string levelName) {
         p_graphic->flipCamera();
 
         // network
-        p_network->process( p_level->getEntityList());
-        if( p_network->isClient() && p_network->isStarted() && p_level->getEntityList()->getSync() == false)
-            p_level->getEntityList()->setSync( true);
+        if( p_level->getEntityList()) {
+            p_network->process( p_level);
+            if( p_network->isClient() && p_network->isStarted() && p_level->getEntityList()->getSync() == false)
+                p_level->getEntityList()->setSync( true);
+        }
 
         // react of player input
         p_player->handle( p_level->getEntityList(), p_level->getWorld(), p_input, p_graphic, p_config);
