@@ -300,6 +300,9 @@ class entity : public RakNet::NetworkIDObject
 
         bool hasNetworkInit() { return p_network_init; }
         void setNetworkInitFlag() { p_network_init = true; }
+
+        int getUpdateTime() { return SDL_GetTicks()-p_updateTime; }
+        void setUpdateTime() { p_updateTime = SDL_GetTicks(); }
     protected:
 
     private:
@@ -335,6 +338,8 @@ class entity : public RakNet::NetworkIDObject
         bool p_flagEndCall;
 
         bool p_network_init;
+
+        int p_updateTime;
 };
 
 class entitylist {

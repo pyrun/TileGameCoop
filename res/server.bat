@@ -1,2 +1,2 @@
-"..\bin\WinDebug32\TileGameCoop.exe" -level test.tmx -server
+"..\bin\WinDebug32\TileGameCoop.exe" -server
 PAUSE

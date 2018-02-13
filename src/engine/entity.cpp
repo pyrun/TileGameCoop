@@ -1133,6 +1133,9 @@ entity::entity( int id)
     p_up = false;
     p_right = false;
     p_left = false;
+
+    // Network update reset
+    p_updateTime = SDL_GetTicks();
 }
 
 entity::~entity()

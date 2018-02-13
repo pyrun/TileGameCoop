@@ -16,10 +16,13 @@
 #include "config.h"
 
 #define MAX_CLIENTS 10
+#define NETWORK_IDLE_TIME 1000 // sec
+#define NETWORK_IDLE_TIME_DESTROY_OBJ NETWORK_IDLE_TIME*2 //
 
 enum {
 ID_SET_TIMED_MINE = ID_USER_PACKET_ENUM,
 ID_ENTITY,
+ID_ENTITY_UPDATE,
 ID_CHANGE_LEVEL
 };
 
@@ -53,6 +56,8 @@ class network
 
         bool p_is_server;
         bool p_started;
+
+        bool b_reset_create;
 
         std::string p_world_file;
 };

@@ -87,6 +87,7 @@ void network::process( level *level) {
                 myBitStream.Write((RakNet::MessageID)typeId);
                 writeString( p_world_file, &myBitStream);
                 p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, l_packet->guid, false);
+                b_reset_create = true;
                 break;
             }
             case ID_NO_FREE_INCOMING_CONNECTIONS:
@@ -127,41 +128,51 @@ void network::process( level *level) {
             }
     }
 
-    if( p_is_server)
-    for( auto l_entity:level->getEntityList()->getEntitys()) {
+    if( p_is_server) {
+        for( auto l_entity:level->getEntityList()->getEntitys()) {
 
-        bool l_createClientSide = false;
+            bool l_createClientSide = b_reset_create;
 
-        if( l_entity->hasNetworkInit() == false) {
-            l_entity->SetNetworkIDManager( p_networkIdManager);
-            l_createClientSide = true;
-            l_entity->setNetworkInitFlag();
+            if( l_entity->hasNetworkInit() == false) {
+                l_entity->SetNetworkIDManager( p_networkIdManager);
+                l_createClientSide = true;
+                l_entity->setNetworkInitFlag();
+            }
+
+            RakNet::MessageID useTimeStamp; // Assign this to ID_TIMESTAMP
+            RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime()
+            RakNet::MessageID typeId; // This will be assigned to a type I've added after ID_USER_PACKET_ENUM, lets say ID_SET_TIMED_MINE
+            useTimeStamp = ID_TIMESTAMP;
+            timeStamp = RakNet::GetTime();
+            typeId=ID_ENTITY;
+            RakNet::BitStream myBitStream;
+            myBitStream.Write((RakNet::MessageID)typeId);
+            myBitStream.Write(useTimeStamp);
+            myBitStream.Write(timeStamp);
+            // Assume we have a Mine* mine object
+            myBitStream.Write( l_entity->getId());
+            writeString( l_entity->getType()->getName(), &myBitStream);
+            writeString( l_entity->getAction(), &myBitStream);
+            myBitStream.Write( l_entity->getFrame());
+            myBitStream.Write( l_entity->getPosition().x);
+            myBitStream.Write( l_entity->getPosition().y);
+            myBitStream.Write( l_entity->getVelocity().x);
+            myBitStream.Write( l_entity->getVelocity().y);
+            myBitStream.Write( (int)l_entity->getDirection());
+            myBitStream.Write( (int)l_createClientSide);
+            myBitStream.Write( l_entity->GetNetworkID()); // In the struct this is NetworkID networkId
+
+            p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
         }
 
-        RakNet::MessageID useTimeStamp; // Assign this to ID_TIMESTAMP
-        RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime()
-        RakNet::MessageID typeId; // This will be assigned to a type I've added after ID_USER_PACKET_ENUM, lets say ID_SET_TIMED_MINE
-        useTimeStamp = ID_TIMESTAMP;
-        timeStamp = RakNet::GetTime();
-        typeId=ID_ENTITY;
-        RakNet::BitStream myBitStream;
-        myBitStream.Write((RakNet::MessageID)typeId);
-        myBitStream.Write(useTimeStamp);
-        myBitStream.Write(timeStamp);
-        // Assume we have a Mine* mine object
-        myBitStream.Write( l_entity->getId());
-        writeString( l_entity->getType()->getName(), &myBitStream);
-        writeString( l_entity->getAction(), &myBitStream);
-        myBitStream.Write( l_entity->getFrame());
-        myBitStream.Write( l_entity->getPosition().x);
-        myBitStream.Write( l_entity->getPosition().y);
-        myBitStream.Write( l_entity->getVelocity().x);
-        myBitStream.Write( l_entity->getVelocity().y);
-        myBitStream.Write( (int)l_entity->getDirection());
-        myBitStream.Write( (int)l_createClientSide);
-        myBitStream.Write( l_entity->GetNetworkID()); // In the struct this is NetworkID networkId
-
-        p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+        // reset
+        b_reset_create = false;
+    } else {
+        // update check
+        for( auto l_entity:level->getEntityList()->getEntitys()) {
+            if( l_entity->getUpdateTime() > NETWORK_IDLE_TIME)
+                level->getEntityList()->deleteObj( l_entity->getId());
+        }
     }
 }
 
@@ -237,5 +248,7 @@ void network::processPacket( RakNet::Packet *packet, entitylist *entitylist)
     // set action
     p_obj->setAction( l_action.C_String(), false);
     p_obj->setFrame( l_action_frame);
+
+    p_obj->setUpdateTime();
 
 }
