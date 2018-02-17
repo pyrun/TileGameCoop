@@ -8,6 +8,9 @@ using namespace tinyxml2;
 	#define XMLCheckResult(a_eResult) if (a_eResult != XML_SUCCESS) { printf("Error: %i\n", a_eResult); return a_eResult; }
 #endif
 
+void (*entity_createObject)( int );
+void (*entity_deleteObject)( int );
+
 /** LUA FUNCTION */
 
 entitylist *lua_entitylist = NULL;
@@ -1639,16 +1642,12 @@ entitylist::~entitylist() {
     p_entity_types.clear();
 }
 
-int entitylist::create( entitytype *type, fvec2 pos, int id, bool force) {
+int entitylist::create( entitytype *type, fvec2 pos, int id) {
     entity* obj;
     int l_id = id;
 
-    // if sync mode no creating
-    if( p_sync && force == false)
-        return -1;
-
     // check data
-    if( type == NULL)
+    if( type == NULL || p_sync)
         return -1;
 
     // chose l_id or p_id
@@ -1688,8 +1687,12 @@ int entitylist::create( entitytype *type, fvec2 pos, int id, bool force) {
 
 void entitylist::deleteObj( int id) {
     for( int i = 0; i < (int)p_entitys.size(); i++)
-        if( p_entitys[i]->getId() == id)
+        if( p_entitys[i]->getId() == id) {
+            if( entity_deleteObject != NULL && !p_sync) {
+                entity_deleteObject( p_entitys[i]->getId());
+            }
             p_entitys.erase( p_entitys.begin()+i);
+        }
 }
 
 std::vector<int> entitylist::createFromWorldFile( std::string file, world *world) {
@@ -1741,7 +1744,7 @@ std::vector<int> entitylist::createFromWorldFile( std::string file, world *world
         entitytype *l_entity_type = getType( l_type);
 
         if( l_entity_type != NULL) {
-            l_id = create( l_entity_type, l_pos, l_id, true);
+            l_id = create( l_entity_type, l_pos, l_id);
             entity *l_entity = getEntity( l_id);
 
             // sammel alle ids
@@ -1882,13 +1885,9 @@ void entitylist::process( world *world, config *config, int deltaTime) {
     // calc delta of velocity
     l_velocityDelta = (float)deltaTime * world->getGravity();
 
-    // again and again if we found o+ne more to delete we search again
-    for(int i = 0; i < (int)p_entitys.size(); i++) {
-        if( p_entitys[i]->isbedelete == true ) {
-            p_entitys.erase( p_entitys.begin() + i);
-            i--;
-        }
-    }
+    for( auto l_entity:p_entitys)
+        if( l_entity->isbedelete == true)
+            deleteObj( l_entity->getId());
 
     // go through
     for(int i = 0; i < (int)p_entitys.size(); i++) {
@@ -1919,6 +1918,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
             if( l_entity->getTimer()->getTicks() > l_type->getTimerTime() ) {
                 // start again
                 l_entity->getTimer()->start();
+
                 l_entity->lua_timer( l_entity->getId(), l_type->getTimerTime());
             }
         }
@@ -1928,6 +1928,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
             // reset counter
             l_entity->resetCallTime();
 
+            // not if network
             l_entity->lua_timeCall( l_entity->getId());
         }
 
@@ -2288,7 +2289,7 @@ void entitylist::process( world *world, config *config, int deltaTime) {
         // add velocity next frame
         l_entity->setVelocity( l_velocity);
 
-        if( l_vertexhitchange > 0) {
+        if( l_vertexhitchange > 0 && !p_sync) {
             l_entity->lua_vertexhit( l_entity->getId());
         }
     }

@@ -347,7 +347,7 @@ class entitylist {
         entitylist();
         virtual ~entitylist();
 
-        int create( entitytype *type, fvec2 pos, int id = -1, bool force = false);
+        int create( entitytype *type, fvec2 pos, int id = -1);
         void deleteObj( int id);
         std::vector<int> createFromWorldFile( std::string file, world *world);
 
@@ -394,5 +394,7 @@ class entitylist {
 
 void lua_setLink( entitylist *entity, world *world, graphic *graphic);
 
+extern void (*entity_createObject)( int );
+extern void (*entity_deleteObject)( int );
 
 #endif // ENTITY_H

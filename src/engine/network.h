@@ -20,10 +20,11 @@
 #define NETWORK_IDLE_TIME_DESTROY_OBJ NETWORK_IDLE_TIME*2 //
 
 enum {
-ID_SET_TIMED_MINE = ID_USER_PACKET_ENUM,
-ID_ENTITY,
-ID_ENTITY_UPDATE,
-ID_CHANGE_LEVEL
+    ID_SET_TIMED_MINE = ID_USER_PACKET_ENUM,
+    ID_ENTITY,
+    ID_ENTITY_DELETE,
+    ID_ENTITY_UPDATE,
+    ID_CHANGE_LEVEL
 };
 
 class network
@@ -37,6 +38,8 @@ class network
         void startClient( std::string ip_address = "127.0.0.1");
 
         void process( level *level);
+
+        void sendDeleteObject( int id);
 
         unsigned char getPacketIdentifier( RakNet::Packet *p);
         void writeString( std::string cstring, RakNet::BitStream *output);

@@ -13,7 +13,7 @@
 				<Option object_output="../obj/windebug32/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="-server -level test.tmx" />
+				<Option parameters="-server" />
 				<Compiler>
 					<Add option="-std=c++0x" />
 					<Add option="-g" />

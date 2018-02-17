@@ -1,5 +1,13 @@
 #include "network.h"
 
+network *
+
+void (*network_createObject)( int ) {
+
+}
+void (*network_deleteObject)( int ) {
+}
+
 network::network(config *config) {
     p_server_port = atoi( config->get( "server_port", "network", "64640").c_str());
 
@@ -49,8 +57,18 @@ void network::startClient( std::string ip_address) {
     printf( "network::startClient() start as server\n");
 }
 
-void network::process( entitylist *entity) {
+void network::process( level *level) {
     RakNet::Packet *l_packet;
+
+    if( level->getWorld()->getFileName() != p_world_file) {
+        p_world_file = level->getWorld()->getFileName();
+        RakNet::MessageID typeId;
+        typeId=ID_CHANGE_LEVEL;
+        RakNet::BitStream myBitStream;
+        myBitStream.Write((RakNet::MessageID)typeId);
+        writeString( p_world_file, &myBitStream);
+        p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+    }
 
     for (l_packet=p_peerInterface->Receive(); l_packet; p_peerInterface->DeallocatePacket(l_packet), l_packet=p_peerInterface->Receive())
     {
@@ -62,15 +80,24 @@ void network::process( entitylist *entity) {
             case ID_REMOTE_CONNECTION_LOST:
                 printf("Another client has lost the connection.\n");
                 break;
-            case ID_REMOTE_NEW_INCOMING_CONNECTION:
+            case ID_REMOTE_NEW_INCOMING_CONNECTION: {
                 printf("Another client has connected.\n");
                 break;
+            }
             case ID_CONNECTION_REQUEST_ACCEPTED:
                 printf("Our connection request has been accepted.\n");
                 break;
-            case ID_NEW_INCOMING_CONNECTION:
+            case ID_NEW_INCOMING_CONNECTION: {
                 printf("A connection is incoming.\n");
+                RakNet::MessageID typeId;
+                typeId=ID_CHANGE_LEVEL;
+                RakNet::BitStream myBitStream;
+                myBitStream.Write((RakNet::MessageID)typeId);
+                writeString( p_world_file, &myBitStream);
+                p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, l_packet->guid, false);
+                b_reset_create = true;
                 break;
+            }
             case ID_NO_FREE_INCOMING_CONNECTIONS:
                 printf("The server is full.\n");
                 break;
@@ -89,7 +116,19 @@ void network::process( entitylist *entity) {
                 }
                 break;
             case ID_ENTITY:
-                processPacket( l_packet, entity);
+                processPacket( l_packet, level->getEntityList());
+            break;
+            case ID_CHANGE_LEVEL: {
+                if( p_is_server)
+                    break;
+                RakNet::MessageID typeId;
+                RakNet::RakString l_file;
+
+                RakNet::BitStream myBitStream(l_packet->data, l_packet->length, false);
+                myBitStream.Read(typeId);
+                readString( &l_file, &myBitStream );
+                level->getWorld()->setLoadWorld( l_file.C_String());
+            }
             break;
             default:
                 printf("Message with identifier %i has arrived.\n", l_packet->data[0]);
@@ -97,37 +136,51 @@ void network::process( entitylist *entity) {
             }
     }
 
-    if( p_is_server)
-    for( auto l_entity:entity->getEntitys()) {
-            
-        bool l_createClientSide =
-        if( l_entity->hasNetworkInit() == false) {
-            l_entity->SetNetworkIDManager( p_networkIdManager);
-            l_entity->setNetworkInitFlag();
+    if( p_is_server) {
+        for( auto l_entity:level->getEntityList()->getEntitys()) {
+
+            bool l_createClientSide = b_reset_create;
+
+            if( l_entity->hasNetworkInit() == false) {
+                l_entity->SetNetworkIDManager( p_networkIdManager);
+                l_createClientSide = true;
+                l_entity->setNetworkInitFlag();
+            }
+
+            RakNet::MessageID useTimeStamp; // Assign this to ID_TIMESTAMP
+            RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime()
+            RakNet::MessageID typeId; // This will be assigned to a type I've added after ID_USER_PACKET_ENUM, lets say ID_SET_TIMED_MINE
+            useTimeStamp = ID_TIMESTAMP;
+            timeStamp = RakNet::GetTime();
+            typeId=ID_ENTITY;
+            RakNet::BitStream myBitStream;
+            myBitStream.Write((RakNet::MessageID)typeId);
+            myBitStream.Write(useTimeStamp);
+            myBitStream.Write(timeStamp);
+            // Assume we have a Mine* mine object
+            myBitStream.Write( l_entity->getId());
+            writeString( l_entity->getType()->getName(), &myBitStream);
+            writeString( l_entity->getAction(), &myBitStream);
+            myBitStream.Write( l_entity->getFrame());
+            myBitStream.Write( l_entity->getPosition().x);
+            myBitStream.Write( l_entity->getPosition().y);
+            myBitStream.Write( l_entity->getVelocity().x);
+            myBitStream.Write( l_entity->getVelocity().y);
+            myBitStream.Write( (int)l_entity->getDirection());
+            myBitStream.Write( (int)l_createClientSide);
+            myBitStream.Write( l_entity->GetNetworkID()); // In the struct this is NetworkID networkId
+
+            p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
         }
 
-        RakNet::MessageID useTimeStamp; // Assign this to ID_TIMESTAMP
-        RakNet::Time timeStamp; // Put the system time in here returned by RakNet::GetTime()
-        RakNet::MessageID typeId; // This will be assigned to a type I've added after ID_USER_PACKET_ENUM, lets say ID_SET_TIMED_MINE
-        useTimeStamp = ID_TIMESTAMP;
-        timeStamp = RakNet::GetTime();
-        typeId=ID_ENTITY;
-        RakNet::BitStream myBitStream;
-        myBitStream.Write((RakNet::MessageID)typeId);
-        myBitStream.Write(useTimeStamp);
-        myBitStream.Write(timeStamp);
-        // Assume we have a Mine* mine object
-        myBitStream.Write( l_entity->getId());
-        writeString( l_entity->getType()->getName(), &myBitStream);
-        writeString( l_entity->getAction(), &myBitStream);
-        myBitStream.Write( l_entity->getFrame());
-        myBitStream.Write( l_entity->getPosition().x);
-        myBitStream.Write( l_entity->getPosition().y);
-        myBitStream.Write( l_entity->getVelocity().x);
-        myBitStream.Write( l_entity->getVelocity().y);
-        myBitStream.Write( l_entity->GetNetworkID()); // In the struct this is NetworkID networkId
-
-        p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+        // reset
+        b_reset_create = false;
+    } else {
+        // update check
+        for( auto l_entity:level->getEntityList()->getEntitys()) {
+            if( l_entity->getUpdateTime() > NETWORK_IDLE_TIME)
+                level->getEntityList()->deleteObj( l_entity->getId());
+        }
     }
 }
 
@@ -156,12 +209,13 @@ void network::processPacket( RakNet::Packet *packet, entitylist *entitylist)
     fvec2 l_vel;
     RakNet::RakString l_typeName;
     RakNet::RakString l_action;
-    bool l_dir;
     RakNet::MessageID useTimeStamp;
     RakNet::Time timeStamp;
 	RakNet::BitStream myBitStream(packet->data, packet->length, false); // The false is for efficiency so we don't make a copy of the passed data
 	RakNet::MessageID typeId;
 	int l_action_frame;
+	int l_createObject;
+	int l_dir;
 
 	/// read
 	myBitStream.Read(typeId);
@@ -175,6 +229,8 @@ void network::processPacket( RakNet::Packet *packet, entitylist *entitylist)
     myBitStream.Read( l_pos.y);
     myBitStream.Read( l_vel.x);
     myBitStream.Read( l_vel.y);
+    myBitStream.Read( l_dir);
+    myBitStream.Read( l_createObject);
 
     entity *p_obj = entitylist->getEntity( l_id);
 
@@ -185,7 +241,9 @@ void network::processPacket( RakNet::Packet *packet, entitylist *entitylist)
             printf( "network::processPacket type %s didnt found\n", l_typeName.C_String());
             return;
         }
-        entitylist->create( l_type, l_pos, l_id);
+        // create one if not there and you have permission
+        if( l_createObject)
+            entitylist->create( l_type, l_pos, l_id);
         return;
 	}
 
@@ -193,7 +251,12 @@ void network::processPacket( RakNet::Packet *packet, entitylist *entitylist)
     p_obj->setPos( l_pos );
     p_obj->setVelocity( l_vel);
 
+    p_obj->setDirection( l_dir);
+
     // set action
     p_obj->setAction( l_action.C_String(), false);
     p_obj->setFrame( l_action_frame);
+
+    p_obj->setUpdateTime();
+
 }

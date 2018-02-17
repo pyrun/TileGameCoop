@@ -1,5 +1,16 @@
 #include "network.h"
 
+network *network_pointer = NULL;
+
+void network_createObject( int id) {
+    if( network_pointer != NULL)
+        ;
+}
+void network_deleteObject( int id) {
+    if( network_pointer != NULL)
+        network_pointer->sendDeleteObject( id);
+}
+
 network::network(config *config) {
     p_server_port = atoi( config->get( "server_port", "network", "64640").c_str());
 
@@ -8,6 +19,11 @@ network::network(config *config) {
     p_socket_descriptor = NULL;
 
     p_networkIdManager = new RakNet::NetworkIDManager();
+
+    entity_createObject = network_createObject;
+    entity_deleteObject = network_deleteObject;
+
+    network_pointer = this;
 }
 
 network::~network()
@@ -122,6 +138,15 @@ void network::process( level *level) {
                 level->getWorld()->setLoadWorld( l_file.C_String());
             }
             break;
+            case ID_ENTITY_DELETE: {
+                RakNet::MessageID typeId;
+                int l_id;
+                RakNet::BitStream myBitStream(l_packet->data, l_packet->length, false);
+                myBitStream.Read(typeId);
+                myBitStream.Read(l_id);
+                level->getEntityList()->deleteObj( l_id);
+            }
+            break;
             default:
                 printf("Message with identifier %i has arrived.\n", l_packet->data[0]);
                 break;
@@ -169,11 +194,20 @@ void network::process( level *level) {
         b_reset_create = false;
     } else {
         // update check
-        for( auto l_entity:level->getEntityList()->getEntitys()) {
+        /*for( auto l_entity:level->getEntityList()->getEntitys()) {
             if( l_entity->getUpdateTime() > NETWORK_IDLE_TIME)
                 level->getEntityList()->deleteObj( l_entity->getId());
-        }
+        }*/
     }
+}
+
+void network::sendDeleteObject( int id) {
+    RakNet::MessageID typeId;
+    typeId=ID_ENTITY_DELETE;
+    RakNet::BitStream myBitStream;
+    myBitStream.Write((RakNet::MessageID)typeId);
+    myBitStream.Write( id);
+    p_peerInterface->Send(&myBitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
 unsigned char network::getPacketIdentifier( RakNet::Packet *p)
@@ -234,9 +268,14 @@ void network::processPacket( RakNet::Packet *packet, entitylist *entitylist)
             return;
         }
         // create one if not there and you have permission
-        if( l_createObject)
-            entitylist->create( l_type, l_pos, l_id, true);
-        return;
+        if( l_createObject) {
+            int l_id_back = entitylist->create( l_type, l_pos, l_id);
+            p_obj = entitylist->getEntity( l_id_back);
+            if( p_obj ==  NULL)
+                return;
+        } else {
+            return;
+        }
 	}
 
 	// set pos
